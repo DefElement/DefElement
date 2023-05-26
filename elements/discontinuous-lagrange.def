@@ -171,6 +171,15 @@ implementations:
       quadrilateral: Lagrange continuity=Discontinuous
       tetrahedron: Lagrange continuity=Discontinuous
       hexahedron: Lagrange continuity=Discontinuous
+  ferrite:
+    equispaced:
+      interval: DiscontinuousLagrange DEGREES=0:3
+      triangle: DiscontinuousLagrange DEGREES=0:6
+      tetrahedron: DiscontinuousLagrange DEGREES=0:5
+      quadrilateral: DiscontinuousLagrange DEGREES=0:4
+      hexahedron: DiscontinuousLagrange DEGREES=0:4
+      prism: DiscontinuousLagrange DEGREES=0:3
+      pyramid: DiscontinuousLagrange DEGREES=0:3
 examples:
   - interval,0,equispaced
   - interval,1,equispaced

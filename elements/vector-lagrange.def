@@ -30,6 +30,9 @@ degree: polynomial-subdegree
 implementations:
   symfem: vector Lagrange
   basix.ufl: P shape=(dim,) lagrange_variant=equispaced
+  ferrite:
+    triangle: Lagrange vdim=2 DEGREES=1:6
+    tetrahedron: Lagrange vdim=3 DEGREES=1:5
 examples:
   - triangle,1
   - triangle,2

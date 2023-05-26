@@ -54,6 +54,9 @@ implementations:
     legendre: BDM
   fiat:
     legendre: BrezziDouglasMarini variant=integral
+  ferrite:
+    lagrange:
+      triangle: BrezziDouglasMarini DEGREES=1
 examples:
   - triangle,1,lagrange
   - triangle,2,lagrange

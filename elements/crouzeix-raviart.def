@@ -63,6 +63,11 @@ implementations:
   fiat:
     triangle: CrouzeixRaviart
     tetrahedron: CrouzeixRaviart
+  ferrite:
+    triangle: CrouzeixRaviart
+    tetrahedron: CrouzeixRaviart
+    quadrilateral: RannacherTurek
+    hexahedron: RannacherTurek
 examples:
   - triangle,1
   - tetrahedron,1
