@@ -33,7 +33,7 @@ with open(_os.path.join(data_path, "contributors")) as f:
     contributors = _yaml.load(f, Loader=_yaml.FullLoader)
 
 url = "https://defelement.org"
-website_name = ["DefElement", "DefElement"]
+website_name: _typing.List[_typing.Optional[str]] = ["DefElement", "DefElement"]
 repo = "DefElement/DefElement"
 
 settings.dir_path = dir_path
