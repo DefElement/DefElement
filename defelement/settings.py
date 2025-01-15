@@ -32,10 +32,6 @@ with open(_os.path.join(data_path, "editors")) as f:
 with open(_os.path.join(data_path, "contributors")) as f:
     contributors = _yaml.load(f, Loader=_yaml.FullLoader)
 
-url = "https://defelement.org"
-website_name: _typing.List[_typing.Optional[str]] = ["DefElement", "DefElement"]
-repo = "DefElement/DefElement"
-
 settings.dir_path = dir_path
 settings.html_path = html_path
 settings.template_path = template_path
@@ -43,9 +39,9 @@ settings.github_token = github_token
 settings.owners = owners
 settings.editors = editors
 settings.contributors = contributors
-settings.url = url
-settings.website_name = website_name
-settings.repo = repo
+settings.url = "https://defelement.org"
+settings.website_name = ["DefElement", "DefElement"]
+settings.repo = "DefElement/DefElement"
 
 
 def set_html_path(path: str):

@@ -10,7 +10,7 @@ import symfem
 from symfem import create_element
 from webtools.citations import make_bibtex, markup_citation
 from webtools.html import make_html_page
-from webtools.markup import cap_first, heading_with_self_ref, python_highlight
+from webtools.markup import cap_first, heading_with_self_ref, markup, python_highlight
 from webtools.tools import comma_and_join, html_local, insert_author_info, parse_metadata
 
 from defelement import plotting, settings
@@ -18,7 +18,7 @@ from defelement.element import Categoriser
 from defelement.examples import markup_example
 from defelement.families import keys_and_names
 from defelement.implementations import implementations, parse_example, verifications
-from defelement.markup import insert_links, markup
+from defelement.markup import insert_links
 from defelement.rss import make_rss
 
 start_all = datetime.now()

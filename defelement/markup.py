@@ -5,31 +5,11 @@ import typing
 
 import symfem
 from webtools.markup import insert_links as _insert_links
-from webtools.markup import markup as _markup
+from webtools import settings
 
-from defelement import plotting
+from defelement import plotting, symbols
 
 page_references: typing.List[str] = []
-
-
-def markup(content: str) -> str:
-    """Markup content.
-
-    Args:
-        content: Content
-
-    Returns:
-        Content with markup replaced by HTML
-    """
-    return _markup(
-        content,
-        [(r"{{plot::([^,]+),([^,]+),([0-9]+)}}", plot_element),
-         (r"{{plot::([^,]+),([^,]+),([0-9]+)::([0-9]+)}}", plot_single_element),
-         (r"{{reference::([^}]+)}}", plot_reference),
-         (r"{{img::([^}]+)}}", plot_img)],
-        [("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>")],
-        insert_links,
-    )
 
 
 def insert_links(txt: str) -> str:
@@ -111,3 +91,17 @@ def plot_img(matches: typing.Match[str]) -> str:
     """
     e = matches[1]
     return f"<center>{plotting.plot_img(e)}</center>"
+
+
+settings.re_extras = [
+    (r"{{plot::([^,]+),([^,]+),([0-9]+)}}", plot_element),
+    (r"{{plot::([^,]+),([^,]+),([0-9]+)::([0-9]+)}}", plot_single_element),
+    (r"{{reference::([^}]+)}}", plot_reference),
+    (r"{{img::([^}]+)}}", plot_img),
+    (r"{{symbols\.([^}\(]+)\(([0-9]+)\)}}", lambda m: getattr(symbols, m[1])(int(m[2]))),
+    (r"{{symbols\.([^}]+)}}", lambda m: getattr(symbols, m[1])),
+]
+settings.str_extras = [
+    ("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>"),
+]
+settings.insert_links = insert_links
