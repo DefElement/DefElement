@@ -4,8 +4,8 @@ import re
 import typing
 
 import symfem
-from webtools.markup import insert_links as _insert_links
 from webtools import settings
+from webtools.markup import insert_links as _insert_links
 
 from defelement import plotting, symbols
 
