@@ -8,18 +8,18 @@ from datetime import datetime
 
 import symfem
 from symfem import create_element
+from webtools.citations import make_bibtex, markup_citation
+from webtools.html import make_html_page
+from webtools.markup import cap_first, heading_with_self_ref, markup, python_highlight
+from webtools.tools import comma_and_join, html_local, insert_author_info, parse_metadata
 
 from defelement import plotting, settings
-from defelement.citations import make_bibtex, markup_citation
 from defelement.element import Categoriser
 from defelement.examples import markup_example
 from defelement.families import keys_and_names
-from defelement.html import make_html_page
 from defelement.implementations import implementations, parse_example, verifications
-from defelement.markup import (cap_first, heading_with_self_ref, insert_links, markup,
-                               python_highlight)
+from defelement.markup import insert_links
 from defelement.rss import make_rss
-from defelement.tools import comma_and_join, html_local, insert_author_info, parse_metadata
 
 start_all = datetime.now()
 
@@ -55,20 +55,16 @@ def write_html_page(path: str, title: str, content: str):
 
 args = parser.parse_args()
 if args.destination is not None:
-    settings.html_path = args.destination
-    settings.htmlelement_path = os.path.join(settings.html_path, "elements")
-    settings.htmlimg_path = os.path.join(settings.html_path, "img")
-    settings.htmlindices_path = os.path.join(settings.html_path, "lists")
-    settings.htmlfamilies_path = os.path.join(settings.html_path, "families")
+    settings.set_html_path(args.destination)
 
 if args.processes is not None:
-    settings.processes = int(args.processes)
+    settings.set_processes(int(args.processes))
 
 if args.github_token is not None:
-    settings.github_token = args.github_token
+    settings.set_github_token(args.github_token)
 
 if args.verification_json is not None:
-    settings.verification_json = args.verification_json
+    settings.set_verification_json(args.verification_json)
 
 if args.test is None:
     test_elements = None

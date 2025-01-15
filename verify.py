@@ -29,9 +29,9 @@ parser.add_argument('--impl', metavar="impl", default=None,
 
 args = parser.parse_args()
 if args.destination is not None:
-    settings.verification_json = args.destination
+    settings.set_verification_json(args.destination)
 if args.processes is not None:
-    settings.processes = int(args.processes)
+    settings.set_processes(int(args.processes))
 if args.test is None:
     test_elements = None
 elif args.test == "auto":

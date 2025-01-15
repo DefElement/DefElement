@@ -4,3 +4,4 @@ sympy
 PyGithub
 pytz
 pyyaml
+git+https://github.com/DefElement/website-build-tools.git

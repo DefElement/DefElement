@@ -9,10 +9,10 @@ from symfem.functionals import BaseFunctional
 from symfem.functions import AnyFunction
 from symfem.piecewise_functions import PiecewiseFunction
 from symfem.symbols import t
+from webtools.html import make_html_page
+from webtools.markup import heading_with_self_ref
 
 from defelement import plotting, settings, symbols
-from defelement.html import make_html_page
-from defelement.markup import heading_with_self_ref
 
 defelement_t = ["s_{0}", "s_{1}", "s_{2}"]
 
