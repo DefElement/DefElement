@@ -4,10 +4,10 @@ import re
 import typing
 
 import symfem
+from webtools.markup import insert_links as _insert_links
+from webtools.markup import markup as _markup
 
 from defelement import plotting
-from webtools.markup import markup as _markup
-from webtools.markup import insert_links as _insert_links
 
 page_references: typing.List[str] = []
 

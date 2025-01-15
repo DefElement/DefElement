@@ -73,8 +73,8 @@ def do_the_plot(
         HTML for plot
     """
     global all_plots
-    from webtools.markup import cap_first, heading_with_self_ref
     from webtools.html import make_html_page
+    from webtools.markup import cap_first, heading_with_self_ref
 
     filename = filename.replace(" ", "-")
 

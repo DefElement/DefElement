@@ -1,6 +1,7 @@
 """DefElement tools."""
 
 import typing
+
 if typing.TYPE_CHECKING:
     from numpy import float64
     from numpy.typing import NDArray
