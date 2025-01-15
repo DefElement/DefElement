@@ -1,6 +1,7 @@
 """DefElement settings."""
 
 import os as _os
+import typing as _typing
 import yaml as _yaml
 from webtools import settings
 
@@ -20,7 +21,7 @@ htmlfamilies_path = _os.path.join(html_path, "families")
 
 verification_json = _os.path.join(dir_path, "verification.json")
 
-github_token = None
+github_token: _typing.Optional[str] = None
 
 processes = 1
 
