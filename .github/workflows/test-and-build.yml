@@ -99,7 +99,6 @@ jobs:
   build-website:
     name: Build defelement
     runs-on: ubuntu-22.04
-    if: github.ref != 'refs/heads/main'
     needs:
       - test-build-website
       - run-tests
