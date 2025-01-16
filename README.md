@@ -38,4 +38,3 @@ The content of the DefElement website itself (including `data/`, `elements/`, `f
 is released under a [Creative Commons Attribution 4.0 International (CC BY 4.0) license](LICENSE-CC.txt).
 
 Font Awesome (`files/fontawesome`) is released under a [Font Awesome Free License](files/fontawesome/LICENSE.txt).
-
