@@ -12,7 +12,7 @@ from defelement import plotting, symbols
 page_references: typing.List[str] = []
 
 
-def insert_links(txt: str) -> str:
+def insert_links(txt: str, root_dir: str = "") -> str:
     """Insert links.
 
     Args:
@@ -28,7 +28,7 @@ def insert_links(txt: str) -> str:
     txt = txt.replace("(index::recent)", "(/lists/recent.html)")
     txt = re.sub(r"\(index::([^\)]+)::([^\)]+)\)", r"(/lists/\1/\2.html)", txt)
     txt = re.sub(r"\(index::([^\)]+)\)", r"(/lists/\1)", txt)
-    return _insert_links(txt)
+    return _insert_links(txt, root_dir)
 
 
 def plot_element(matches: typing.Match[str]) -> str:
