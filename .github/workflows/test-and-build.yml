@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: |
           python3 -m pip install -r requirements.txt
@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load Symfem cache
         id: cache-restore
@@ -57,7 +57,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
@@ -68,7 +68,7 @@ jobs:
             python3 -m pip install .[optional]
 
       - name: Clone verification
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./verification
           repository: DefElement/DefElement
@@ -78,7 +78,7 @@ jobs:
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
       - name: Clone Varela Round
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
@@ -108,7 +108,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load Symfem cache
         id: cache-restore
@@ -118,7 +118,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
@@ -129,7 +129,7 @@ jobs:
             python3 -m pip install .[optional]
 
       - name: Clone verification
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./verification
           repository: DefElement/DefElement
@@ -139,7 +139,7 @@ jobs:
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
       - name: Clone Varela Round
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
@@ -170,7 +170,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load Symfem cache
         id: cache-restore
@@ -180,7 +180,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
@@ -215,7 +215,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load Symfem cache
         id: cache-restore
@@ -225,7 +225,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
@@ -236,7 +236,7 @@ jobs:
             python3 -m pip install .[optional]
 
       - name: Clone verification
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./verification
           repository: DefElement/DefElement
@@ -245,7 +245,7 @@ jobs:
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
       - name: Clone Varela Round
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
@@ -267,12 +267,12 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: '_html'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v3
 
       - name: Save matrix cache
         id: cache-save
@@ -291,7 +291,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: python3 -m pip install pytest-xdist
         name: Install dependencies
@@ -304,7 +304,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
