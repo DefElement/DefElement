@@ -19,13 +19,13 @@ def load_cache(
     try:
         with open(join(settings.cache_path, f"{item_key}.json")) as f:
             data = json.load(f)
-        if data["symfem_version"] != symfem.__version__:
+        if data.get("symfem_version") != symfem.__version__:
             return None
-        if data["last_updated"] != e.last_updated:
+        if data.get("last_updated") != e.last_updated:
             return None
-        if data["cache_version"] != e.cache_version:
+        if data.get("cache_version") != cache_version:
             return None
-        return data["content"]
+        return data.get("content")
     except FileNotFoundError:
         return None
 
