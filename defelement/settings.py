@@ -14,6 +14,8 @@ pages_path = _os.path.join(dir_path, "pages")
 data_path = _os.path.join(dir_path, "data")
 img_path = _os.path.join(dir_path, "img")
 
+cache_path = _os.path.join(dir_path, ".defelement-build-cache")
+
 html_path = _os.path.join(dir_path, "_html")
 htmlelement_path = _os.path.join(html_path, "elements")
 htmlimg_path = _os.path.join(html_path, "img")
