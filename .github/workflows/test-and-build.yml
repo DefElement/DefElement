@@ -93,15 +93,15 @@ jobs:
 
       - run: python3 -m pip install -r requirements.txt
         name: Install requirements
-      #- run: python3 build.py _test_html --verification-json verification/verification.json --test auto --processes 4
-      #  name: Build website HTML
+      - run: python3 build.py _test_html --verification-json verification/verification.json --test auto --processes 4
+        name: Build website HTML
 
   build-website:
     name: Build defelement
     runs-on: ubuntu-22.04
-    #needs:
-    #  - test-build-website
-    #  - run-tests
+    needs:
+      - test-build-website
+      - run-tests
     steps:
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -153,10 +153,7 @@ jobs:
 
       - run: python3 -m pip install -r requirements.txt
         name: Install requirements
-      #- run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
-      #  name: Build website HTML
-      #  if: ${{ !github.event.pull_request.head.repo.fork }}
-      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4 --test None
+      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
         name: Build website HTML
         if: ${{ !github.event.pull_request.head.repo.fork }}
       - run: python3 build.py _html --verification-json verification/verification.json --processes 4
@@ -278,5 +275,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base
 
-      #- run: python3 -m pytest -n4 test
-      #  name: Run tests with pytest
+      - run: python3 -m pytest -n4 test
+        name: Run tests with pytest
