@@ -8,7 +8,6 @@ from webtools import settings
 from webtools.markup import insert_links as _insert_links
 
 from defelement import plotting, symbols
-from defelement.caching import load_cache, save_cache
 
 page_references: typing.List[str] = []
 
@@ -44,20 +43,14 @@ def plot_element(matches: typing.Match[str]) -> str:
     if "variant=" in matches[1]:
         a, b = matches[1].split(" variant=")
         e = symfem.create_element(a, matches[2], int(matches[3]), b)
-        cache_key = f"plot_element-{a}-{matches[2]}-{matches[3]}-{b}"
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
-        cache_key = f"plot_element-{matches[1]}-{matches[2]}-{matches[3]}"
 
-    out = load_cache(cache_key, e)
-    if out is None:
-        out = (
-            "<center>"
-            f"{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}"
-            "</center>"
-        )
-        out = save_cache(cache_key, e, out)
-    return out
+    return (
+        "<center>"
+        f"{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}"
+        "</center>"
+    )
 
 
 def plot_single_element(matches: typing.Match[str]) -> str:
@@ -72,17 +65,10 @@ def plot_single_element(matches: typing.Match[str]) -> str:
     if "variant=" in matches[1]:
         a, b = matches[1].split(" variant=")
         e = symfem.create_element(a, matches[2], int(matches[3]), b)
-        cache_key = f"plot_single_element-{a}-{matches[2]}-{matches[3]}-{b}-{matches[4]}"
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
-        cache_key = f"plot_single_element-{matches[1]}-{matches[2]}-{matches[3]}-{matches[4]}"
 
-    out = load_cache(cache_key, e)
-    if out is None:
-        out = f"<center>{plotting.plot_function(e, int(matches[4]))}</center>"
-        out = save_cache(cache_key, e, out)
-
-    return out
+    return f"<center>{plotting.plot_function(e, int(matches[4]))}</center>"
 
 
 def plot_reference(matches: typing.Match[str]) -> str:
