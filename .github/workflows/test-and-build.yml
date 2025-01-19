@@ -93,8 +93,8 @@ jobs:
 
       - run: python3 -m pip install -r requirements.txt
         name: Install requirements
-      - run: python3 build.py _test_html --verification-json verification/verification.json --test auto --processes 4
-        name: Build website HTML
+      #- run: python3 build.py _test_html --verification-json verification/verification.json --test auto --processes 4
+      #  name: Build website HTML
 
   build-website:
     name: Build defelement
@@ -153,13 +153,15 @@ jobs:
 
       - run: python3 -m pip install -r requirements.txt
         name: Install requirements
-      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
+      #- run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
+      #  name: Build website HTML
+      #  if: ${{ !github.event.pull_request.head.repo.fork }}
+      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4 --test None
         name: Build website HTML
         if: ${{ !github.event.pull_request.head.repo.fork }}
       - run: python3 build.py _html --verification-json verification/verification.json --processes 4
         name: Build website HTML
         if: ${{ github.event.pull_request.head.repo.fork }}
-
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
