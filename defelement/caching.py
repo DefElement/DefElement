@@ -2,9 +2,9 @@
 
 import json
 import os
-import symfem
 import typing
 
+import symfem
 from webtools.tools import join
 
 from defelement import settings

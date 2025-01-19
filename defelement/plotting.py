@@ -1,10 +1,10 @@
 """Plotting."""
 
+import base64
 import os
 import typing
 from datetime import datetime
 
-import base64
 import symfem
 import sympy
 from symfem.finite_element import FiniteElement
