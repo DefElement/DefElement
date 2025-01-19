@@ -10,7 +10,8 @@ import symfem
 from symfem import create_element
 from webtools.citations import make_bibtex, markup_citation
 from webtools.html import make_html_page
-from webtools.markup import cap_first, heading_with_self_ref, markup, python_highlight
+from webtools.markup import cap_first, heading_with_self_ref, markup
+from webtools.code_markup import python_highlight
 from webtools.tools import comma_and_join, html_local, insert_author_info, parse_metadata
 
 from defelement import plotting, settings
