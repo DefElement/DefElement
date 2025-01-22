@@ -474,7 +474,7 @@ class Element:
                 space = space.strip()
                 degree = degree.strip()
                 space_link = self._c.get_space_name(space)
-                return f"{mom_type} with an degree \\({degree}\\) {space_link} space"
+                return f"{mom_type} with a degree \\({degree}\\) {space_link} space"
             return dofs
 
         def make_dof_d(data: typing.Dict[str, typing.Any], post: str = "") -> str:
