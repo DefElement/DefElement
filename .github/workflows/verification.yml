@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Load Symfem cache
         id: cache-restore
@@ -28,7 +28,7 @@ jobs:
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./symfem
           repository: mscroggs/symfem
