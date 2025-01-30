@@ -49,12 +49,6 @@ jobs:
           python-version: "3.12"
       - uses: actions/checkout@v4
 
-      - name: Load Symfem cache
-        uses: actions/cache/restore@v4
-        with:
-          path: /home/runner/.cache/symfem
-          key: symfem-cache
-
       - name: Clone Symfem
         uses: actions/checkout@v4
         with:
