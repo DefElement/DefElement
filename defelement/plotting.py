@@ -8,7 +8,7 @@ from datetime import datetime
 import symfem
 import sympy
 from symfem.finite_element import FiniteElement
-from symfem.plotting import Picture, colors
+from symfem.plotting import Picture
 
 from defelement import settings
 from defelement.caching import load_cache, save_cache
@@ -253,6 +253,7 @@ def plot_img(img_filename: str, link: bool = True) -> str:
         filename: str, plot_options: typing.Dict[str, typing.Any] = {}, **kwargs: typing.Any
     ):
         img = Picture(**kwargs)
+        colors = img.colors
         with open(os.path.join(settings.img_path, f"{img_filename}.img")) as f:
             for line in f:
                 if ":" not in line:
