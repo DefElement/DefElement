@@ -45,9 +45,12 @@ def plot_element(matches: typing.Match[str]) -> str:
         e = symfem.create_element(a, matches[2], int(matches[3]), b)
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
-    return ("<center>"
-            f"{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}"
-            "</center>")
+
+    return (
+        "<center>"
+        f"{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}"
+        "</center>"
+    )
 
 
 def plot_single_element(matches: typing.Match[str]) -> str:
@@ -64,6 +67,7 @@ def plot_single_element(matches: typing.Match[str]) -> str:
         e = symfem.create_element(a, matches[2], int(matches[3]), b)
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
+
     return f"<center>{plotting.plot_function(e, int(matches[4]))}</center>"
 
 

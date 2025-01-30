@@ -13,6 +13,7 @@ from webtools.html import make_html_page
 from webtools.markup import heading_with_self_ref
 
 from defelement import plotting, settings, symbols
+from defelement.caching import load_cache, save_cache
 
 defelement_t = ["s_{0}", "s_{1}", "s_{2}"]
 
@@ -147,45 +148,50 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
 
     plots = plotting.plot_basis_functions(element)
 
-    for dof_i, func in enumerate(element.get_basis_functions()):
-        eg += "<div class='basisf'><div style='display:inline-block'>"
-        pd = plots[dof_i]
-        if pd is not None:
-            eg += pd
-        eg += "</div>"
-        eg += "<div style='display:inline-block;padding-left:10px;padding-bottom:10px'>"
-        if isinstance(element, CiarletElement) and len(element.dofs) > 0:
-            dof = element.dofs[dof_i]
-            eg += f"\\(\\displaystyle {symbols.functional}_{{{dof_i}}}:"
-            dof_tex, symbols_used = describe_dof(element, dof)
-            eg += dof_tex + "\\)"
-            if len(symbols_used) > 0:
-                eg += "<br />where " + ";<br />".join(symbols_used[:-1])
-                if len(symbols_used) > 1:
-                    eg += ";<br />and "
-                eg += symbols_used[-1] + "."
-            eg += "<br /><br />"
-        if element.range_dim == 1:
-            eg += f"\\(\\displaystyle {symbols.basis_function}_{{{dof_i}}} = "
-        elif element.range_shape is None or len(element.range_shape) == 1:
-            eg += f"\\(\\displaystyle {symbols.vector_basis_function}_{{{dof_i}}} = "
-        else:
-            eg += f"\\(\\displaystyle {symbols.matrix_basis_function}_{{{dof_i}}} = "
-        eg += to_tex(func) + "\\)"
-        if isinstance(element, CiarletElement):
-            if len(element.dofs) > 0:
-                eg += "<br /><br />"
-                eg += "This DOF is associated with "
-                eg += entity_name(dof.entity[0]) + f" {dof.entity[1]}"
-                eg += " of the reference element."
-        elif isinstance(element, DirectElement):
-            eg += "<br /><br />"
-            eg += "This DOF is associated with "
-            eg += entity_name(element._basis_entities[dof_i][0])
-            eg += f" {element._basis_entities[dof_i][1]}"
-            eg += " of the reference element."
-        eg += "</div>"
-        eg += "</div>"
+    cache_key = f"markup_example-{html_name}-{element.order}-{element.reference.name}"
+    basis = load_cache(cache_key, element)
+    if basis is None:
+        basis = ""
+        for dof_i, func in enumerate(element.get_basis_functions()):
+            basis += "<div class='basisf'><div style='display:inline-block'>"
+            pd = plots[dof_i]
+            if pd is not None:
+                basis += pd
+            basis += "</div>"
+            basis += "<div style='display:inline-block;padding-left:10px;padding-bottom:10px'>"
+            if isinstance(element, CiarletElement) and len(element.dofs) > 0:
+                dof = element.dofs[dof_i]
+                basis += f"\\(\\displaystyle {symbols.functional}_{{{dof_i}}}:"
+                dof_tex, symbols_used = describe_dof(element, dof)
+                basis += dof_tex + "\\)"
+                if len(symbols_used) > 0:
+                    basis += "<br />where " + ";<br />".join(symbols_used[:-1])
+                    if len(symbols_used) > 1:
+                        basis += ";<br />and "
+                    basis += symbols_used[-1] + "."
+                basis += "<br /><br />"
+            if element.range_dim == 1:
+                basis += f"\\(\\displaystyle {symbols.basis_function}_{{{dof_i}}} = "
+            elif element.range_shape is None or len(element.range_shape) == 1:
+                basis += f"\\(\\displaystyle {symbols.vector_basis_function}_{{{dof_i}}} = "
+            else:
+                basis += f"\\(\\displaystyle {symbols.matrix_basis_function}_{{{dof_i}}} = "
+            basis += to_tex(func) + "\\)"
+            if isinstance(element, CiarletElement):
+                if len(element.dofs) > 0:
+                    basis += "<br /><br />"
+                    basis += "This DOF is associated with "
+                    basis += entity_name(dof.entity[0]) + f" {dof.entity[1]}"
+                    basis += " of the reference element."
+            elif isinstance(element, DirectElement):
+                basis += "<br /><br />"
+                basis += "This DOF is associated with "
+                basis += entity_name(element._basis_entities[dof_i][0])
+                basis += f" {element._basis_entities[dof_i][1]}"
+                basis += " of the reference element."
+            basis += "</div>"
+            basis += "</div>"
+        save_cache(cache_key, element, basis)
 
     with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", fname)), "w") as f:
         f.write(make_html_page(eg))

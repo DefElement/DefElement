@@ -50,8 +50,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Load Symfem cache
-        id: cache-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
@@ -110,11 +109,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Load Symfem cache
-        id: cache-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
+      - name: Load DefElement cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .defelement-build-cache
+          key: defelement-build-cache
 
       - name: Clone Symfem
         uses: actions/checkout@v4
@@ -168,13 +171,18 @@ jobs:
         with:
           path: '_html'
         if: github.ref == 'refs/heads/main'
-      - name: Save matrix cache
-        id: cache-save
-        uses: actions/cache/save@v3
+
+      - name: Save Symfem cache
+        uses: actions/cache/save@v4
         with:
           path: /home/runner/.cache/symfem
-          key: symfem-cache-${{ github.run_id }}
-          restore-keys: symfem-cache
+          key: symfem-cache
+        if: github.ref == 'refs/heads/main'
+      - name: Save DefElement cache
+        uses: actions/cache/save@v4
+        with:
+          path: .defelement-build-cache
+          key: defelement-build-cache
         if: github.ref == 'refs/heads/main'
 
   deploy-website:
@@ -205,8 +213,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Load Symfem cache
-        id: cache-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
@@ -248,8 +255,7 @@ jobs:
         name: Install dependencies
 
       - name: Load Symfem cache
-        id: cache-restore
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache

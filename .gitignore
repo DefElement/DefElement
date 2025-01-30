@@ -1,14 +1,9 @@
 *.pyc
-
 _html
-_html/*
-
 verification.json
-
-.*.swp
+.defelement-build-cache
 
 *.xcf
-
 _temp*
 *.log
 

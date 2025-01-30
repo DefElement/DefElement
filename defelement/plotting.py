@@ -1,14 +1,17 @@
 """Plotting."""
 
+import base64
 import os
 import typing
 from datetime import datetime
 
+import symfem
 import sympy
 from symfem.finite_element import FiniteElement
 from symfem.plotting import Picture, colors
 
 from defelement import settings
+from defelement.caching import load_cache, save_cache
 
 now = datetime.now()
 svg_desc = (
@@ -56,7 +59,8 @@ all_plots = []
 def do_the_plot(
     filename: str, desc: str, plot: typing.Callable,
     args: typing.List[typing.Any] = [], png_width: int = 180,
-    scale: int = 250, link: bool = True
+    scale: int = 250, link: bool = True,
+    cache_element: typing.Optional[symfem.finite_element.FiniteElement] = None,
 ) -> str:
     """Create a plot.
 
@@ -84,12 +88,28 @@ def do_the_plot(
     svg_kw = {"scale": scale, "dof_arrow_size": sympy.Rational(3, 2)}
 
     if filename not in all_plots:
-        plot(*args, os.path.join(settings.htmlimg_path, f"{filename}.tex"), **kwargs)
-        plot(*args, os.path.join(settings.htmlimg_path, f"{filename}.svg"), **svg_kw, **kwargs)
-        plot(*args, os.path.join(settings.htmlimg_path, f"{filename}.png"),
-             plot_options={"png_width": png_width}, **svg_kw, **kwargs)
-        plot(*args, os.path.join(settings.htmlimg_path, f"{filename}-large.png"),
-             plot_options={"png_width": png_width * 9 // 2}, **svg_kw, **kwargs)
+        for fname, pf in [
+            (f"{filename}.tex", lambda fn: plot(*args, fn, **kwargs)),
+            (f"{filename}.svg", lambda fn: plot(*args, fn, **svg_kw, **kwargs)),
+            (f"{filename}.png", lambda fn: plot(
+                *args, fn, plot_options={"png_width": png_width}, **svg_kw, **kwargs)),
+            (f"{filename}-large.png", lambda fn: plot(
+                *args, fn, plot_options={"png_width": png_width * 9 // 2}, **svg_kw, **kwargs)),
+        ]:
+            c = None
+            if cache_element is not None:
+                c = load_cache(f"plot-{fname}", cache_element)
+            if c is not None:
+                with open(os.path.join(settings.htmlimg_path, fname), "wb") as f:
+                    f.write(base64.b64decode(c))
+            else:
+                pf(os.path.join(settings.htmlimg_path, fname))
+                if cache_element is not None:
+                    with open(os.path.join(settings.htmlimg_path, fname), "rb") as f:
+                        save_cache(
+                            f"plot-{fname}",
+                            cache_element,
+                            base64.b64encode(f.read()).decode("utf-8"))
 
         img_page = heading_with_self_ref("h1", cap_first(desc))
         img_page += f"<center><a href='/img/{filename}-large.png'>"
@@ -162,7 +182,10 @@ def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
     for i, j in element.init_kwargs().items():
         filename += f"-{i}-{j}"
     filename += f"-{ref_id}-{element.order}-{dof_i}"
-    return do_the_plot(filename, desc, element.plot_basis_function, [dof_i], link=link)
+    return do_the_plot(
+        filename, desc, element.plot_basis_function, [dof_i], link=link,
+        cache_element=element,
+    )
 
 
 def plot_basis_functions(
@@ -273,4 +296,7 @@ def plot_dof_diagram(element: FiniteElement, link: bool = True) -> str:
     for i, j in element.init_kwargs().items():
         filename += f"-{i}-{j}"
     filename += f"-{ref_id}-{element.order}-dofs"
-    return do_the_plot(filename, desc, element.plot_dof_diagram, link=link)
+    return do_the_plot(
+        filename, desc, element.plot_dof_diagram, link=link,
+        cache_element=element,
+    )
