@@ -25,16 +25,17 @@ from defelement.rss import make_rss
 start_all = datetime.now()
 
 parser = argparse.ArgumentParser(description="Build defelement.org")
-parser.add_argument('destination', metavar='destination', nargs="?",
+parser.add_argument("destination", metavar="destination", nargs="?",
                     default=None, help="Destination of HTML files.")
-parser.add_argument('--test', metavar="test", default=None,
+parser.add_argument("--test", metavar="test", default=None,
                     help="Builds a version of the website with fewer elements.")
-parser.add_argument('--github-token', metavar="github_token", default=None,
+parser.add_argument("--github-token", metavar="github_token", default=None,
                     help="Provide a GitHub token to get update timestamps.")
-parser.add_argument('--processes', metavar="processes", default=None,
+parser.add_argument("--processes", metavar="processes", default=None,
                     help="The number of processes to run the building of examples on.")
-parser.add_argument('--verification-json', metavar="verification_json", default=None,
+parser.add_argument("--verification-json", metavar="verification_json", default=None,
                     help="Provide a verification JSON.")
+parser.add_argument("--no-cache", action="store_true", help="Build without using cache.")
 
 sitemap = {}
 
@@ -57,6 +58,9 @@ def write_html_page(path: str, title: str, content: str):
 args = parser.parse_args()
 if args.destination is not None:
     settings.set_html_path(args.destination)
+
+if args.no_cache:
+    settings.caching = False
 
 if args.processes is not None:
     settings.set_processes(int(args.processes))
