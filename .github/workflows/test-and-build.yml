@@ -60,7 +60,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: tikz-newlines
       - name: Install Symfem
         run: |
             cd symfem
@@ -124,7 +124,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: tikz-newlines
       - name: Install Symfem
         run: |
             cd symfem
@@ -223,7 +223,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: tikz-newlines
       - name: Install Symfem
         run: |
             cd symfem
@@ -265,7 +265,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: tikz-newlines
       - name: Install Symfem
         run: |
             cd symfem
