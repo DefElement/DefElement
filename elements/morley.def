@@ -20,7 +20,7 @@ dofs:
   vertices: point evaluations
   edges: point evaluations of normal derivatives at midpoints
 mapping: identity
-sobolev: H1
+sobolev: L2
 implementations:
   symfem: Morley
   ufl: Morley
