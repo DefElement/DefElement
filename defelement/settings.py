@@ -27,6 +27,7 @@ verification_json = _os.path.join(dir_path, "verification.json")
 github_token: _typing.Optional[str] = None
 
 processes = 1
+caching = True
 
 owners = ["mscroggs"]
 with open(_os.path.join(data_path, "editors")) as f:

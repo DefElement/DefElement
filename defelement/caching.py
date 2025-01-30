@@ -16,6 +16,8 @@ def load_cache(
     item_key: str, e: symfem.finite_element.FiniteElement,
 ) -> typing.Optional[str]:
     """Load item from cache."""
+    if not settings.caching:
+        return None
     try:
         with open(join(settings.cache_path, f"{item_key}.json")) as f:
             data = json.load(f)
@@ -32,6 +34,8 @@ def load_cache(
 
 def save_cache(item_key: str, e: symfem.finite_element.FiniteElement, item: str):
     """Save item to cache."""
+    if not settings.caching:
+        return
     if not os.path.isdir(settings.cache_path):
         os.mkdir(settings.cache_path)
     data = {
