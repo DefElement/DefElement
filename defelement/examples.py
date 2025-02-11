@@ -150,6 +150,7 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
 
     cache_key = f"markup_example-{html_name}-{element.order}-{element.reference.name}"
     basis = load_cache(cache_key, element)
+
     if basis is None:
         basis = ""
         for dof_i, func in enumerate(element.get_basis_functions()):
@@ -192,6 +193,8 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
             basis += "</div>"
             basis += "</div>"
         save_cache(cache_key, element, basis)
+
+    eg += basis
 
     with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", fname)), "w") as f:
         f.write(make_html_page(eg))
