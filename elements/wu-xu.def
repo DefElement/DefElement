@@ -1,5 +1,7 @@
 name: Wu-Xu
 html-name: Wu&ndash;Xu
+notes:
+  - This is a higher degree version of the [Morley&ndash;Wang&ndash;Xu](element::morley-wang-xu) element.
 min-degree:
   interval: 2
   triangle: 3
