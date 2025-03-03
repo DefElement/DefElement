@@ -49,7 +49,7 @@ class UFLImplementation(Implementation):
                     out += f"element = ufl_legacy.{params['type']}("
                 else:
                     out += "element = ufl_legacy.FiniteElement("
-                out += f"\"{ufl_name}\", \"{ref}\", {deg})"
+                out += f"\"{ufl_name}\", \"{ref}\", {input_deg})"
         return out
 
     id = "ufl"

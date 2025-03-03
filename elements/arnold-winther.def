@@ -28,7 +28,7 @@ sobolev: H(div div)
 implementations:
   symfem: AW DEGREEMAP=k+1
   ufl: AWc DEGREEMAP=k+1
-  fiat: ArnoldWinther DEGREES=3 DEGREEMAP=k+1
+  fiat: ArnoldWinther DEGREES=2 DEGREEMAP=k+1
 examples:
   - triangle,2
   - triangle,3
