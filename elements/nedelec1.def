@@ -111,10 +111,10 @@ implementations:
       hexahedron: N1E DEGREEMAP=k+1
   ufl:
     lagrange:
-      triangle: N1curl
-      tetrahedron: N1curl
-      quadrilateral: RTCE
-      hexahedron: NCE
+      triangle: N1curl DEGREEMAP=k+1
+      tetrahedron: N1curl DEGREEMAP=k+1
+      quadrilateral: RTCE DEGREEMAP=k+1
+      hexahedron: NCE DEGREEMAP=k+1
   bempp:
     lagrange:
       triangle: SNC DEGREES=1

@@ -47,8 +47,8 @@ sobolev: H(div)
 implementations:
   symfem: BDFM DEGREEMAP=k+1
   ufl:
-    triangle: BDFM
-    tetrahedron: BDFM
+    triangle: BDFM DEGREEMAP=k+1
+    tetrahedron: BDFM DEGREEMAP=k+1
   fiat:
     triangle: BrezziDouglasFortinMarini DEGREES=2 DEGREEMAP=k+1
 examples:

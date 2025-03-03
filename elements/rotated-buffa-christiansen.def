@@ -13,14 +13,14 @@ categories:
 reference-elements:
   - dual polygon
 implementations:
-  symfem: RBC
-  bempp: RBC DEGREES=1 DEGREEMAP=k-1
+  symfem: RBC DEGREEMAP=k+1
+  bempp: RBC
 sobolev: H(curl)
 mapping: covariant Piola
 examples:
-  - dual polygon(4),1
-  - dual polygon(5),1
-  - dual polygon(6),1
+  - dual polygon(4),0
+  - dual polygon(5),0
+  - dual polygon(6),0
 notes:
   - These elements are defined on the [barycentric dual grid](barycentric-dual-grid.md).
   - These elements are defined as a linear combination of [N&eacute;d&eacute;lec first kind](element::nedelec1) basis functions on the fine grid.

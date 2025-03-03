@@ -5,22 +5,22 @@ short-names:
 ndofs:
   dual polygon(n):
     formula: n
-min-degree: 1
-max-degree: 1
+min-degree: 0
+max-degree: 0
 categories:
   - vector
   - Hdiv
 reference-elements:
   - dual polygon
 implementations:
-  symfem: BC
-  bempp: BC DEGREES=1 DEGREEMAP=k-1
+  symfem: BC DEGREEMAP=k+1
+  bempp: BC
 mapping: contravariant Piola
 sobolev: H(div)
 examples:
-  - dual polygon(4),1
-  - dual polygon(5),1
-  - dual polygon(6),1
+  - dual polygon(4),0
+  - dual polygon(5),0
+  - dual polygon(6),0
 notes:
   - These elements are defined on the [barycentric dual grid](barycentric-dual-grid.md).
   - These elements are defined as a linear combination of [Raviart-Thomas](element::raviart-thomas) basis functions on the fine grid.

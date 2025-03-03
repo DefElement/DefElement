@@ -25,7 +25,7 @@ mapping: identity
 sobolev: H3
 implementations:
   symfem: Bell DEGREEMAP=k+1
-  ufl: Bell
+  ufl: Bell DEGREEMAP=k+1
   fiat: Bell DEGREEMAP=None
 examples:
   - triangle,4

@@ -27,7 +27,7 @@ mapping: double contravariant Piola
 sobolev: H(div div)
 implementations:
   symfem: AW DEGREEMAP=k+1
-  ufl: AWc
+  ufl: AWc DEGREEMAP=k+1
   fiat: ArnoldWinther DEGREES=3 DEGREEMAP=k+1
 examples:
   - triangle,2
