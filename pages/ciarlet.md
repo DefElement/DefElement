@@ -209,6 +209,7 @@ Throughout this website, the notation given here in this section is used.
 <tr><td style='padding-right:10px'>\({{symbols.entity(2)}}_i\)</td><td>The \(i\)th face</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.entity(3)}}_i\)</td><td>The \(i\)th volume</td></tr>
 <tr><td style='padding-right:10px'>\(k\)</td><td>Degree of a finite element</td></tr>
-<tr><td style='padding-right:10px'>\(d\)</td><td>Geometric dimension</td></tr>
+<tr><td style='padding-right:10px'>\(d\)</td><td>Topological dimension</td></tr>
+<tr><td style='padding-right:10px'>\(d_g\)</td><td>Geometric dimension</td></tr>
 <tr><td style='padding-right:10px'>\(r\)</td><td>Exterior derivative order</td></tr>
 </table>
