@@ -3,11 +3,11 @@
 import argparse
 import json
 import os
-import sympy
 import typing
 from datetime import datetime
 
 import symfem
+import sympy
 from symfem import create_element
 from webtools.citations import make_bibtex, markup_citation
 from webtools.code_markup import python_highlight
