@@ -1,12 +1,12 @@
 name: Bell
 html-name: Bell
-min-degree: 5
-max-degree: 5
-polynomial-subdegree: k-1
-polynomial-superdegree: k
-lagrange-subdegree: k-1
-lagrange-superdegree: k
-degree: lagrange-superdegree
+min-degree: 4
+max-degree: 4
+polynomial-subdegree: k
+polynomial-superdegree: k+1
+lagrange-subdegree: k
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 categories:
   - scalar
 ndofs:
@@ -15,7 +15,7 @@ ndofs:
 reference-elements:
   - triangle
 polynomial-set:
-  triangle: <k>[\left\{p\in{{poly[k]}}\middle|\text{normal derivative of $p$ on each edge is cubic}\right\}]
+  triangle: <k+1>[\left\{p\in{{poly[k]}}\middle|\text{normal derivative of $p$ on each edge is cubic}\right\}]
 dofs:
   vertices:
     - point evaluations
@@ -24,11 +24,11 @@ dofs:
 mapping: identity
 sobolev: H3
 implementations:
-  symfem: Bell
+  symfem: Bell DEGREEMAP=k+1
   ufl: Bell
   fiat: Bell DEGREEMAP=None
 examples:
-  - triangle,5
+  - triangle,4
 references:
   - title: A refined triangular plate bending finite element
     author: Bell, Kolbein

@@ -1,12 +1,12 @@
 name: nonconforming Arnold-Winther
 html-name: nonconforming Arnold&ndash;Winther
-min-degree: 2
-max-degree: 2
-polynomial-subdegree: k-1
-polynomial-superdegree: k
-lagrange-subdegree: k-1
-lagrange-superdegree: k
-degree: lagrange-superdegree
+min-degree: 1
+max-degree: 1
+polynomial-subdegree: k
+polynomial-superdegree: k+1
+lagrange-subdegree: k
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 categories:
   - matrix
 reference-elements:
@@ -15,18 +15,18 @@ ndofs:
   triangle:
     formula: 15
 polynomial-set:
-  triangle: <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\text{ and for every edge }\hat{\mathbf{n}}_i^t\mathbf{M}\hat{\mathbf{n}}_i\text{ is linear }\right\}]
+  triangle: <k+1>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\text{ and for every edge }\hat{\mathbf{n}}_i^t\mathbf{M}\hat{\mathbf{n}}_i\text{ is linear }\right\}]
 dofs:
   edges: integral moments of normal-normal and normal-tangent inner products with (lagrange,1)
   faces: integral moments of three components with (lagrange,0)
 mapping: double contravariant Piola
 sobolev: H(div div)
 implementations:
-  symfem: nonconforming AW
+  symfem: nonconforming AW DEGREEMAP=k+1
   ufl: AWnc
-  fiat: ArnoldWintherNC
+  fiat: ArnoldWintherNC DEGREEMAP=k+1
 examples:
-  - triangle,2
+  - triangle,1
 references:
   - title: Nonconforming mixed elements for elasticity
     author:

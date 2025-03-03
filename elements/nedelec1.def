@@ -18,17 +18,16 @@ variants:
   lagrange:
     variant-name: Lagrange
     description: Integral moments are taken against [Lagrange](element:lagrange) basis functions
-min-degree: 1
-polynomial-subdegree: k-1
+polynomial-subdegree: k
 polynomial-superdegree:
-  triangle: k
-  tetrahedron: k
-  prism: 2k
-  quadrilateral: dk-1
-  hexahedron: dk-1
-lagrange-subdegree: k-1
-lagrange-superdegree: k
-degree: lagrange-superdegree
+  triangle: k+1
+  tetrahedron: k+1
+  prism: 2k+2
+  quadrilateral: dk+d-1
+  hexahedron: dk+d-1
+lagrange-subdegree: k
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 categories:
   - vector
   - Hcurl
@@ -40,19 +39,19 @@ sobolev: H(curl)
 mapping: covariant Piola
 ndofs:
   triangle:
-    formula: k(k+2)
+    formula: (k+1)(k+3)
     oeis: A005563
   tetrahedron:
-    formula: k(k+2)(k+3)/2
+    formula: (k+1)(k+3)(k+4)/2
     oeis: A005564
   quadrilateral:
-    formula: 2k(k+1)
+    formula: 2(k+1)(k+2)
     oeis: A046092
   hexahedron:
-    formula: 3k(k+1)^2
+    formula: 3(k+1)(k+2)^2
     oeis: A059986
   prism:
-    formula: 3k(k+2)(k+1)/2
+    formula: 3(k+1)(k+2)(k+3)/2
 reference-elements:
   - triangle
   - tetrahedron
@@ -60,56 +59,56 @@ reference-elements:
   - hexahedron
   - prism
 polynomial-set:
-  triangle: poly[k-1]^d && <k>[\left\{\boldsymbol{p}\in{{tpoly[k]^d}}\middle|\boldsymbol{p}({{x}})\cdot {{x}}=0\right\}]
-  tetrahedron: poly[k-1]^d && <k>[\left\{\boldsymbol{p}\in{{tpoly[k]^d}}\middle|\boldsymbol{p}({{x}})\cdot {{x}}=0\right\}]
-  quadrilateral: qoly[k-1]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_i\in{{qoly[k]}}\text{ for }i=1,\dots,d\right\}]
-  hexahedron: qoly[k-1]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_i\in{{qoly[k]}}\text{ for }i=1,\dots,d\right\}]
+  triangle: poly[k]^d && <k+1>[\left\{\boldsymbol{p}\in{{tpoly[k]^d}}\middle|\boldsymbol{p}({{x}})\cdot {{x}}=0\right\}]
+  tetrahedron: poly[k]^d && <k+1>[\left\{\boldsymbol{p}\in{{tpoly[k]^d}}\middle|\boldsymbol{p}({{x}})\cdot {{x}}=0\right\}]
+  quadrilateral: qoly[k]^d && <k+1>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_i\in{{qoly[k]}}\text{ for }i=1,\dots,d\right\}]
+  hexahedron: qoly[k]^d && <k+1>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_i\in{{qoly[k]}}\text{ for }i=1,\dots,d\right\}]
 dofs:
-  edges: tangent integral moments with (lagrange,k-1)
+  edges: tangent integral moments with (lagrange,k)
   faces:
-    triangle: integral moments with (vector-lagrange,k-2)
+    triangle: integral moments with (vector-lagrange,k-1)
     quadrilateral: integral moments with (raviart-thomas,k-1)
   volumes:
-    tetrahedron: integral moments with (vector-lagrange,k-3)
+    tetrahedron: integral moments with (vector-lagrange,k-2)
     hexahedron: integral moments with (raviart-thomas,k-1)
 implementations:
   symfem:
     lagrange:
-      triangle: N1curl
-      tetrahedron: N1curl
-      quadrilateral: Qcurl
-      hexahedron: Qcurl
-      prism: Ncurl
+      triangle: N1curl DEGREEMAP=k+1
+      tetrahedron: N1curl DEGREEMAP=k+1
+      quadrilateral: Qcurl DEGREEMAP=k+1
+      hexahedron: Qcurl DEGREEMAP=k+1
+      prism: Ncurl DEGREEMAP=k+1
     legendre:
-      triangle: N1curl variant=legendre
-      tetrahedron: N1curl variant=legendre
-      quadrilateral: Qcurl variant=legendre
-      hexahedron: Qcurl variant=legendre
-      prism: Ncurl variant=legendre
+      triangle: N1curl variant=legendre DEGREEMAP=k+1
+      tetrahedron: N1curl variant=legendre DEGREEMAP=k+1
+      quadrilateral: Qcurl variant=legendre DEGREEMAP=k+1
+      hexahedron: Qcurl variant=legendre DEGREEMAP=k+1
+      prism: Ncurl variant=legendre DEGREEMAP=k+1
   basix:
     display: N1E
     lagrange:
-      triangle: N1E
-      tetrahedron: N1E
-      quadrilateral: N1E
-      hexahedron: N1E
+      triangle: N1E DEGREEMAP=k+1
+      tetrahedron: N1E DEGREEMAP=k+1
+      quadrilateral: N1E DEGREEMAP=k+1
+      hexahedron: N1E DEGREEMAP=k+1
     legendre:
-      triangle: N1E lagrange_variant=legendre
-      tetrahedron: N1E lagrange_variant=legendre
-      quadrilateral: N1E lagrange_variant=legendre
-      hexahedron: N1E lagrange_variant=legendre
+      triangle: N1E lagrange_variant=legendre DEGREEMAP=k+1
+      tetrahedron: N1E lagrange_variant=legendre DEGREEMAP=k+1
+      quadrilateral: N1E lagrange_variant=legendre DEGREEMAP=k+1
+      hexahedron: N1E lagrange_variant=legendre DEGREEMAP=k+1
   basix.ufl:
     display: N1E
     lagrange:
-      triangle: N1E lagrange_variant=equispaced
-      tetrahedron: N1E lagrange_variant=equispaced
-      quadrilateral: N1E lagrange_variant=equispaced
-      hexahedron: N1E lagrange_variant=equispaced
+      triangle: N1E lagrange_variant=equispaced DEGREEMAP=k+1
+      tetrahedron: N1E lagrange_variant=equispaced DEGREEMAP=k+1
+      quadrilateral: N1E lagrange_variant=equispaced DEGREEMAP=k+1
+      hexahedron: N1E lagrange_variant=equispaced DEGREEMAP=k+1
     legendre:
-      triangle: N1E
-      tetrahedron: N1E
-      quadrilateral: N1E
-      hexahedron: N1E
+      triangle: N1E DEGREEMAP=k+1
+      tetrahedron: N1E DEGREEMAP=k+1
+      quadrilateral: N1E DEGREEMAP=k+1
+      hexahedron: N1E DEGREEMAP=k+1
   ufl:
     lagrange:
       triangle: N1curl
@@ -118,32 +117,32 @@ implementations:
       hexahedron: NCE
   bempp:
     lagrange:
-      triangle: SNC DEGREES=1 DEGREEMAP=k-1
+      triangle: SNC DEGREES=1
   fiat:
     legendre:
-      triangle: Nedelec variant=integral
-      tetrahedron: Nedelec variant=integral
+      triangle: Nedelec variant=integral DEGREEMAP=k+1
+      tetrahedron: Nedelec variant=integral DEGREEMAP=k+1
   ndelement:
     legendre:
-      triangle: NedelecFirstKind
-      tetrahedron: NedelecFirstKind
-      quadrilateral: NedelecFirstKind
-      hexahedron: NedelecFirstKind
+      triangle: NedelecFirstKind DEGREEMAP=k+1
+      tetrahedron: NedelecFirstKind DEGREEMAP=k+1
+      quadrilateral: NedelecFirstKind DEGREEMAP=k+1
+      hexahedron: NedelecFirstKind DEGREEMAP=k+1
 examples:
+  - triangle,0,lagrange
   - triangle,1,lagrange
-  - triangle,2,lagrange
+  - quadrilateral,0,lagrange
   - quadrilateral,1,lagrange
-  - quadrilateral,2,lagrange
+  - tetrahedron,0,lagrange
   - tetrahedron,1,lagrange
-  - tetrahedron,2,lagrange
+  - hexahedron,0,lagrange
   - hexahedron,1,lagrange
-  - hexahedron,2,lagrange
+  - prism,0,lagrange
   - prism,1,lagrange
-  - prism,2,lagrange
+  - triangle,0,legendre
   - triangle,1,legendre
-  - triangle,2,legendre
+  - quadrilateral,0,legendre
   - quadrilateral,1,legendre
-  - quadrilateral,2,legendre
 references:
   - title: Mixed finite elements in \(\mathbb{R}^3\)
     author: N&eacute;d&eacute;lec, Jean-Claude
