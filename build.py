@@ -499,7 +499,8 @@ for e in categoriser.elements:
                     fname = fname.replace(s, "-")
 
                 if "DEGREEMAP" in params:
-                    symfem_degree = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+                    symfem_degree = int(
+                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
                 else:
                     symfem_degreee = degree
                 name = f"{cell}<br />degree {degree}"
