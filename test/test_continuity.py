@@ -33,6 +33,9 @@ def test_sequence(file, cellname):
     if m == "identity":
         for i in c:
             assert i in ["L2", "H1", "H2", "H3"]
+    elif m == "L2 Piola":
+        for i in c:
+            assert i in ["L2"]
     elif m == "covariant Piola":
         for i in c:
             assert i == "H(curl)"

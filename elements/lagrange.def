@@ -1,15 +1,13 @@
 name: Lagrange
 html-name: Lagrange
 alt-names:
-  - Polynomial
   - Galerkin
-  - DGT (facets)
   - Hdiv trace (facets)
-  - Q (quadrilateral and hexahedron)
 short-names:
   - P
   - CG
-  - DG
+  - DGT (facets)
+  - Q (quadrilateral and hexahedron)
 notes:
   - DGT and Hdiv trace are names given to this element when it is defined on the facets of a mesh.
   - For the Lobatto variant, the derivatives of most of the basis functions are orthogonal.
@@ -34,10 +32,6 @@ complexes:
   - P-,0,simplex
   - P,0,simplex
   - Q-,0,tp
-  - P-,d,simplex
-  - P,d,simplex
-  - Q-,d,tp
-  - TNT,d,tp
 sobolev: H1
 mapping: identity
 ndofs:
