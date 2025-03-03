@@ -185,6 +185,7 @@ There are a few different ways to describe the (polynomial) degree of a finite e
 * The Lagrange superdegree is the degree of the lowest degree Lagrange space that is a superspace of this element's polynomial space.
 
 On each element's page, the value of these is shown, as well as information about which one is used as the canonical degree of that element.
+In general, the polynomial subdegree is used to index every element whenever possible.
 
 ## Notation
 Throughout this website, the notation given here in this section is used.
