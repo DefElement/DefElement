@@ -101,7 +101,7 @@ polynomial-superdegree:
   pyramid: none
 lagrange-subdegree: k
 lagrange-superdegree: k
-degree: lagrange-superdegree
+degree: polynomial-subdegree
 categories:
   - scalar
 reference-elements:
