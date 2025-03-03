@@ -134,11 +134,15 @@ The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geomet
 \right)\) for 3D reference elements.
 
 ### Scalar-valued basis functions
-The simplest mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
-$$\left({{symbols.mapping}}{{symbols.basis_function}}\right)(\boldsymbol{x})
+The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
+$$\left({{symbols.mapping}}^\text{id}{{symbols.basis_function}}\right)(\boldsymbol{x})
 :={{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
 The term \({{symbols.geometry_map}}^{-1}(\boldsymbol{x})\) is the point on the reference element corresponding to the point \(\boldsymbol{x}\), so this mapping
 maps a value of the function on the reference to the same value at the corresponding point.
+
+The L2 Piola mapping&mdash;used to map scalar discontinuous elements, \({{symbols.basis_function}}\)&mdash;is defined by
+$$\left({{symbols.mapping}}^\text{L2}{{symbols.basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\det {{symbols.jacobian}}}{{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
 
 ### Vector-valued basis functions
 For vector-valued basis functions, \({{symbols.vector_basis_function}}\), the
