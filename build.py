@@ -502,7 +502,7 @@ for e in categoriser.elements:
                     symfem_degree = int(
                         sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
                 else:
-                    symfem_degreee = degree
+                    symfem_degree = degree
                 name = f"{cell}<br />degree {degree}"
                 if variant is not None:
                     name += f"<br />{e.variant_name(variant)} variant"
