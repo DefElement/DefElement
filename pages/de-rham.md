@@ -16,7 +16,7 @@ H^{k-1}
 $$
 
 A set of four finite elements \(\mathcal{V}_0\) to \(\mathcal{V}_3\) forms 
-a discrete de Rham complex if the following commitative diagram holds,
+a discrete de Rham complex if the following commutative diagram holds,
 where \(I_0\) to \(I_3\) are interpolations into \(\mathcal{V}_0\) to \(\mathcal{V}_3\).
 (The commutative diagram holds if following different arrow combinations to the same destination will give the same result.)
 $$
