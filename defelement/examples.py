@@ -149,6 +149,8 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
     plots = plotting.plot_basis_functions(element)
 
     cache_key = f"markup_example-{html_name}-{element.order}-{element.reference.name}"
+    for i, j in element.init_kwargs().items():
+        cache_key += f"-{i}-{j}"
     basis = load_cache(cache_key, element)
 
     if basis is None:
