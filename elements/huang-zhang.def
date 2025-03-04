@@ -1,18 +1,18 @@
 name: Huang-Zhang
 html-name: Huang&ndash;Zhang
-min-degree: 2
-polynomial-subdegree: k-1
-polynomial-superdegree: 2k-1
-lagrange-subdegree: k-1
-lagrange-superdegree: k
-degree: lagrange-superdegree
+min-degree: 1
+polynomial-subdegree: k
+polynomial-superdegree: 2k+1
+lagrange-subdegree: k
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 alt-names:
   - \(Q_{k+1,k}\times Q_{k,k+1}\)
 short-names:
   - HZ
 ndofs:
   quadrilateral:
-    formula: 2k(k+1)
+    formula: 2(k+1)(k+2)
     oeis: A046092
 categories:
   - vector
@@ -22,17 +22,17 @@ mapping: contravariant Piola
 reference-elements:
   - quadrilateral
 polynomial-set:
-  quadrilateral: <k>[\operatorname{span}\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k+1\}, j\in\{0,1,...,k\}\right\}] && <k>[\operatorname{span}\left\{\left(\begin{array}{c}0\\x^iy^j\end{array}\right)\middle|i\in\{0,1,...,k\}, j\in\{0,1,...,k+1\}\right\}]
+  quadrilateral: <k+1>[\operatorname{span}\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k+1\}, j\in\{0,1,...,k\}\right\}] && <k+1>[\operatorname{span}\left\{\left(\begin{array}{c}0\\x^iy^j\end{array}\right)\middle|i\in\{0,1,...,k\}, j\in\{0,1,...,k+1\}\right\}]
 dofs:
   facets:
-    - normal integral moments with (lagrange,k-1)
-    - tangent integral moments with (lagrange,k-2)
-  cell: integral moments with "\(\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k-1\}, j\in\{0,1,...,k-2\}\right\}\cup\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k-2\}, j\in\{0,1,...,k-1\}\right\}\)"
+    - normal integral moments with (lagrange,k)
+    - tangent integral moments with (lagrange,k-1)
+  cell: integral moments with "\(\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k\}, j\in\{0,1,...,k-1\}\right\}\cup\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k-1\}, j\in\{0,1,...,k\}\right\}\)"
 implementations:
-  symfem: HZ
+  symfem: HZ DEGREEMAP=k+1
 examples:
+  - quadrilateral,1
   - quadrilateral,2
-  - quadrilateral,3
 references:
   - title: A family of \(Q_{k+1,k}\times Q+{k,k+1}\) divergence-free finite elements on rectangular grids
     author: Zhang, Shangyou

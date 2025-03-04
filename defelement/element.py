@@ -707,6 +707,7 @@ class Element:
                     break
             else:
                 raise DegreeNotImplemented()
+            del params["DEGREES"]
 
         input_deg: typing.Optional[int] = degree
         if "DEGREEMAP" in params:
@@ -714,6 +715,7 @@ class Element:
                 input_deg = None
             else:
                 input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+            del params["DEGREEMAP"]
 
         return out, input_deg, params
 

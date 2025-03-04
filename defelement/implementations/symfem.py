@@ -105,9 +105,9 @@ class SymfemImplementation(Implementation):
             else:
                 out += f"element = symfem.create_element(\"{ref}\","
             if "variant" in params:
-                out += f" \"{symfem_name}\", {deg}, variant=\"{params['variant']}\""
+                out += f" \"{symfem_name}\", {input_deg}, variant=\"{params['variant']}\""
             else:
-                out += f" \"{symfem_name}\", {deg}"
+                out += f" \"{symfem_name}\", {input_deg}"
             for i, j in kwargs.items():
                 if isinstance(j, str):
                     out += f", {i}=\"{j}\""

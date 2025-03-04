@@ -49,7 +49,7 @@ class BasixUFLImplementation(Implementation):
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
             out += "element = basix.ufl.element("
-            out += f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {deg}"
+            out += f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {input_deg}"
             if "lagrange_variant" in params:
                 out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
             if "dpc_variant" in params:
