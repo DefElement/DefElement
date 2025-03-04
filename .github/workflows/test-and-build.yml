@@ -168,6 +168,7 @@ jobs:
 
       - name: Tidy Symfem cache
         run: python -c "from defelement.caching import tidy_cache; tidy_cache()"
+        if: github.ref == 'refs/heads/main'
       - name: Save Symfem cache
         uses: actions/cache/save@v4
         with:
