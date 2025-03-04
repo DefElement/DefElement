@@ -46,3 +46,16 @@ def save_cache(item_key: str, e: symfem.finite_element.FiniteElement, item: str)
     }
     with open(join(settings.cache_path, f"{item_key}.json"), "w") as f:
         return json.dump(data, f)
+
+
+def tidy_cache():
+    """Remove old items from cache."""
+    if not settings.caching or not os.path.isdir(settings.cache_path):
+        return
+    for file in os.listdir(settings.cache_path):
+        with open(join(settings.cache_path, file)) as f:
+            data = json.load(f)
+        if data.get(
+            "symfem_version"
+        ) != symfem.__version__ or data.get("cache_version") != cache_version:
+            os.remove(join(settings.cache_path, file))
