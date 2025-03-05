@@ -55,7 +55,7 @@ class NDElementImplementation(Implementation):
             if "continuity" in params:
                 cont = True
                 assert params["continuity"] in ["Standard", "Discontinuous"]
-                out += f", continuity=Continuity.{params['continuty']}"
+                out += f", continuity=Continuity.{params['continuity']}"
             out += ")\n"
             out += f"element = family.element(ReferenceCellType.{ref[0].upper() + ref[1:]})"
         if cont:

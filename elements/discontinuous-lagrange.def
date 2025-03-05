@@ -1,0 +1,202 @@
+name: discontinuous Lagrange
+html-name: discontinuous Lagrange
+alt-names:
+  - discontinuous Galerkin
+short-names:
+  - DP
+  - DQ (quadrilateral and hexahedron)
+  - DG
+variants:
+  equispaced:
+    description: The variant has its point evaluations at equally spaced points.
+    variant-name: equispaced
+  gll:
+    description: This variant has its point evaluations at GLL points.
+    variant-name: GLL
+    names:
+      - discontinuous Gauss&ndash;Lobatto&ndash;Legendre
+    short-names:
+      - discontinuous GLL
+  gl:
+    description: This variant has its point evaluations at GL points.
+    variant-name: GL
+    names:
+      - Gauss&ndash;Legendre
+    short-names:
+      - GL
+  legendre:
+    description: The basis functions of this variant are orthonormal Legendre polynomials.
+    variant-name: Legendre
+    names:
+      - Legendre
+complexes:
+  de-rham:
+  - P-,d,simplex
+  - P,d,simplex
+  - Q-,d,tp
+  - TNT,d,tp
+sobolev: L2
+mapping: L2 Piola
+ndofs:
+  interval:
+    formula: k+1
+    oeis: A000027
+  triangle:
+    formula: (k+1)(k+2)/2
+    oeis: A000217
+  tetrahedron:
+    formula: (k+1)(k+2)(k+3)/6
+    oeis: A000292
+  quadrilateral:
+    formula: (k+1)^2
+    oeis: A000290
+  hexahedron:
+    formula: (k+1)^3
+    oeis: A000578
+  prism:
+    formula: (k+1)^2(k+2)/2
+    oeis: A002411
+  pyramid:
+    formula: (k+1)(k+2)(2k+3)/6
+    oeis: A000330
+entity-ndofs:
+  cells:
+    interval:
+      formula: k+1
+      oeis: A000027
+    triangle:
+      formula: (k+1)(k+2)/2
+      oeis: A000217
+    tetrahedron:
+      formula: (k+1)(k+2)(k+3)/6
+      oeis: A000292
+    quadrilateral:
+      formula: (k+1)^2
+      oeis: A000290
+    hexahedron:
+      formula: (k+1)^3
+      oeis: A000578
+    prism:
+      formula: (k+1)^2(k+2)/2
+      oeis: A002411
+    pyramid:
+      formula: (k+1)(k+2)(2k+3)/6
+      oeis: A000330
+min-degree: 0
+polynomial-subdegree: k
+polynomial-superdegree:
+  interval: k
+  triangle: k
+  tetrahedron: k
+  quadrilateral: dk
+  hexahedron: dk
+  prism: 2k
+  pyramid: none
+lagrange-subdegree: k
+lagrange-superdegree: k
+degree: lagrange-superdegree
+categories:
+  - scalar
+reference-elements:
+  - interval
+  - triangle
+  - tetrahedron
+  - quadrilateral
+  - hexahedron
+  - prism
+  - pyramid
+dofs:
+  vertices: point evaluations
+  edges: point evaluations
+  faces: point evaluations
+  volumes: point evaluations
+polynomial-set:
+  interval: poly[k]
+  triangle: poly[k]
+  tetrahedron: poly[k]
+  quadrilateral: qoly[k]
+  hexahedron: qoly[k]
+  prism: <k>[\operatorname{span}\left\{x_1^{p_1}x_2^{p_2}x_3^{p_3}\middle|\max(p_1+p_2,p_3)\leqslant k\right\}]
+  pyramid: poly[k] && <k>[\operatorname{span}\left\{\frac{x_1^{p_1}x_2^{p_2}}{(1-x_3)^{\min(p_1,p_2)}}\middle|(p_1,p_2)=(1,k)\text{ or }(p_1,p_2)=(k,1)\text{ or }p_1\leqslant k-1,p_2\leqslant k-1,k+1\leqslant p_1+p_2\right\}]
+implementations:
+  symfem:
+    equispaced: discontinuous Lagrange
+    gll:
+      interval: discontinuous Lagrange variant=gll
+      quadrilateral: discontinuous Q variant=gll
+      hexahedron: discontinuous Q variant=gll
+    gl:
+      interval: discontinuous Lagrange variant=gl
+      quadrilateral: discontinuous Q variant=gl
+      hexahedron: discontinuous Q variant=gl
+    legendre: discontinuous Lagrange variant=legendre
+  basix:
+    display: P
+    equispaced:
+      interval: P lagrange_variant=equispaced discontinuous=True
+      triangle: P lagrange_variant=equispaced discontinuous=True
+      quadrilateral: P lagrange_variant=equispaced discontinuous=True
+      tetrahedron: P lagrange_variant=equispaced discontinuous=True
+      hexahedron: P lagrange_variant=equispaced discontinuous=True
+      prism: P lagrange_variant=equispaced discontinuous=True
+    gll:
+      interval: P lagrange_variant=gll_warped discontinuous=True
+      quadrilateral: P lagrange_variant=gll_warped discontinuous=True
+      hexahedron: P lagrange_variant=gll_warped discontinuous=True
+  basix.ufl:
+    display: P
+    equispaced:
+      interval: P lagrange_variant=equispaced discontinuous=True
+      triangle: P lagrange_variant=equispaced discontinuous=True
+      quadrilateral: P lagrange_variant=equispaced discontinuous=True
+      tetrahedron: P lagrange_variant=equispaced discontinuous=True
+      hexahedron: P lagrange_variant=equispaced discontinuous=True
+      prism: P lagrange_variant=equispaced discontinuous=True
+    gll:
+      interval: P lagrange_variant=gll_warped discontinuous=True
+      quadrilateral: P lagrange_variant=gll_warped discontinuous=True
+      hexahedron: P lagrange_variant=gll_warped discontinuous=True
+  ufl:
+    equispaced:
+      interval: Discontinuous Lagrange
+      triangle: Discontinuous Lagrange
+      tetrahedron: Discontinuous Lagrange
+      quadrilateral: DQ
+      hexahedron: DQ
+  bempp:
+    equispaced:
+      triangle: DP DEGREES=0,1
+  fiat:
+    equispaced:
+      interval: DiscontinuousLagrange
+      triangle: DiscontinuousLagrange
+      tetrahedron: DiscontinuousLagrange
+  ndelement:
+    equispaced:
+      interval: Lagrange continuity=Discontinuous
+      triangle: Lagrange continuity=Discontinuous
+      quadrilateral: Lagrange continuity=Discontinuous
+      tetrahedron: Lagrange continuity=Discontinuous
+      hexahedron: Lagrange continuity=Discontinuous
+examples:
+  - interval,0,equispaced
+  - interval,1,equispaced
+  - interval,2,equispaced
+  - triangle,0,equispaced
+  - triangle,1,equispaced
+  - triangle,2,equispaced
+  - quadrilateral,0,equispaced
+  - quadrilateral,1,equispaced
+  - quadrilateral,2,equispaced
+  - tetrahedron,0,equispaced
+  - tetrahedron,1,equispaced
+  - tetrahedron,2,equispaced
+  - hexahedron,0,equispaced
+  - hexahedron,1,equispaced
+  - hexahedron,2,equispaced
+  - prism,0,equispaced
+  - prism,1,equispaced
+  - prism,2,equispaced
+  - pyramid,0,equispaced
+  - pyramid,1,equispaced
+  - pyramid,2,equispaced

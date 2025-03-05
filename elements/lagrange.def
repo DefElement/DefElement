@@ -1,15 +1,13 @@
 name: Lagrange
 html-name: Lagrange
 alt-names:
-  - Polynomial
   - Galerkin
-  - DGT (facets)
   - Hdiv trace (facets)
-  - Q (quadrilateral and hexahedron)
 short-names:
   - P
   - CG
-  - DG
+  - DGT (facets)
+  - Q (quadrilateral and hexahedron)
 notes:
   - DGT and Hdiv trace are names given to this element when it is defined on the facets of a mesh.
   - For the Lobatto variant, the derivatives of most of the basis functions are orthogonal.
@@ -34,10 +32,6 @@ complexes:
   - P-,0,simplex
   - P,0,simplex
   - Q-,0,tp
-  - P-,d,simplex
-  - P,d,simplex
-  - Q-,d,tp
-  - TNT,d,tp
 sobolev: H1
 mapping: identity
 ndofs:
@@ -127,14 +121,7 @@ polynomial-set:
   pyramid: poly[k] && <k>[\operatorname{span}\left\{\frac{x_1^{p_1}x_2^{p_2}}{(1-x_3)^{\min(p_1,p_2)}}\middle|(p_1,p_2)=(1,k)\text{ or }(p_1,p_2)=(k,1)\text{ or }p_1\leqslant k-1,p_2\leqslant k-1,k+1\leqslant p_1+p_2\right\}]
 implementations:
   symfem:
-    equispaced:
-      interval: Lagrange
-      triangle: Lagrange
-      tetrahedron: Lagrange
-      quadrilateral: Q
-      hexahedron: Q
-      prism: Lagrange
-      pyramid: Lagrange
+    equispaced: Lagrange
     gll:
       interval: Lagrange variant=gll
       quadrilateral: Q variant=gll
