@@ -7,7 +7,7 @@ import symfem
 from webtools import settings
 from webtools.markup import insert_links as _insert_links
 
-from defelement import plotting, symbols
+from defelement import info, plotting, symbols
 
 page_references: typing.List[str] = []
 
@@ -107,5 +107,6 @@ settings.re_extras = [
 ]
 settings.str_extras = [
     ("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>"),
+    ("{{number-of-elements}}", f"{info.number_of_elements}"),
 ]
 settings.insert_links = insert_links
