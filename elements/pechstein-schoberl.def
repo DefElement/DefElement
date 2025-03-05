@@ -12,7 +12,7 @@ reference-elements:
 mixed:
   - nedelec2(k)
   - lagrange(k+1)
-  - hellan-hermann-johnson(k)
+  - hellan-herrmann-johnson(k)
 min-degree: 1
 references:
   - author:
