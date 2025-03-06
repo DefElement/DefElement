@@ -111,7 +111,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .defelement-build-cache
-          key: defelement-build-cache
+          key: defelement-cache
 
       - name: Clone Symfem
         uses: actions/checkout@v4
@@ -179,7 +179,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .defelement-build-cache
-          key: defelement-build-cache
+          key: defelement-cache
         if: github.ref == 'refs/heads/main'
 
   deploy-website:
