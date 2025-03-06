@@ -26,6 +26,7 @@ and more exotic elements such as
 and
 [Regge](element::regge)
 elements.
+DefElement currently contains the definition of {{number-of-elements}} elements.
 
 You can:
 <ul>
