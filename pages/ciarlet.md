@@ -38,11 +38,9 @@ reference elements of topological dimensions 0 to 3 are shown below.
 The Ciarlet definition <ref type="book" title="The Finite Element Method for Elliptic Problems" author="Ciarlet, P. G." year="1978" publisher="North-Holland">
 defines a finite element by a triple \(({{symbols.reference}},{{symbols.polyset}},{{symbols.dual_basis}})\), where
 
-<ul>
-<li>\({{symbols.reference}}\subset\mathbb{R}^d\) is the reference element, usually a polygon or polyhedron;</li>
-<li>\({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);</li>
-<li>\({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference element \({{symbols.reference}}\).</li>
-</ul>
+* \({{symbols.reference}}\subset\mathbb{R}^d\) is the reference element, usually a polygon or polyhedron;
+* \({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);
+* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference element \({{symbols.reference}}\).
 
 The basis functions \(\{{{symbols.basis_function}}_0,...,{{symbols.basis_function}}_{n-1}\}\)
 of the finite element space are defined by
@@ -54,11 +52,9 @@ The correct continuity is enforced by ensuring that the same global degree-of-fr
 ### Example: Order 1 Lagrange space on a triangle
 An order 1 [Lagrange space](element::lagrange) on a triangle is defined by:
 
-<ul>
-<li>\({{symbols.reference}}\) is a triangle with vertices at \((0,0)\), \((1,0)\) and \((0,1)\);</li>
-<li>\({{symbols.polyset}}=\operatorname{span}\{1, x, y\}\);</li>
-<li>\({{symbols.dual_basis}}=\{{{symbols.functional}}_0,{{symbols.functional}}_1,{{symbols.functional}}_2\}\).
-</ul>
+* \({{symbols.reference}}\) is a triangle with vertices at \((0,0)\), \((1,0)\) and \((0,1)\);
+* \({{symbols.polyset}}=\operatorname{span}\{1, x, y\}\);
+* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,{{symbols.functional}}_1,{{symbols.functional}}_2\}\).
 
 The functionals \({{symbols.functional}}_0\) to \({{symbols.functional}}_2\) are defined as
 point evaluations at the three vertices of the triangle:

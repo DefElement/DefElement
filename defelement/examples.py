@@ -6,7 +6,7 @@ import typing
 import sympy
 from symfem.finite_element import CiarletElement, DirectElement, FiniteElement
 from symfem.functionals import BaseFunctional
-from symfem.functions import AnyFunction
+from symfem.functions import Function
 from symfem.piecewise_functions import PiecewiseFunction
 from symfem.symbols import t
 from webtools.html import make_html_page
@@ -20,10 +20,10 @@ defelement_t = ["s_{0}", "s_{1}", "s_{2}"]
 
 def to_tex(
     f: typing.Union[
-        AnyFunction,
+        Function,
         sympy.core.expr.Expr,
-        typing.List[typing.Union[AnyFunction, sympy.core.expr.Expr]],
-        typing.Tuple[typing.Union[AnyFunction, sympy.core.expr.Expr], ...]],
+        typing.List[typing.Union[Function, sympy.core.expr.Expr]],
+        typing.Tuple[typing.Union[Function, sympy.core.expr.Expr], ...]],
     tfrac: bool = False
 ) -> str:
     """Convert function to TeX.
@@ -48,7 +48,7 @@ def to_tex(
     if isinstance(f, (list, tuple)):
         return "\\left(\\begin{array}{c}" + "\\\\".join(
             ["\\displaystyle " + to_tex(i) for i in f]) + "\\end{array}\\right)"
-    elif isinstance(f, AnyFunction):
+    elif isinstance(f, Function):
         out = f.as_tex()
     else:
         out = sympy.latex(sympy.simplify(sympy.expand(f)))
