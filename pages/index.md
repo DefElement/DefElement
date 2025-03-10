@@ -29,15 +29,14 @@ elements.
 DefElement currently contains the definition of {{number-of-elements}} elements.
 
 You can:
-<ul>
-<li>[view the full alphabetical list of elements](index::all)</li>
-<li>[view the elements by category](index::categories)</li>
-<li>[view the elements by reference element](index::references)</li>
-<li>[view the elements that form complexes](index::families)</li>
-<li>[view the elements by available implementations](index::implementations)</li>
-<li>[view recently added/updated elements](index::recent)</li>
-<li>[view a list of all pages on DefElement](/sitemap.html)</li>
-</ul>
+
+* [view the full alphabetical list of elements](index::all)
+* [view the elements by category](index::categories)
+* [view the elements by reference element](index::references)
+* [view the elements that form complexes](index::families)
+* [view the elements by available implementations](index::implementations)
+* [view recently added/updated elements](index::recent)
+* [view a list of all pages on DefElement](/sitemap.html)
 
 ## The finite element method
 The finite element method is a numerical method that involves discretising a problem using a finite
