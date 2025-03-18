@@ -8,9 +8,9 @@ The following relationship is the de Rham complex:
 $$
 H^1
 \xrightarrow{\nabla}
-H(\textbf{curl})
+\textbf{H}(\text{curl})
 \xrightarrow{\nabla\times}
-H(\text{div})
+\textbf{H}(\text{div})
 \xrightarrow{\nabla\cdot}
 L^2
 $$
@@ -23,9 +23,9 @@ $$
 \begin{array}{ccccccc}
 H^1
 &\xrightarrow{\nabla}
-&H(\textbf{curl})
+&\textbf{H}(\text{curl})
 &\xrightarrow{\nabla\times}
-&H(\text{div})
+&\textbf{H}(\text{div})
 &\xrightarrow{\nabla\cdot}
 &L^2\\
 \hphantom{\small I_0}\big\downarrow {\small I_0}&&

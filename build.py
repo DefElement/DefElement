@@ -1113,8 +1113,36 @@ def linked_names(dim: str, fname: str, cell: str) -> str:
     return ", ".join(out)
 
 
-de_rham_3d = []
-de_rham_2d = []
+def de_rham_row(family: typing.Dict[str, typing.Dict[str, typing.List[str]]],
+                fname: str, cell: str, diff_form_deg: typing.List[str]) -> str:
+    """Create HTML string of FEs.
+
+    Args:
+        family: Elements
+        fname: Filename
+        cell: Reference cell
+        diff_form_deg: List of differential form degrees
+
+    Returns:
+        HTML string of FEs
+    """
+    row = ""
+    if all(i in family[cell] for i in diff_form_deg):
+        row += "<tr>"
+        row += f"<td>{linked_names(str(len(diff_form_deg)-1), fname, cell)}</td>"
+        for o in diff_form_deg:
+            row += f"<td><a href='/elements/{family[cell][o][1]}'"
+            row += " style='text-decoration:none'>"
+            row += f"{family[cell][o][0]}</a></td>"
+            if o != "d":
+                row += "<td>&nbsp;</td>"
+        row += "</tr>"
+    return row
+
+
+de_rham_3d: typing.List[str] = []
+de_rham_2d_hdiv: typing.List[str] = []
+de_rham_2d_hcurl: typing.List[str] = []
 
 for fname, data in categoriser.families["de-rham"].items():
     family = data["elements"]
@@ -1143,28 +1171,9 @@ for fname, data in categoriser.families["de-rham"].items():
                     sub_content += " or ".join(sub_names)
                     sub_content += f" ({family[cell][o][0]})</a></li>"
 
-            if all(o in family[cell] for o in ["0", "1", "d-1", "d"]):
-                row3d = "<tr>"
-                row3d += f"<td>{linked_names('3', fname, cell)}</td>"
-                for o in ["0", "1", "d-1", "d"]:
-                    row3d += f"<td><a href='/elements/{family[cell][o][1]}'"
-                    row3d += " style='text-decoration:none'>"
-                    row3d += f"{family[cell][o][0]}</a></td>"
-                    if o != "d":
-                        row3d += "<td>&nbsp;</td>"
-                row3d += "</tr>"
-                de_rham_3d.append(row3d)
-            if all(i in family[cell] for i in ["0", "d-1", "d"]):
-                row2d = "<tr>"
-                row2d += f"<td>{linked_names('2', fname, cell)}</td>"
-                for o in ["0", "d-1", "d"]:
-                    row2d += f"<td><a href='/elements/{family[cell][o][1]}'"
-                    row2d += " style='text-decoration:none'>"
-                    row2d += f"{family[cell][o][0]}</a></td>"
-                    if o != "d":
-                        row2d += "<td>&nbsp;</td>"
-                row2d += "</tr>"
-                de_rham_2d.append(row2d)
+            de_rham_3d.append(de_rham_row(family, fname, cell, ["0", "1", "d-1", "d"]))
+            de_rham_2d_hdiv.append(de_rham_row(family, fname, cell, ["0", "d-1", "d"]))
+            de_rham_2d_hcurl.append(de_rham_row(family, fname, cell, ["0", "1", "d"]))
         sub_content += "</ul>"
 
     write_html_page(os.path.join(settings.htmlfamilies_path, f"{fname}.html"),
@@ -1179,25 +1188,47 @@ content += "<tr>"
 content += "<td><small>Name(s)</small></td>"
 content += "<td>\\(H^1\\)</td>"
 content += "<td>\\(\\xrightarrow{\\nabla}\\)</td>"
-content += "<td>\\(H(\\textbf{curl})\\)</td>"
+content += "<td>\\(\\textbf{H}(\\text{curl})\\)</td>"
 content += "<td>\\(\\xrightarrow{\\nabla\\times}\\)</td>"
-content += "<td>\\(H(\\text{div})\\)</td>"
+content += "<td>\\(\\textbf{H}(\\text{div})\\)</td>"
 content += "<td>\\(\\xrightarrow{\\nabla\\cdot}\\)</td>"
 content += "<td>\\(L^2\\)</td>"
 content += "</tr>\n"
 content += "\n".join(de_rham_3d)
 content += "</table>"
 content += heading_with_self_ref("h2", "De Rham complex in 2D")
+content += "<p>In 2D, \\(\\textbf{H}(\\text{div})\\) and \\(\\textbf{H}(\\text{curl})\\) "
+content += "are isomorphic via a 90 degree rotation \\(R\\). This means that we can define "
+content += "the de Rham complex in two ways.</p>"
+content += "<p>One variant uses \\(\\textbf{H}(\\text{div})\\) and the vector-valued "
+content += "\\(\\textbf{curl}\\) operator, "
+content += "\\(\\textbf{curl} \\, u = (\\partial_y u, -\\partial_x u)\\). "
+content += "Note that \\(\\textbf{curl} \\, u = R \\, \\nabla u\\).</p>"
 content += "<table class='families'>\n"
 content += "<tr>"
 content += "<td><small>Name(s)</small></td>"
 content += "<td>\\(H^1\\)</td>"
 content += "<td>\\(\\xrightarrow{\\textbf{curl}}\\)</td>"
-content += "<td>\\(H(\\text{div})\\)</td>"
+content += "<td>\\(\\textbf{H}(\\text{div})\\)</td>"
 content += "<td>\\(\\xrightarrow{\\nabla\\cdot}\\)</td>"
 content += "<td>\\(L_2\\)</td>"
 content += "</tr>\n"
-content += "\n".join(de_rham_2d)
+content += "\n".join(de_rham_2d_hdiv)
+content += "</table>"
+content += "<p>The second variant uses \\(\\textbf{H}(\\text{curl})\\) and the scalar-valued "
+content += "\\(\\text{curl}\\) operator, "
+content += "\\(\\text{curl} \\, \\mathbf{u} = \\partial_x u_y - \\partial_y u_x\\). "
+content += "Note that \\(\\text{curl} \\, \\mathbf{u} = \\nabla\\cdot R \\mathbf{u}\\).</p>"
+content += "<table class='families'>\n"
+content += "<tr>"
+content += "<td><small>Name(s)</small></td>"
+content += "<td>\\(H^1\\)</td>"
+content += "<td>\\(\\xrightarrow{\\nabla}\\)</td>"
+content += "<td>\\(\\textbf{H}(\\text{curl})\\)</td>"
+content += "<td>\\(\\xrightarrow{\\text{curl}}\\)</td>"
+content += "<td>\\(L_2\\)</td>"
+content += "</tr>\n"
+content += "\n".join(de_rham_2d_hcurl)
 content += "</table>"
 write_html_page(os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content)
 
