@@ -58,8 +58,8 @@ reference-elements:
 polynomial-set:
   triangle: poly[k-1]^d && <k>[\left\{\left(\begin{array}{c}px_1\\\vdots\\px_d\end{array}\right)\middle|p\in{{tpoly[k-1]}}\right\}]
   tetrahedron: poly[k-1]^d && <k>[\left\{\left(\begin{array}{c}px_1\\\vdots\\px_d\end{array}\right)\middle|p\in{{tpoly[k-1]}}\right\}]
-  quadrilateral: qoly[k-1]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_j\in\begin{cases}{{tqoly[k+1]}}&i=j\\{{tqoly[k]}}&i\not=j\end{cases}\text{ for }i,j=1,\dots,d\right\}]
-  hexahedron: qoly[k]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_j\in\begin{cases}{{tqoly[k+1]}}&i=j\\{{tqoly[k]}}&i\not=j\end{cases}\text{ for }i,j=1,\dots,d\right\}]
+  quadrilateral: qoly[k-1]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_j\in\begin{cases}{{tqoly[k+1]}}&i=j\\{{tqoly[k]}}&i\not=j\end{cases}\text{ for }i,j=1,\dots,d\right\}]
+  hexahedron: qoly[k-1]^d && <k>[\left\{\boldsymbol{q}\in{{tqoly[k]^d}}\middle|\boldsymbol{q}(\boldsymbol{x})\cdot x_i\boldsymbol{e}_j\in\begin{cases}{{tqoly[k+1]}}&i=j\\{{tqoly[k]}}&i\not=j\end{cases}\text{ for }i,j=1,\dots,d\right\}]
 dofs:
   facets: normal integral moments with (lagrange,k-1)
   cell:
