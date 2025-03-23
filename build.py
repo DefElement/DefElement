@@ -1230,6 +1230,11 @@ content += "<td>\\(L_2\\)</td>"
 content += "</tr>\n"
 content += "\n".join(de_rham_2d_hcurl)
 content += "</table>"
+content += "<p>These two de Rham complex definitions in 2D account for the "
+content += "double element diagrams in the orange boxes in the "
+content += "<a href=https://www-users.cse.umn.edu/~arnold/femtable>"
+content += "Periodic table of the finite elements</a>. That is also why the "
+content += "boxes are orange, and not red nor yellow as in 3D.</p>"
 write_html_page(os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content)
 
 # List of lists
