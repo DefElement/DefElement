@@ -4,30 +4,30 @@ authors:
 --
 
 # De Rham element families
-The following relationship is the \(L^2\) de Rham complex:
+The following relationship is the de Rham complex:
 $$
-H^k
+H^1
 \xrightarrow{\nabla}
-H^{k-1}(\textbf{curl})
+\textbf{H}(\text{curl})
 \xrightarrow{\nabla\times}
-H^{k-1}(\text{div})
+\textbf{H}(\text{div})
 \xrightarrow{\nabla\cdot}
-H^{k-1}
+L^2
 $$
 
 A set of four finite elements \(\mathcal{V}_0\) to \(\mathcal{V}_3\) forms 
-a discrete de Rham complex if the following commitative diagram holds,
+a discrete de Rham complex if the following commutative diagram holds,
 where \(I_0\) to \(I_3\) are interpolations into \(\mathcal{V}_0\) to \(\mathcal{V}_3\).
 (The commutative diagram holds if following different arrow combinations to the same destination will give the same result.)
 $$
 \begin{array}{ccccccc}
-H^k
+H^1
 &\xrightarrow{\nabla}
-&H^{k-1}(\textbf{curl})
+&\textbf{H}(\text{curl})
 &\xrightarrow{\nabla\times}
-&H^{k-1}(\text{div})
+&\textbf{H}(\text{div})
 &\xrightarrow{\nabla\cdot}
-&H^{k-1}\\
+&L^2\\
 \hphantom{\small I_0}\big\downarrow {\small I_0}&&
 \hphantom{\small I_1}\big\downarrow {\small I_1}&&
 \hphantom{\small I_2}\big\downarrow {\small I_2}&&

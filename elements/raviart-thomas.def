@@ -21,8 +21,9 @@ short-names:
   - RTcf (quadrilateral)
   - Ncf (hexahedron)
 complexes:
-  de-rham: P-,d-1,simplex
-  de-rham: Q-,d-1,tp
+  de-rham:
+  - P-,d-1,simplex
+  - Q-,d-1,tp
 ndofs:
   triangle:
     formula: (k+1)(k+3)
@@ -91,7 +92,7 @@ implementations:
       tetrahedron: RT DEGREEMAP=k+1
       quadrilateral: RTCF DEGREEMAP=k+1
       hexahedron: NCF DEGREEMAP=k+1
-  bempp:
+  bempp-cl:
     lagrange:
       triangle: RWG DEGREES=0
   ndelement:

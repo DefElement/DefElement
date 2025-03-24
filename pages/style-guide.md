@@ -18,11 +18,11 @@ The notation used on DefElement can be found [in this list](ciarlet.md#Notation)
 ### References
 References to papers, books, etc should follow the following style guidance:
 
-- Author names should include the full first name, middle initial(s) followed by full stop(s), then
+* Author names should include the full first name, middle initial(s) followed by full stop(s), then
   surname. In .def files, they are written as Surname, First Name Initials (eg
   "Scroggs, Matthew W.")
-- Paper titles should use sentence case (like this)
-- Journal and Book Names Should Use Title Case (Like This)
+* Paper titles should use sentence case (like this)
+* Journal and Book Names Should Use Title Case (Like This)
 
 ### Sobolev spaces
 When written in text, the spaces H(div) and H(curl) should be written as text, and not in math-mode.

@@ -115,7 +115,7 @@ implementations:
       tetrahedron: N1curl DEGREEMAP=k+1
       quadrilateral: RTCE DEGREEMAP=k+1
       hexahedron: NCE DEGREEMAP=k+1
-  bempp:
+  bempp-cl:
     lagrange:
       triangle: SNC DEGREES=0
   fiat:

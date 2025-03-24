@@ -38,11 +38,9 @@ reference elements of topological dimensions 0 to 3 are shown below.
 The Ciarlet definition <ref type="book" title="The Finite Element Method for Elliptic Problems" author="Ciarlet, P. G." year="1978" publisher="North-Holland">
 defines a finite element by a triple \(({{symbols.reference}},{{symbols.polyset}},{{symbols.dual_basis}})\), where
 
-<ul>
-<li>\({{symbols.reference}}\subset\mathbb{R}^d\) is the reference element, usually a polygon or polyhedron;</li>
-<li>\({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);</li>
-<li>\({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference element \({{symbols.reference}}\).</li>
-</ul>
+* \({{symbols.reference}}\subset\mathbb{R}^d\) is the reference element, usually a polygon or polyhedron;
+* \({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);
+* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference element \({{symbols.reference}}\).
 
 The basis functions \(\{{{symbols.basis_function}}_0,...,{{symbols.basis_function}}_{n-1}\}\)
 of the finite element space are defined by
@@ -54,11 +52,9 @@ The correct continuity is enforced by ensuring that the same global degree-of-fr
 ### Example: Order 1 Lagrange space on a triangle
 An order 1 [Lagrange space](element::lagrange) on a triangle is defined by:
 
-<ul>
-<li>\({{symbols.reference}}\) is a triangle with vertices at \((0,0)\), \((1,0)\) and \((0,1)\);</li>
-<li>\({{symbols.polyset}}=\operatorname{span}\{1, x, y\}\);</li>
-<li>\({{symbols.dual_basis}}=\{{{symbols.functional}}_0,{{symbols.functional}}_1,{{symbols.functional}}_2\}\).
-</ul>
+* \({{symbols.reference}}\) is a triangle with vertices at \((0,0)\), \((1,0)\) and \((0,1)\);
+* \({{symbols.polyset}}=\operatorname{span}\{1, x, y\}\);
+* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,{{symbols.functional}}_1,{{symbols.functional}}_2\}\).
 
 The functionals \({{symbols.functional}}_0\) to \({{symbols.functional}}_2\) are defined as
 point evaluations at the three vertices of the triangle:
@@ -134,11 +130,15 @@ The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geomet
 \right)\) for 3D reference elements.
 
 ### Scalar-valued basis functions
-The simplest mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
-$$\left({{symbols.mapping}}{{symbols.basis_function}}\right)(\boldsymbol{x})
+The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
+$$\left({{symbols.mapping}}^\text{id}{{symbols.basis_function}}\right)(\boldsymbol{x})
 :={{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
 The term \({{symbols.geometry_map}}^{-1}(\boldsymbol{x})\) is the point on the reference element corresponding to the point \(\boldsymbol{x}\), so this mapping
 maps a value of the function on the reference to the same value at the corresponding point.
+
+The L2 Piola mapping&mdash;used to map scalar discontinuous elements, \({{symbols.basis_function}}\)&mdash;is defined by
+$$\left({{symbols.mapping}}^\text{L2}{{symbols.basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\det {{symbols.jacobian}}}{{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
 
 ### Vector-valued basis functions
 For vector-valued basis functions, \({{symbols.vector_basis_function}}\), the
@@ -206,6 +206,7 @@ Throughout this website, the notation given here in this section is used.
 <tr><td style='padding-right:10px'>\({{symbols.entity(2)}}_i\)</td><td>The \(i\)th face</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.entity(3)}}_i\)</td><td>The \(i\)th volume</td></tr>
 <tr><td style='padding-right:10px'>\(k\)</td><td>Degree of a finite element</td></tr>
-<tr><td style='padding-right:10px'>\(d\)</td><td>Geometric dimension</td></tr>
+<tr><td style='padding-right:10px'>\(d\)</td><td>Topological dimension</td></tr>
+<tr><td style='padding-right:10px'>\(d_g\)</td><td>Geometric dimension</td></tr>
 <tr><td style='padding-right:10px'>\(r\)</td><td>Exterior derivative order</td></tr>
 </table>
