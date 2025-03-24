@@ -92,9 +92,9 @@ jobs:
   build-website:
     name: Build defelement
     runs-on: ubuntu-22.04
-#    needs:
-#      - test-build-website
-#      - run-tests
+    needs:
+      - test-build-website
+      - run-tests
     steps:
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -102,31 +102,16 @@ jobs:
           python-version: "3.12"
       - uses: actions/checkout@v4
 
-      - name: Symfem cache
+      - name: Load Symfem cache
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
-        #if: github.ref == 'refs/heads/main'
-      - name: DefElement cache
+      - name: Load DefElement cache
         uses: actions/cache@v4
         with:
           path: .defelement-build-cache
           key: defelement-cache
-        #if: github.ref == 'refs/heads/main'
-
-#      - name: Load Symfem cache
-#        uses: actions/cache/restore@v4
-#        with:
-#          path: /home/runner/.cache/symfem
-#          key: symfem-cache
-#        if: github.ref != 'refs/heads/main'
-#      - name: Load DefElement cache
-#        uses: actions/cache/restore@v4
-#        with:
-#          path: .defelement-build-cache
-#          key: defelement-cache
-#        if: github.ref != 'refs/heads/main'
 
       - name: Clone Symfem
         uses: actions/checkout@v4
