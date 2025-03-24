@@ -13,13 +13,8 @@ categories:
 reference-elements:
   - dual polygon
 implementations:
-<<<<<<< HEAD
   symfem: RBC DEGREEMAP=k+1
-  bempp: RBC
-=======
-  symfem: RBC
-  bempp-cl: RBC DEGREES=1 DEGREEMAP=k-1
->>>>>>> main
+  bempp-cl: RBC
 sobolev: H(curl)
 mapping: covariant Piola
 examples:
