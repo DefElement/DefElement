@@ -106,7 +106,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
-          key: symfem-cache2
+          key: symfem-cache
       - name: Load DefElement cache
         uses: actions/cache/restore@v4
         with:
@@ -170,7 +170,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: /home/runner/.cache/symfem
-          key: symfem-cache2
+          key: symfem-cache-${{ github.run_id }}-${{ github.run_attempt }}
         if: github.ref == 'refs/heads/main'
       - name: Tidy DefElement cache
         run: python -c "from defelement.caching import tidy_cache; tidy_cache()"
@@ -179,7 +179,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .defelement-build-cache
-          key: defelement-cache
+          key: defelement-cache-${{ github.run_id }}-${{ github.run_attempt }}
         if: github.ref == 'refs/heads/main'
 
   deploy-website:
@@ -213,7 +213,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
-          key: symfem-cache2
+          key: symfem-cache
 
       - name: Clone Symfem
         uses: actions/checkout@v4
@@ -255,7 +255,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /home/runner/.cache/symfem
-          key: symfem-cache2
+          key: symfem-cache
 
       - name: Clone Symfem
         uses: actions/checkout@v4
