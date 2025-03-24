@@ -165,7 +165,7 @@ implementations:
       hexahedron: Q
     lobatto:
       interval: Lobatto
-  bempp:
+  bempp-cl:
     equispaced:
       triangle: P DEGREES=1
   fiat:
