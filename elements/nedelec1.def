@@ -116,7 +116,7 @@ implementations:
       tetrahedron: N1curl
       quadrilateral: RTCE
       hexahedron: NCE
-  bempp:
+  bempp-cl:
     lagrange:
       triangle: SNC DEGREES=1 DEGREEMAP=k-1
   fiat:

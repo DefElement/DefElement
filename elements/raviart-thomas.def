@@ -93,7 +93,7 @@ implementations:
       tetrahedron: RT
       quadrilateral: RTCF
       hexahedron: NCF
-  bempp:
+  bempp-cl:
     lagrange:
       triangle: RWG DEGREES=1 DEGREEMAP=k-1
   ndelement:

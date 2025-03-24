@@ -163,7 +163,7 @@ implementations:
       tetrahedron: Discontinuous Lagrange
       quadrilateral: DQ
       hexahedron: DQ
-  bempp:
+  bempp-cl:
     equispaced:
       triangle: DP DEGREES=0,1
   fiat:
