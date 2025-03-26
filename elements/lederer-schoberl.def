@@ -33,8 +33,10 @@ examples:
   - tetrahedron,0
   - tetrahedron,1
 references:
-  - title: A Mass conserving mixed stress formulation for incompressible flows
+  - type: phdthesis
+    title: A Mass conserving mixed stress formulation for incompressible flows
     author:
       - Lederer, Philip L.
     year: 2019
     doi: 10.34726/hss.2019.62042
+    thesis-institution: Technische Universit&auml;t Wien
