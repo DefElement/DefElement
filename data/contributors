@@ -31,3 +31,9 @@
   github: pbrubeck
   email: brubeck@protonmail.com
   desc: "Pablo is a postdoctoral research associate at the University of Oxford. He works on fast solvers for high-order finite element discretisations of PDEs and is a developer of [Firedrake](https://firedrakeproject.org), a finite element package."
+
+- name: Nobre, Nuno
+  img: nobre.jpeg
+  github: nmnobre
+  email: nuno.nobre@stfc.ac.uk
+  desc: "Nuno is a computational scientist at the STFC Hartree Centre. He collaborates with research institutions worldwide to optimise scientific applications for tomorrow's computer architectures. He has contributed to the [libMesh](https://github.com/libMesh/libmesh), [MOOSE](https://github.com/idaholab/moose) and [MFEM](https://github.com/mfem/mfem) finite element packages."
