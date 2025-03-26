@@ -1,0 +1,40 @@
+name: Lederer-Schoberl
+html-name: Lederer&ndash;Sch&ouml;berl
+min-degree: 0
+polynomial-subdegree: k
+polynomial-superdegree: k
+lagrange-subdegree: k
+lagrange-superdegree: k
+degree: polynomial-subdegree
+categories:
+  - matrix
+reference-elements:
+  - triangle
+ndofs:
+  triangle:
+    formula: 4(k+1)(k+2)/2
+    oeis: A045943
+  tetrahedron:
+    formula: 9(k+1)(k+2)(k+3)/6
+polynomial-set: poly[k]^dd
+dofs:
+  edges: integral moments of inner products of tangent and normal to edge with (lagrange,k)
+  faces:
+    - integral moments matrix trace with (lagrange,k-1)
+    - integrals of tensor products with bubbles with zero normal-tangent trace
+sobolev: H(curl div)
+mapping: covariant-contravariant Piola
+implementations:
+  symfem: Lederer-Schoberl
+examples:
+  - triangle,0
+  - triangle,1
+  - triangle,2
+  - tetrahedron,0
+  - tetrahedron,1
+references:
+  - title: A Mass conserving mixed stress formulation for incompressible flows
+    author:
+      - Lederer, Philip L.
+    year: 2019
+    doi: 10.34726/hss.2019.62042
