@@ -26,7 +26,7 @@ sobolev: H(curl div)
 mapping: covariant-contravariant Piola
 implementations:
   symfem: Gopalakrishnan-Lederer-Schoberl
-  fiat: GopalakrishnanLedererSchoberlFirstKind
+  fiat: GopalakrishnanLedererSchoberlFirstKind DEGREEMAP=k+1
 examples:
   - triangle,0
   - triangle,1
