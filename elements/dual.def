@@ -7,7 +7,6 @@ ndofs:
     formula:
     - k=0: 1
     - k=1: n
-min-degree: 0
 max-degree: 1
 categories:
   - scalar

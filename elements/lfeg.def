@@ -25,7 +25,7 @@ polynomial-superdegree:
   hexahedron: dk
 lagrange-subdegree: k
 lagrange-superdegree: k
-degree: lagrange-superdegree
+degree: polynomial-subdegree
 categories:
   - vector
 reference-elements:
