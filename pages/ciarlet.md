@@ -157,7 +157,7 @@ and are typically used to map H(div) elements.
 For matrix-valued basis functions, \({{symbols.matrix_basis_function}}\), the
 <b>double covariant Piola</b> (\({{symbols.mapping}}^\text{curl curl}\)),
 <b>double contravariant Piola</b> (\({{symbols.mapping}}^\text{div div}\)) and
-<b>covariant-contravariant Piola</b> (\({{symbols.mapping}}^\text{curl div}\)) <ref type="phdthesis" title="A Mass conserving mixed stress formulation for incompressible flows" author="Lederer, Philip L." year="2019" doi="10.34726/hss.2019.62042" thesis-institution="Technische Universit&auml;t Wien">
+<b>covariant-contravariant Piola</b> (\({{symbols.mapping}}^\text{curl div}\))
 mappings are defined:
 $$\left({{symbols.mapping}}^\text{curl curl}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
 :={{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^{-1}$$
