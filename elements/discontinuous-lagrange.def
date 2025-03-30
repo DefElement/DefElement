@@ -31,10 +31,10 @@ variants:
       - Legendre
 complexes:
   de-rham:
-  - P-,d,simplex,k-1
-  - P,d,simplex,k-1
-  - Q-,d,tp,k-1
-  - TNT,d,tp,k-1
+  - P-,d,simplex
+  - P,d,simplex
+  - Q-,d,tp
+  - TNT,d,tp
 sobolev: L2
 mapping: L2 Piola
 ndofs:
