@@ -3,23 +3,23 @@ html-name: Wu&ndash;Xu
 notes:
   - This is a higher degree version of the [Morley&ndash;Wang&ndash;Xu](element::morley-wang-xu) element.
 min-degree:
-  interval: 2
+  interval: 3
   triangle: 3
   tetrahedron: 4
 max-degree:
-  interval: 2
+  interval: 3
   triangle: 3
   tetrahedron: 4
 polynomial-subdegree:
-  interval: k + 1
+  interval: k
   triangle: k
   tetrahedron: k
-polynomial-superdegree: k+1
+polynomial-superdegree: k
 lagrange-subdegree:
-  interval: k + 1
+  interval: k
   triangle: k
   tetrahedron: k
-lagrange-superdegree: k+1
+lagrange-superdegree: k
 categories:
   - scalar
 ndofs:
@@ -34,7 +34,7 @@ reference-elements:
   - triangle
   - tetrahedron
 polynomial-set:
-  interval: poly[k] && <1>[\left\{x(1-x)p\middle|p\in{{poly[k]}}\setminus{{poly[0]}}\right\}]
+  interval: poly[k]
   triangle: poly[k] && <1>[\left\{xy(1-x-y)p\middle|p\in{{poly[k]}}\setminus{{poly[0]}}\right\}]
   tetrahedron: poly[k] && <1>[\left\{xyz(1-x-y-z)p\middle|p\in{{poly[k]}}\setminus{{poly[0]}}\right\}]
 mapping: identity
@@ -47,7 +47,7 @@ dofs:
 implementations:
   symfem: Wu-Xu
 examples:
-  - interval,2
+  - interval,3
   - triangle,3
   - tetrahedron,4
 references:

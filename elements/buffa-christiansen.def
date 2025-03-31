@@ -13,7 +13,7 @@ categories:
 reference-elements:
   - dual polygon
 implementations:
-  symfem: BC DEGREEMAP=k+1
+  symfem: BC
   bempp-cl: BC
 mapping: contravariant Piola
 sobolev: H(div)
