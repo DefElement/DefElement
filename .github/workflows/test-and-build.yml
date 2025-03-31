@@ -54,7 +54,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: mscroggs/polynomial-subdegree
       - name: Install Symfem
         run: |
             cd symfem
@@ -118,7 +118,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: mscroggs/polynomial-subdegree
       - name: Install Symfem
         run: |
             cd symfem
@@ -220,7 +220,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: mscroggs/polynomial-subdegree
       - name: Install Symfem
         run: |
             cd symfem
@@ -262,7 +262,7 @@ jobs:
         with:
           path: ./symfem
           repository: mscroggs/symfem
-          ref: main
+          ref: mscroggs/polynomial-subdegree
       - name: Install Symfem
         run: |
             cd symfem
