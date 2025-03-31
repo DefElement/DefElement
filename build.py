@@ -49,7 +49,6 @@ def write_html_page(path: str, title: str, content: str):
         title: Page title
         content: Page content
     """
-    global sitemap
     assert html_local(path) not in sitemap
     sitemap[html_local(path)] = title
     with open(path, "w") as f:
