@@ -45,7 +45,7 @@ dofs:
 mapping: contravariant Piola
 sobolev: H(div)
 implementations:
-  symfem: BDFM DEGREEMAP=k+1
+  symfem: BDFM
   ufl:
     triangle: BDFM DEGREEMAP=k+1
     tetrahedron: BDFM DEGREEMAP=k+1

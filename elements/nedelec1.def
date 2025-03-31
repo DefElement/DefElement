@@ -74,17 +74,17 @@ dofs:
 implementations:
   symfem:
     lagrange:
-      triangle: N1curl DEGREEMAP=k+1
-      tetrahedron: N1curl DEGREEMAP=k+1
-      quadrilateral: Qcurl DEGREEMAP=k+1
-      hexahedron: Qcurl DEGREEMAP=k+1
-      prism: Ncurl DEGREEMAP=k+1
+      triangle: N1curl
+      tetrahedron: N1curl
+      quadrilateral: Qcurl
+      hexahedron: Qcurl
+      prism: Ncurl
     legendre:
-      triangle: N1curl variant=legendre DEGREEMAP=k+1
-      tetrahedron: N1curl variant=legendre DEGREEMAP=k+1
-      quadrilateral: Qcurl variant=legendre DEGREEMAP=k+1
-      hexahedron: Qcurl variant=legendre DEGREEMAP=k+1
-      prism: Ncurl variant=legendre DEGREEMAP=k+1
+      triangle: N1curl variant=legendre
+      tetrahedron: N1curl variant=legendre
+      quadrilateral: Qcurl variant=legendre
+      hexahedron: Qcurl variant=legendre
+      prism: Ncurl variant=legendre
   basix:
     display: N1E
     lagrange:
