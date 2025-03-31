@@ -2,36 +2,36 @@ name: Arnold-Winther
 html-name: Arnold&ndash;Winther
 alt-names:
   - conforming Arnold&ndash;Winther
-min-degree: 3
-polynomial-subdegree: k-1
-polynomial-superdegree: k
-lagrange-subdegree: k-1
-lagrange-superdegree: k
-degree: lagrange-superdegree
+min-degree: 2
+polynomial-subdegree: k
+polynomial-superdegree: k+1
+lagrange-subdegree: k
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 categories:
   - matrix
 reference-elements:
   - triangle
 ndofs:
   triangle:
-    formula: (3k^2+5k+6)/2
+    formula: (3k^2+11k+14)/2
 polynomial-set:
-  triangle: <k-1>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\right\}] && <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\text{ and }\operatorname{div}\mathbf{M}=0\right\}]
+  triangle: <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\right\}] && <k+1>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\text{ and }\operatorname{div}\mathbf{M}=0\right\}]
 dofs:
   vertices: point evaluations of three components
-  edges: integral moments of normal-normal and normal-tangent inner products with (lagrange,k-2)
+  edges: integral moments of normal-normal and normal-tangent inner products with (lagrange,k-1)
   faces:
-    - integral moments of three components with (lagrange,k-3)
-    - integral moments of tensor dot product with "\(\frac{\partial}{\partial(x, y)}x^2y^2(1-x-y)^2f\) for each degree \(k-4\) polynomial \(f\) in a degree \(k-4\) [Lagrange](element::lagrange) space"
+    - integral moments of three components with (lagrange,k-2)
+    - integral moments of tensor dot product with "\(\frac{\partial}{\partial(x, y)}x^2y^2(1-x-y)^2f\) for each degree \(k-3\) polynomial \(f\) in a degree \(k-3\) [Lagrange](element::lagrange) space"
 mapping: double contravariant Piola
 sobolev: H(div div)
 implementations:
-  symfem: AW
-  ufl: AWc
-  fiat: ArnoldWinther DEGREES=3
+  symfem: AW DEGREEMAP=k+1
+  ufl: AWc DEGREEMAP=k+1
+  fiat: ArnoldWinther DEGREES=2 DEGREEMAP=k+1
 examples:
+  - triangle,2
   - triangle,3
-  - triangle,4
 references:
   - title: Mixed finite elements for elasticity
     author:

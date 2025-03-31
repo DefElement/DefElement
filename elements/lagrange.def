@@ -29,9 +29,9 @@ variants:
       - Lobatto
 complexes:
   de-rham:
-  - P-,0,simplex
-  - P,0,simplex
-  - Q-,0,tp
+  - P-,0,simplex,k-1
+  - P,0,simplex,k-1
+  - Q-,0,tp,k-1
 sobolev: H1
 mapping: identity
 ndofs:
@@ -95,7 +95,7 @@ polynomial-superdegree:
   pyramid: none
 lagrange-subdegree: k
 lagrange-superdegree: k
-degree: lagrange-superdegree
+degree: polynomial-subdegree
 categories:
   - scalar
 reference-elements:

@@ -7,6 +7,7 @@ import typing
 from datetime import datetime
 
 import symfem
+import sympy
 from symfem import create_element
 from webtools.citations import make_bibtex, markup_citation
 from webtools.code_markup import python_highlight
@@ -48,7 +49,6 @@ def write_html_page(path: str, title: str, content: str):
         title: Page title
         content: Page content
     """
-    global sitemap
     assert html_local(path) not in sitemap
     sitemap[html_local(path)] = title
     with open(path, "w") as f:
@@ -497,6 +497,11 @@ for e in categoriser.elements:
                 for s in " ()":
                     fname = fname.replace(s, "-")
 
+                if "DEGREEMAP" in params:
+                    symfem_degree = int(
+                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+                else:
+                    symfem_degree = degree
                 name = f"{cell}<br />degree {degree}"
                 if variant is not None:
                     name += f"<br />{e.variant_name(variant)} variant"
@@ -504,7 +509,7 @@ for e in categoriser.elements:
                     name += f"<br />{key}={str(value).replace(' ', '&nbsp;')}"
 
                 eginfo = {
-                    "name": name, "args": [cell, symfem_name, degree], "kwargs": kwargs,
+                    "name": name, "args": [cell, symfem_name, symfem_degree], "kwargs": kwargs,
                     "html_name": e.html_name, "element_filename": e.html_filename,
                     "filename": fname, "url": f"/elements/examples/{fname}"}
                 if "variant" in params:
