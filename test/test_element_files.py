@@ -46,3 +46,17 @@ def test_element_page(e):
 
     for key in docs["req"]:
         assert key in data
+
+
+@pytest.mark.parametrize("e", [e for e in os.listdir(element_path) if e.endswith(".def")])
+def test_symfem_no_degreemap(e):
+    def no_degreemap(impl):
+        if isinstance(impl, dict):
+            return all(no_degreemap(i) for i in impl.values())
+        return "DEGREEMAP" not in impl
+
+    with open(os.path.join(element_path, e)) as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+
+    if "implementations" in data and "symfem" in data["implementations"]:
+        assert no_degreemap(data["implementations"]["symfem"])

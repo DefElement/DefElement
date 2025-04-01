@@ -34,7 +34,6 @@ def replace_def(matches: typing.Match[str]) -> str:
     Returns:
         TODO
     """
-    global defs
     defs[matches[1]] = matches[2]
     return ""
 
@@ -48,7 +47,6 @@ def replace_defmath(matches: typing.Match[str]) -> str:
     Returns:
         TODO
     """
-    global defs
     defs[matches[1]] = f"\\({matches[2]}\\)"
     return ""
 
@@ -79,7 +77,6 @@ def make_poly_set(p: str) -> str:
     Returns:
         Formatted polynomial set
     """
-    global named
     global defs
     if "&&" in p:
         return " \\oplus ".join([make_poly_set(i.strip()) for i in p.split("&&")])

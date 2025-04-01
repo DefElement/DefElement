@@ -1,15 +1,14 @@
 name: Brezzi-Douglas-Fortin-Marini
 html-name: Brezzi&ndash;Douglas&ndash;Fortin&ndash;Marini
-min-degree: 1
-polynomial-subdegree: k-1
-polynomial-superdegree: k
+polynomial-subdegree: k
+polynomial-superdegree: k+1
 lagrange-subdegree:
-  triangle: k-1
-  tetrahedron: k-1
-  quadrilateral: floor(k/d)
-  hexahedron: floor(k/d)
-lagrange-superdegree: k
-degree: lagrange-superdegree
+  triangle: k
+  tetrahedron: k
+  quadrilateral: floor((k+1)/d)
+  hexahedron: floor((k+1)/d)
+lagrange-superdegree: k+1
+degree: polynomial-subdegree
 short-names:
   - BDFM
 categories:
@@ -22,43 +21,45 @@ reference-elements:
   - hexahedron
 ndofs:
   triangle:
-    formula: k^2+3k-1
+    formula: k^2+5k+3
   quadrilateral:
-    formula: k(k+3)
+    formula: (k+1)(k+4)
     oeis: A028552
   tetrahedron:
-    formula: (k+1)(k^2+5k-2)/2
+    formula: (k+2)(k^2+7k+4)/2
   hexahedron:
-    formula: k(k+1)(k+5)/2
+    formula: (k+1)(k+2)(k+6)/2
 min-degree: 1
-polynomial-set: <k>[\left\{\boldsymbol{p}\in{{poly[k]}}^d\middle|\boldsymbol{p}\cdot\boldsymbol{n}\in{{poly[k-1]}}\text{ on each facet}\right\}]
+polynomial-set: <k+1>[\left\{\boldsymbol{p}\in{{poly[k]}}^d\middle|\boldsymbol{p}\cdot\boldsymbol{n}\in{{poly[k-1]}}\text{ on each facet}\right\}]
 dofs:
   facets:
-    triangle: normal integral moments with (lagrange,k-1)
-    tetrahedron: normal integral moments with (lagrange,k-1)
-    quadrilateral: normal integral moments with (dpc,k-1)
-    hexahedron: normal integral moments with (dpc,k-1)
+    triangle: normal integral moments with (lagrange,k)
+    tetrahedron: normal integral moments with (lagrange,k)
+    quadrilateral: normal integral moments with (dpc,k)
+    hexahedron: normal integral moments with (dpc,k)
   cell:
     triangle: integral moments with (nedelec1,k-1)
     tetrahedron: integral moments with (nedelec1,k-1)
-    quadrilateral: integral moments with (vector-dpc,k-2)
-    hexahedron: integral moments with (vector-dpc,k-2)
+    quadrilateral: integral moments with (vector-dpc,k-1)
+    hexahedron: integral moments with (vector-dpc,k-1)
 mapping: contravariant Piola
 sobolev: H(div)
 implementations:
   symfem: BDFM
   ufl:
-    triangle: BDFM
-    tetrahedron: BDFM
+    triangle: BDFM DEGREEMAP=k+1
+    tetrahedron: BDFM DEGREEMAP=k+1
   fiat:
-    triangle: BrezziDouglasFortinMarini DEGREES=2
+    triangle: BrezziDouglasFortinMarini DEGREES=2 DEGREEMAP=k+1
 examples:
+  - triangle,0
   - triangle,1
-  - triangle,2
+  - quadrilateral,0
   - quadrilateral,1
-  - quadrilateral,2
-  - tetrahedron,2
-  - hexahedron,2
+  - tetrahedron,0
+  - tetrahedron,1
+  - hexahedron,0
+  - hexahedron,1
 references:
   - author:
       - Brezzi, Franco

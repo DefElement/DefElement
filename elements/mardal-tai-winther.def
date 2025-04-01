@@ -1,11 +1,11 @@
 name: Mardal-Tai-Winther
 html-name: Mardal&ndash;Tai&ndash;Winther
-min-degree: 3
-max-degree: 3
+min-degree: 1
+max-degree: 1
 polynomial-subdegree: 1
-polynomial-superdegree: k+d-2
+polynomial-superdegree: d-1
 lagrange-subdegree: 1
-lagrange-superdegree: k+d-2
+lagrange-superdegree: d-1
 short-names:
   - MTW
 ndofs:
@@ -36,12 +36,12 @@ sobolev: H(div)
 implementations:
   symfem: MTW
   ufl:
-    triangle: MTW
+    triangle: MTW DEGREEMAP=k+2
   fiat:
-    triangle: MardalTaiWinther
+    triangle: MardalTaiWinther DEGREEMAP=k+2
 examples:
-  - triangle,3
-  - tetrahedron,3
+  - triangle,1
+  - tetrahedron,1
 references:
   - title: A robust finite element method for Darcy&ndash;Stokes flow
     author:

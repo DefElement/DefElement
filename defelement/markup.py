@@ -42,7 +42,7 @@ def plot_element(matches: typing.Match[str]) -> str:
     """
     if "variant=" in matches[1]:
         a, b = matches[1].split(" variant=")
-        e = symfem.create_element(a, matches[2], int(matches[3]), b)
+        e = symfem.create_element(a, matches[2], int(matches[3]), variant=b)
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
 
@@ -64,7 +64,7 @@ def plot_single_element(matches: typing.Match[str]) -> str:
     """
     if "variant=" in matches[1]:
         a, b = matches[1].split(" variant=")
-        e = symfem.create_element(a, matches[2], int(matches[3]), b)
+        e = symfem.create_element(a, matches[2], int(matches[3]), variant=b)
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
 
