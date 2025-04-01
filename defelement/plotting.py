@@ -149,6 +149,7 @@ def plot_reference(ref, link: bool = True) -> str:
         HTML for plot
     """
     if ref.name == "dual polygon":
+        assert isinstance(ref, symfem.references.DualPolygon)
         ref_id = f"dual-polygon-{ref.number_of_triangles}"
     else:
         ref_id = ref.name
@@ -172,7 +173,9 @@ def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
         HTML for plot
     """
     if element.reference.name == "dual polygon":
-        ref_id = f"dual-polygon-{element.reference.number_of_triangles}"
+        ref = element.reference
+        assert isinstance(ref, symfem.references.DualPolygon)
+        ref_id = f"dual-polygon-{ref.number_of_triangles}"
     else:
         ref_id = element.reference.name
 
@@ -286,7 +289,9 @@ def plot_dof_diagram(element: FiniteElement, link: bool = True) -> str:
         HTML for plot
     """
     if element.reference.name == "dual polygon":
-        ref_id = f"dual-polygon-{element.reference.number_of_triangles}"
+        ref = element.reference
+        assert isinstance(ref, symfem.references.DualPolygon)
+        ref_id = f"dual-polygon-{ref.number_of_triangles}"
     else:
         ref_id = element.reference.name
     desc = "DOFs of "
