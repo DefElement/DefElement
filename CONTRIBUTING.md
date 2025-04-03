@@ -13,7 +13,7 @@ If you want to suggest a new element to be added to DefElement, suggest it on th
 using the *New element* template.
 
 ### Suggesting improvements
-If you want to suggest a new featute or improvement to DefElement, suggest it on the
+If you want to suggest a new feature or improvement to DefElement, suggest it on the
 [issue tracker](https://github.com/DefElement/DefElement/issues/new?assignees=&labels=feature+request&template=suggest-an-improvement.md&title=)
 using the *Suggest an improvement* template.
 
