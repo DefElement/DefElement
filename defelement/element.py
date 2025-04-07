@@ -694,7 +694,6 @@ class Element:
                 j = " ".join(j.split(" ")[:-1])
                 params[i] = j
 
-
         if "DEGREES" in params:
             if degree is not None:
                 for d in params["DEGREES"].split(","):
@@ -735,8 +734,6 @@ class Element:
 
         if "display" in self.data["implementations"][lib]:
             d = implementations[lib].format(self.data["implementations"][lib]["display"], {})
-            if "DEGREEMAP" in d:
-                from IPython import embed; embed()()
             return f"<code>{d}</code>"
         if "variants" in self.data:
             variants = self.data["variants"]
