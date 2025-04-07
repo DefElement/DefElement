@@ -79,11 +79,11 @@ implementations:
       quadrilateral: Qdiv variant=legendre
       hexahedron: Qdiv variant=legendre
   basix:
-    display: RT DEGREEMAP=k+1
+    display: RT
     lagrange: RT DEGREEMAP=k+1
     legendre: RT lagrange_variant=legendre DEGREEMAP=k+1
   basix.ufl:
-    display: RT DEGREEMAP=k+1
+    display: RT
     lagrange: RT lagrange_variant=equispaced DEGREEMAP=k+1
     legendre: RT DEGREEMAP=k+1
   ufl:
