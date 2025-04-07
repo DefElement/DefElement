@@ -24,6 +24,8 @@ class NDElementImplementation(Implementation):
             out += f", {p}="
             if p == "continuity":
                 out += f"Continuity.{v}"
+            else:
+                raise ValueError(f"Unexpected parameter: {p}")
         return out
 
     @staticmethod

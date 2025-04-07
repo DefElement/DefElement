@@ -694,27 +694,27 @@ class Element:
                 j = " ".join(j.split(" ")[:-1])
                 params[i] = j
 
-        if degree is None:
-            return out, None, params
 
         if "DEGREES" in params:
-            for d in params["DEGREES"].split(","):
-                if ":" in d:
-                    start, end = [int(i) for i in d.split(":")]
-                    if start <= degree < end:
+            if degree is not None:
+                for d in params["DEGREES"].split(","):
+                    if ":" in d:
+                        start, end = [int(i) for i in d.split(":")]
+                        if start <= degree < end:
+                            break
+                    elif degree == int(d):
                         break
-                elif degree == int(d):
-                    break
-            else:
-                raise DegreeNotImplemented()
+                else:
+                    raise DegreeNotImplemented()
             del params["DEGREES"]
 
         input_deg: typing.Optional[int] = degree
         if "DEGREEMAP" in params:
-            if params["DEGREEMAP"] == "None":
-                input_deg = None
-            else:
-                input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+            if degree is not None:
+                if params["DEGREEMAP"] == "None":
+                    input_deg = None
+                else:
+                    input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
             del params["DEGREEMAP"]
 
         return out, input_deg, params
@@ -735,6 +735,8 @@ class Element:
 
         if "display" in self.data["implementations"][lib]:
             d = implementations[lib].format(self.data["implementations"][lib]["display"], {})
+            if "DEGREEMAP" in d:
+                from IPython import embed; embed()()
             return f"<code>{d}</code>"
         if "variants" in self.data:
             variants = self.data["variants"]

@@ -81,6 +81,8 @@ class SymfemImplementation(Implementation):
         for p, v in params.items():
             if p == "variant":
                 out += f", {p}=\"{v}\""
+            else:
+                raise ValueError(f"Unexpected parameter: {p}")
         return out
 
     @staticmethod
