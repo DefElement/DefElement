@@ -1,10 +1,10 @@
 <div id='sideplots' style='float:right;width:220px;padding:10px 0px 20px 40px'>
 <div>{{plot::triangle,Raviart-Thomas,0::1}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [Raviart&ndash;Thomas space](element::raviart-thomas) on a triangle</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 0 [Raviart&ndash;Thomas space](element::raviart-thomas) on a triangle</div>
 <div>{{plot::quadrilateral,Q,2::3}}</div>
 <div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 2 [Q space](element::lagrange) on a quadrilateral</div>
 <div>{{plot::tetrahedron,N1curl,0::1}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [N&eacute;d&eacute;lec (first kind) space](element::nedelec1) on a tetrahedron</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 0 [N&eacute;d&eacute;lec (first kind) space](element::nedelec1) on a tetrahedron</div>
 <div>{{plot::hexahedron,Scurl,1::13}}</div>
 <div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [Arnold&ndash;Awanou H(curl) space](element::scurl) on a hexahedron</div>
 </div>
