@@ -48,5 +48,8 @@ def test_sequence(file, cellname):
     elif m == "double contravariant Piola":
         for i in c:
             assert i == "H(div div)"
+    elif m == "covariant-contravariant Piola":
+        for i in c:
+            assert i == "H(curl div)"
     else:
         raise ValueError(f"Unknown mapping: {m}")

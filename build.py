@@ -137,6 +137,7 @@ cdescs = {
     "H(curl)": "Components tangential to facets are continuous",
     "H(div div)": "Inner products with normals to facets are continuous",
     "H(curl curl)": "Inner products with tangents to facets are continuous",
+    "H(curl div)": "Tangent-normal inner products on facets are continuous",
     "H1(div)": "Function values and divergence are continuous.",
     }
 

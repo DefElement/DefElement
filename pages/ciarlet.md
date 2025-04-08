@@ -155,12 +155,16 @@ and are typically used to map H(div) elements.
 
 ### Matrix-valued basis functions
 For matrix-valued basis functions, \({{symbols.matrix_basis_function}}\), the
-<b>double covariant Piola</b> (\({{symbols.mapping}}^\text{curl curl}\)) and
-<b>double contravariant Piola</b> (\({{symbols.mapping}}^\text{div div}\)) mappings are defined:
+<b>double covariant Piola</b> (\({{symbols.mapping}}^\text{curl curl}\)),
+<b>double contravariant Piola</b> (\({{symbols.mapping}}^\text{div div}\)) and
+<b>covariant-contravariant Piola</b> (\({{symbols.mapping}}^\text{curl div}\))
+mappings are defined:
 $$\left({{symbols.mapping}}^\text{curl curl}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
 :={{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^{-1}$$
 $$\left({{symbols.mapping}}^\text{div div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
 :=\frac1{\left(\det {{symbols.jacobian}}\right)^2}{{symbols.jacobian}}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T$$
+$$\left({{symbols.mapping}}^\text{curl div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\left(\det {{symbols.jacobian}}\right)}{{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T$$
 
 ## Variants of finite elements
 For many elements, there are a number of different choices that could be made for the functionals

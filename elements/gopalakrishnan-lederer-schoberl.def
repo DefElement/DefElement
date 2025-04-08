@@ -1,0 +1,49 @@
+name: Gopalakrishnan-Lederer-Schoberl
+html-name: Gopalakrishnan&ndash;Lederer&ndash;Sch&ouml;berl
+min-degree: 0
+polynomial-subdegree: k
+polynomial-superdegree: k
+lagrange-subdegree: k
+lagrange-superdegree: k
+degree: polynomial-subdegree
+categories:
+  - matrix
+reference-elements:
+  - triangle
+ndofs:
+  triangle:
+    formula: 4(k+1)(k+2)/2
+    oeis: A045943
+  tetrahedron:
+    formula: 9(k+1)(k+2)(k+3)/6
+polynomial-set: poly[k]^dd
+dofs:
+  facets: integral moments of inner products of tangent(s) and normal to facet with (lagrange,k)
+  cell:
+    - integral moments of matrix trace with (lagrange,k)
+    - integral moments of tensor products against zero normal-tangent trace bubble with (lagrange,k-1)
+sobolev: H(curl div)
+mapping: covariant-contravariant Piola
+implementations:
+  symfem: Gopalakrishnan-Lederer-Schoberl
+  fiat: GopalakrishnanLedererSchoberlFirstKind DEGREEMAP=k+1
+examples:
+  - triangle,0
+  - triangle,1
+  - triangle,2
+  - tetrahedron,0
+  - tetrahedron,1
+references:
+  - title: A mass conserving mixed stress formulation for Stokes flow with weakly imposed stress symmetry
+    author:
+      - Gopalakrishnan, Jay
+      - Lederer, Philip L.
+      - Sch&ouml;berl, Joachim
+    journal: SIAM Journal on Numerical Analysis
+    volume: 58
+    issue: 1
+    pagestart: 706
+    pageend: 732
+    year: 2020
+    doi: 10.1137/19M1248960
+
