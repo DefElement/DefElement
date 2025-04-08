@@ -144,6 +144,8 @@ This class should include:
 <tr><td>`format`</td><td>method</td><td>This method should take an implementation string and a set of parameters as inputs and return the implementation information for the library, as it will be displayed on each element's page.</td></tr>
 <tr><td>`example`</td><td>method</td><td>This method should take a DefElement `Element` object as an input and return a block of Python (as a string) that creates all the examples of that element using the library.</td></tr>
 <tr><td>`verify`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object, an example, and a set of points as inputs and returns the element for that example tabulated at the set of points and the number of DOFs associated with each sub-entity as a tuple of tuples. The shape of the first output is `(number of points, value size, number of basis functions)`. These functions are used to [verify](https://defelement.org/verification.html) that the implementation spans the same space as Symfem.</td></tr>
+<tr><td>`notes`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object and return a list of notes about the implementation to include on the element's page.</td></tr>
+<tr><td>`references`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object and return a list of reference about the implementation to include on the element's page.</td></tr>
 <tr><td>`id`</td><td>variable</td><td>The unique identifier for your library. This will be used in .def files.</td></tr>
 <tr><td>`name`</td><td>variable</td><td>The name of your library.</td></tr>
 <tr><td>`install`</td><td>variable</td><td>Code snippet to install you library (preferably using `pip3`)</td></tr>
