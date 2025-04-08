@@ -30,7 +30,7 @@ degree: polynomial-subdegree
 implementations:
   symfem: vector Lagrange
   ufl: Lagrange type=VectorElement
-  basix.ufl: P shape=(dim,) lagrange_variant=equispaced rank=1
+  basix.ufl: P shape=(dim,) lagrange_variant=equispaced
 examples:
   - triangle,1
   - triangle,2

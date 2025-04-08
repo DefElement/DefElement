@@ -1,12 +1,12 @@
 <div id='sideplots' style='float:right;width:220px;padding:10px 0px 20px 40px'>
 <div>{{plot::triangle,Raviart-Thomas,0::1}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [Raviart&ndash;Thomas space](element::raviart-thomas) on a triangle</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 0 [Raviart&ndash;Thomas space](element::raviart-thomas) on a triangle</div>
 <div>{{plot::quadrilateral,Q,2::3}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 2 [Q space](element::lagrange) on a quadrilateral</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 2 [Q space](element::lagrange) on a quadrilateral</div>
 <div>{{plot::tetrahedron,N1curl,0::1}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [N&eacute;d&eacute;lec (first kind) space](element::nedelec1) on a tetrahedron</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 0 [N&eacute;d&eacute;lec (first kind) space](element::nedelec1) on a tetrahedron</div>
 <div>{{plot::hexahedron,Scurl,1::13}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of an order 1 [Arnold&ndash;Awanou H(curl) space](element::scurl) on a hexahedron</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 1 [Arnold&ndash;Awanou H(curl) space](element::scurl) on a hexahedron</div>
 </div>
 
 Welcome to DefElement: an encyclopedia of finite element definitions.
@@ -47,7 +47,7 @@ of finite elements, and examples of the basis functions they define.
 Following the Ciarlet definition of a finite element, the elements on this website
 are defined using a reference element, a polynomial space, and a set of functionals. Each element's
 page describes how these are defined for that element, and gives examples of these and the basis
-functions they lead to for a selection of low-order spaces.
+functions they lead to for a selection of low degree spaces.
 
 You can read a detailed description of how the finite element definitions can be understood
 on the [how to understand a finite element page](ciarlet.md).
