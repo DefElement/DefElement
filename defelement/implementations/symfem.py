@@ -25,6 +25,7 @@ def symfem_create_element(element: Element, example: str) -> FiniteElement:
     assert symfem_name is not None
     if ref == "dual polygon":
         ref += "(4)"
+    assert isinstance(input_deg, int)
     return symfem.create_element(ref, symfem_name, input_deg, **params)
 
 
@@ -55,7 +56,7 @@ class CachedSymfemTabulator:
             if i.shape == points.shape and np.allclose(i, points):
                 return j
         shape = (points.shape[0], self.element.range_dim, self.element.space_dim)
-        table = to_array(self.element.tabulate_basis(points, "xx,yy,zz"))
+        table = to_array(self.element.tabulate_basis(points, "xx,yy,zz"))  # type: ignore
         assert not isinstance(table, float)
         table = table.reshape(shape)
         self.tables.append((points, table))
@@ -80,6 +81,8 @@ class SymfemImplementation(Implementation):
         for p, v in params.items():
             if p == "variant":
                 out += f", {p}=\"{v}\""
+            else:
+                raise ValueError(f"Unexpected parameter: {p}")
         return out
 
     @staticmethod
@@ -136,6 +139,7 @@ class SymfemImplementation(Implementation):
             "symfem", ref, deg, variant)
         if ref == "dual polygon":
             ref += "(4)"
+        assert isinstance(input_deg, int)
         e = symfem.create_element(ref, symfem_name, input_deg, **params)
         edofs = [[e.entity_dofs(i, j) for j in range(e.reference.sub_entity_count(i))]
                  for i in range(e.reference.tdim + 1)]

@@ -13,7 +13,7 @@ categories:
 reference-elements:
   - dual polygon
 implementations:
-  symfem: RBC DEGREEMAP=k+1
+  symfem: RBC
   bempp-cl: RBC
 sobolev: H(curl)
 mapping: covariant Piola

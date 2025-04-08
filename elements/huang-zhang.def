@@ -29,7 +29,7 @@ dofs:
     - tangent integral moments with (lagrange,k-1)
   cell: integral moments with "\(\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k\}, j\in\{0,1,...,k-1\}\right\}\cup\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k-1\}, j\in\{0,1,...,k\}\right\}\)"
 implementations:
-  symfem: HZ DEGREEMAP=k+1
+  symfem: HZ
 examples:
   - quadrilateral,1
   - quadrilateral,2

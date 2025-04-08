@@ -764,7 +764,7 @@ write_html_page(os.path.join(settings.html_path, "detailed-verification.html"),
                 "Verification: full detail", long_content)
 
 
-def build_examples(egs: typing.List[typing.Dict[str, str]], process: str = ""):
+def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str = ""):
     """Build examples.
 
     Args:

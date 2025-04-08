@@ -38,11 +38,13 @@ class FIATImplementation(Implementation):
                     out += "(..."
                     started = True
                 out += f", {p}=\"{v}\""
-            if p in ["subdegree", "reduced"]:
+            elif p in ["subdegree", "reduced"]:
                 if not started:
                     out += "(..."
                     started = True
                 out += f", {p}={v}"
+            else:
+                raise ValueError(f"Unexpected parameter: {p}")
         if started:
             out += ")"
         return out

@@ -28,6 +28,8 @@ class BasixImplementation(Implementation):
                 out += f"basix.DPCVariant.{v}"
             elif p == "discontinuous":
                 out += v
+            else:
+                raise ValueError(f"Unexpected parameter: {p}")
         return out
 
     @staticmethod

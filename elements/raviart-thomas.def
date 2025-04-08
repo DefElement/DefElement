@@ -69,21 +69,21 @@ dofs:
 implementations:
   symfem:
     lagrange:
-      triangle: N1div DEGREEMAP=k+1
-      tetrahedron: N1div DEGREEMAP=k+1
-      quadrilateral: Qdiv DEGREEMAP=k+1
-      hexahedron: Qdiv DEGREEMAP=k+1
+      triangle: N1div
+      tetrahedron: N1div
+      quadrilateral: Qdiv
+      hexahedron: Qdiv
     legendre:
-      triangle: N1div variant=legendre DEGREEMAP=k+1
-      tetrahedron: N1div variant=legendre DEGREEMAP=k+1
-      quadrilateral: Qdiv variant=legendre DEGREEMAP=k+1
-      hexahedron: Qdiv variant=legendre DEGREEMAP=k+1
+      triangle: N1div variant=legendre
+      tetrahedron: N1div variant=legendre
+      quadrilateral: Qdiv variant=legendre
+      hexahedron: Qdiv variant=legendre
   basix:
-    display: RT DEGREEMAP=k+1
+    display: RT
     lagrange: RT DEGREEMAP=k+1
     legendre: RT lagrange_variant=legendre DEGREEMAP=k+1
   basix.ufl:
-    display: RT DEGREEMAP=k+1
+    display: RT
     lagrange: RT lagrange_variant=equispaced DEGREEMAP=k+1
     legendre: RT DEGREEMAP=k+1
   ufl:
