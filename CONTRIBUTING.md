@@ -150,7 +150,7 @@ This class should include:
 <tr><td>`name`</td><td>variable</td><td>The name of your library.</td></tr>
 <tr><td>`install`</td><td>variable</td><td>Code snippet to install you library (preferably using `pip3`)</td></tr>
 <tr><td>`url`</td><td>variable</td><td>URL where the source code of your library is avaliable (eg a GitHub link).</td></tr>
-<tr><td>`verification`</td><td>variable (optional)</td><td>Should be set to `True` if the `verification` function is implemented.</td></tr>
+<tr><td>`verification`</td><td>variable (optional)</td><td>Should be set to `True` if the `verify` function is implemented.</td></tr>
 </table>
 
 Once these steps are done, you can start adding implementation details for your library to
