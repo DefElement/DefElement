@@ -11,6 +11,7 @@ import yaml
 
 oeis_cache = {}
 
+
 class TimeOutTheTest(BaseException):
     pass
 
@@ -73,7 +74,8 @@ def check_oeis(oeis, seq):
     seq = {i: j for i, j in seq.items() if j > 0}
     if oeis not in oeis_cache:
         with urllib.request.urlopen(urllib.request.Request(f"http://oeis.org/{oeis}/list", headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3"
+            "User-Agent": ("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "
+                           "Chrome/41.0.2228.0 Safari/537.3")
         })) as f:
             oeis_cache[oeis] = "".join([
                 i.strip() for i in f.read().decode('utf-8').split(
@@ -89,6 +91,7 @@ def parse_degree(degree, cellname):
 
     return degree
 
+
 element_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../elements")
 
 inputs = []
@@ -97,6 +100,7 @@ for i in os.listdir(element_path):
         with open(os.path.join(element_path, i)) as f:
             data = yaml.load(f, Loader=yaml.FullLoader)
         inputs += [(i, c) for c in data["reference-elements"]]
+
 
 @pytest.mark.parametrize("file, cellname", inputs)
 def test_sequence(file, cellname):
