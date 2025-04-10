@@ -6,7 +6,10 @@ import warnings
 
 import pytest
 import symfem
+import sympy
 import yaml
+
+oeis_cache = {}
 
 
 class TimeOutTheTest(BaseException):
@@ -69,11 +72,23 @@ def check_oeis(oeis, seq):
         condition = condition.split("]")[0]
         seq = {i: j for i, j in seq.items() if is_satisfied(condition, i)}
     seq = {i: j for i, j in seq.items() if j > 0}
-    with urllib.request.urlopen(f"http://oeis.org/{oeis}/list") as f:
-        oeis_seq = "".join([
-            i.strip() for i in f.read().decode('utf-8').split(
-                "<pre>[")[1].split("]</pre>")[0].split("\n")])
-    assert ",".join([str(i) for i in seq.values()]) in oeis_seq
+    if oeis not in oeis_cache:
+        with urllib.request.urlopen(urllib.request.Request(
+            f"http://oeis.org/{oeis}/list", headers={"User-Agent": "DefElement test runner"}
+        )) as f:
+            oeis_cache[oeis] = "".join([
+                i.strip() for i in f.read().decode('utf-8').split(
+                    "<pre>[")[1].split("]</pre>")[0].split("\n")])
+    assert ",".join([str(i) for i in seq.values()]) in oeis_cache[oeis]
+
+
+def parse_degree(degree, cellname):
+    if isinstance(degree, dict):
+        return parse_degree(degree[cellname], cellname)
+    if isinstance(degree, str):
+        return int(sympy.S(degree).subs("d", symfem.create_reference(cellname).tdim))
+
+    return degree
 
 
 element_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../elements")
@@ -93,32 +108,26 @@ def test_sequence(file, cellname):
     with open(os.path.join(element_path, file)) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
 
-    if "symfem" not in data:
+    if "implementations" not in data or "symfem" not in data["implementations"]:
         pytest.skip()
     if "ndofs" not in data:
         pytest.skip()
 
+    if isinstance(data["implementations"]["symfem"], dict):
+        if cellname not in data["implementations"]["symfem"]:
+            pytest.skip()
+        symfem_name = data["implementations"]["symfem"][cellname]
+    else:
+        symfem_name = data["implementations"]["symfem"]
+
     seq = {}
-    if "min-order" in data:
-        if isinstance(data["min-order"], dict):
-            mink = data["min-order"][cellname]
-        else:
-            mink = data["min-order"]
+    if "min-degree" in data:
+        mink = parse_degree(data["min-degree"], cellname)
     else:
         mink = 0
     maxk = 10
-    if "max-order" in data:
-        if isinstance(data["max-order"], dict):
-            maxk = data["max-order"][cellname]
-        else:
-            maxk = min(maxk, data["max-order"])
-
-    if isinstance(data["symfem"], dict):
-        if cellname not in data["symfem"]:
-            pytest.skip()
-        symfem_name = data["symfem"][cellname]
-    else:
-        symfem_name = data["symfem"]
+    if "max-degree" in data:
+        maxk = min(maxk, parse_degree(data["max-degree"], cellname))
 
     for k in range(mink, maxk + 1):
         try:
@@ -153,33 +162,27 @@ def test_entity_sequences(file, cellname):
     with open(os.path.join(element_path, file)) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
 
-    if "symfem" not in data:
+    if "implementations" not in data or "symfem" not in data["implementations"]:
         pytest.skip()
     if "entity-ndofs" not in data:
         pytest.skip()
 
+    if isinstance(data["implementations"]["symfem"], dict):
+        if cellname not in data["implementations"]["symfem"]:
+            pytest.skip()
+        symfem_name = data["implementations"]["symfem"][cellname]
+    else:
+        symfem_name = data["implementations"]["symfem"]
+
     seq = {"vertices": {}, "edges": {}, "faces": {}, "volumes": {},
            "cell": {}, "facets": {}, "ridges": {}, "peaks": {}}
-    if "min-order" in data:
-        if isinstance(data["min-order"], dict):
-            mink = data["min-order"][cellname]
-        else:
-            mink = data["min-order"]
+    if "min-degree" in data:
+        mink = parse_degree(data["min-degree"], cellname)
     else:
         mink = 0
     maxk = 10
-    if "max-order" in data:
-        if isinstance(data["max-order"], dict):
-            maxk = data["max-order"][cellname]
-        else:
-            maxk = min(maxk, data["max-order"])
-
-    if isinstance(data["symfem"], dict):
-        if cellname not in data["symfem"]:
-            pytest.skip()
-        symfem_name = data["symfem"][cellname]
-    else:
-        symfem_name = data["symfem"]
+    if "max-degree" in data:
+        maxk = min(maxk, parse_degree(data["max-degree"], cellname))
 
     for k in range(mink, maxk + 1):
         try:

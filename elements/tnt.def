@@ -7,10 +7,10 @@ complexes:
   - TNT,0,tp
 ndofs:
   quadrilateral:
-    formula: (k+1)^2 + 4
+    formula: k^2 + 4
   hexahedron:
-    formula: (k+1)^3 + 12
-min-degree: 2
+    formula: k^3 + 12
+min-degree: 1
 polynomial-subdegree: k
 polynomial-superdegree: max(dk,d+k)
 lagrange-subdegree: k

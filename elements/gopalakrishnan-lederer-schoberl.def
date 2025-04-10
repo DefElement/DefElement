@@ -12,10 +12,10 @@ reference-elements:
   - triangle
 ndofs:
   triangle:
-    formula: 4(k+1)(k+2)/2
-    oeis: A045943
+    formula: 2(k+1)(k+2)
+    oeis: A046092
   tetrahedron:
-    formula: 9(k+1)(k+2)(k+3)/6
+    formula: 3(k+1)(k+2)(k+3)/2
 polynomial-set: poly[k]^dd
 dofs:
   facets: integral moments of inner products of tangent(s) and normal to facet with (lagrange,k)
