@@ -159,33 +159,27 @@ def test_entity_sequences(file, cellname):
     with open(os.path.join(element_path, file)) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
 
-    if "symfem" not in data:
+    if "implementations" not in data or "symfem" not in data["implementations"]:
         pytest.skip()
     if "entity-ndofs" not in data:
         pytest.skip()
 
+    if isinstance(data["implementations"]["symfem"], dict):
+        if cellname not in data["implementations"]["symfem"]:
+            pytest.skip()
+        symfem_name = data["implementations"]["symfem"][cellname]
+    else:
+        symfem_name = data["implementations"]["symfem"]
+
     seq = {"vertices": {}, "edges": {}, "faces": {}, "volumes": {},
            "cell": {}, "facets": {}, "ridges": {}, "peaks": {}}
     if "min-degree" in data:
-        if isinstance(data["min-degree"], dict):
-            mink = data["min-degree"][cellname]
-        else:
-            mink = data["min-degree"]
+        mink = parse_degree(data["min-degree"], cellname)
     else:
         mink = 0
     maxk = 10
     if "max-degree" in data:
-        if isinstance(data["max-degree"], dict):
-            maxk = data["max-degree"][cellname]
-        else:
-            maxk = min(maxk, data["max-degree"])
-
-    if isinstance(data["symfem"], dict):
-        if cellname not in data["symfem"]:
-            pytest.skip()
-        symfem_name = data["symfem"][cellname]
-    else:
-        symfem_name = data["symfem"]
+        maxk = min(maxk, parse_degree(data["max-degree"], cellname))
 
     for k in range(mink, maxk + 1):
         try:
