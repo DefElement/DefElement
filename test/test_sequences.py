@@ -73,10 +73,9 @@ def check_oeis(oeis, seq):
         seq = {i: j for i, j in seq.items() if is_satisfied(condition, i)}
     seq = {i: j for i, j in seq.items() if j > 0}
     if oeis not in oeis_cache:
-        with urllib.request.urlopen(urllib.request.Request(f"http://oeis.org/{oeis}/list", headers={
-            "User-Agent": ("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "
-                           "Chrome/41.0.2228.0 Safari/537.3")
-        })) as f:
+        with urllib.request.urlopen(urllib.request.Request(
+            f"http://oeis.org/{oeis}/list", headers={"User-Agent": "DefElement test runner"}
+        )) as f:
             oeis_cache[oeis] = "".join([
                 i.strip() for i in f.read().decode('utf-8').split(
                     "<pre>[")[1].split("]</pre>")[0].split("\n")])
