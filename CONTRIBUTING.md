@@ -47,6 +47,7 @@ The entries in this yaml file are:
 <tr><td>`html&#8209;name`</td><td>{{tick}}</td><td>The name of the element, including HTML special characters.</td></tr>
 <tr><td>`reference&#8209;elements`</td><td>{{tick}}</td><td>The reference element(s) that this finite element can be defined on.</td></tr>
 <tr><td>`alt&#8209;names`</td><td></td><td>Alternative (HTML) names of the element.</td></tr>
+<tr><td>`legacy&#8209;names`</td><td></td><td>Filenames that have previously been used for this element and/or filenames of elements that were merged into this element. Pages that redirect from the old names to new name will be created if this is set.</td></tr>
 <tr><td>`short&#8209;names`</td><td></td><td>Abbreviated names of the element.</td></tr>
 <tr><td>`variants`</td><td></td><td>Variants of this element.</td></tr>
 <tr><td>`complexes`</td><td></td><td>Any discretiations of complexes that this element is part of.</td></tr>

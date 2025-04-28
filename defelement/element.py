@@ -596,6 +596,17 @@ class Element:
         return self.data["name"]
 
     @property
+    def legacy_filenames(self) -> typing.List[str]:
+        """Get any filenames that this element previously used.
+
+        Returns:
+            A list of filenames
+        """
+        if "legacy-names" not in self.data:
+            return []
+        return self.data["legacy-names"]
+
+    @property
     def notes(self) -> typing.List[str]:
         """Get notes.
 
