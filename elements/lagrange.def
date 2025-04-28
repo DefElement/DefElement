@@ -1,5 +1,9 @@
 name: Lagrange
 html-name: Lagrange
+legacy-names:
+  - q
+  - lobatto
+  - gauss-lobatto-legendre
 alt-names:
   - Galerkin
   - Hdiv trace (facets)

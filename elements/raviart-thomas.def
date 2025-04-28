@@ -1,5 +1,7 @@
 name: Raviart-Thomas
 html-name: Raviart&ndash;Thomas
+legacy-names:
+  - qdiv
 polynomial-subdegree: k
 polynomial-superdegree:
   triangle: k+1
