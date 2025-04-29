@@ -136,26 +136,14 @@ implementations:
       hexahedron: Q variant=lobatto
   basix:
     display: P
-    equispaced:
-      interval: P lagrange_variant=equispaced
-      triangle: P lagrange_variant=equispaced
-      quadrilateral: P lagrange_variant=equispaced
-      tetrahedron: P lagrange_variant=equispaced
-      hexahedron: P lagrange_variant=equispaced
-      prism: P lagrange_variant=equispaced
+    equispaced: P lagrange_variant=equispaced
     gll:
       interval: P lagrange_variant=gll_warped
       quadrilateral: P lagrange_variant=gll_warped
       hexahedron: P lagrange_variant=gll_warped
   basix.ufl:
     display: P
-    equispaced:
-      interval: P lagrange_variant=equispaced
-      triangle: P lagrange_variant=equispaced
-      quadrilateral: P lagrange_variant=equispaced
-      tetrahedron: P lagrange_variant=equispaced
-      hexahedron: P lagrange_variant=equispaced
-      prism: P lagrange_variant=equispaced
+    equispaced: P lagrange_variant=equispaced
     gll:
       interval: P lagrange_variant=gll_warped
       quadrilateral: P lagrange_variant=gll_warped
