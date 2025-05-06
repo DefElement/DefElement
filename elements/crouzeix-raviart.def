@@ -1,11 +1,27 @@
 name: Crouzeix-Raviart
 html-name: Crouzeix&ndash;Raviart
+alternative-names:
+  - Rannachker&ndash;Turek (quadrilateral, hexahedron)
+legacy-names:
+  - rannacher-turek
 min-degree: 1
 max-degree: 1
 polynomial-subdegree: k
-polynomial-superdegree: k
-lagrange-subdegree: k
-lagrange-superdegree: k
+polynomial-superdegree:
+  triangle: k
+  tetrahedron: k
+  quadrilateral: k+1
+  hexahedron: k+1
+lagrange-subdegree:
+  triangle: k
+  tetrahedron: k
+  quadrilateral: k-1
+  hexahedron: k-1
+lagrange-superdegree:
+  triangle: k
+  tetrahedron: k
+  quadrilateral: k+1
+  hexahedron: k+1
 degree: polynomial-subdegree
 alt-names:
   - non-conforming Crouzeix&ndash;Raviart
@@ -18,24 +34,43 @@ ndofs:
     formula: 3
   tetrahedron:
     formula: 4
+  quadrilateral:
+    formula: 4
+  hexahedron:
+    formula: 6
 reference-elements:
   - triangle
   - tetrahedron
+  - quadrilateral
+  - hexahedron
 mapping: identity
 sobolev: L2
 polynomial-set:
   triangle: poly[k]
   tetrahedron: poly[k]
+  quadrilateral: poly[k] && <k>[\operatorname{span}\left\{(x_1+x_2)(x_1-x_2)\right\}]
+  hexahedron: poly[k] && <k>[\operatorname{span}\left\{(x_1+x_2)(x_1-x_2),(x_2+x_3)(x_2-x_3))\right\}]
 dofs:
   facets: point evaluation at midpoint
 implementations:
-  symfem: Crouzeix-Raviart
+  symfem:
+    triangle: Crouzeix-Raviart
+    tetrahedron: Crouzeix-Raviart
+    quadrilateral: Rannacher-Turek
+    hexahedron: Rannacher-Turek
   basix: CR
   basix.ufl: CR
-  ufl: Crouzeix-Raviart
-  fiat: CrouzeixRaviart
+  ufl:
+    triangle: Crouzeix-Raviart
+    tetrahedron: Crouzeix-Raviart
+  fiat:
+    triangle: CrouzeixRaviart
+    tetrahedron: CrouzeixRaviart
 examples:
   - triangle,1
+  - tetrahedron,1
+  - quadrilateral,1
+  - hexahedron,1
 references:
   - title: Conforming and nonconforming finite element methods for solving the stationary Stokes equations
     author:
@@ -47,3 +82,14 @@ references:
     pagestart: 33
     pageend: 75
     doi: 10.1051/m2an/197307R300331
+  - title: Simple nonconforming quadrilateral Stokes element
+    author:
+      - Rannacher, Rolf
+      - Turek, Stefan
+    year: 1992
+    journal: Numerical methods for partial differential equations
+    volume: 8
+    number: 2
+    pagestart: 97
+    pageend: 111
+    doi: 10.1002/num.1690080202
