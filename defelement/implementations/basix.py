@@ -105,4 +105,5 @@ class BasixImplementation(Implementation):
     name = "Basix"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    install = "pip3 install fenics-basix"
+    install = "pip3 install git+https://github.com/FEniCS/basix"
+    # install = "pip3 install fenics-basix"
