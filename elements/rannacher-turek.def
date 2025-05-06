@@ -26,8 +26,11 @@ sobolev: L2
 mapping: identity
 implementations:
   symfem: Rannacher-Turek
+  basix: CR
+  basix.ufl: CR
 examples:
   - quadrilateral,1
+  - hexahedron,1
 references:
   - title: Simple nonconforming quadrilateral Stokes element
     author:
