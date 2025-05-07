@@ -106,7 +106,10 @@ def describe_dof(element: FiniteElement, d: BaseFunctional) -> typing.Tuple[str,
     return desc, symb
 
 
-def markup_example(element: FiniteElement, html_name: str, element_page: str, fname: str) -> str:
+def markup_example(
+    element: FiniteElement, html_name: str, element_page: str, fname: str,
+    legacy_filenames: typing.List[str] = [],
+) -> str:
     """Markup examples.
 
     Args:
@@ -114,6 +117,7 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
         html_name: Name of element
         element_page: URL of elemtn page
         fname: Filename
+        legacy_filenames: Old filenames to create redirects from
 
     Returns:
         Example as HTML
@@ -200,5 +204,15 @@ def markup_example(element: FiniteElement, html_name: str, element_page: str, fn
 
     with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", fname)), "w") as f:
         f.write(make_html_page(eg))
+
+    for i in legacy_filenames:
+        with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", i)), "w") as f:
+            f.write(make_html_page((
+                f"This example has moved to <a href='/elements/examples/{fname}'>"
+                f"defelement.org/elements/examples/{fname}</a>"
+            ), extra_head=(
+                f"<meta http-equiv='refresh' content='0; URL=/elements/examples/{fname}' />"
+            )
+            ))
 
     return f"/elements/examples/{fname}"

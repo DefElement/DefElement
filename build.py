@@ -520,6 +520,10 @@ for e in categoriser.elements:
                     "filename": fname, "url": f"/elements/examples/{fname}"}
                 if "variant" in params:
                     eginfo["kwargs"]["variant"] = params["variant"]
+                if "legacy-names" in e.data:
+                    eginfo["legacy-filenames"] = [
+                        fname.replace(e.filename, i) for i in e.data["legacy-names"]
+                    ]
                 all_examples.append(eginfo)
                 element_examples.append(eginfo)
 
@@ -563,7 +567,7 @@ for e in categoriser.elements:
     # Make redirects from legacy filenames
     for fname in e.legacy_filenames:
         write_html_page(os.path.join(settings.htmlelement_path, f"{fname}.html"), None, (
-            f"This element has moved to <a href='/element/{e.html_filename}'>"
+            f"This element has moved to <a href='/elements/{e.html_filename}'>"
             f"defelement.org/elements/{e.html_filename}</a>"
         ), extra_head=f"<meta http-equiv='refresh' content='0; URL=/elements/{e.html_filename}' />")
 
@@ -791,7 +795,7 @@ def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str 
 
         markup_example(
             element, eg['html_name'], f"/elements/{eg['element_filename']}",
-            eg['filename'])
+            eg['filename'], eg['legacy-filenames'] if "legacy-filenames" in eg else [])
 
         end = datetime.now()
         print(f"  {process}{eg['args'][0]} {eg['args'][1]} {eg['args'][2]}"
