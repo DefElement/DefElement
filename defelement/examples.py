@@ -9,7 +9,7 @@ from symfem.functionals import BaseFunctional
 from symfem.functions import Function
 from symfem.piecewise_functions import PiecewiseFunction
 from symfem.symbols import t
-from webtools.html import make_html_page
+from webtools.html import make_html_forwarding_page, make_html_page
 from webtools.markup import heading_with_self_ref
 
 from defelement import plotting, settings, symbols
@@ -207,12 +207,6 @@ def markup_example(
 
     for i in legacy_filenames:
         with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", i)), "w") as f:
-            f.write(make_html_page((
-                f"This example has moved to <a href='/elements/examples/{fname}'>"
-                f"defelement.org/elements/examples/{fname}</a>"
-            ), extra_head=(
-                f"<meta http-equiv='refresh' content='0; URL=/elements/examples/{fname}' />"
-            )
-            ))
+            f.write(make_html_forwarding_page(f"/elements/examples/{fname}"))
 
     return f"/elements/examples/{fname}"
