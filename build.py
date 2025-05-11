@@ -51,6 +51,7 @@ def write_html_page(
         path: Page path
         title: Page title
         content: Page content
+        extra_head: Extra HTML to include inside <head>
     """
     assert html_local(path) not in sitemap
     if title is not None:
