@@ -23,6 +23,7 @@ htmlindices_path = _os.path.join(html_path, "lists")
 htmlfamilies_path = _os.path.join(html_path, "families")
 
 verification_json = _os.path.join(dir_path, "verification.json")
+verification_history_json = _os.path.join(dir_path, "verification-history.json")
 
 github_token: _typing.Optional[str] = None
 
@@ -79,4 +80,7 @@ def set_github_token(token):
 def set_verification_json(vj: str):
     """Set path of verification JSON."""
     global verification_json
+    global verification_history_json
+    assert vj.endswith(".json")
     verification_json = vj
+    verification_history_json = f"{vj[:-5]}-history.json"

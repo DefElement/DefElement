@@ -1,6 +1,7 @@
 *.pyc
 _html
 verification.json
+verification-history.json
 .defelement-build-cache
 
 *.xcf
