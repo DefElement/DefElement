@@ -956,17 +956,18 @@ c = heading_with_self_ref("h2", "Verification GitHub badges")
 c += "<table class='bordered align-left'>"
 c += "<thead><tr><td>Implementation</td><td>Badge</td><td>Markdown</td></tr></thead>"
 for i in verifications:
+    if i == "symfem":
+        url = "https://defelement.org/verification/"
+    else:
+        url = f"https://defelement.org/verification/{i}.html"
     c += (
         "<tr>"
         f"<td>{implementations[i].name}</td>"
-        f"<td><img src='/badges/{i}.svg'></td>"
+        f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
         "<td style='font-size:80%;font-family:monospace'>"
-        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]")
-    if i == "symfem":
-        c += f"(https://defelement.org/verification/)</td>"
-    else:
-        c += f"(https://defelement.org/verification/{i}.html)</td>"
-    c += "</tr>"
+        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+        f"({url})</td>"
+        "</tr>")
     if i in impl_content:
         impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
         impl_content[i] += (
