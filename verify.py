@@ -168,8 +168,8 @@ else:
 now = datetime.now().strftime("%Y-%m-%d")
 
 try:
-    with open(settings.verification_json) as f:
-        history = json.load(f)["history"]
+    with open(settings.verification_history_json) as f:
+        history = json.load(f)
 except FileNotFoundError:
     history = {}
 
@@ -187,12 +187,12 @@ for impl in set(j for i in data.values() for j in i):
             for i in data.values() if impl in i
         ),
     })
-print(history)
 
 with open(settings.verification_json, "w") as f:
     json.dump({
         "metadata": {"date": now},
         "verification": data,
-        "history": history,
     }, f)
+with open(settings.verification_history_json, "w") as f:
+    json.dump(history, f)
 

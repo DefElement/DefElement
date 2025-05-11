@@ -55,7 +55,7 @@ jobs:
 
       - run: |
           mkdir ../verification
-          cp verificiation-old/verification.json ../verification
+          cp verificiation-old/verification-history.json ../verification
         name: Make verification dir containing history
       - run: python3 verify.py ../verification/verification.json --processes 4
         name: Run verification
