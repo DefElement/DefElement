@@ -195,4 +195,3 @@ with open(settings.verification_json, "w") as f:
     }, f)
 with open(settings.verification_history_json, "w") as f:
     json.dump(history, f)
-
