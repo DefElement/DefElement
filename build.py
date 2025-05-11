@@ -1301,15 +1301,15 @@ for c in categoriser.references:
     content += f"<h2>{cap_first(c)}</h2>\n"
     content += "<ul>" + "".join([i[1] for i in refels]) + "</ul>"
 
-    heading = "Finite elements on a"
+    title = "Finite elements on a"
     if c[0] in "aeiou":
-        heading += "n"
-    heading += f" {c}"
-    sub_content = heading_with_self_ref("h1", heading)
+        title += "n"
+    title += f" {c}"
+    sub_content = heading_with_self_ref("h1", title)
     sub_content += "<ul>" + "".join([i[1] for i in refels]) + "</ul>"
 
     write_html_page(os.path.join(settings.htmlindices_path, f"references/{c}.html"),
-                    heading, sub_content)
+                    title, sub_content)
 
 write_html_page(os.path.join(settings.htmlindices_path, "references/index.html"),
                 "Reference elements", content)
