@@ -823,8 +823,8 @@ vs = []
 for i in verifications:
     if i != "symfem":
         vs.append(i)
-        content += f"<td>{implementations[i].name}</td>"
-        long_content += f"<td>{implementations[i].name}</td>"
+        content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
