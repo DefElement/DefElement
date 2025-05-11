@@ -47,3 +47,13 @@ references:
     pagestart: 2829
     pageend: 2855
     doi: 10.1137/19M1288723
+  - title: An analysis of the TDNNS method using natural norms
+    author:
+      - Pechstein, Astrid S.
+      - Sch&ouml;berl, Joachim
+    journal: Numerische Mathematik
+    year: 2018
+    volume: 139
+    pagestart: 92
+    pageend: 120
+    doi: 10.1007/s00211-017-0933-3
