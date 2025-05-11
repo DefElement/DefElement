@@ -146,8 +146,11 @@ cdescs = {
     "H1(div)": "Function values and divergence are continuous.",
     }
 
+VHistoryDict = typing.TypedDict('VHistoryDict', {'date': str, 'pass': int, 'total': int})
+
+
 verification: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
-vhistory: typing.Dict[str, typing.List[typing.Dict[str, typing.Union[int, str]]]] = {}
+vhistory: typing.Dict[str, typing.List[VHistoryDict]] = {}
 v_date = None
 if os.path.isfile(settings.verification_json):
     with open(settings.verification_json) as f:
@@ -864,7 +867,7 @@ for e in categoriser.elements:
                                   key=lambda i: ",".join(i.split(",")[:0:-1]))
     assert len(examples) == len(sorted_examples)
     long_row = ""
-    impl_rows = {i: [] for i in impl_content}
+    impl_rows: typing.Dict[str, typing.List[str]] = {i: [] for i in impl_content}
     for eg in sorted_examples:
         long_row += "<tr>"
         if long_row == "<tr>":
