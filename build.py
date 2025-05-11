@@ -148,7 +148,6 @@ cdescs = {
 
 VHistoryDict = typing.TypedDict('VHistoryDict', {'date': str, 'pass': int, 'total': int})
 
-
 verification: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
 vhistory: typing.Dict[str, typing.List[VHistoryDict]] = {}
 v_date = None
