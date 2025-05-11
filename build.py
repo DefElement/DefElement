@@ -961,9 +961,12 @@ for i in verifications:
         f"<td>{implementations[i].name}</td>"
         f"<td><img src='/badges/{i}.svg'></td>"
         "<td style='font-size:80%;font-family:monospace'>"
-        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-        f"(https://defelement.org/verification/{i}.html)</td>"
-        "</tr>")
+        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]")
+    if i == "symfem":
+        c += f"(https://defelement.org/verification/)</td>"
+    else:
+        c += f"(https://defelement.org/verification/{i}.html)</td>"
+    c += "</tr>"
     if i in impl_content:
         impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
         impl_content[i] += (
