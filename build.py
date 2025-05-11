@@ -985,7 +985,7 @@ write_html_page(os.path.join(settings.html_path, "verification/index.html"),
 write_html_page(os.path.join(settings.html_path, "verification/detailed.html"),
                 "Verification: full detail", long_content)
 with open(os.path.join(settings.html_path, "verification.html"), "w") as f:
-    f.write(make_html_forwarding_page("/verification"))
+    f.write(make_html_forwarding_page("/verification/"))
 
 for i in verifications:
     if i != "symfem":
