@@ -165,8 +165,34 @@ else:
                         data[i0][i1][i2] = []
                     data[i0][i1][i2] += j2
 
+now = datetime.now().strftime("%Y-%m-%d")
+
+try:
+    with open(settings.verification_json) as f:
+        history = json.load(f)["history"]
+except FileNotFoundError:
+    history = {}
+
+for impl in set(j for i in data.values() for j in i):
+    if impl not in history:
+        history[impl] = []
+    history[impl].append({
+        "date": now,
+        "pass": sum(
+            len(i[impl]["pass"])
+            for i in data.values() if impl in i
+        ),
+        "total": sum(
+            len(i[impl]["pass"]) + len(i[impl]["fail"])
+            for i in data.values() if impl in i
+        ),
+    })
+print(history)
+
 with open(settings.verification_json, "w") as f:
     json.dump({
-        "metadata": {"date": datetime.now().strftime("%Y-%m-%d")},
+        "metadata": {"date": now},
         "verification": data,
+        "history": history,
     }, f)
+
