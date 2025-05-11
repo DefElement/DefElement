@@ -12,7 +12,7 @@ from symfem import create_element
 from webtools.citations import make_bibtex, markup_citation
 from webtools.code_markup import python_highlight
 from webtools.html import make_html_forwarding_page, make_html_page
-from webtools.markup import cap_first, heading_with_self_ref, markup
+from webtools.markup import cap_first, heading, heading_with_self_ref, markup
 from webtools.tools import comma_and_join, html_local, insert_author_info, parse_metadata
 
 from defelement import plotting, settings
@@ -43,6 +43,7 @@ sitemap = {}
 
 def write_html_page(
     path: str, title: typing.Optional[str], content: str,
+    extra_head: typing.Optional[str] = None
 ):
     """Write a HTML page.
 
@@ -55,7 +56,7 @@ def write_html_page(
     if title is not None:
         sitemap[html_local(path)] = title
     with open(path, "w") as f:
-        f.write(make_html_page(content, title))
+        f.write(make_html_page(content, title, extra_head=extra_head))
 
 
 args = parser.parse_args()
@@ -145,12 +146,16 @@ cdescs = {
     }
 
 verification: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
+vhistory: typing.Dict[str, typing.List[typing.Dict[str, typing.Union[int, str]]]] = {}
 v_date = None
 if os.path.isfile(settings.verification_json):
     with open(settings.verification_json) as f:
         v_json = json.load(f)
         verification = v_json["verification"]
         v_date = v_json["metadata"]["date"]
+if os.path.isfile(settings.verification_history_json):
+    with open(settings.verification_history_json) as f:
+        vhistory = json.load(f)
 
 icon_style = "font-size:150%;vertical-align:middle"
 icon_style_small = "font-size:80%;vertical-align:middle"
@@ -636,19 +641,184 @@ with open(os.path.join(badges, "symfem.svg"), "w") as f:
         "</svg>")
 
 # Make verification pages
+os.mkdir(os.path.join(settings.html_path, "verification"))
+
+impl_content = {
+    i: ""
+    for i in verifications
+    if i != "symfem"
+}
+for i in impl_content:
+    title = f"{implementations[i].name} verification"
+    if i in vhistory:
+        good = vhistory[i][-1]["pass"]
+        total = vhistory[i][-1]["total"]
+        if good == total:
+            col = symfem.plotting.Colors.GREEN
+        elif good < total / 2:
+            col = "#FF0000"
+        else:
+            col = symfem.plotting.Colors.ORANGE
+        title += (
+            "<span class='verification-total' "
+            f"style='background-color:{col};margin-left:30px'>{good} / {total}</span>"
+        )
+    impl_content[i] += heading("h1", title)
+
 content = heading_with_self_ref("h1", "Verification")
 long_content = heading_with_self_ref("h1", "Verification: full detail")
 if v_date is not None:
     year, month, day = [int(i) for i in v_date.split("-")]
     monthname = ["Zeromber", "January", "February", "March", "April", "May", "June",
                  "July", "August", "September", "October", "November", "December"][month]
-    content += f"<small>Last updated: {day} {monthname} {year}</small><br /><br />"
+    updated = f"<small>Last updated: {day} {monthname} {year}</small><br /><br />"
+    content += updated
+    long_content += updated
+    for i in impl_content:
+        impl_content[i] += updated
+
+for i in impl_content:
+    if i in vhistory:
+        hist = vhistory[i]
+        impl_content[i] += (
+            "<div id='verification-plot'></div>"
+            "<script type='text/javascript'>\n")
+
+        impl_content[i] += (
+            "var vpassing = {\n"
+            "  x: [")
+        impl_content[i] += ",".join(f"\"{i['date']}\"" for i in hist)
+        impl_content[i] += (
+            "],\n"
+            "  y: [")
+        impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in hist)
+        impl_content[i] += (
+            "],\n"
+            "  type: 'scatter',\n"
+            "  mode: 'lines',\n"
+            "  name: \"Number of elements with passing verification\"\n,"
+            "  line: {\n"
+            f"    color: '{symfem.plotting.Colors.GREEN}',\n"
+            "    width: 2"
+            "  }\n"
+            "};\n")
+
+        impl_content[i] += (
+            "var vtotal = {\n"
+            "  x: [")
+        impl_content[i] += ",".join(f"\"{i['date']}\"" for i in hist)
+        impl_content[i] += (
+            "],\n"
+            "  y: [")
+        impl_content[i] += ",".join(f"\"{i['total']}\"" for i in hist)
+        impl_content[i] += (
+            "],\n"
+            "  type: 'scatter',\n"
+            "  mode: 'lines',\n"
+            "  name: \"Number of elements implemented\"\n,"
+            "  line: {\n"
+            "    dash: 'dash',\n"
+            "    color: '#000000',\n"
+            "    width: 3\n"
+            "  }\n"
+            "};\n")
+
+        plotme = "vtotal, vpassing"
+
+        green_hist = [h for h in hist if h["pass"] == h["total"]]
+        if len(green_hist) > 0:
+            impl_content[i] += (
+                "var vpassing_green = {\n"
+                "  x: [")
+            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in green_hist)
+            impl_content[i] += (
+                "],\n"
+                "  y: [")
+            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in green_hist)
+            impl_content[i] += (
+                "],\n"
+                "  type: 'scatter',\n"
+                "  mode: 'markers',\n"
+                "  marker: {\n"
+                f"    color: '{symfem.plotting.Colors.GREEN}',\n"
+                "    size: 8"
+                "  }\n"
+                "};\n")
+            plotme += ", vpassing_green"
+
+        amber_hist = [h for h in hist if h["total"] / 2 <= h["pass"] < h["total"]]
+        if len(amber_hist) > 0:
+            impl_content[i] += (
+                "var vpassing_amber = {\n"
+                "  x: [")
+            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in amber_hist)
+            impl_content[i] += (
+                "],\n"
+                "  y: [")
+            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in amber_hist)
+            impl_content[i] += (
+                "],\n"
+                "  type: 'scatter',\n"
+                "  mode: 'markers',\n"
+                "  marker: {\n"
+                f"    color: '{symfem.plotting.Colors.ORANGE}',\n"
+                "    size: 8"
+                "  }\n"
+                "};\n")
+            plotme += ", vpassing_amber"
+
+        red_hist = [h for h in hist if h["pass"] < h["total"] / 2]
+        if len(red_hist) > 0:
+            impl_content[i] += (
+                "var vpassing_red = {\n"
+                "  x: [")
+            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in red_hist)
+            impl_content[i] += (
+                "],\n"
+                "  y: [")
+            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in red_hist)
+            impl_content[i] += (
+                "],\n"
+                "  type: 'scatter',\n"
+                "  mode: 'markers',\n"
+                "  marker: {\n"
+                "    color: '#FF0000',\n"
+                "    size: 8"
+                "  }\n"
+                "};\n")
+            plotme += ", vpassing_red"
+
+        impl_content[i] += (
+            "var layout = {\n"
+            "  showlegend: false,\n"
+            "  height: 450,\n"
+            "  xaxis: {title: 'Date'},\n"
+            "  yaxis: {title: 'Number of elements', rangemode: 'tozero'},\n"
+            "  margin: {t: 15}\n"
+            "};\n"
+            f"Plotly.newPlot('verification-plot', [{plotme}], layout);"
+            "</script>"
+        )
+
+        impl_content[i] += "</script>"
+        impl_content[i] += (
+            "The plot above shows the number of elements passing verificiation (green line) "
+            "out of the number of elements being verifified (dashed black line) over time."
+        )
+        impl_content[i] += "<br /><br />"
+
 content += "<table style='margin:auto' class='bordered align-left'>"
 content += "<thead>"
 content += "<tr><td>Element</td>"
 long_content += "<table style='margin:auto' class='bordered align-left'>"
 long_content += "<thead>"
 long_content += "<tr><td>Element</td><td>Example</td>"
+for i in impl_content:
+    impl_content[i] += (
+        "<table style='margin:auto' class='bordered align-left'>"
+        "<thead>"
+        "<tr><td>Element</td><td>Example</td><td></td></tr>"
+        "</thead>")
 vs = []
 for i in verifications:
     if i != "symfem":
@@ -693,6 +863,7 @@ for e in categoriser.elements:
                                   key=lambda i: ",".join(i.split(",")[:0:-1]))
     assert len(examples) == len(sorted_examples)
     long_row = ""
+    impl_rows = {i: [] for i in impl_content}
     for eg in sorted_examples:
         long_row += "<tr>"
         if long_row == "<tr>":
@@ -704,9 +875,13 @@ for e in categoriser.elements:
             if e.filename in verification and i in verification[e.filename]:
                 result = verification[e.filename][i]
                 if eg in result["pass"]:
+                    impl_rows[i].append(
+                        f"<td style='font-size:80%'>{eg}</td><td>{green_check}</td>")
                     long_row += green_check
                 elif eg in result["fail"]:
                     long_row += red_check
+                    impl_rows[i].append(
+                        f"<td style='font-size:80%'>{eg}</td><td>{red_check}</td>")
                 else:
                     long_row += blue_minus
             else:
@@ -714,12 +889,21 @@ for e in categoriser.elements:
             long_row += "</td>"
         long_row += "</tr>"
 
+    for i, i_rows in impl_rows.items():
+        if len(i_rows) > 0:
+            impl_content[i] += (
+                f"<tr><td rowspan='{len(i_rows)}'>"
+                f"<a href='/elements/{e.filename}.html'>{e.html_name}</a></td>")
+            impl_content[i] += "</tr><tr>".join(i_rows)
+            impl_content[i] += "</tr>"
+
     rows.append((row, long_row, n))
 rows.sort(key=lambda i: -i[2])
 for r in rows:
     if r[2] > 0:
         content += r[0]
         long_content += r[1]
+
 c = (
     "</table>"
     "<br /><br />"
@@ -731,24 +915,33 @@ c = (
     "</ul>"
     "The symbols in the table have the following meaning:")
 content += c
-long_content += c
 content += (
     "<table style='margin:auto' class='bordered align-left'>"
     f"<tr><td>{green_check}</td><td>Verification passes from all the examples on the element's page"
     "</td></tr>"
     f"<tr><td>{orange_check}</td><td>Verification passes for some examples, but not all</td></tr>"
     f"<tr><td>{red_check}</td><td>Verification fails for all examples</td></tr>"
-    "</table>")
+    "</table>"
+    "<br /><br />You can view more details of which examples pass and fail on the "
+    "<a href='/verification/detailed.html'>verification with full detail page</a>.")
+long_content += c
 long_content += (
     "<table style='margin:auto' class='bordered align-left'>"
     f"<tr><td>{green_check}</td><td>Verification passes</td></tr>"
     f"<tr><td>{red_check}</td><td>Verification fails</td></tr>"
     f"<tr><td>{blue_minus}</td><td>Example not implemented</td></tr>"
-    "</table>")
-content += ("<br /><br />You can view more details of which examples pass and fail on the "
-            "<a href='/detailed-verification.html'>verification with full detail page</a>.")
-long_content += ("<br /><br />You can view a summarised version of this information on the "
-                 "<a href='/verification.html'>verification page</a>.")
+    "</table>"
+    "<br /><br />You can view a summarised version of this information on the "
+    "<a href='/verification/index.html'>verification page</a>.")
+for i in impl_content:
+    impl_content[i] += c
+    impl_content[i] += (
+        "<table style='margin:auto' class='bordered align-left'>"
+        f"<tr><td>{green_check}</td><td>Verification passes</td></tr>"
+        f"<tr><td>{red_check}</td><td>Verification fails</td></tr>"
+        "</table>"
+        "<br /><br />You can information about verification of other libraries on the "
+        "<a href='/verification/index.html'>verification page</a>.")
 if os.path.isfile(settings.verification_json):
     os.system(f"cp {settings.verification_json} {settings.html_path}/verification.json")
     c = ("<br /><br />The verification data is also available "
@@ -766,15 +959,39 @@ for i in verifications:
         f"<td><img src='/badges/{i}.svg'></td>"
         "<td style='font-size:80%;font-family:monospace'>"
         f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-        "(https://defelement.org/verification.html)</td>"
+        f"(https://defelement.org/verification/{i}.html)</td>"
         "</tr>")
+    if i in impl_content:
+        impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
+        impl_content[i] += (
+            "<table class='bordered align-left'>"
+            "<thead><tr><td>Badge</td><td>Markdown</td></tr></thead>"
+            "<tr>"
+            f"<td><img src='/badges/{i}.svg'></td>"
+            "<td style='font-size:80%;font-family:monospace'>"
+            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+            f"(https://defelement.org/verification/{i}.html)</td>"
+            "</tr>"
+            "</table>")
+
 c += "</table>"
 content += c
 long_content += c
-write_html_page(os.path.join(settings.html_path, "verification.html"),
+write_html_page(os.path.join(settings.html_path, "verification/index.html"),
                 "Verification", content)
-write_html_page(os.path.join(settings.html_path, "detailed-verification.html"),
+write_html_page(os.path.join(settings.html_path, "verification/detailed.html"),
                 "Verification: full detail", long_content)
+with open(os.path.join(settings.html_path, "verification.html"), "w") as f:
+    f.write(make_html_forwarding_page("/verification"))
+
+for i in verifications:
+    if i != "symfem":
+        write_html_page(
+            os.path.join(settings.html_path, f"verification/{i}.html"),
+            f"{implementations[i].name} verification", impl_content[i],
+            extra_head=(
+                "<script src='https://cdn.plot.ly/plotly-2.27.0.min.js' charset='utf-8' "
+                "type='text/javascript'></script>"))
 
 
 def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str = ""):

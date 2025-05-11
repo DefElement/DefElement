@@ -114,3 +114,5 @@ img.person {float:right;width:200px;margin-left:20px;border-radius: 50%;margin-t
 
 #authorcite {border: 2px solid #FF8800;border-radius:10px;padding:10px;margin:10px}
 .authors {font-size:80%;margin-bottom:-5px}
+
+.verification-total {padding:10px 20px; font-family: 'Varela Round', sans-serif;font-weight:normal;text-align:center;width:fit-content;color:white;border-radius:15px;text-shadow: 1px 1px 2px black}
