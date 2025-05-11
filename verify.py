@@ -91,8 +91,6 @@ def verify_examples(
 
     results: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
     for e, eg, implementations in egs:
-        if "pyramid" not in eg: # TODO
-            continue # TODO: remove this
         if e.filename not in results:
             results[e.filename] = {
                 i: {"pass": [], "fail": [], "not implemented": []}
