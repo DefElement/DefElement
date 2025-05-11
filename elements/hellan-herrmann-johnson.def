@@ -18,10 +18,10 @@ polynomial-set: <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\math
 dofs:
   facets: integral moments of inner products of normal with (lagrange,k)
   cell:
-    triangle: integral moments of tensor products with symmetric matrices whose entries are in (lagrange,k-1)
+    triangle: integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1)
     tetrahedron:
-      - integral moments of tensor products with symmetric matrices whose entries are in (lagrange,k-1) and whose off-diagonal entries are all equal
-      - integral moments of tensor products with symmetric matrices whose entries are in (lagrange,k) and whose diagonal entries are all zero
+      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1) and whose off-diagonal entries are all equal
+      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k) and whose diagonal entries are all zero
 sobolev: H(div div)
 mapping: double contravariant Piola
 implementations:
