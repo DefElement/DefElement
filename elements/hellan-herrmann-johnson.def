@@ -28,8 +28,7 @@ implementations:
   symfem: HHJ
   ufl:
     triangle: HHJ
-  fiat:
-    triangle: HellanHerrmannJohnson
+  fiat: HellanHerrmannJohnson
   basix:
     triangle: HHJ
 examples:
