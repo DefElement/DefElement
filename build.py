@@ -117,7 +117,6 @@ for file in os.listdir(settings.pages_path):
         if "authors" in metadata:
             content = insert_author_info(content, metadata["authors"], f"{fname}.html")
 
-        print(content)
         content = markup(content)
 
         write_html_page(os.path.join(settings.html_path, f"{fname}.html"),
