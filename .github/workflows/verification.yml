@@ -46,8 +46,17 @@ jobs:
           python3 -m pip install setuptools
           python3 install_implementations.py --install-type verification
 
-      - run: mkdir ../verification
-        name: Make dir
+      - name: Clone verification history
+        uses: actions/checkout@v4
+        with:
+          path: ./verification-old
+          repository: DefElement/DefElement
+          ref: verificiation
+
+      - run: |
+          mkdir ../verification
+          cp verificiation-old/verification-history.json ../verification
+        name: Make verification dir containing history
       - run: python3 verify.py ../verification/verification.json --processes 4
         name: Run verification
       - run: |

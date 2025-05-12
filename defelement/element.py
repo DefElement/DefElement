@@ -73,6 +73,32 @@ def make_formula(data: typing.Dict[str, typing.Any]) -> str:
     return txt
 
 
+def extract_degreemap(info):
+    """Extract degree map information."""
+    if isinstance(info, str):
+        return info.split("DEGREEMAP=")[1].split()[0]
+
+    assert isinstance(info, dict)
+    maps = {i: extract_degreemap(j) for i, j in info.items() if i != "display"}
+
+    value = list(maps.values())[0]
+    for i in maps.values():
+        if i != value:
+            return maps
+    return value
+
+
+def degreemap_equal(a, b) -> bool:
+    """Check if two degreemaps are equal."""
+    if isinstance(a, str):
+        return a == b
+    assert isinstance(a, dict)
+    for i in a:
+        if not degreemap_equal(a[i], b[i]):
+            return False
+    return True
+
+
 class Element:
     """An element."""
 
@@ -679,7 +705,7 @@ class Element:
             degree: Degree
             variant: Variant name
 
-        Raturns:
+        Returns:
             Implementation string, degree and parameters to pass to implementation
         """
         assert self.implemented(lib)
@@ -818,7 +844,30 @@ class Element:
         Returns:
             Implementation notes
         """
-        return implementations[lib].notes(self)
+        notes = implementations[lib].notes(self)
+
+        if "implementations" in self.data and lib in self.data["implementations"]:
+            impl = self.data["implementations"][lib]
+            if "DEGREEMAP" in f"{impl}":
+                degreemap = extract_degreemap(impl)
+                if degreemap == "None":
+                    pass
+                else:
+
+                    for id, info in [
+                        ("polynomial-subdegree", "polynomial subdegree"),
+                        ("lagrange-superdegree", "Lagrange superdegree"),
+                        ("polynomial-superdegree", "polynomial superdegree"),
+                        ("lagrange-subdegree", "Lagrange subdegree"),
+                    ]:
+                        if id in self.data and degreemap_equal(degreemap, self.data[id]):
+                            notes.append(f"This element uses the {info} as the canonical degree "
+                                         "of this element")
+                            break
+                    else:
+                        notes.append("This implementation uses an alternative value of "
+                                     "degree for this element")
+        return notes
 
     def implementation_references(self, lib: str) -> typing.List[typing.Dict[str, str]]:
         """Get implementation notes for a library.
