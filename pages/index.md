@@ -52,6 +52,14 @@ functions they lead to for a selection of low degree spaces.
 You can read a detailed description of how the finite element definitions can be understood
 on the [how to understand a finite element page](ciarlet.md).
 
+## Implementations of finite elements
+There are a large number of libraries that implement finite elements. On each element's page,
+code snippets are provided that can create the element in a selection of these libraries.
+
+For many libraries, DefElement performs verification to check that the implementation of
+each element in the library matches the element's definition. The results of the most
+recent verification run can be found on the [verification page](/verification).
+
 ## Contributing to DefElement
 If you find an error or inaccuracy in a DefElement entry, please open
 [an issue on GitHub](https://github.com/DefElement/DefElement/issues).
