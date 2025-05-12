@@ -9,24 +9,34 @@ categories:
   - matrix
 reference-elements:
   - triangle
+  - tetrahedron
 ndofs:
   triangle:
     formula: 3(k+1)(k+2)/2
     oeis: A045943
-polynomial-set:
-  triangle: <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\right\}]
+polynomial-set: <k>[\left\{\mathbf{M}\in{{poly[k]^dd}}\middle|\mathbf{M}^t=\mathbf{M}\right\}]
 dofs:
-  edges: integral moments of inner products of normal to edge with (lagrange,k)
-  faces: point evaluations of tensor products with symmetric matrices whose entries are in (lagrange,k-1)
+  facets: integral moments of inner products of normal with (lagrange,k)
+  cell:
+    triangle: integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1)
+    tetrahedron:
+      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1) and whose off-diagonal entries are all equal
+      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k) and whose diagonal entries are all zero
 sobolev: H(div div)
 mapping: double contravariant Piola
 implementations:
   symfem: HHJ
-  ufl: HHJ
-  fiat: HellanHerrmannJohnson
+  ufl:
+    triangle: HHJ
+  fiat:
+    triangle: HellanHerrmannJohnson
+  basix:
+    triangle: HHJ
 examples:
   - triangle,1
   - triangle,2
+  - tetrahedron,1
+  - tetrahedron,2
 references:
   - title: The Hellan&ndash;Herrmann&ndash;Johnson method with curved elements 
     author:
@@ -39,3 +49,13 @@ references:
     pagestart: 2829
     pageend: 2855
     doi: 10.1137/19M1288723
+  - title: An analysis of the TDNNS method using natural norms
+    author:
+      - Pechstein, Astrid S.
+      - Sch&ouml;berl, Joachim
+    journal: Numerische Mathematik
+    year: 2018
+    volume: 139
+    pagestart: 92
+    pageend: 120
+    doi: 10.1007/s00211-017-0933-3
