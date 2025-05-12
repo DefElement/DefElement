@@ -20,8 +20,8 @@ dofs:
   cell:
     triangle: integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1)
     tetrahedron:
-      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1) and whose off-diagonal entries are all equal
-      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k) and whose diagonal entries are all zero
+      - integrals against tensor products with symmetric matrices whose entries are in (lagrange,k-1)
+      - integrals against tensor products with matrices in \(\displaystyle\left\{\boldsymbol{n}_1\boldsymbol{n}_2^{\text{t}},\boldsymbol{n}_2\boldsymbol{n}_3^{\text{t}}\right\}\) multiplied by degree \(k\) polynomials
 sobolev: H(div div)
 mapping: double contravariant Piola
 implementations:
