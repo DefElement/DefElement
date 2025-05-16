@@ -5,5 +5,4 @@ on:
 jobs:
   run:
     runs-on: ubuntu-22.04
-    steps:
-      - uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
