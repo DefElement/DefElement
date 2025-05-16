@@ -72,6 +72,7 @@ jobs:
         name: Push to GitHub
 
   build-and-deply-website:
+    name: Build and deploy website
     needs:
       - verification
     uses: ./.github/workflows/build.yml
