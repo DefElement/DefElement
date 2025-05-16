@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-website:
-    name: Build defelement
+    name: Build
     runs-on: ubuntu-22.04
     steps:
       - name: Set up Python
@@ -96,7 +96,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
 
   deploy-website:
-    name: Deploy defelement
+    name: Deploy
     runs-on: ubuntu-22.04
     if: github.ref == 'refs/heads/main'
     needs:
