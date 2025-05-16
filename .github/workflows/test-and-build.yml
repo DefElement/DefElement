@@ -99,9 +99,7 @@ jobs:
     needs:
       - test-build-website
       - run-tests
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
 
   verification:
     name: Test verification
