@@ -70,3 +70,12 @@ jobs:
           git remote add origin https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/DefElement/DefElement.git
           git push -u origin verification --force
         name: Push to GitHub
+
+  build-and-deply-website:
+    name: Build and deploy website
+    needs:
+      - verification
+    uses: ./.github/workflows/build.yml
+    permissions:
+      pages: write
+      id-token: write

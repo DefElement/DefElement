@@ -90,113 +90,14 @@ jobs:
         name: Build website HTML
 
   build-website:
-    name: Build defelement
-    runs-on: ubuntu-22.04
+    name: Build and deploy website
     needs:
       - test-build-website
       - run-tests
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - uses: actions/checkout@v4
-
-      - name: Load Symfem cache
-        uses: actions/cache/restore@v4
-        with:
-          path: /home/runner/.cache/symfem
-          key: symfem-cache
-      - name: Load DefElement cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .defelement-build-cache
-          key: defelement-cache
-
-      - name: Clone Symfem
-        uses: actions/checkout@v4
-        with:
-          path: ./symfem
-          repository: mscroggs/symfem
-          ref: main
-      - name: Install Symfem
-        run: |
-            cd symfem
-            python3 -m pip install .[optional]
-
-      - name: Clone verification
-        uses: actions/checkout@v4
-        with:
-          path: ./verification
-          repository: DefElement/DefElement
-          ref: verification
-        continue-on-error: true
-
-      - run: mkdir -p ~/.local/share/fonts
-        name: Make font folder
-      - name: Clone Varela Round
-        uses: actions/checkout@v4
-        with:
-          path: ./varela-r
-          repository: avrahamcornfeld/Varela-Round-Hebrew
-          ref: master
-      - run: cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
-        name: Install Varela Round
-      - name: Download and install Computer Modern
-        run: |
-          wget https://downloads.sourceforge.net/project/cm-unicode/cm-unicode/0.7.0/cm-unicode-0.7.0-otf.tar.xz
-          tar -xf cm-unicode-0.7.0-otf.tar.xz
-          cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
-
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
-      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
-        name: Build website HTML
-        if: ${{ !github.event.pull_request.head.repo.fork }}
-      - run: python3 build.py _html --verification-json verification/verification.json --processes 4
-        name: Build website HTML
-        if: ${{ github.event.pull_request.head.repo.fork }}
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-        if: github.ref == 'refs/heads/main'
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '_html'
-        if: github.ref == 'refs/heads/main'
-
-      - name: Save Symfem cache
-        uses: actions/cache/save@v4
-        with:
-          path: /home/runner/.cache/symfem
-          key: symfem-cache-${{ github.run_id }}-${{ github.run_attempt }}
-        if: github.ref == 'refs/heads/main'
-      - name: Tidy DefElement cache
-        run: python -c "from defelement.caching import tidy_cache; tidy_cache()"
-        if: github.ref == 'refs/heads/main'
-      - name: Save DefElement cache
-        uses: actions/cache/save@v4
-        with:
-          path: .defelement-build-cache
-          key: defelement-cache-${{ github.run_id }}-${{ github.run_attempt }}
-        if: github.ref == 'refs/heads/main'
-
-  deploy-website:
-    name: Deploy defelement
-    runs-on: ubuntu-22.04
-    if: github.ref == 'refs/heads/main'
-    needs:
-      - build-website
+    uses: ./.github/workflows/build.yml
     permissions:
       pages: write
       id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
 
   verification:
     name: Test verification
