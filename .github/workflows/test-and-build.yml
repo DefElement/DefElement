@@ -1,12 +1,13 @@
 name: Test and build
 
 on:
-  push:
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: "0 7 * * 1"
+  #push:
+  #pull_request:
+  #  branches:
+  #    - main
+  #schedule:
+  #  - cron: "0 7 * * 1"
+  workflow_dispatch:
 
 jobs:
   style-checks:

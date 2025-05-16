@@ -1,0 +1,18 @@
+name: Testing new workflow
+on:
+  push:
+
+jobs:
+  - run:
+    name: Testing
+    runs-on: ubuntu-22.04
+    steps:
+      - name: sleep for a bit
+        run: sleep 10
+      - name: Invoke website rebuild
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build.yml
+          repo: rust-scicomp/website
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: refs/heads/main
