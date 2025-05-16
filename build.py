@@ -807,7 +807,7 @@ for i in impl_content:
         impl_content[i] += "</script>"
         impl_content[i] += (
             "The plot above shows the number of elements passing verificiation (green line) "
-            "out of the number of elements being verifified (dashed black line) over time."
+            "out of the number of elements being verified (dashed black line) over time."
         )
         impl_content[i] += "<br /><br />"
 
