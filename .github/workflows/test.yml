@@ -4,6 +4,8 @@ on:
 
 jobs:
   run:
+    permissions:
+      repo: write
     name: Testing
     runs-on: ubuntu-22.04
     steps:
