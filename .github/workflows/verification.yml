@@ -51,11 +51,11 @@ jobs:
         with:
           path: ./verification-old
           repository: DefElement/DefElement
-          ref: verificiation
+          ref: verification
 
       - run: |
           mkdir ../verification
-          cp verificiation-old/verification-history.json ../verification
+          cp verification-old/verification-history.json ../verification
         name: Make verification dir containing history
       - run: python3 verify.py ../verification/verification.json --processes 4
         name: Run verification
@@ -70,3 +70,12 @@ jobs:
           git remote add origin https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/DefElement/DefElement.git
           git push -u origin verification --force
         name: Push to GitHub
+
+  build-and-deply-website:
+    name: Build and deploy website
+    needs:
+      - verification
+    uses: ./.github/workflows/build.yml
+    permissions:
+      pages: write
+      id-token: write
