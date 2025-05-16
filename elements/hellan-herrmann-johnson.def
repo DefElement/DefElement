@@ -29,11 +29,12 @@ implementations:
   ufl:
     triangle: HHJ
   fiat: HellanHerrmannJohnson
-  basix:
-    triangle: HHJ
+  basix: HHJ
 examples:
+  - triangle,0
   - triangle,1
   - triangle,2
+  - tetrahedron,0
   - tetrahedron,1
   - tetrahedron,2
 references:
