@@ -4,7 +4,6 @@ on:
 
 jobs:
   run:
-    name: Testing
     runs-on: ubuntu-22.04
     steps:
       - name: sleep for a bit
