@@ -51,7 +51,7 @@ jobs:
         with:
           path: ./verification-old
           repository: DefElement/DefElement
-          ref: verificiation
+          ref: verification
 
       - run: |
           mkdir ../verification
