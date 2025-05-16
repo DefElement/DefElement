@@ -98,6 +98,9 @@ jobs:
       - test-build-website
       - run-tests
     uses: ./.github/workflows/build.yml
+    permissions:
+      pages: write
+      id-token: write
 
   verification:
     name: Test verification
