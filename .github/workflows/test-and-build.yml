@@ -94,8 +94,6 @@ jobs:
         name: Build website HTML
 
   build-website:
-    name: Build DefElement
-    runs-on: ubuntu-22.04
     needs:
       - test-build-website
       - run-tests
