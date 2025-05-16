@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  - run:
+  run:
     name: Testing
     runs-on: ubuntu-22.04
     steps:
