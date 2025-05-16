@@ -6,7 +6,4 @@ jobs:
   run:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - name: sleep for a bit
-        run: sleep 10
-      - uses: ./.github/workflows/build.yml
+      - uses: .github/workflows/build.yml
