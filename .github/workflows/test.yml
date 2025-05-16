@@ -11,8 +11,3 @@ jobs:
     steps:
       - name: sleep for a bit
         run: sleep 10
-      - name: Invoke website rebuild
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: test-and-build.yml
-          ref: refs/heads/main
