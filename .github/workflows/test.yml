@@ -12,7 +12,5 @@ jobs:
       - name: Invoke website rebuild
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: build.yml
-          repo: rust-scicomp/website
-          token: ${{ secrets.PAT_TOKEN }}
+          workflow: test-and-build.yml
           ref: refs/heads/main
