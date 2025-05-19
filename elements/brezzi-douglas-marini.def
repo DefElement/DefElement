@@ -37,7 +37,7 @@ polynomial-set:
   tetrahedron: poly[k]^d
 dofs:
   facets: normal integral moments with (lagrange,k)
-  cell: integral moments with (nedelec1,k-1)
+  cell: integral moments with (nedelec1,k-2)
 mapping: contravariant Piola
 sobolev: H(div)
 implementations:
