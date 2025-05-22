@@ -1,6 +1,7 @@
 """DefElement elements."""
 
 import os
+import re
 import typing
 import warnings
 from datetime import datetime
@@ -494,13 +495,11 @@ class Element:
                 if space_info.startswith('"') and space_info.endswith('"'):
                     return f"{mom_type} with {insert_links(space_info[1:-1])}"
 
-                assert space_info.startswith("(") and space_info.endswith(")")
-                space_info = space_info[1:-1]
-                space, degree = space_info.split(",")
-                space = space.strip()
-                degree = degree.strip()
-                space_link = self._c.get_space_name(space)
-                return f"{mom_type} with a degree \\({degree}\\) {space_link} space"
+            def insert_space_links(matches):
+                space_link = self._c.get_space_name(matches[1])
+                return f"a degree \\({matches[2]}\\) {space_link} space"
+
+            dofs = re.sub(r"\(([A-Za-z0-9\-]+),([^\)]*)\)", insert_space_links, dofs)
             return dofs
 
         def make_dof_d(data: typing.Dict[str, typing.Any], post: str = "") -> str:
