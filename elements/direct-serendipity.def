@@ -19,5 +19,10 @@ references:
     author:
       - Arbogast, Todd
       - Tao, Zhong
-    year: 2018
-    arxiv: 1809.02192
+      - Wang, Chuning
+    journal: Numerische Mathematik
+    year: 2022
+    doi: 110.1007/s00211-022-01274-3
+    volume: 150
+    pagestart: 929
+    pageend: 974
