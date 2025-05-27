@@ -30,6 +30,7 @@ implementations:
     triangle: HHJ
   fiat: HellanHerrmannJohnson
   basix: HHJ
+  basix.ufl: HHJ
 examples:
   - triangle,0
   - triangle,1
