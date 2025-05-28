@@ -139,6 +139,7 @@ references:
     series: Lecture Notes in Mathematics
     volume: 606
     year: 1977
+    doi: 10.1007/BFb0064470
   - title: Mixed finite elements in \(\mathbb{R}^3\)
     author: N&eacute;d&eacute;lec, Jean-Claude
     year: 1980

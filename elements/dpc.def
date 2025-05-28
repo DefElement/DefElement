@@ -16,7 +16,7 @@ ndofs:
   hexahedron:
     formula: (k+1)(k+2)(k+3)/6
     oeis: A000292
-mapping: identity
+mapping: L2 Piola
 sobolev: L2
 categories:
   - scalar
