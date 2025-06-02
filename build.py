@@ -1392,7 +1392,7 @@ for fname, data in categoriser.families["de-rham"].items():
     cnames = []
     for key, cname in keys_and_names:
         if key in data:
-            cnames.append("\\(" + cname(data[key], dim=3) + "\\)")
+            cnames.append("\\(" + cname(data[key], dim="3") + "\\)")
     if len(cnames) == 0:
         raise ValueError(f"No name found for family: {fname}")
     sub_content = heading_with_self_ref("h1", "The " + " or ".join(cnames) + " family")
