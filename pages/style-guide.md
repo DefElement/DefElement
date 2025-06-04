@@ -17,7 +17,7 @@ The notation used on DefElement can be found [in this list](ciarlet.md#Notation)
 
 ### Reference cell
 The cell \({{symbols.reference}}\) on which an element is defined should always be referred to as the reference
-**cell** and never the reference **element** to avoid confusion with the finite element.
+<em>cell</em> and never the reference <em>element</em> to avoid confusion with the finite element.
 
 ### References
 References to papers, books, etc should follow the following style guidance:
