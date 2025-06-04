@@ -6,7 +6,7 @@ short-names:
   - TDNNS
 categories:
   - mixed
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 mixed:

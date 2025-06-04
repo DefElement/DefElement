@@ -21,7 +21,7 @@ categories:
   - Hcurl
 sobolev: H(curl)
 mapping: covariant Piola
-reference-elements:
+reference-cells:
   - quadrilateral
   - hexahedron
 dofs:

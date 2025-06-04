@@ -10,7 +10,7 @@ ndofs:
 max-degree: 1
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - dual polygon
 implementations:
   symfem: dual

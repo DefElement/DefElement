@@ -18,7 +18,7 @@ ndofs:
     formula: 3
   tetrahedron:
     formula: 4
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 mapping: identity

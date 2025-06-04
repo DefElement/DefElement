@@ -14,7 +14,7 @@ ndofs:
     formula: 4
   hexahedron:
     formula: 6
-reference-elements:
+reference-cells:
   - quadrilateral
   - hexahedron
 polynomial-set:

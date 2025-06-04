@@ -155,7 +155,7 @@ def plot_reference(ref, link: bool = True) -> str:
         ref_id = ref.name
 
     filename = f"ref-{ref_id}"
-    desc = f"{ref.name} reference element"
+    desc = f"{ref.name} reference cell"
 
     return do_the_plot(filename, desc, ref.plot_entity_diagrams, png_width=175 * (ref.tdim + 1),
                        scale=300, link=link)

@@ -28,7 +28,7 @@ lagrange-superdegree: k
 degree: polynomial-subdegree
 categories:
   - vector
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
   - quadrilateral

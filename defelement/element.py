@@ -256,7 +256,7 @@ class Element:
         """
         return self._edegree("lagrange-superdegree")
 
-    def reference_elements(self, link: bool = True) -> typing.List[str]:
+    def reference_cells(self, link: bool = True) -> typing.List[str]:
         """Get reference cells.
 
         Args:
@@ -267,9 +267,9 @@ class Element:
         """
         if link:
             return [f"<a href='/lists/references/{e}.html'>{e}</a>"
-                    for e in self.data["reference-elements"]]
+                    for e in self.data["reference-cells"]]
         else:
-            return self.data["reference-elements"]
+            return self.data["reference-cells"]
 
     def alternative_names(
         self, include_bracketed: bool = True, include_complexes: bool = True,
@@ -527,7 +527,7 @@ class Element:
                 ("On each ridge", "ridges"),
                 ("On each peak", "peaks"),
                 ("On each facet", "facets"),
-                ("On the interior of the reference element", "cell"),
+                ("On the interior of the reference cell", "cell"),
             ]:
                 if j in data:
                     if isinstance(data[j], dict):
@@ -556,10 +556,10 @@ class Element:
                 psets[j].append(i)
         else:
             assert isinstance(self.data["polynomial-set"], str)
-            psets[self.data["polynomial-set"]] = self.data["reference-elements"]
+            psets[self.data["polynomial-set"]] = self.data["reference-cells"]
         if (
-            "reference-elements" in self.data and len(psets) == 1
-            and len(list(psets.values())[0]) == len(self.data["reference-elements"])
+            "reference-cells" in self.data and len(psets) == 1
+            and len(list(psets.values())[0]) == len(self.data["reference-cells"])
         ):
             out = f"\\({make_poly_set(list(psets.keys())[0])}\\)<br />"
         else:
@@ -1166,7 +1166,7 @@ class Categoriser:
         """
         self.elements.append(e)
         e._c = self
-        for r in e.reference_elements(False):
+        for r in e.reference_cells(False):
             assert r in self.references
 
         for j, k in e.complexes(False, False).items():
@@ -1204,4 +1204,4 @@ class Categoriser:
         Returns:
             List of elements
         """
-        return [e for e in self.elements if r in e.reference_elements(False)]
+        return [e for e in self.elements if r in e.reference_cells(False)]

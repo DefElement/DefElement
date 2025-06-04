@@ -97,7 +97,7 @@ lagrange-superdegree: k
 degree: lagrange-superdegree
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - interval
   - triangle
   - tetrahedron
