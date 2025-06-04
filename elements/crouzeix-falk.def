@@ -14,7 +14,7 @@ categories:
 ndofs:
   triangle:
     formula: 10
-reference-elements:
+reference-cells:
   - triangle
 polynomial-set:
   triangle: poly[k]

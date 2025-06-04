@@ -16,7 +16,7 @@ ndofs:
 categories:
   - vector
   - Hdiv
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 polynomial-set:

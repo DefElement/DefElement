@@ -25,7 +25,7 @@ mapping: identity
 categories:
   - scalar
   - macro
-reference-elements:
+reference-cells:
   - triangle
 implementations:
   symfem: HCT

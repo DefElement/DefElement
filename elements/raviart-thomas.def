@@ -51,7 +51,7 @@ categories:
   - Hdiv
 sobolev: H(div)
 mapping: contravariant Piola
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
   - quadrilateral

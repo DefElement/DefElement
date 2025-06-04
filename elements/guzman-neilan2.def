@@ -14,7 +14,7 @@ ndofs:
 categories:
   - vector
   - macro
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 dofs:

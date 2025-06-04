@@ -45,7 +45,7 @@ The entries in this yaml file are:
 </thead>
 <tr><td>`name`</td><td>{{tick}}</td><td>The name of the element (ascii).</td></tr>
 <tr><td>`html&#8209;name`</td><td>{{tick}}</td><td>The name of the element, including HTML special characters.</td></tr>
-<tr><td>`reference&#8209;elements`</td><td>{{tick}}</td><td>The reference element(s) that this finite element can be defined on.</td></tr>
+<tr><td>`reference&#8209;cells`</td><td>{{tick}}</td><td>The reference cell(s) that this finite element can be defined on.</td></tr>
 <tr><td>`alt&#8209;names`</td><td></td><td>Alternative (HTML) names of the element.</td></tr>
 <tr><td>`legacy&#8209;names`</td><td></td><td>Filenames that have previously been used for this element and/or filenames of elements that were merged into this element. Pages that redirect from the old names to new name will be created if this is set.</td></tr>
 <tr><td>`short&#8209;names`</td><td></td><td>Abbreviated names of the element.</td></tr>
@@ -56,7 +56,7 @@ The entries in this yaml file are:
 <tr><td>`entity&#8209;ndofs`</td><td></td><td>The number of DOFs the element has per subentity type and the A-numbers of the [OEIS](http://oeis.org) sequence(s) giving the number of DOFs.</td></tr>
 <tr><td>`polynomial&#8209;set`</td><td></td><td>The polynomial set of this element. This can use sets defined in the file [`/data/polysets`](https://github.com/DefElement/DefElement/blob/main/data/polysets). Other sets can be given by writing `<k>[LaTeX definition of set]`. Unions of multiple sets can be given, separated by ` && `.</td></tr>
 <tr><td>`mixed`</td><td></td><td>If this element is a mixed element, the subelements that it contains.</td></tr>
-<tr><td>`mapping`</td><td></td><td>The mapping used to push/pull values foward/back from/to the reference element.</td></tr>
+<tr><td>`mapping`</td><td></td><td>The mapping used to push/pull values foward/back from/to the reference cell.</td></tr>
 <tr><td>`sobolev`</td><td></td><td>The Sobolev space the element lives in.</td></tr>
 <tr><td>`min&#8209;degree`</td><td></td><td>The minimum degree of the element</td></tr>
 <tr><td>`max&#8209;degree`</td><td></td><td>The maximum degree of the element</td></tr>
@@ -65,7 +65,7 @@ The entries in this yaml file are:
 <tr><td>`lagrange-subdegree`</td><td></td><td>The degree of the highest degree Lagrange space that is a subspace of this element's polynomial space</td></tr>
 <tr><td>`lagrange-superdegree`</td><td></td><td>The degree of the lowest degree Lagrange space that is a superspace of this element's polynomial space</td></tr>
 <tr><td>`degree`</td><td></td><td>Degree that is use to index this element, should be `polynomial-subdegree`, `polynomial-superdegree`, `lagrange-subdegree`, `lagrange-superdegree`</td></tr>
-<tr><td>`examples`</td><td></td><td>Reference elements and degrees to be included in the examples section of the entry.</td></tr>
+<tr><td>`examples`</td><td></td><td>Reference cells and degrees to be included in the examples section of the entry.</td></tr>
 <tr><td>`notes`</td><td></td><td>Notes about the element.</td></tr>
 <tr><td>`references`</td><td></td><td>References to where the element is defined.</td></tr>
 <tr><td>`categories`</td><td></td><td>Categories the element belongs to. Categories are defined in the file [`/data/categories`](https://github.com/DefElement/DefElement/blob/main/data/categories).</td></tr>

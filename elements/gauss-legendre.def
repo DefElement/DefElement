@@ -7,7 +7,7 @@ polynomial-superdegree: dk
 lagrange-subdegree: k
 lagrange-superdegree: k
 degree: polynomial-subdegree
-reference-elements:
+reference-cells:
   - interval
   - quadrilateral
   - hexahedron

@@ -19,7 +19,7 @@ max-degree: 2
 categories:
   - vector
   - macro
-reference-elements:
+reference-cells:
   - triangle
 dofs:
   vertices:

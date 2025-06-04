@@ -22,5 +22,5 @@ one of the vertices in the original mesh:
 
 {{img::mesh-bary3}}
 
-In DefElement, regular polygons centred at the origin are used as reference elements of the
+In DefElement, regular polygons centred at the origin are used as reference cells of the
 dual grid.

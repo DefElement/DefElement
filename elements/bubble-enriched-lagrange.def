@@ -6,7 +6,7 @@ ndofs:
     oeis: A000290
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - triangle
 dofs:
   vertices: point evaluations
