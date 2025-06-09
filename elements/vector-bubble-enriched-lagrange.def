@@ -6,7 +6,7 @@ ndofs:
     oeis: A001105
 categories:
   - vector
-reference-elements:
+reference-cells:
   - triangle
 sobolev: H1
 mapping: identity

@@ -12,7 +12,7 @@ categories:
 ndofs:
   quadrilateral:
     formula: 16
-reference-elements:
+reference-cells:
   - quadrilateral
 polynomial-set:
   quadrilateral: qoly[k]

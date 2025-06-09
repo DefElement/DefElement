@@ -7,7 +7,7 @@ lagrange-superdegree: k
 degree: polynomial-subdegree
 categories:
   - matrix
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 ndofs:

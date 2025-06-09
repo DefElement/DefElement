@@ -54,7 +54,7 @@ ndofs:
     oeis: A059986
   prism:
     formula: 3(k+1)(k+2)(k+3)/2
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
   - quadrilateral

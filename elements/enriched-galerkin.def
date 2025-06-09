@@ -35,7 +35,7 @@ lagrange-superdegree: k
 degree: polynomial-subdegree
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - interval
   - triangle
   - tetrahedron

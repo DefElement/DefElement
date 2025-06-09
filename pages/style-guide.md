@@ -15,6 +15,10 @@ More detail on referring the site itself can be found on the [branding page](bra
 ### Notation
 The notation used on DefElement can be found [in this list](ciarlet.md#Notation).
 
+### Reference cell
+The cell \({{symbols.reference}}\) on which an element is defined should always be referred to as the reference
+<em>cell</em> and never the reference <em>element</em> to avoid confusion with the finite element.
+
 ### References
 References to papers, books, etc should follow the following style guidance:
 
@@ -26,3 +30,4 @@ References to papers, books, etc should follow the following style guidance:
 
 ### Sobolev spaces
 When written in text, the spaces H(div) and H(curl) should be written as text, and not in math-mode.
+

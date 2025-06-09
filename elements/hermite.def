@@ -16,7 +16,7 @@ ndofs:
     formula: 10
   tetrahedron:
     formula: 20
-reference-elements:
+reference-cells:
   - interval
   - triangle
   - tetrahedron

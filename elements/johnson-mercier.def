@@ -7,7 +7,7 @@ max-degree: 1
 categories:
   - matrix
   - macro
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 ndofs:

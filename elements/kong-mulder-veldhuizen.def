@@ -4,7 +4,7 @@ short-names:
   - KMV
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 polynomial-subdegree: k

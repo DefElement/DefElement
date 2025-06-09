@@ -4,7 +4,7 @@ categories:
   - vector
 alt-names:
   - (vector Lagrange)
-reference-elements:
+reference-cells:
   - quadrilateral
   - hexahedron
 ndofs:

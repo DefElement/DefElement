@@ -3,7 +3,7 @@ html-name: direct serendipity
 min-degree: 1
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - quadrilateral
 implementations:
   symfem: direct serendipity

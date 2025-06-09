@@ -131,7 +131,7 @@ def markup_example(
     eg += "In this example:\n<ul>\n"
     # Reference
     eg += f"<li>\\({symbols.reference}\\) is the reference {element.reference.name}."
-    eg += " The following numbering of the subentities of the reference is used:</li>\n"
+    eg += " The following numbering of the subentities of the reference cell is used:</li>\n"
     eg += "<center>" + plotting.plot_reference(element.reference) + "</center>\n"
     if isinstance(element, CiarletElement) and element.reference.name != "dual polygon":
         # Polynomial set
@@ -189,13 +189,13 @@ def markup_example(
                     basis += "<br /><br />"
                     basis += "This DOF is associated with "
                     basis += entity_name(dof.entity[0]) + f" {dof.entity[1]}"
-                    basis += " of the reference element."
+                    basis += " of the reference cell."
             elif isinstance(element, DirectElement):
                 basis += "<br /><br />"
                 basis += "This DOF is associated with "
                 basis += entity_name(element._basis_entities[dof_i][0])
                 basis += f" {element._basis_entities[dof_i][1]}"
-                basis += " of the reference element."
+                basis += " of the reference cell."
             basis += "</div>"
             basis += "</div>"
         save_cache(cache_key, element, basis)

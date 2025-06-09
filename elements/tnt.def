@@ -20,7 +20,7 @@ categories:
   - scalar
 sobolev: H1
 mapping: identity
-reference-elements:
+reference-cells:
   - quadrilateral
   - hexahedron
 dofs:

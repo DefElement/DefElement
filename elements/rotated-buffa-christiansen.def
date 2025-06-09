@@ -10,7 +10,7 @@ max-degree: 1
 categories:
   - vector
   - Hcurl
-reference-elements:
+reference-cells:
   - dual polygon
 implementations:
   symfem: RBC
