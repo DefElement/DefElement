@@ -71,7 +71,7 @@ def entity_points(ref: str) -> typing.List[typing.List[Array]]:
             e = r.sub_entity(d, n)
             epts = points(e.name)
             row.append(np.array([
-                to_array(e.origin) + sum(i * to_array(a) for i, a in zip(p, e.axes))
+                to_array(e.origin) + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
                 for p in epts]))
         out.append(row)
     return out
