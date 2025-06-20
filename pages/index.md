@@ -32,7 +32,7 @@ You can:
 
 * [view the full alphabetical list of elements](index::all)
 * [view the elements by category](index::categories)
-* [view the elements by reference element](index::references)
+* [view the elements by reference cell](index::references)
 * [view the elements that form complexes](index::families)
 * [view the elements by available implementations](index::implementations)
 * [view recently added/updated elements](index::recent)
@@ -41,11 +41,11 @@ You can:
 ## The finite element method
 The finite element method is a numerical method that involves discretising a problem using a finite
 dimensional function space. These function spaces are commonly defined using a finite element
-on a reference element to derive basis functions for the space. This website contains a collection
+on a reference cell to derive basis functions for the space. This website contains a collection
 of finite elements, and examples of the basis functions they define.
 
 Following the Ciarlet definition of a finite element, the elements on this website
-are defined using a reference element, a polynomial space, and a set of functionals. Each element's
+are defined using a reference cell, a polynomial space, and a set of functionals. Each element's
 page describes how these are defined for that element, and gives examples of these and the basis
 functions they lead to for a selection of low degree spaces.
 

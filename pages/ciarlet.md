@@ -7,19 +7,19 @@ authors:
 This page describes how finite elements are defined in the DefElement database.
 
 ## Cell subentities
-Throughout this website, the subentities of a reference element will be referred to as described here.
+Throughout this website, the subentities of a reference cell will be referred to as described here.
 
-The vertices, edges, faces, and volumes of a reference element have dimension
+The vertices, edges, faces, and volumes of a reference cell have dimension
 0, 1, 2, and 3 (respectively).
-The (topological) dimension \(d\) is the dimension of the reference element itself.
+The (topological) dimension \(d\) is the dimension of the reference cell itself.
 (When using the finite element method, the topological dimensions may differ from the
 <em>geometric</em> dimension: for example, when meshing a 2D manifold in 3D space, the
 topological and geometric dimensions are 2 and 3 (respectively).)
 
 The codimension of an entity is given by subtracting the dimension of the entity from the
-topological dimension of the reference element. Entities of codimension 1, 2, and 3 are
+topological dimension of the reference cell. Entities of codimension 1, 2, and 3 are
 called facets, ridges and peaks (respectively). The usual names given to entities of
-reference elements of topological dimensions 0 to 3 are shown below.
+reference cells of topological dimensions 0 to 3 are shown below.
 
 <center>
 <table class='bordered'>
@@ -38,9 +38,9 @@ reference elements of topological dimensions 0 to 3 are shown below.
 The Ciarlet definition <ref type="book" title="The Finite Element Method for Elliptic Problems" author="Ciarlet, P. G." year="1978" publisher="North-Holland">
 defines a finite element by a triple \(({{symbols.reference}},{{symbols.polyset}},{{symbols.dual_basis}})\), where
 
-* \({{symbols.reference}}\subset\mathbb{R}^d\) is the reference element, usually a polygon or polyhedron;
+* \({{symbols.reference}}\subset\mathbb{R}^d\) is the reference cell, usually a polygon or polyhedron;
 * \({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);
-* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference element \({{symbols.reference}}\).
+* \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference cell \({{symbols.reference}}\).
 
 The basis functions \(\{{{symbols.basis_function}}_0,...,{{symbols.basis_function}}_{n-1}\}\)
 of the finite element space are defined by
@@ -104,36 +104,36 @@ The basis functions of this space are:
 
 ## Mapping finite elements
 In order to maintain desired properties when mapping finite elements from a reference
-element to an actual mesh, an appropriate mapping must be defined.
+cell to an actual mesh, an appropriate mapping must be defined.
 <ref title="Efficient assembly of H(div) and H(curl) conforming finite elements" author="Rognes, M. E. and Kirby, R. C. and Logg, A." journal="SIAM Journal on Scientific Computing" volume="31" issue="6" pagestart="4130" pageend="4151" year="2009" doi="10.1137/08073901X">
 <ref title="Quadrilateral H(div) Finite Elements" author="Arnold, D. A. and Boffi, D. and Falk, R. S." journal="SIAM Journal on Numerical Analysis" volume="42" issue="6" pagestart="2429" pageend="2451" year="2005" doi="10.1137/S0036142903431924">
 (For elements with a mixture of functional types, a more complex approach is required.
 <ref author="Kirby, R. C." title="A general approach to transforming finite elements" journal="The SMAI journal of computational mathematics" pagestart="197" pageend="224" volume="4" year="2018" doi="10.5802/smai-jcm.33">)
 
-Let \({{symbols.geometry_map}}\) be a transformation that maps the reference element to a cell in the mesh,
+Let \({{symbols.geometry_map}}\) be a transformation that maps the reference cell to a cell in the mesh,
 and let \(\boldsymbol{x}\) be a point in the cell.
 
 The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geometry_map}}\) is
-\(\displaystyle\frac{\mathrm{d}F}{\mathrm{d}x}\) for 1D reference elements,
+\(\displaystyle\frac{\mathrm{d}F}{\mathrm{d}x}\) for 1D reference cells,
 \(\displaystyle\left(
 \begin{array}{cc}
 \frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}\\
 \frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}
 \end{array}
-\right)\) for 2D reference elements, or
+\right)\) for 2D reference cells, or
 \(\displaystyle\left(
 \begin{array}{ccc}
 \frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}&\frac{\partial F_1}{\partial z}\\
 \frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}&\frac{\partial F_2}{\partial z}\\
 \frac{\partial F_3}{\partial x}&\frac{\partial F_3}{\partial y}&\frac{\partial F_3}{\partial z}
 \end{array}
-\right)\) for 3D reference elements.
+\right)\) for 3D reference cells.
 
 ### Scalar-valued basis functions
 The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
 $$\left({{symbols.mapping}}^\text{id}{{symbols.basis_function}}\right)(\boldsymbol{x})
 :={{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
-The term \({{symbols.geometry_map}}^{-1}(\boldsymbol{x})\) is the point on the reference element corresponding to the point \(\boldsymbol{x}\), so this mapping
+The term \({{symbols.geometry_map}}^{-1}(\boldsymbol{x})\) is the point on the reference cell corresponding to the point \(\boldsymbol{x}\), so this mapping
 maps a value of the function on the reference to the same value at the corresponding point.
 
 The L2 Piola mapping&mdash;used to map scalar discontinuous elements, \({{symbols.basis_function}}\)&mdash;is defined by
@@ -173,7 +173,7 @@ key properties. For example, when defining a [Lagrange element](element::lagrang
 choices for where exactly to locate the point evaluation functionals.
 We refer to a pair of elements as variants of each other if:
 
-* They are defined on the same reference element \({{symbols.reference}}\);
+* They are defined on the same reference cell \({{symbols.reference}}\);
 * They are defined using the same polynomial set \({{symbols.polyset}}\);
 * The functionals in \({{symbols.dual_basis}}\) associated with each facet, ridge, and peak of the
   cell, and the push forward/pull back map used lead to the same type of continuity between cells.
@@ -196,7 +196,7 @@ in some implementations (most notably FEniCS and UFL, where the Lagrange superde
 Throughout this website, the notation given here in this section is used.
 
 <table>
-<tr><td style='padding-right:10px'>\({{symbols.reference}}\)</td><td>A reference element</td></tr>
+<tr><td style='padding-right:10px'>\({{symbols.reference}}\)</td><td>A reference cell</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.polyset}}\)</td><td>A polynomial set</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.dual_basis}}\)</td><td>A dual basis</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.functional}}_i\)</td><td>A functional in the dual basis</td></tr>

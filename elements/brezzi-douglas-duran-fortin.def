@@ -11,7 +11,7 @@ short-names:
 categories:
   - vector
   - Hdiv
-reference-elements:
+reference-cells:
   - hexahedron
 ndofs:
   hexahedron:

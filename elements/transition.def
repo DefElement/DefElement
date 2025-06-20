@@ -5,7 +5,7 @@ notes:
 min-degree: 1
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 sobolev: H1

@@ -12,7 +12,7 @@ categories:
 ndofs:
   triangle:
     formula: 18
-reference-elements:
+reference-cells:
   - triangle
 polynomial-set:
   triangle: <k+1>[\left\{p\in{{poly[k]}}\middle|\text{normal derivative of $p$ on each edge is cubic}\right\}]

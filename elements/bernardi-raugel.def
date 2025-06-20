@@ -18,7 +18,7 @@ ndofs:
     - k=2: 37
 categories:
   - vector
-reference-elements:
+reference-cells:
   - triangle
   - tetrahedron
 polynomial-set:

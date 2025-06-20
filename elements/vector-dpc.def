@@ -11,7 +11,7 @@ categories:
   - scalar
 sobolev: L2
 mapping: identity
-reference-elements:
+reference-cells:
   - interval
   - quadrilateral
   - hexahedron

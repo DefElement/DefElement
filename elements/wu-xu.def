@@ -29,7 +29,7 @@ ndofs:
     formula: 12
   tetrahedron:
     formula: 38
-reference-elements:
+reference-cells:
   - interval
   - triangle
   - tetrahedron

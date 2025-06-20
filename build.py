@@ -124,7 +124,7 @@ for file in os.listdir(settings.pages_path):
         end = datetime.now()
         print(f" (completed in {(end - start).total_seconds():.2f}s)")
 
-# Load categories and reference elements
+# Load categories and reference cells
 categoriser = Categoriser()
 categoriser.load_categories(os.path.join(settings.data_path, "categories"))
 categoriser.load_references(os.path.join(settings.data_path, "references"))
@@ -208,7 +208,7 @@ for e in categoriser.elements:
         element_data.append(("Variants", "<br />".join([insert_links(v) for v in variants])))
 
     simplex_only = len([
-        i for i in e.reference_elements(False)
+        i for i in e.reference_cells(False)
         if i not in ["point", "interval", "triangle", "tetrahedron"]
     ]) == 0
 
@@ -243,9 +243,9 @@ for e in categoriser.elements:
         if e.lagrange_superdegree() is not None:
             element_data.append(("Lagrange superdegree", e.lagrange_superdegree()))
 
-    # Reference elements
-    refs = e.reference_elements()
-    element_data.append(("Reference elements", ", ".join(refs)))
+    # Reference cells
+    refs = e.reference_cells()
+    element_data.append(("Reference cells", ", ".join(refs)))
 
     # Mixed elements
     if e.is_mixed:
@@ -1156,7 +1156,7 @@ content += (
     "<label><input type='checkbox' id='show-abrv-names' onchange='do_filter()'>"
     "&nbsp;Show abbreviated names</label> "
     "</td></tr>")
-content += "<tr><td>Reference&nbsp;elements</td><td>"
+content += "<tr><td>Reference&nbsp;cells</td><td>"
 content += "<label><input type='checkbox' checked id='check-ref-all' onchange='do_filter_refall()'"
 content += ">&nbsp;show all</label> "
 for r in categoriser.references:
@@ -1174,7 +1174,7 @@ content += "</table>\n"
 # Write element list
 elementlist = []
 for e in categoriser.elements:
-    id = " ".join([f"ref-{r}" for r in e.reference_elements(False)]
+    id = " ".join([f"ref-{r}" for r in e.reference_cells(False)]
                   + [f"cat-{c}" for c in e.categories(False, False)])
     elementlist.append((e.html_name.lower(),
                         f"<li class='element-on-list' id='{id} name-main'>"
@@ -1290,9 +1290,9 @@ for c, info in implementations.items():
 write_html_page(os.path.join(settings.htmlindices_path, "implementations/index.html"),
                 "Implemented elements", content)
 
-# Reference elements index
+# Reference cells index
 os.mkdir(os.path.join(settings.htmlindices_path, "references"))
-content = heading_with_self_ref("h1", "Reference elements")
+content = heading_with_self_ref("h1", "Reference cells")
 for c in categoriser.references:
     refels = []
     for e in categoriser.elements_by_reference(c):
@@ -1316,7 +1316,7 @@ for c in categoriser.references:
                     title, sub_content)
 
 write_html_page(os.path.join(settings.htmlindices_path, "references/index.html"),
-                "Reference elements", content)
+                "Reference cells", content)
 
 # Page showing numbering of references
 content = heading_with_self_ref("h1", "Reference cell numbering")
@@ -1392,7 +1392,7 @@ for fname, data in categoriser.families["de-rham"].items():
     cnames = []
     for key, cname in keys_and_names:
         if key in data:
-            cnames.append("\\(" + cname(data[key], dim=3) + "\\)")
+            cnames.append("\\(" + cname(data[key], dim="3") + "\\)")
     if len(cnames) == 0:
         raise ValueError(f"No name found for family: {fname}")
     sub_content = heading_with_self_ref("h1", "The " + " or ".join(cnames) + " family")
@@ -1484,7 +1484,7 @@ write_html_page(os.path.join(settings.htmlfamilies_path, "index.html"), "Complex
 content = heading_with_self_ref("h1", "Lists of elements")
 content += "<ul>\n"
 content += "<li><a href='/lists/categories'>Finite elements by category</a></li>\n"
-content += "<li><a href='/lists/references'>Finite elements by reference element</a></li>\n"
+content += "<li><a href='/lists/references'>Finite elements by reference cell</a></li>\n"
 content += "<li><a href='/lists/recent.html'>Recently added/updated finite elements</a></li>\n"
 content += "</ul>"
 write_html_page(os.path.join(settings.htmlindices_path, "index.html"), "Lists of elements", content)

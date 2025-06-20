@@ -19,7 +19,7 @@ categories:
   - Hdiv
 sobolev: H(div)
 mapping: contravariant Piola
-reference-elements:
+reference-cells:
   - quadrilateral
 polynomial-set:
   quadrilateral: <k+1>[\operatorname{span}\left\{\left(\begin{array}{c}x^iy^j\\0\end{array}\right)\middle|i\in\{0,1,...,k+1\}, j\in\{0,1,...,k\}\right\}] && <k+1>[\operatorname{span}\left\{\left(\begin{array}{c}0\\x^iy^j\end{array}\right)\middle|i\in\{0,1,...,k\}, j\in\{0,1,...,k+1\}\right\}]

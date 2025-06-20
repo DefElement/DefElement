@@ -21,7 +21,7 @@ degree: polynomial-subdegree
 categories:
   - vector
   - Hcurl
-reference-elements:
+reference-cells:
   - quadrilateral
   - hexahedron
 sobolev: H(curl)

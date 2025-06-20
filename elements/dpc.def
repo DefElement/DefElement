@@ -20,7 +20,7 @@ mapping: L2 Piola
 sobolev: L2
 categories:
   - scalar
-reference-elements:
+reference-cells:
   - interval
   - quadrilateral
   - hexahedron

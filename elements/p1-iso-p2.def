@@ -27,7 +27,7 @@ max-degree: 1
 categories:
   - scalar
   - macro
-reference-elements:
+reference-cells:
   - interval
   - triangle
   - quadrilateral

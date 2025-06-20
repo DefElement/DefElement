@@ -14,7 +14,7 @@ short-names:
 categories:
   - vector
   - Hdiv
-reference-elements:
+reference-cells:
   - triangle
   - quadrilateral
   - tetrahedron
