@@ -214,15 +214,15 @@ for e in categoriser.elements:
 
     if simplex_only:
         degree_names = {
-            "polynomial-subdegree": "Polynomial subdegree",
-            "polynomial-superdegree": "Polynomial superdegree",
-            "lagrange-subdegree": "Polynomial subdegree",
-            "lagrange-superdegree": "Polynomial superdegree",
+            "polynomial-subdegree": "polynomial subdegree",
+            "polynomial-superdegree": "polynomial superdegree",
+            "lagrange-subdegree": "polynomial subdegree",
+            "lagrange-superdegree": "polynomial superdegree",
         }
     else:
         degree_names = {
-            "polynomial-subdegree": "Polynomial subdegree",
-            "polynomial-superdegree": "Polynomial superdegree",
+            "polynomial-subdegree": "polynomial subdegree",
+            "polynomial-superdegree": "polynomial superdegree",
             "lagrange-subdegree": "Lagrange subdegree",
             "lagrange-superdegree": "Lagrange superdegree",
         }
