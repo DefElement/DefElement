@@ -36,6 +36,27 @@ This will create a reference along the lines of:
 <li>{{list contributors|citation}}. <i>DefElement: an encyclopedia of finite element definitions</i>, {{date:Y}}, <a href='https://defelement.org'>https://defelement.org</a> [Online; accessed: {{date:D-M-Y}}].</li>
 </ul>
 
+### DefElement paper
+
+You may also wish to cite the [DefElement paper](TODO: insert arXiv link).
+To cite this, you can use the following BibTeX:
+
+```
+@unpublished{2025-defelement,
+       AUTHOR = {Scroggs, Matthew W. and Brubeck, Pablo D. and Dean, Joseph P. and Dokken, J{\o}rgen S. and Marsden, India},
+        TITLE = {{DefElement:} an encyclopedia of finite element definitions},
+         YEAR = {2025},
+         NOTE = {submitted to Computational Science and Engineering},
+          DOI = {TODO/TODO}
+}
+```
+
+This will create a reference along the lines of:
+
+<ul class='citations'>
+<li>M. W. Scroggs, P. D. Brubeck, J. P. Dean, J. S Dokken, I. A. Marsden. <i>DefElement: an encyclopedia of finite element definitions</i>, 2025, submitted to Computational Science and Engineering, <a href=https://doi.org/TODO/TODO>https://doi.org/TODO/TODO</a>.</li>
+</ul>
+
 ### DefElement poster
 
 You may also wish to cite the [DefElement poster](https://doi.org/10.6084/m9.figshare.23294939.v1) that was presented at [FEniCS 2023](https://fenicsproject.org/fenics-2023/).
