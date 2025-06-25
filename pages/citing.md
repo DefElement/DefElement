@@ -57,10 +57,20 @@ This will create a reference along the lines of:
 <li>M. W. Scroggs, P. D. Brubeck, J. P. Dean, J. S Dokken, I. A. Marsden. <i>DefElement: an encyclopedia of finite element definitions</i>, 2025, submitted to Computational Science and Engineering, <a href=https://doi.org/TODO/TODO>https://doi.org/TODO/TODO</a>.</li>
 </ul>
 
-### DefElement poster
+## DefElement poster
+The [DefElement poster](https://doi.org/10.6084/m9.figshare.23294939.v1) was first presented at [FEniCS 2023](https://fenicsproject.org/fenics-2023/).
 
-You may also wish to cite the [DefElement poster](https://doi.org/10.6084/m9.figshare.23294939.v1) that was presented at [FEniCS 2023](https://fenicsproject.org/fenics-2023/).
-To cite this, you can use the following BibTeX:
+If you'd like a copy of the poster, you can download
+[the A0 poster](/pdfs/poster-a0.pdf),
+[the A0 poster (with bleed for printing)](/pdfs/poster-a0-bleed.pdf),
+[the A1 poster](/pdfs/poster-a1.pdf),
+[the A1 poster (with bleed for printing)](/pdfs/poster-a1-bleed.pdf),
+[the A4 poster](/pdfs/poster-a4.pdf), or
+[the A4 poster (with bleed for printing)](/pdfs/poster-a4-bleed.pdf).
+These are all available under the same [Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/)
+as the rest of DefElement.
+
+If you wich to cite the poster, you can use the following BibTeX:
 
 ```
 @misc{defelement-poster,
@@ -77,13 +87,3 @@ This will create a reference along the lines of:
 <ul class='citations'>
 <li>M. W. Scroggs. <i>DefElement: an encyclopedia of finite element definitions</i>, 2023, Poster presented at FEniCS 2023, Cagliari, Italy, <a href=https://doi.org/10.6084/m9.figshare.23294939.v1>https://doi.org/10.6084/m9.figshare.23294939.v1</a>.</li>
 </ul>
-
-If you'd like a copy of the poster, you can download
-[the A0 poster](/pdfs/poster-a0.pdf),
-[the A0 poster (with bleed for printing)](/pdfs/poster-a0-bleed.pdf),
-[the A1 poster](/pdfs/poster-a1.pdf),
-[the A1 poster (with bleed for printing)](/pdfs/poster-a1-bleed.pdf),
-[the A4 poster](/pdfs/poster-a4.pdf), or
-[the A4 poster (with bleed for printing)](/pdfs/poster-a4-bleed.pdf).
-These are all available under the same [Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/)
-as the rest of DefElement.
