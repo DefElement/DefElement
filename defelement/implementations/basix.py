@@ -85,7 +85,7 @@ class BasixImplementation(Implementation):
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
         basix_name, input_deg, params = element.get_implementation_string(
-            "basix", ref, deg, variant)
+            "basix", ref, deg, variant, any_variant=True)
         kwargs = {}
         if "lagrange_variant" in params:
             kwargs["lagrange_variant"] = getattr(basix.LagrangeVariant, params['lagrange_variant'])

@@ -84,7 +84,8 @@ class NDElementImplementation(Implementation):
 
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
-        name, input_deg, params = element.get_implementation_string("ndelement", ref, deg, variant)
+        name, input_deg, params = element.get_implementation_string(
+            "ndelement", ref, deg, variant, any_variant=True)
         kwargs = {}
         if "continuity" in params:
             kwargs["continuity"] = getattr(Continuity, params["continuity"])

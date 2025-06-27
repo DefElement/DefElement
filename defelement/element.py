@@ -693,8 +693,12 @@ class Element:
         return "implementations" in self.data and lib in self.data["implementations"]
 
     def get_implementation_string(
-        self, lib: str, reference: typing.Optional[str], degree: typing.Optional[int],
-        variant: typing.Optional[str] = None
+        self,
+        lib: str,
+        reference: typing.Optional[str],
+        degree: typing.Optional[int],
+        variant: typing.Optional[str] = None,
+        any_variant: typing.Optional[bool] = False
     ) -> typing.Tuple[str, typing.Optional[int], typing.Dict[str, typing.Any]]:
         """Get implementation string.
 
@@ -703,6 +707,7 @@ class Element:
             reference: Reference cell
             degree: Degree
             variant: Variant name
+            any_variant: Allow any variant if requested variant not found
 
         Returns:
             Implementation string, degree and parameters to pass to implementation
@@ -711,6 +716,11 @@ class Element:
         if variant is None:
             data = self.data["implementations"][lib]
         else:
+            if variant not in self.data["implementations"][lib] and any_variant:
+                for v in self.data["implementations"][lib]:
+                    if reference in self.data["implementations"][lib][v]:
+                        variant = v
+                        break
             if variant not in self.data["implementations"][lib]:
                 raise VariantNotImplemented()
             data = self.data["implementations"][lib][variant]

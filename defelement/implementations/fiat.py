@@ -111,7 +111,8 @@ class FIATImplementation(Implementation):
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
 
-        fiat_name, input_deg, params = element.get_implementation_string("fiat", ref, deg, variant)
+        fiat_name, input_deg, params = element.get_implementation_string(
+            "fiat", ref, deg, variant, any_variant=True)
 
         if ref in ["interval", "triangle", "tetrahedron"]:
             cell = FIAT.ufc_cell(ref)
