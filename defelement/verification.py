@@ -9,6 +9,7 @@ from defelement.tools import to_array
 if typing.TYPE_CHECKING:
     from numpy import float64
     from numpy.typing import NDArray
+
     Array = NDArray[float64]
 else:
     Array = typing.Any
@@ -37,17 +38,41 @@ def points(ref: str) -> Array:
         return np.array([[i / 15, j / 15] for i in range(16) for j in range(16 - i)])
 
     if ref == "hexahedron":
-        return np.array([[i / 10, j / 10, k / 10]
-                         for i in range(11) for j in range(11) for k in range(11)])
+        return np.array(
+            [
+                [i / 10, j / 10, k / 10]
+                for i in range(11)
+                for j in range(11)
+                for k in range(11)
+            ]
+        )
     if ref == "tetrahedron":
-        return np.array([[i / 10, j / 10, k / 10]
-                         for i in range(11) for j in range(11 - i) for k in range(11 - i - j)])
+        return np.array(
+            [
+                [i / 10, j / 10, k / 10]
+                for i in range(11)
+                for j in range(11 - i)
+                for k in range(11 - i - j)
+            ]
+        )
     if ref == "prism":
-        return np.array([[i / 10, j / 10, k / 10]
-                         for i in range(11) for j in range(11 - i) for k in range(11)])
+        return np.array(
+            [
+                [i / 10, j / 10, k / 10]
+                for i in range(11)
+                for j in range(11 - i)
+                for k in range(11)
+            ]
+        )
     if ref == "pyramid":
-        return np.array([[i / 10, j / 10, k / 10]
-                         for i in range(11) for j in range(11) for k in range(11 - max(i, j))])
+        return np.array(
+            [
+                [i / 10, j / 10, k / 10]
+                for i in range(11)
+                for j in range(11)
+                for k in range(11 - max(i, j))
+            ]
+        )
 
     raise ValueError(f"Unsupported cell type: {ref}")
 
@@ -70,16 +95,21 @@ def entity_points(ref: str) -> typing.List[typing.List[Array]]:
         for n in range(r.sub_entity_count(d)):
             e = r.sub_entity(d, n)
             epts = points(e.name)
-            row.append(np.array([
-                to_array(e.origin) + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
-                for p in epts]))
+            row.append(
+                np.array(
+                    [
+                        to_array(e.origin)
+                        + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
+                        for p in epts
+                    ]
+                )
+            )
         out.append(row)
     return out
 
 
 def closure_dofs(
-    entity_dofs: typing.List[typing.List[typing.List[int]]],
-    ref: str
+    entity_dofs: typing.List[typing.List[typing.List[int]]], ref: str
 ) -> typing.List[typing.List[typing.List[int]]]:
     """Make lists of DOFs associated with the closure of an entity.
 
@@ -91,7 +121,9 @@ def closure_dofs(
         Entity closure DOFs
     """
     r = symfem.create_reference(ref)
-    out: typing.List[typing.List[typing.List[int]]] = [[[] for j in i] for i in entity_dofs]
+    out: typing.List[typing.List[typing.List[int]]] = [
+        [[] for j in i] for i in entity_dofs
+    ]
     for dim in range(r.tdim + 1):
         for e_n, e in enumerate(r.sub_entities(dim)):
             for subdim in range(dim + 1):
@@ -136,10 +168,12 @@ def same_span(table0: Array, table1: Array, complete: bool = True) -> bool:
 
 def verify(
     ref: str,
-    info0: typing.Tuple[typing.List[typing.List[typing.List[int]]],
-                        typing.Callable[[Array], Array]],
-    info1: typing.Tuple[typing.List[typing.List[typing.List[int]]],
-                        typing.Callable[[Array], Array]],
+    info0: typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ],
+    info1: typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ],
 ) -> typing.Tuple[bool, typing.Optional[str]]:
     """Run verification.
 
@@ -165,12 +199,17 @@ def verify(
     entity_counts = []
     for dim, (i0, i1) in enumerate(zip(edofs0, edofs1)):
         if len(i0) != len(i1):
-            return False, f"Wrong number of entities of dim {dim} ({len(i0)} vs {len(i1)})"
+            return (
+                False,
+                f"Wrong number of entities of dim {dim} ({len(i0)} vs {len(i1)})",
+            )
         entity_counts.append(len(i0))
         for e_n, (j0, j1) in enumerate(zip(i0, i1)):
             if len(j0) != len(j1):
-                return False, ("Wrong number of DOFs associated with an entity"
-                               f" {dim},{e_n} ({len(j0)} vs {len(j1)})")
+                return False, (
+                    "Wrong number of DOFs associated with an entity"
+                    f" {dim},{e_n} ({len(j0)} vs {len(j1)})"
+                )
 
     # Check that polysets span the same space
     pts = points(ref)

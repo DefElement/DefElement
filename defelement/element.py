@@ -12,15 +12,26 @@ import yaml
 from github import Github
 
 from defelement import settings
-from defelement.families import arnold_logg_reference, cockburn_fu_reference, keys_and_names
-from defelement.implementations import (DegreeNotImplemented, NotImplementedOnReference,
-                                        VariantNotImplemented, examples, implementations)
+from defelement.families import (
+    arnold_logg_reference,
+    cockburn_fu_reference,
+    keys_and_names,
+)
+from defelement.implementations import (
+    DegreeNotImplemented,
+    NotImplementedOnReference,
+    VariantNotImplemented,
+    examples,
+    implementations,
+)
 from defelement.markup import insert_links
 from defelement.polyset import make_extra_info, make_poly_set
 
 
 def make_dof_data(
-    ndofs: typing.Union[typing.Dict[str, typing.Any], typing.List[typing.Dict[str, typing.Any]]]
+    ndofs: typing.Union[
+        typing.Dict[str, typing.Any], typing.List[typing.Dict[str, typing.Any]]
+    ],
 ) -> str:
     """Make DOF data.
 
@@ -31,8 +42,9 @@ def make_dof_data(
         DOFs formatted as HTML
     """
     if isinstance(ndofs, list):
-        return "<br /><br />".join([f"\\({i}\\):<br />{make_dof_data(j)}"
-                                    for a in ndofs for i, j in a.items()])
+        return "<br /><br />".join(
+            [f"\\({i}\\):<br />{make_dof_data(j)}" for a in ndofs for i, j in a.items()]
+        )
 
     dof_text = []
     for i, j in ndofs.items():
@@ -54,13 +66,14 @@ def make_formula(data: typing.Dict[str, typing.Any]) -> str:
     """
     txt = ""
     if "formula" not in data and "oeis" not in data:
-        return ", ".join(f"{make_formula(j)} ({i})"
-                         for i, j in data.items())
+        return ", ".join(f"{make_formula(j)} ({i})" for i, j in data.items())
     if "formula" in data:
         txt += "\\("
         if isinstance(data["formula"], list):
             txt += "\\begin{cases}"
-            txt += "\\\\".join([f"{c}&{b}" for a in data["formula"] for b, c in a.items()])
+            txt += "\\\\".join(
+                [f"{c}&{b}" for a in data["formula"] for b, c in a.items()]
+            )
             txt += "\\end{cases}"
         else:
             txt += f"{data['formula']}"
@@ -204,10 +217,15 @@ class Element:
 
         def to_tex(txt):
             if isinstance(txt, dict):
-                return ", ".join([
-                    to_tex(j) + " (" + ("otherwise" if i == "_" else f"degree={i}") + ")"
-                    for i, j in txt.items()
-                ])
+                return ", ".join(
+                    [
+                        to_tex(j)
+                        + " ("
+                        + ("otherwise" if i == "_" else f"degree={i}")
+                        + ")"
+                        for i, j in txt.items()
+                    ]
+                )
             txt = str(txt)
             if txt == "none":
                 return "undefined"
@@ -218,10 +236,7 @@ class Element:
 
         d = self.data[dtype]
         if isinstance(d, dict):
-            return "<br />".join([
-                f"{cell}: {to_tex(deg)}"
-                for cell, deg in d.items()
-            ])
+            return "<br />".join([f"{cell}: {to_tex(deg)}" for cell, deg in d.items()])
         return to_tex(d)
 
     def polynomial_subdegree(self) -> typing.Optional[str]:
@@ -266,15 +281,21 @@ class Element:
             List of reference cells.
         """
         if link:
-            return [f"<a href='/lists/references/{e}.html'>{e}</a>"
-                    for e in self.data["reference-cells"]]
+            return [
+                f"<a href='/lists/references/{e}.html'>{e}</a>"
+                for e in self.data["reference-cells"]
+            ]
         else:
             return self.data["reference-cells"]
 
     def alternative_names(
-        self, include_bracketed: bool = True, include_complexes: bool = True,
-        include_variants: bool = True, link: bool = True,
-        strip_cell_name: bool = False, cell: typing.Optional[str] = None
+        self,
+        include_bracketed: bool = True,
+        include_complexes: bool = True,
+        include_variants: bool = True,
+        link: bool = True,
+        strip_cell_name: bool = False,
+        cell: typing.Optional[str] = None,
     ) -> typing.List[str]:
         """Get alternative names.
 
@@ -300,8 +321,7 @@ class Element:
                     out += [f"{i} ({v['variant-name']} variant)" for i in v["names"]]
 
         if include_bracketed:
-            out = [i[1:-1] if i[0] == "(" and i[-1] == ")" else i
-                   for i in out]
+            out = [i[1:-1] if i[0] == "(" and i[-1] == ")" else i for i in out]
         else:
             out = [i for i in out if i[0] != "(" or i[-1] != ")"]
 
@@ -328,7 +348,9 @@ class Element:
         if include_variants and "variants" in self.data:
             for v in self.data["variants"].values():
                 if "short-names" in v:
-                    out += [f"{i} ({v['variant-name']} variant)" for i in v["short-names"]]
+                    out += [
+                        f"{i} ({v['variant-name']} variant)" for i in v["short-names"]
+                    ]
         return out
 
     def mapping(self) -> typing.Union[None, str]:
@@ -404,9 +426,10 @@ class Element:
         Returns:
             The formatted range
         """
+
         def make_degree_data(
             min_o: typing.Union[typing.Dict[str, int], int, None],
-            max_o: typing.Union[typing.Dict[str, int], int, None]
+            max_o: typing.Union[typing.Dict[str, int], int, None],
         ) -> str:
             """Make degree data.
 
@@ -438,7 +461,8 @@ class Element:
 
         return make_degree_data(
             self.data["min-degree"] if "min-degree" in self.data else 0,
-            self.data["max-degree"] if "max-degree" in self.data else None)
+            self.data["max-degree"] if "max-degree" in self.data else None,
+        )
 
     def sub_elements(self, link: bool = True) -> typing.List[str]:
         """Get sub elements of a mixed element.
@@ -491,7 +515,9 @@ class Element:
                 mom_type, space_info = dofs.split(" with ")
                 space_info = space_info.strip()
                 if space_info.startswith("{") and space_info.endswith("}"):
-                    return f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
+                    return (
+                        f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
+                    )
                 if space_info.startswith('"') and space_info.endswith('"'):
                     return f"{mom_type} with {insert_links(space_info[1:-1])}"
 
@@ -513,7 +539,13 @@ class Element:
                 Formatted DOF
             """
             dof_data = []
-            for i in ["interval", "triangle", "tetrahedron", "quadrilateral", "hexahedron"]:
+            for i in [
+                "interval",
+                "triangle",
+                "tetrahedron",
+                "quadrilateral",
+                "hexahedron",
+            ]:
                 if i in data:
                     dof_data.append(make_dof_d(data[i], f" ({i})"))
             if len(dof_data) != 0:
@@ -532,7 +564,9 @@ class Element:
                 if j in data:
                     if isinstance(data[j], dict):
                         for shape, sub_data in data[j].items():
-                            dof_data.append(f"{i} ({shape}){post}: {dofs_on_entity(j, sub_data)}")
+                            dof_data.append(
+                                f"{i} ({shape}){post}: {dofs_on_entity(j, sub_data)}"
+                            )
                     else:
                         dof_data.append(f"{i}{post}: {dofs_on_entity(j, data[j])}")
             return "<br />\n".join(dof_data)
@@ -558,7 +592,8 @@ class Element:
             assert isinstance(self.data["polynomial-set"], str)
             psets[self.data["polynomial-set"]] = self.data["reference-cells"]
         if (
-            "reference-cells" in self.data and len(psets) == 1
+            "reference-cells" in self.data
+            and len(psets) == 1
             and len(list(psets.values())[0]) == len(self.data["reference-cells"])
         ):
             out = f"\\({make_poly_set(list(psets.keys())[0])}\\)<br />"
@@ -579,13 +614,21 @@ class Element:
             out += "</div>"
             out += "<script type='text/javascript'>\n"
             out += "function show_psets(){\n"
-            out += "  document.getElementById('show_pset_link').style.display = 'none'\n"
-            out += "  document.getElementById('hide_pset_link').style.display = 'block'\n"
+            out += (
+                "  document.getElementById('show_pset_link').style.display = 'none'\n"
+            )
+            out += (
+                "  document.getElementById('hide_pset_link').style.display = 'block'\n"
+            )
             out += "  document.getElementById('psets').style.display = 'block'\n"
             out += "}\n"
             out += "function hide_psets(){\n"
-            out += "  document.getElementById('show_pset_link').style.display = 'block'\n"
-            out += "  document.getElementById('hide_pset_link').style.display = 'none'\n"
+            out += (
+                "  document.getElementById('show_pset_link').style.display = 'block'\n"
+            )
+            out += (
+                "  document.getElementById('hide_pset_link').style.display = 'none'\n"
+            )
             out += "  document.getElementById('psets').style.display = 'none'\n"
             out += "}\n"
             out += "</script>"
@@ -698,7 +741,7 @@ class Element:
         reference: typing.Optional[str],
         degree: typing.Optional[int],
         variant: typing.Optional[str] = None,
-        any_variant: typing.Optional[bool] = False
+        any_variant: typing.Optional[bool] = False,
     ) -> typing.Tuple[str, typing.Optional[int], typing.Dict[str, typing.Any]]:
         """Get implementation string.
 
@@ -759,7 +802,9 @@ class Element:
                 if params["DEGREEMAP"] == "None":
                     input_deg = None
                 else:
-                    input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+                    input_deg = int(
+                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
+                    )
             del params["DEGREEMAP"]
 
         return out, input_deg, params
@@ -779,7 +824,9 @@ class Element:
         assert self.implemented(lib)
 
         if "display" in self.data["implementations"][lib]:
-            d = implementations[lib].format(self.data["implementations"][lib]["display"], {})
+            d = implementations[lib].format(
+                self.data["implementations"][lib]["display"], {}
+            )
             return f"<code>{d}</code>"
         if "variants" in self.data:
             variants = self.data["variants"]
@@ -815,8 +862,10 @@ class Element:
                         i_dict[s].append(f"{i}, {vinfo['variant-name']}")
         if len(i_dict) == 1:
             return f"<code>{list(i_dict.keys())[0]}</code>"
-        imp_list = [f"<code>{i}</code> <span style='font-size:60%'>({'; '.join(j)})</span>"
-                    for i, j in i_dict.items()]
+        imp_list = [
+            f"<code>{i}</code> <span style='font-size:60%'>({'; '.join(j)})</span>"
+            for i, j in i_dict.items()
+        ]
         if joiner is None:
             return imp_list
         else:
@@ -862,20 +911,25 @@ class Element:
                 if degreemap == "None":
                     pass
                 else:
-
                     for id, info in [
                         ("polynomial-subdegree", "polynomial subdegree"),
                         ("lagrange-superdegree", "Lagrange superdegree"),
                         ("polynomial-superdegree", "polynomial superdegree"),
                         ("lagrange-subdegree", "Lagrange subdegree"),
                     ]:
-                        if id in self.data and degreemap_equal(degreemap, self.data[id]):
-                            notes.append(f"This element uses the {info} as the canonical degree "
-                                         "of this element")
+                        if id in self.data and degreemap_equal(
+                            degreemap, self.data[id]
+                        ):
+                            notes.append(
+                                f"This element uses the {info} as the canonical degree "
+                                "of this element"
+                            )
                             break
                     else:
-                        notes.append("This implementation uses an alternative value of "
-                                     "degree for this element")
+                        notes.append(
+                            "This implementation uses an alternative value of "
+                            "degree for this element"
+                        )
         return notes
 
     def implementation_references(self, lib: str) -> typing.List[typing.Dict[str, str]]:
@@ -908,8 +962,10 @@ class Element:
         else:
             cnames = {c: c for c in self.data["categories"]}
         if link:
-            return [f"<a href='/lists/categories/{c}.html'>{cnames[c]}</a>"
-                    for c in self.data["categories"]]
+            return [
+                f"<a href='/lists/categories/{c}.html'>{cnames[c]}</a>"
+                for c in self.data["categories"]
+            ]
         else:
             return [f"{cnames[c]}" for c in self.data["categories"]]
 
@@ -935,9 +991,15 @@ class Element:
                     else:
                         fam, ext, cell, k = e_s
                     data = self._c.families[key][fam]
-                    if "arnold-logg" in data and arnold_logg_reference not in references:
+                    if (
+                        "arnold-logg" in data
+                        and arnold_logg_reference not in references
+                    ):
                         references.append(arnold_logg_reference)
-                    if "cockburn-fu" in data and cockburn_fu_reference not in references:
+                    if (
+                        "cockburn-fu" in data
+                        and cockburn_fu_reference not in references
+                    ):
                         references.append(cockburn_fu_reference)
                     if "references" in data:
                         for r in references:
@@ -1001,7 +1063,7 @@ class Categoriser:
         """
         if self.elements[0].created is None:
             return self.elements[:n]
-        return sorted(self.elements, key=lambda e: e.created)[:-n-1:-1]
+        return sorted(self.elements, key=lambda e: e.created)[: -n - 1 : -1]
 
     def recently_updated(self, n: int) -> typing.List[Element]:
         """Get recently updated elements.
@@ -1014,7 +1076,7 @@ class Categoriser:
         """
         if self.elements[0].modified is None:
             return self.elements[:n]
-        return sorted(self.elements, key=lambda e: e.modified)[:-n-1:-1]
+        return sorted(self.elements, key=lambda e: e.modified)[: -n - 1 : -1]
 
     def load_categories(self, file: str):
         """Load categories from a file.
@@ -1067,7 +1129,9 @@ class Categoriser:
                 self.add_element(Element(data, fname))
 
         if settings.github_token is None:
-            warnings.warn("Building without GitHub token. Timestamps will not be obtained.")
+            warnings.warn(
+                "Building without GitHub token. Timestamps will not be obtained."
+            )
         else:
             g = Github(settings.github_token)
             repo = g.get_repo("DefElement/DefElement")

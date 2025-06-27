@@ -13,7 +13,8 @@ cache_version = "1.0.0"
 
 
 def load_cache(
-    item_key: str, e: symfem.finite_element.FiniteElement,
+    item_key: str,
+    e: symfem.finite_element.FiniteElement,
 ) -> typing.Optional[str]:
     """Load item from cache."""
     if not settings.caching:
@@ -55,7 +56,8 @@ def tidy_cache():
     for file in os.listdir(settings.cache_path):
         with open(join(settings.cache_path, file)) as f:
             data = json.load(f)
-        if data.get(
-            "symfem_version"
-        ) != symfem.__version__ or data.get("cache_version") != cache_version:
+        if (
+            data.get("symfem_version") != symfem.__version__
+            or data.get("cache_version") != cache_version
+        ):
             os.remove(join(settings.cache_path, file))

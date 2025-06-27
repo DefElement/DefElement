@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description="Set Symfem branch")
 parser.add_argument("branch")
 branch = parser.parse_args().branch
 
-print(f"Setting Symfem branch to \"{branch}\"")
+print(f'Setting Symfem branch to "{branch}"')
 
 for file in os.listdir("workflows"):
     skip = False

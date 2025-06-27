@@ -9,7 +9,9 @@ class UFLImplementation(Implementation):
     """UFL implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -19,7 +21,7 @@ class UFLImplementation(Implementation):
         Returns:
             Formatted implementation string
         """
-        return f"\"{string}\""
+        return f'"{string}"'
 
     @staticmethod
     def example(element: Element) -> str:
@@ -38,7 +40,8 @@ class UFLImplementation(Implementation):
 
             try:
                 ufl_name, input_deg, params = element.get_implementation_string(
-                    "ufl", ref, deg, variant)
+                    "ufl", ref, deg, variant
+                )
             except NotImplementedError:
                 continue
 
@@ -49,7 +52,7 @@ class UFLImplementation(Implementation):
                     out += f"element = ufl_legacy.{params['type']}("
                 else:
                     out += "element = ufl_legacy.FiniteElement("
-                out += f"\"{ufl_name}\", \"{ref}\", {input_deg})"
+                out += f'"{ufl_name}", "{ref}", {input_deg})'
         return out
 
     id = "ufl"

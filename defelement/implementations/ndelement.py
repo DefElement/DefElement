@@ -2,14 +2,21 @@
 
 import typing
 
-from defelement.implementations.core import Array, Element, Implementation, parse_example
+from defelement.implementations.core import (
+    Array,
+    Element,
+    Implementation,
+    parse_example,
+)
 
 
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -46,7 +53,8 @@ class NDElementImplementation(Implementation):
 
             try:
                 name, input_deg, params = element.get_implementation_string(
-                    "ndelement", ref, deg, variant)
+                    "ndelement", ref, deg, variant
+                )
             except NotImplementedError:
                 continue
 
@@ -61,7 +69,9 @@ class NDElementImplementation(Implementation):
             out += ")\n"
             out += f"element = family.element(ReferenceCellType.{ref[0].upper() + ref[1:]})"
         if cont:
-            out = "from ndelement.ciarlet import Continuity, Family, create_family" + out
+            out = (
+                "from ndelement.ciarlet import Continuity, Family, create_family" + out
+            )
         else:
             out = "from ndelement.ciarlet import Family, create_family" + out
         return out
@@ -69,7 +79,9 @@ class NDElementImplementation(Implementation):
     @staticmethod
     def verify(
         element: Element, example: str
-    ) -> typing.Tuple[typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]]:
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
         """Get verification data.
 
         Args:
@@ -85,17 +97,23 @@ class NDElementImplementation(Implementation):
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
         name, input_deg, params = element.get_implementation_string(
-            "ndelement", ref, deg, variant, any_variant=True)
+            "ndelement", ref, deg, variant, any_variant=True
+        )
         kwargs = {}
         if "continuity" in params:
             kwargs["continuity"] = getattr(Continuity, params["continuity"])
 
         cell = getattr(ReferenceCellType, ref[0].upper() + ref[1:])
         e = create_family(getattr(Family, name), input_deg, **kwargs).element(cell)
-        entity_dofs = [[e.entity_dofs(dim, entity) for entity in range(n)]
-                       for dim, n in enumerate(entity_counts(cell)) if n > 0]
+        entity_dofs = [
+            [e.entity_dofs(dim, entity) for entity in range(n)]
+            for dim, n in enumerate(entity_counts(cell))
+            if n > 0
+        ]
 
-        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose((2, 0, 1))
+        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose(
+            (2, 0, 1)
+        )
 
     id = "ndelement"
     name = "NDElement"
