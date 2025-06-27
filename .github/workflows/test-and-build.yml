@@ -23,7 +23,7 @@ jobs:
           python3 -m pip install -r requirements.txt
           python3 -m pip install numpy
         name: Install requirements
-      - run: python3 -m pip install ruff mypy pydocstyle isort
+      - run: python3 -m pip install ruff mypy pydocstyle
         name: Install linting tools
       - run: |
           python3 -m ruff format --check .
@@ -36,9 +36,6 @@ jobs:
           python3 -m mypy --install-types --non-interactive .
           python3 -m mypy .
         name: mypy checks
-      - run: |
-          python3 -m isort --check .
-        name: isort checks
 
   test-build-website:
     name: Test building of defelement
