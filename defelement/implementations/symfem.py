@@ -4,7 +4,12 @@ import typing
 
 from symfem.finite_element import FiniteElement
 
-from defelement.implementations.core import Array, Element, Implementation, parse_example
+from defelement.implementations.core import (
+    Array,
+    Element,
+    Implementation,
+    parse_example,
+)
 from defelement.tools import to_array
 
 
@@ -21,7 +26,9 @@ def symfem_create_element(element: Element, example: str) -> FiniteElement:
     import symfem
 
     ref, deg, variant, kwargs = parse_example(example)
-    symfem_name, input_deg, params = element.get_implementation_string("symfem", ref, deg, variant)
+    symfem_name, input_deg, params = element.get_implementation_string(
+        "symfem", ref, deg, variant
+    )
     assert symfem_name is not None
     if ref == "dual polygon":
         ref += "(4)"
@@ -67,7 +74,9 @@ class SymfemImplementation(Implementation):
     """Symfem implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -77,10 +86,10 @@ class SymfemImplementation(Implementation):
         Returns:
             Formatted implementation string
         """
-        out = f"\"{string}\""
+        out = f'"{string}"'
         for p, v in params.items():
             if p == "variant":
-                out += f", {p}=\"{v}\""
+                out += f', {p}="{v}"'
             else:
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
@@ -99,21 +108,22 @@ class SymfemImplementation(Implementation):
         for e in element.examples:
             ref, deg, variant, kwargs = parse_example(e)
             symfem_name, input_deg, params = element.get_implementation_string(
-                "symfem", ref, deg, variant)
+                "symfem", ref, deg, variant
+            )
 
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
             if ref == "dual polygon":
-                out += f"element = symfem.create_element(\"{ref}(4)\","
+                out += f'element = symfem.create_element("{ref}(4)",'
             else:
-                out += f"element = symfem.create_element(\"{ref}\","
+                out += f'element = symfem.create_element("{ref}",'
             if "variant" in params:
-                out += f" \"{symfem_name}\", {input_deg}, variant=\"{params['variant']}\""
+                out += f' "{symfem_name}", {input_deg}, variant="{params["variant"]}"'
             else:
-                out += f" \"{symfem_name}\", {input_deg}"
+                out += f' "{symfem_name}", {input_deg}'
             for i, j in kwargs.items():
                 if isinstance(j, str):
-                    out += f", {i}=\"{j}\""
+                    out += f', {i}="{j}"'
                 else:
                     out += f", {i}={j}"
             out += ")"
@@ -122,7 +132,9 @@ class SymfemImplementation(Implementation):
     @staticmethod
     def verify(
         element: Element, example: str
-    ) -> typing.Tuple[typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]]:
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
         """Get verification data.
 
         Args:
@@ -136,13 +148,16 @@ class SymfemImplementation(Implementation):
 
         ref, deg, variant, kwargs = parse_example(example)
         symfem_name, input_deg, params = element.get_implementation_string(
-            "symfem", ref, deg, variant)
+            "symfem", ref, deg, variant
+        )
         if ref == "dual polygon":
             ref += "(4)"
         assert isinstance(input_deg, int)
         e = symfem.create_element(ref, symfem_name, input_deg, **params)
-        edofs = [[e.entity_dofs(i, j) for j in range(e.reference.sub_entity_count(i))]
-                 for i in range(e.reference.tdim + 1)]
+        edofs = [
+            [e.entity_dofs(i, j) for j in range(e.reference.sub_entity_count(i))]
+            for i in range(e.reference.tdim + 1)
+        ]
         t = CachedSymfemTabulator(e)
         return edofs, lambda points: t.tabulate(points)
 

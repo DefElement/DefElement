@@ -6,8 +6,7 @@ import os
 from defelement import implementations
 
 parser = argparse.ArgumentParser(description="Install implementations")
-parser.add_argument('--install-type', default="all",
-                    help="Type of installation.")
+parser.add_argument("--install-type", default="all", help="Type of installation.")
 args = parser.parse_args()
 
 if args.install_type == "all":

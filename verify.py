@@ -14,18 +14,33 @@ from defelement.verification import verify
 start_all = datetime.now()
 
 parser = argparse.ArgumentParser(description="Verify elements")
-parser.add_argument('destination', metavar='destination', nargs="?",
-                    default=None, help="Name of output json file.")
-parser.add_argument('--test', metavar="test", default=None,
-                    help="Verify fewer elements.")
-parser.add_argument('--processes', metavar="processes", default=None,
-                    help="The number of processes to run the verification on.")
-parser.add_argument('--skip-missing-libraries', default="true",
-                    help="Skip verification if library is not installed.")
-parser.add_argument('--print-reasons', default="false",
-                    help="Show reasons for failed verification")
-parser.add_argument('--impl', metavar="impl", default=None,
-                    help="libraries to run verification for")
+parser.add_argument(
+    "destination",
+    metavar="destination",
+    nargs="?",
+    default=None,
+    help="Name of output json file.",
+)
+parser.add_argument(
+    "--test", metavar="test", default=None, help="Verify fewer elements."
+)
+parser.add_argument(
+    "--processes",
+    metavar="processes",
+    default=None,
+    help="The number of processes to run the verification on.",
+)
+parser.add_argument(
+    "--skip-missing-libraries",
+    default="true",
+    help="Skip verification if library is not installed.",
+)
+parser.add_argument(
+    "--print-reasons", default="false", help="Show reasons for failed verification"
+)
+parser.add_argument(
+    "--impl", metavar="impl", default=None, help="libraries to run verification for"
+)
 
 args = parser.parse_args()
 if args.destination is not None:
@@ -36,10 +51,21 @@ if args.test is None:
     test_elements = None
 elif args.test == "auto":
     test_elements = [
-        "buffa-christiansen", "direct-serendipity", "dual", "hellan-herrmann-johnson",
-        "hsieh-clough-tocher", "lagrange", "nedelec1", "raviart-thomas", "regge",
-        "serendipity", "taylor-hood", "vector-bubble-enriched-Lagrange", "enriched-galerkin",
-        "bernardi-raugel"]
+        "buffa-christiansen",
+        "direct-serendipity",
+        "dual",
+        "hellan-herrmann-johnson",
+        "hsieh-clough-tocher",
+        "lagrange",
+        "nedelec1",
+        "raviart-thomas",
+        "regge",
+        "serendipity",
+        "taylor-hood",
+        "vector-bubble-enriched-Lagrange",
+        "enriched-galerkin",
+        "bernardi-raugel",
+    ]
 else:
     test_elements = args.test.split(",")
 if args.impl is None:
@@ -61,18 +87,24 @@ for e in categoriser.elements:
     if test_elements is None or e.filename in test_elements:
         for eg in e.examples:
             implementations = [
-                i for i in verifications
-                if i != "symfem" and e.implemented(i) and (
-                    test_implementations is None or i in test_implementations)
+                i
+                for i in verifications
+                if i != "symfem"
+                and e.implemented(i)
+                and (test_implementations is None or i in test_implementations)
             ]
             if len(implementations) > 0:
                 elements_to_verify.append((e, eg, implementations))
 
 
 def verify_examples(
-    egs: typing.List[typing.Tuple[Element, str, typing.List[str]]], process: str = "",
-    result_dict: typing.Optional[typing.Dict[str, typing.Dict[str, typing.Dict[
-        str, typing.Dict[str, typing.List[str]]]]]] = None
+    egs: typing.List[typing.Tuple[Element, str, typing.List[str]]],
+    process: str = "",
+    result_dict: typing.Optional[
+        typing.Dict[
+            str, typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]
+        ]
+    ] = None,
 ) -> typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]:
     """Verify examples.
 
@@ -139,7 +171,11 @@ else:
     for i in range(p):
         process = multiprocessing.Process(
             target=verify_examples,
-            args=(elements_to_verify[n_egs * i // p: n_egs * (i + 1) // p], f"[{i}] ", results)
+            args=(
+                elements_to_verify[n_egs * i // p : n_egs * (i + 1) // p],
+                f"[{i}] ",
+                results,
+            ),
         )
         jobs.append(process)
 
@@ -176,22 +212,25 @@ except FileNotFoundError:
 for impl in set(j for i in data.values() for j in i):
     if impl not in history:
         history[impl] = []
-    history[impl].append({
-        "date": now,
-        "pass": sum(
-            len(i[impl]["pass"])
-            for i in data.values() if impl in i
-        ),
-        "total": sum(
-            len(i[impl]["pass"]) + len(i[impl]["fail"])
-            for i in data.values() if impl in i
-        ),
-    })
+    history[impl].append(
+        {
+            "date": now,
+            "pass": sum(len(i[impl]["pass"]) for i in data.values() if impl in i),
+            "total": sum(
+                len(i[impl]["pass"]) + len(i[impl]["fail"])
+                for i in data.values()
+                if impl in i
+            ),
+        }
+    )
 
 with open(settings.verification_json, "w") as f:
-    json.dump({
-        "metadata": {"date": now},
-        "verification": data,
-    }, f)
+    json.dump(
+        {
+            "metadata": {"date": now},
+            "verification": data,
+        },
+        f,
+    )
 with open(settings.verification_history_json, "w") as f:
     json.dump(history, f)

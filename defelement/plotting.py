@@ -15,10 +15,11 @@ from defelement.caching import load_cache, save_cache
 
 now = datetime.now()
 svg_desc = (
-   "This plot is from DefElement (https://defelement.org) "
-   "and is available under a Creative Commons Attribution "
-   "4.0 International (CC BY 4.0) license: "
-   "https://creativecommons.org/licenses/by/4.0/")
+    "This plot is from DefElement (https://defelement.org) "
+    "and is available under a Creative Commons Attribution "
+    "4.0 International (CC BY 4.0) license: "
+    "https://creativecommons.org/licenses/by/4.0/"
+)
 svg_metadata = (
     "<metadata id='license'>\n"
     " <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' "
@@ -44,22 +45,28 @@ svg_metadata = (
     "     <cc:requires rdf:resource='http://web.resource.org/cc/Attribution'/>\n"
     "   </cc:License>\n"
     " </rdf:RDF>\n"
-    "</metadata>\n")
+    "</metadata>\n"
+)
 tex_comment = (
     "% -------------------------------------------------------\n"
     "% This plot is from DefElement (https://defelement.org)\n"
     "% and is available under a Creative Commons Attribution\n"
     "% 4.0 International (CC BY 4.0) license:\n"
     "% https://creativecommons.org/licenses/by/4.0/\n"
-    "% -------------------------------------------------------\n")
+    "% -------------------------------------------------------\n"
+)
 
 all_plots = []
 
 
 def do_the_plot(
-    filename: str, desc: str, plot: typing.Callable,
-    args: typing.List[typing.Any] = [], png_width: int = 180,
-    scale: int = 250, link: bool = True,
+    filename: str,
+    desc: str,
+    plot: typing.Callable,
+    args: typing.List[typing.Any] = [],
+    png_width: int = 180,
+    scale: int = 250,
+    link: bool = True,
     cache_element: typing.Optional[symfem.finite_element.FiniteElement] = None,
 ) -> str:
     """Create a plot.
@@ -82,18 +89,33 @@ def do_the_plot(
     filename = filename.replace(" ", "-")
 
     kwargs = {
-        "title": desc, "desc": svg_desc,
-        "svg_metadata": svg_metadata.replace("{title}", desc), "tex_comment": tex_comment}
+        "title": desc,
+        "desc": svg_desc,
+        "svg_metadata": svg_metadata.replace("{title}", desc),
+        "tex_comment": tex_comment,
+    }
     svg_kw = {"scale": scale, "dof_arrow_size": sympy.Rational(3, 2)}
 
     if filename not in all_plots:
         for fname, pf in [
             (f"{filename}.tex", lambda fn: plot(*args, fn, **kwargs)),
             (f"{filename}.svg", lambda fn: plot(*args, fn, **svg_kw, **kwargs)),
-            (f"{filename}.png", lambda fn: plot(
-                *args, fn, plot_options={"png_width": png_width}, **svg_kw, **kwargs)),
-            (f"{filename}-large.png", lambda fn: plot(
-                *args, fn, plot_options={"png_width": png_width * 9 // 2}, **svg_kw, **kwargs)),
+            (
+                f"{filename}.png",
+                lambda fn: plot(
+                    *args, fn, plot_options={"png_width": png_width}, **svg_kw, **kwargs
+                ),
+            ),
+            (
+                f"{filename}-large.png",
+                lambda fn: plot(
+                    *args,
+                    fn,
+                    plot_options={"png_width": png_width * 9 // 2},
+                    **svg_kw,
+                    **kwargs,
+                ),
+            ),
         ]:
             c = None
             if cache_element is not None:
@@ -108,21 +130,24 @@ def do_the_plot(
                         save_cache(
                             f"plot-{fname}",
                             cache_element,
-                            base64.b64encode(f.read()).decode("utf-8"))
+                            base64.b64encode(f.read()).decode("utf-8"),
+                        )
 
         img_page = heading_with_self_ref("h1", cap_first(desc))
         img_page += f"<center><a href='/img/{filename}-large.png'>"
         img_page += f"<img src='/img/{filename}.png'></a></center>\n"
 
-        img_page += ("<p>"
-                     "This image can be used under a "
-                     "<a href='https://creativecommons.org/licenses/by/4.0/'>"
-                     "Creative Commons Attribution 4.0 International (CC BY 4.0) license"
-                     "</a>: if you use it anywhere, you must attribute DefElement. "
-                     "If you use this image anywhere online, please include a link to "
-                     "DefElement; if you use this image in a paper, please <a href='"
-                     "/citing.html'>cite DefElement</a>."
-                     "</p>")
+        img_page += (
+            "<p>"
+            "This image can be used under a "
+            "<a href='https://creativecommons.org/licenses/by/4.0/'>"
+            "Creative Commons Attribution 4.0 International (CC BY 4.0) license"
+            "</a>: if you use it anywhere, you must attribute DefElement. "
+            "If you use this image anywhere online, please include a link to "
+            "DefElement; if you use this image in a paper, please <a href='"
+            "/citing.html'>cite DefElement</a>."
+            "</p>"
+        )
         img_page += "<ul>"
         img_page += f"<li><a href='/img/{filename}-large.png'>Download PNG</a></li>"
         img_page += f"<li><a href='/img/{filename}.svg'>Download SVG</a></li>"
@@ -157,8 +182,14 @@ def plot_reference(ref, link: bool = True) -> str:
     filename = f"ref-{ref_id}"
     desc = f"{ref.name} reference cell"
 
-    return do_the_plot(filename, desc, ref.plot_entity_diagrams, png_width=175 * (ref.tdim + 1),
-                       scale=300, link=link)
+    return do_the_plot(
+        filename,
+        desc,
+        ref.plot_entity_diagrams,
+        png_width=175 * (ref.tdim + 1),
+        scale=300,
+        link=link,
+    )
 
 
 def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
@@ -185,7 +216,11 @@ def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
         filename += f"-{i}-{j}"
     filename += f"-{ref_id}-{element.order}-{dof_i}"
     return do_the_plot(
-        filename, desc, element.plot_basis_function, [dof_i], link=link,
+        filename,
+        desc,
+        element.plot_basis_function,
+        [dof_i],
+        link=link,
         cache_element=element,
     )
 
@@ -252,7 +287,9 @@ def plot_img(img_filename: str, link: bool = True) -> str:
     desc = metadata["DESC"]
 
     def actual_plot(
-        filename: str, plot_options: typing.Dict[str, typing.Any] = {}, **kwargs: typing.Any
+        filename: str,
+        plot_options: typing.Dict[str, typing.Any] = {},
+        **kwargs: typing.Any,
     ):
         img = Picture(**kwargs)
         colors = img.colors
@@ -302,6 +339,9 @@ def plot_dof_diagram(element: FiniteElement, link: bool = True) -> str:
         filename += f"-{i}-{j}"
     filename += f"-{ref_id}-{element.order}-dofs"
     return do_the_plot(
-        filename, desc, element.plot_dof_diagram, link=link,
+        filename,
+        desc,
+        element.plot_dof_diagram,
+        link=link,
         cache_element=element,
     )

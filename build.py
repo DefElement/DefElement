@@ -13,7 +13,12 @@ from webtools.citations import make_bibtex, markup_citation
 from webtools.code_markup import python_highlight
 from webtools.html import make_html_forwarding_page, make_html_page
 from webtools.markup import cap_first, heading, heading_with_self_ref, markup
-from webtools.tools import comma_and_join, html_local, insert_author_info, parse_metadata
+from webtools.tools import (
+    comma_and_join,
+    html_local,
+    insert_author_info,
+    parse_metadata,
+)
 
 from defelement import plotting, settings
 from defelement.element import Categoriser
@@ -26,24 +31,49 @@ from defelement.rss import make_rss
 start_all = datetime.now()
 
 parser = argparse.ArgumentParser(description="Build defelement.org")
-parser.add_argument("destination", metavar="destination", nargs="?",
-                    default=None, help="Destination of HTML files.")
-parser.add_argument("--test", metavar="test", default=None,
-                    help="Builds a version of the website with fewer elements.")
-parser.add_argument("--github-token", metavar="github_token", default=None,
-                    help="Provide a GitHub token to get update timestamps.")
-parser.add_argument("--processes", metavar="processes", default=None,
-                    help="The number of processes to run the building of examples on.")
-parser.add_argument("--verification-json", metavar="verification_json", default=None,
-                    help="Provide a verification JSON.")
-parser.add_argument("--no-cache", action="store_true", help="Build without using cache.")
+parser.add_argument(
+    "destination",
+    metavar="destination",
+    nargs="?",
+    default=None,
+    help="Destination of HTML files.",
+)
+parser.add_argument(
+    "--test",
+    metavar="test",
+    default=None,
+    help="Builds a version of the website with fewer elements.",
+)
+parser.add_argument(
+    "--github-token",
+    metavar="github_token",
+    default=None,
+    help="Provide a GitHub token to get update timestamps.",
+)
+parser.add_argument(
+    "--processes",
+    metavar="processes",
+    default=None,
+    help="The number of processes to run the building of examples on.",
+)
+parser.add_argument(
+    "--verification-json",
+    metavar="verification_json",
+    default=None,
+    help="Provide a verification JSON.",
+)
+parser.add_argument(
+    "--no-cache", action="store_true", help="Build without using cache."
+)
 
 sitemap = {}
 
 
 def write_html_page(
-    path: str, title: typing.Optional[str], content: str,
-    extra_head: typing.Optional[str] = None
+    path: str,
+    title: typing.Optional[str],
+    content: str,
+    extra_head: typing.Optional[str] = None,
 ):
     """Write a HTML page.
 
@@ -80,9 +110,20 @@ if args.test is None:
     test_elements = None
 elif args.test == "auto":
     test_elements = [
-        "buffa-christiansen", "direct-serendipity", "dual", "hellan-herrmann-johnson",
-        "hsieh-clough-tocher", "lagrange", "nedelec1", "raviart-thomas", "regge",
-        "serendipity", "taylor-hood", "vector-bubble-enriched-Lagrange", "enriched-galerkin"]
+        "buffa-christiansen",
+        "direct-serendipity",
+        "dual",
+        "hellan-herrmann-johnson",
+        "hsieh-clough-tocher",
+        "lagrange",
+        "nedelec1",
+        "raviart-thomas",
+        "regge",
+        "serendipity",
+        "taylor-hood",
+        "vector-bubble-enriched-Lagrange",
+        "enriched-galerkin",
+    ]
 else:
     test_elements = args.test.split(",")
 
@@ -119,8 +160,11 @@ for file in os.listdir(settings.pages_path):
 
         content = markup(content)
 
-        write_html_page(os.path.join(settings.html_path, f"{fname}.html"),
-                        metadata["title"], content)
+        write_html_page(
+            os.path.join(settings.html_path, f"{fname}.html"),
+            metadata["title"],
+            content,
+        )
         end = datetime.now()
         print(f" (completed in {(end - start).total_seconds():.2f}s)")
 
@@ -144,11 +188,15 @@ cdescs = {
     "H(curl curl)": "Inner products with tangents to facets are continuous",
     "H(curl div)": "Tangent-normal inner products on facets are continuous",
     "H1(div)": "Function values and divergence are continuous.",
-    }
+}
 
-VHistoryDict = typing.TypedDict('VHistoryDict', {'date': str, 'pass': int, 'total': int})
+VHistoryDict = typing.TypedDict(
+    "VHistoryDict", {"date": str, "pass": int, "total": int}
+)
 
-verification: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
+verification: typing.Dict[
+    str, typing.Dict[str, typing.Dict[str, typing.List[str]]]
+] = {}
 vhistory: typing.Dict[str, typing.List[VHistoryDict]] = {}
 v_date = None
 if os.path.isfile(settings.verification_json):
@@ -163,14 +211,21 @@ if os.path.isfile(settings.verification_history_json):
 icon_style = "font-size:150%;vertical-align:middle"
 icon_style_small = "font-size:80%;vertical-align:middle"
 text_style = "font-size:80%;vertical-align:middle"
-green_check = ("<i class='fa-solid fa-square-check' style='color:"
-               f"{symfem.plotting.Colors.GREEN};{icon_style}'></i>")
-orange_check = ("<i class='fa-solid fa-square-xmark' style='color:"
-                f"{symfem.plotting.Colors.ORANGE};{icon_style}'></i>")
-red_check = ("<i class='fa-solid fa-square-xmark' style='color:"
-             f"#FF0000;{icon_style}'></i>")
-blue_minus = ("<i class='fa-solid fa-square-minus' style='color:"
-              f"{symfem.plotting.Colors.BLUE};{icon_style}'></i>")
+green_check = (
+    "<i class='fa-solid fa-square-check' style='color:"
+    f"{symfem.plotting.Colors.GREEN};{icon_style}'></i>"
+)
+orange_check = (
+    "<i class='fa-solid fa-square-xmark' style='color:"
+    f"{symfem.plotting.Colors.ORANGE};{icon_style}'></i>"
+)
+red_check = (
+    f"<i class='fa-solid fa-square-xmark' style='color:#FF0000;{icon_style}'></i>"
+)
+blue_minus = (
+    "<i class='fa-solid fa-square-minus' style='color:"
+    f"{symfem.plotting.Colors.BLUE};{icon_style}'></i>"
+)
 green_check_small = green_check.replace(icon_style, icon_style_small)
 orange_check_small = orange_check.replace(icon_style, icon_style_small)
 red_check_small = red_check.replace(icon_style, icon_style_small)
@@ -205,12 +260,20 @@ for e in categoriser.elements:
     # Variants
     variants = e.variants()
     if len(variants) > 0:
-        element_data.append(("Variants", "<br />".join([insert_links(v) for v in variants])))
+        element_data.append(
+            ("Variants", "<br />".join([insert_links(v) for v in variants]))
+        )
 
-    simplex_only = len([
-        i for i in e.reference_cells(False)
-        if i not in ["point", "interval", "triangle", "tetrahedron"]
-    ]) == 0
+    simplex_only = (
+        len(
+            [
+                i
+                for i in e.reference_cells(False)
+                if i not in ["point", "interval", "triangle", "tetrahedron"]
+            ]
+        )
+        == 0
+    )
 
     if simplex_only:
         degree_names = {
@@ -230,9 +293,12 @@ for e in categoriser.elements:
     if e.degree_convention() is None:
         element_data.append(("Degrees", e.degree_range()))
     else:
-        element_data.append((
-            "Degrees",
-            f"{e.degree_range()}<br />where \\(k\\) is the {degree_names[e.degree_convention()]}"))
+        element_data.append(
+            (
+                "Degrees",
+                f"{e.degree_range()}<br />where \\(k\\) is the {degree_names[e.degree_convention()]}",
+            )
+        )
     if e.polynomial_subdegree() is not None:
         element_data.append(("Polynomial subdegree", e.polynomial_subdegree()))
     if e.polynomial_superdegree() is not None:
@@ -251,9 +317,12 @@ for e in categoriser.elements:
     if e.is_mixed:
         subelements = e.sub_elements()
         element_data.append(
-            ("Definition",
-             "This is a mixed element containing these subelements:"
-             "<ul>" + "\n".join(subelements) + "</ul>"))
+            (
+                "Definition",
+                "This is a mixed element containing these subelements:"
+                "<ul>" + "\n".join(subelements) + "</ul>",
+            )
+        )
 
     # Polynomial set
     psets = e.make_polynomial_set_html()
@@ -284,8 +353,14 @@ for e in categoriser.elements:
     sobolev = e.sobolev()
     if sobolev is not None:
         if isinstance(sobolev, dict):
-            element_data.append(("continuity", "<br />".join([
-                f"{cdescs[c]} (\\({n}\\))" for n, c in sobolev.items()])))
+            element_data.append(
+                (
+                    "continuity",
+                    "<br />".join(
+                        [f"{cdescs[c]} (\\({n}\\))" for n, c in sobolev.items()]
+                    ),
+                )
+            )
         else:
             element_data.append(("continuity", cdescs[sobolev]))
 
@@ -295,13 +370,11 @@ for e in categoriser.elements:
         notes = [notes]
     if len(notes) > 0:
         element_data.append(
-            ("Notes", "<br />\n".join([insert_links(i) for i in notes])))
+            ("Notes", "<br />\n".join([insert_links(i) for i in notes]))
+        )
 
     # Implementations
-    libraries = [
-        (i, j.name, j.url, j.install)
-        for i, j in implementations.items()
-    ]
+    libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
     libraries.sort(key=lambda i: i[0])
     for codename, libname, url, pip in libraries:
         if e.implemented(codename):
@@ -310,7 +383,7 @@ for e in categoriser.elements:
             short_info = libname
 
             if e.has_implementation_examples(codename):
-                jscodename = codename.replace('.', '_').replace('-', '_')
+                jscodename = codename.replace(".", "_").replace("-", "_")
                 info += (
                     "<br />"
                     f"<a class='show_eg_link' id='show_{jscodename}_link' "
@@ -320,22 +393,27 @@ for e in categoriser.elements:
                     f"href='javascript:hide_{jscodename}_eg()' style='display:none'>"
                     f"&uarr; Hide {libname} examples &uarr;</a>"
                     f"<div id='{jscodename}_eg' style='display:none'>"
-                    f"Before running this example, you must install <a href='{url}'>{libname}</a>")
+                    f"Before running this example, you must install <a href='{url}'>{libname}</a>"
+                )
                 if pip is None:
                     info += ". "
                 else:
                     info += ":<p class='pcode'>" + pip.replace("\n", "<br />") + "</p>"
                 info += "This element can then be created with the following lines of Python:"
 
-                info += "<p class='pcode'>" + python_highlight(
-                    e.make_implementation_examples(codename)) + "</p>"
+                info += (
+                    "<p class='pcode'>"
+                    + python_highlight(e.make_implementation_examples(codename))
+                    + "</p>"
+                )
                 info += "</div>"
                 if codename == "symfem":
                     short_info += f" {green_check_small}"
                     info += (
                         f"{green_check} <span style='{text_style}'>"
                         "This implementation is used to compute the examples below and "
-                        "verify other implementations.</span>")
+                        "verify other implementations.</span>"
+                    )
                 if e.filename in verification and codename in verification[e.filename]:
                     v = verification[e.filename][codename]
                     if len(v["fail"]) == 0:
@@ -344,7 +422,8 @@ for e in categoriser.elements:
                             info += (
                                 f"{green_check} <span style='{text_style}'>"
                                 "This implementation is correct for all the examples below."
-                                "</span>")
+                                "</span>"
+                            )
                         else:
                             short_info += f" {green_check_small}"
                             info += (
@@ -380,7 +459,8 @@ for e in categoriser.elements:
                                 f"document.getElementById('{jscodename}-showverification')"
                                 ".style.display = 'block'\n"
                                 f"document.getElementById('{jscodename}-hiddenverification')"
-                                ".style.display = 'none'\n}\n</script>")
+                                ".style.display = 'none'\n}\n</script>"
+                            )
                     elif len(v["pass"]) > 0:
                         short_info += f" {orange_check_small}"
                         info += (
@@ -400,14 +480,16 @@ for e in categoriser.elements:
                             f"<b>Correct</b>: {'; '.join(v['pass'])}</div>"
                             f"<div style='margin-left:70px;text-indent:-40px;{text_style}'>"
                             f"{red_check} "
-                            f"<b>Incorrect</b>: {'; '.join(v['fail'])}</div>")
+                            f"<b>Incorrect</b>: {'; '.join(v['fail'])}</div>"
+                        )
                         if len(v["not implemented"]) > 0:
                             short_info += f" {blue_minus_small}"
                             info += (
                                 f"<div style='margin-left:70px;text-indent:-40px;{text_style}'>"
                                 f"{blue_minus} "
                                 f"<b>Not implemented</b>: {'; '.join(v['not implemented'])}</div>"
-                                "</div>")
+                                "</div>"
+                            )
                         info += (
                             "</div>"
                             "<script type='text/javascript'>\n"
@@ -422,12 +504,14 @@ for e in categoriser.elements:
                             f"document.getElementById('{jscodename}-showverification')"
                             ".style.display = 'block'\n"
                             f"document.getElementById('{jscodename}-hiddenverification')"
-                            ".style.display = 'none'\n}\n</script>")
+                            ".style.display = 'none'\n}\n</script>"
+                        )
                     else:
                         short_info += f" {red_check_small}"
                         info += (
                             f"{red_check} <span style='{text_style}'>"
-                            "This implementation is incorrect for this element.</span>")
+                            "This implementation is incorrect for this element.</span>"
+                        )
                 notes = e.implementation_notes(codename)
                 if notes is not None:
                     for note in notes:
@@ -445,10 +529,15 @@ for e in categoriser.elements:
                     f" document.getElementById('hide_{jscodename}_link').style.display='none'\n"
                     f" document.getElementById('{jscodename}_eg').style.display='none'\n"
                     "}\n"
-                    "</script>")
+                    "</script>"
+                )
 
             impl.append(
-                (f"<a href='/lists/implementations/{libname}.html'>{libname}</a>", info, short_info)
+                (
+                    f"<a href='/lists/implementations/{libname}.html'>{libname}</a>",
+                    info,
+                    short_info,
+                )
             )
 
     # Categories
@@ -459,7 +548,9 @@ for e in categoriser.elements:
     # Write element data
     content += "<table class='element-info'>"
     for i, j in element_data:
-        content += f"<tr><td>{i.replace(' ', '&nbsp;').replace('<breakable>', ' ')}</td>"
+        content += (
+            f"<tr><td>{i.replace(' ', '&nbsp;').replace('<breakable>', ' ')}</td>"
+        )
         content += f"<td>{j}</td></tr>"
     content += "</table>"
 
@@ -467,11 +558,15 @@ for e in categoriser.elements:
     if len(impl) > 0:
         content += heading_with_self_ref("h2", "Implementations")
         content += "This element is implemented in "
-        content += comma_and_join([f"<span style='white-space:nowrap'>{i[2]}</span>" for i in impl])
+        content += comma_and_join(
+            [f"<span style='white-space:nowrap'>{i[2]}</span>" for i in impl]
+        )
         content += "."
-        content += ("<a class='show_eg_link' id='implementation-more-link' "
-                    "href='javascript:show_more_impl()' style='display:block'>"
-                    "&darr; Show implementation detail &darr;</a>")
+        content += (
+            "<a class='show_eg_link' id='implementation-more-link' "
+            "href='javascript:show_more_impl()' style='display:block'>"
+            "&darr; Show implementation detail &darr;</a>"
+        )
         content += (
             "<script type='text/javascript'>\n"
             "function show_more_impl(){\n"
@@ -482,11 +577,14 @@ for e in categoriser.elements:
             " document.getElementById('implementation-more-link').style.display='block'\n"
             " document.getElementById('implementation-more').style.display='none'\n"
             "}\n"
-            "</script>")
+            "</script>"
+        )
         content += "<div id='implementation-more' style='display:none'>"
-        content += ("<a class='show_eg_link' "
-                    "href='javascript:hide_more_impl()' style='display:block'>"
-                    "&uarr; Hide implementation detail &uarr;</a>")
+        content += (
+            "<a class='show_eg_link' "
+            "href='javascript:hide_more_impl()' style='display:block'>"
+            "&uarr; Hide implementation detail &uarr;</a>"
+        )
         content += "<table class='element-info'>"
         for i, j, _ in impl:
             content += f"<tr><td>{i.replace(' ', '&nbsp;')}</td><td>{j}</td></tr>"
@@ -501,7 +599,9 @@ for e in categoriser.elements:
 
             for eg in e.examples:
                 cell, degree, variant, kwargs = parse_example(eg)
-                symfem_name, _, params = e.get_implementation_string("symfem", cell, None, variant)
+                symfem_name, _, params = e.get_implementation_string(
+                    "symfem", cell, None, variant
+                )
 
                 fname = f"{cell}-{e.filename}"
                 if variant is not None:
@@ -512,7 +612,8 @@ for e in categoriser.elements:
 
                 if "DEGREEMAP" in params:
                     symfem_degree = int(
-                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
+                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
+                    )
                 else:
                     symfem_degree = degree
                 name = f"{cell}<br />degree {degree}"
@@ -522,9 +623,14 @@ for e in categoriser.elements:
                     name += f"<br />{key}={str(value).replace(' ', '&nbsp;')}"
 
                 eginfo = {
-                    "name": name, "args": [cell, symfem_name, symfem_degree], "kwargs": kwargs,
-                    "html_name": e.html_name, "element_filename": e.html_filename,
-                    "filename": fname, "url": f"/elements/examples/{fname}"}
+                    "name": name,
+                    "args": [cell, symfem_name, symfem_degree],
+                    "kwargs": kwargs,
+                    "html_name": e.html_name,
+                    "element_filename": e.html_filename,
+                    "filename": fname,
+                    "url": f"/elements/examples/{fname}",
+                }
                 if "variant" in params:
                     eginfo["kwargs"]["variant"] = params["variant"]
                 if "legacy-names" in e.data:
@@ -538,11 +644,12 @@ for e in categoriser.elements:
             content += heading_with_self_ref("h2", "Examples")
             content += "<table class='element-info'>"
             for eg in element_examples:
-                element = create_element(*eg['args'], **eg['kwargs'])
+                element = create_element(*eg["args"], **eg["kwargs"])
                 content += (
                     f"<tr><td>{eg['name']}</td><td><center><a href='{eg['url']}'>"
                     f"{plotting.plot_dof_diagram(element, link=False)}"
-                    "<br /><small>(click to view basis functions)</small></a></center></td></tr>")
+                    "<br /><small>(click to view basis functions)</small></a></center></td></tr>"
+                )
             content += "</table>"
 
     # Write references section
@@ -553,8 +660,12 @@ for e in categoriser.elements:
         for rindex, r in enumerate(refs):
             content += f"<li>{markup_citation(r)}"
             content += f" [<a href='/elements/bibtex/{e.filename}-{rindex}.bib'>BibTeX</a>]</li>\n"
-            with open(os.path.join(settings.htmlelement_path,
-                                   f"bibtex/{e.filename}-{rindex}.bib"), "w") as f:
+            with open(
+                os.path.join(
+                    settings.htmlelement_path, f"bibtex/{e.filename}-{rindex}.bib"
+                ),
+                "w",
+            ) as f:
                 f.write(make_bibtex(f"{e.filename}-{rindex}", r))
         content += "</ul>"
 
@@ -568,8 +679,9 @@ for e in categoriser.elements:
         content += "</table>"
 
     # Write file
-    write_html_page(os.path.join(settings.htmlelement_path, e.html_filename),
-                    e.html_name, content)
+    write_html_page(
+        os.path.join(settings.htmlelement_path, e.html_filename), e.html_name, content
+    )
 
     # Make redirects from legacy filenames
     for fname in e.legacy_filenames:
@@ -599,59 +711,57 @@ for i in verifications:
         svgwidth = width // 10 if width % 10 == 0 else width / 10
         with open(os.path.join(badges, f"{i}.svg"), "w") as f:
             f.write(
-                f"<svg width=\"{svgwidth}\" height=\"20\" viewBox=\"0 0 {width} 200\" "
-                "xmlns=\"http://www.w3.org/2000/svg\" "
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" role=\"img\" "
-                f"aria-label=\"DefElement verification: {proportion}\">\n"
+                f'<svg width="{svgwidth}" height="20" viewBox="0 0 {width} 200" '
+                'xmlns="http://www.w3.org/2000/svg" '
+                'xmlns:xlink="http://www.w3.org/1999/xlink" role="img" '
+                f'aria-label="DefElement verification: {proportion}">\n'
                 f"<title>DefElement verification: {proportion}</title>\n"
-                "<linearGradient id=\"NcgeH\" x2=\"0\" y2=\"100%\">\n"
-                "<stop offset=\"0\" stop-opacity=\".1\" stop-color=\"#EEE\"/>\n"
-                "<stop offset=\"1\" stop-opacity=\".1\"/>\n</linearGradient>\n"
-                f"<mask id=\"SeeOV\"><rect width=\"{width}\" height=\"200\" rx=\"30\" "
-                "fill=\"#FFF\"/></mask>\n<g mask=\"url(#SeeOV)\">\n"
-                "<rect width=\"840\" height=\"200\" fill=\"#555\"/>\n"
-                f"<rect width=\"{twidth + 90}\" height=\"200\" fill=\"{col}\" x=\"840\"/>\n"
-                f"<rect width=\"{width}\" height=\"200\" fill=\"url(#NcgeH)\"/>\n</g>\n"
-                "<g aria-hidden=\"true\" fill=\"#fff\" text-anchor=\"start\" "
-                "font-family=\"Verdana,DejaVu Sans,sans-serif\" font-size=\"110\">\n"
-                "<text x=\"190\" y=\"148\" textLength=\"610\" fill=\"#000\" opacity=\"0.25\">"
+                '<linearGradient id="NcgeH" x2="0" y2="100%">\n'
+                '<stop offset="0" stop-opacity=".1" stop-color="#EEE"/>\n'
+                '<stop offset="1" stop-opacity=".1"/>\n</linearGradient>\n'
+                f'<mask id="SeeOV"><rect width="{width}" height="200" rx="30" '
+                'fill="#FFF"/></mask>\n<g mask="url(#SeeOV)">\n'
+                '<rect width="840" height="200" fill="#555"/>\n'
+                f'<rect width="{twidth + 90}" height="200" fill="{col}" x="840"/>\n'
+                f'<rect width="{width}" height="200" fill="url(#NcgeH)"/>\n</g>\n'
+                '<g aria-hidden="true" fill="#fff" text-anchor="start" '
+                'font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">\n'
+                '<text x="190" y="148" textLength="610" fill="#000" opacity="0.25">'
                 "verification</text>\n"
-                "<text x=\"180\" y=\"138\" textLength=\"610\">verification</text>\n"
-                f"<text x=\"895\" y=\"148\" textLength=\"{twidth}\" fill=\"#000\" opacity=\"0.25\">"
+                '<text x="180" y="138" textLength="610">verification</text>\n'
+                f'<text x="895" y="148" textLength="{twidth}" fill="#000" opacity="0.25">'
                 f"{proportion}</text>\n"
-                f"<text x=\"885\" y=\"138\" textLength=\"{twidth}\">{proportion}</text>\n</g>\n"
-                f"<image x=\"40\" y=\"35\" width=\"100\" height=\"130\" xlink:href=\"{img}\"/>\n"
-                "</svg>")
+                f'<text x="885" y="138" textLength="{twidth}">{proportion}</text>\n</g>\n'
+                f'<image x="40" y="35" width="100" height="130" xlink:href="{img}"/>\n'
+                "</svg>"
+            )
 with open(os.path.join(badges, "symfem.svg"), "w") as f:
     f.write(
-        f"<svg width=\"186.6\" height=\"20\" viewBox=\"0 0 1866 200\" "
-        "xmlns=\"http://www.w3.org/2000/svg\" "
-        "xmlns:xlink=\"http://www.w3.org/1999/xlink\" role=\"img\" "
-        "aria-label=\"DefElement: used as verification baseline\">\n"
+        f'<svg width="186.6" height="20" viewBox="0 0 1866 200" '
+        'xmlns="http://www.w3.org/2000/svg" '
+        'xmlns:xlink="http://www.w3.org/1999/xlink" role="img" '
+        'aria-label="DefElement: used as verification baseline">\n'
         "<title>DefElement: used as verification baseline</title>\n"
-        "<linearGradient id=\"NcgeH\" x2=\"0\" y2=\"100%\">\n"
-        "<stop offset=\"0\" stop-opacity=\".1\" stop-color=\"#EEE\"/>\n"
-        "<stop offset=\"1\" stop-opacity=\".1\"/>\n</linearGradient>\n"
-        f"<mask id=\"SeeOV\"><rect width=\"1866\" height=\"200\" rx=\"30\" fill=\"#FFF\"/></mask>\n"
-        "<g mask=\"url(#SeeOV)\">\n<rect width=\"200\" height=\"200\" fill=\"#555\"/>\n"
-        f"<rect width=\"1666\" height=\"200\" fill=\"{symfem.plotting.Colors.GREEN}\" x=\"200\"/>\n"
-        f"<rect width=\"1866\" height=\"200\" fill=\"url(#NcgeH)\"/>\n</g>\n"
-        "<g aria-hidden=\"true\" fill=\"#fff\" text-anchor=\"start\" "
-        "font-family=\"Verdana,DejaVu Sans,sans-serif\" font-size=\"110\">\n"
-        f"<text x=\"255\" y=\"148\" textLength=\"1566\" fill=\"#000\" opacity=\"0.25\">"
+        '<linearGradient id="NcgeH" x2="0" y2="100%">\n'
+        '<stop offset="0" stop-opacity=".1" stop-color="#EEE"/>\n'
+        '<stop offset="1" stop-opacity=".1"/>\n</linearGradient>\n'
+        f'<mask id="SeeOV"><rect width="1866" height="200" rx="30" fill="#FFF"/></mask>\n'
+        '<g mask="url(#SeeOV)">\n<rect width="200" height="200" fill="#555"/>\n'
+        f'<rect width="1666" height="200" fill="{symfem.plotting.Colors.GREEN}" x="200"/>\n'
+        f'<rect width="1866" height="200" fill="url(#NcgeH)"/>\n</g>\n'
+        '<g aria-hidden="true" fill="#fff" text-anchor="start" '
+        'font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">\n'
+        f'<text x="255" y="148" textLength="1566" fill="#000" opacity="0.25">'
         f"used as verification baseline</text>\n"
-        f"<text x=\"245\" y=\"138\" textLength=\"1566\">used as verification baseline</text>\n</g>"
-        f"\n<image x=\"40\" y=\"35\" width=\"100\" height=\"130\" xlink:href=\"{img}\"/>\n"
-        "</svg>")
+        f'<text x="245" y="138" textLength="1566">used as verification baseline</text>\n</g>'
+        f'\n<image x="40" y="35" width="100" height="130" xlink:href="{img}"/>\n'
+        "</svg>"
+    )
 
 # Make verification pages
 os.mkdir(os.path.join(settings.html_path, "verification"))
 
-impl_content = {
-    i: ""
-    for i in verifications
-    if i != "symfem"
-}
+impl_content = {i: "" for i in verifications if i != "symfem"}
 for i in impl_content:
     title = f"{implementations[i].name} verification"
     if i in vhistory:
@@ -673,8 +783,21 @@ content = heading_with_self_ref("h1", "Verification")
 long_content = heading_with_self_ref("h1", "Verification: full detail")
 if v_date is not None:
     year, month, day = [int(i) for i in v_date.split("-")]
-    monthname = ["Zeromber", "January", "February", "March", "April", "May", "June",
-                 "July", "August", "September", "October", "November", "December"][month]
+    monthname = [
+        "Zeromber",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ][month]
     updated = f"<small>Last updated: {day} {monthname} {year}</small><br /><br />"
     content += updated
     long_content += updated
@@ -685,60 +808,50 @@ for i in impl_content:
     if i in vhistory:
         hist = vhistory[i]
         impl_content[i] += (
-            "<div id='verification-plot'></div>"
-            "<script type='text/javascript'>\n")
+            "<div id='verification-plot'></div><script type='text/javascript'>\n"
+        )
 
-        impl_content[i] += (
-            "var vpassing = {\n"
-            "  x: [")
-        impl_content[i] += ",".join(f"\"{i['date']}\"" for i in hist)
-        impl_content[i] += (
-            "],\n"
-            "  y: [")
-        impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in hist)
+        impl_content[i] += "var vpassing = {\n  x: ["
+        impl_content[i] += ",".join(f'"{i["date"]}"' for i in hist)
+        impl_content[i] += "],\n  y: ["
+        impl_content[i] += ",".join(f'"{i["pass"]}"' for i in hist)
         impl_content[i] += (
             "],\n"
             "  type: 'scatter',\n"
             "  mode: 'lines',\n"
-            "  name: \"Number of elements with passing verification\"\n,"
+            '  name: "Number of elements with passing verification"\n,'
             "  line: {\n"
             f"    color: '{symfem.plotting.Colors.GREEN}',\n"
             "    width: 2"
             "  }\n"
-            "};\n")
+            "};\n"
+        )
 
-        impl_content[i] += (
-            "var vtotal = {\n"
-            "  x: [")
-        impl_content[i] += ",".join(f"\"{i['date']}\"" for i in hist)
-        impl_content[i] += (
-            "],\n"
-            "  y: [")
-        impl_content[i] += ",".join(f"\"{i['total']}\"" for i in hist)
+        impl_content[i] += "var vtotal = {\n  x: ["
+        impl_content[i] += ",".join(f'"{i["date"]}"' for i in hist)
+        impl_content[i] += "],\n  y: ["
+        impl_content[i] += ",".join(f'"{i["total"]}"' for i in hist)
         impl_content[i] += (
             "],\n"
             "  type: 'scatter',\n"
             "  mode: 'lines',\n"
-            "  name: \"Number of elements implemented\"\n,"
+            '  name: "Number of elements implemented"\n,'
             "  line: {\n"
             "    dash: 'dash',\n"
             "    color: '#000000',\n"
             "    width: 3\n"
             "  }\n"
-            "};\n")
+            "};\n"
+        )
 
         plotme = "vtotal, vpassing"
 
         green_hist = [h for h in hist if h["pass"] == h["total"]]
         if len(green_hist) > 0:
-            impl_content[i] += (
-                "var vpassing_green = {\n"
-                "  x: [")
-            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in green_hist)
-            impl_content[i] += (
-                "],\n"
-                "  y: [")
-            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in green_hist)
+            impl_content[i] += "var vpassing_green = {\n  x: ["
+            impl_content[i] += ",".join(f'"{i["date"]}"' for i in green_hist)
+            impl_content[i] += "],\n  y: ["
+            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in green_hist)
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
@@ -747,19 +860,16 @@ for i in impl_content:
                 f"    color: '{symfem.plotting.Colors.GREEN}',\n"
                 "    size: 8"
                 "  }\n"
-                "};\n")
+                "};\n"
+            )
             plotme += ", vpassing_green"
 
         amber_hist = [h for h in hist if h["total"] / 2 <= h["pass"] < h["total"]]
         if len(amber_hist) > 0:
-            impl_content[i] += (
-                "var vpassing_amber = {\n"
-                "  x: [")
-            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in amber_hist)
-            impl_content[i] += (
-                "],\n"
-                "  y: [")
-            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in amber_hist)
+            impl_content[i] += "var vpassing_amber = {\n  x: ["
+            impl_content[i] += ",".join(f'"{i["date"]}"' for i in amber_hist)
+            impl_content[i] += "],\n  y: ["
+            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in amber_hist)
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
@@ -768,19 +878,16 @@ for i in impl_content:
                 f"    color: '{symfem.plotting.Colors.ORANGE}',\n"
                 "    size: 8"
                 "  }\n"
-                "};\n")
+                "};\n"
+            )
             plotme += ", vpassing_amber"
 
         red_hist = [h for h in hist if h["pass"] < h["total"] / 2]
         if len(red_hist) > 0:
-            impl_content[i] += (
-                "var vpassing_red = {\n"
-                "  x: [")
-            impl_content[i] += ",".join(f"\"{i['date']}\"" for i in red_hist)
-            impl_content[i] += (
-                "],\n"
-                "  y: [")
-            impl_content[i] += ",".join(f"\"{i['pass']}\"" for i in red_hist)
+            impl_content[i] += "var vpassing_red = {\n  x: ["
+            impl_content[i] += ",".join(f'"{i["date"]}"' for i in red_hist)
+            impl_content[i] += "],\n  y: ["
+            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in red_hist)
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
@@ -789,7 +896,8 @@ for i in impl_content:
                 "    color: '#FF0000',\n"
                 "    size: 8"
                 "  }\n"
-                "};\n")
+                "};\n"
+            )
             plotme += ", vpassing_red"
 
         impl_content[i] += (
@@ -822,13 +930,18 @@ for i in impl_content:
         "<table style='margin:auto' class='bordered align-left'>"
         "<thead>"
         "<tr><td>Element</td><td>Example</td><td></td></tr>"
-        "</thead>")
+        "</thead>"
+    )
 vs = []
 for i in verifications:
     if i != "symfem":
         vs.append(i)
-        content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        content += (
+            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        )
+        long_content += (
+            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        )
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
@@ -860,19 +973,29 @@ for e in categoriser.elements:
                         examples.append(eg)
     sorted_examples = []
     for cell in [
-        "interval", "triangle", "quadrilateral", "tetrahedron", "hexahedron",
-        "prism", "pyramid", "dual"
+        "interval",
+        "triangle",
+        "quadrilateral",
+        "tetrahedron",
+        "hexahedron",
+        "prism",
+        "pyramid",
+        "dual",
     ]:
-        sorted_examples += sorted([i for i in examples if i.startswith(cell)],
-                                  key=lambda i: ",".join(i.split(",")[:0:-1]))
+        sorted_examples += sorted(
+            [i for i in examples if i.startswith(cell)],
+            key=lambda i: ",".join(i.split(",")[:0:-1]),
+        )
     assert len(examples) == len(sorted_examples)
     long_row = ""
     impl_rows: typing.Dict[str, typing.List[str]] = {i: [] for i in impl_content}
     for eg in sorted_examples:
         long_row += "<tr>"
         if long_row == "<tr>":
-            long_row += (f"<td rowspan='{len(sorted_examples)}'>"
-                         f"<a href='/elements/{e.filename}.html'>{e.html_name}</a></td>")
+            long_row += (
+                f"<td rowspan='{len(sorted_examples)}'>"
+                f"<a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
+            )
         long_row += f"<td style='font-size:80%'>{eg}</td>"
         for i in vs:
             long_row += "<td>"
@@ -880,12 +1003,14 @@ for e in categoriser.elements:
                 result = verification[e.filename][i]
                 if eg in result["pass"]:
                     impl_rows[i].append(
-                        f"<td style='font-size:80%'>{eg}</td><td>{green_check}</td>")
+                        f"<td style='font-size:80%'>{eg}</td><td>{green_check}</td>"
+                    )
                     long_row += green_check
                 elif eg in result["fail"]:
                     long_row += red_check
                     impl_rows[i].append(
-                        f"<td style='font-size:80%'>{eg}</td><td>{red_check}</td>")
+                        f"<td style='font-size:80%'>{eg}</td><td>{red_check}</td>"
+                    )
                 else:
                     long_row += blue_minus
             else:
@@ -897,7 +1022,8 @@ for e in categoriser.elements:
         if len(i_rows) > 0:
             impl_content[i] += (
                 f"<tr><td rowspan='{len(i_rows)}'>"
-                f"<a href='/elements/{e.filename}.html'>{e.html_name}</a></td>")
+                f"<a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
+            )
             impl_content[i] += "</tr><tr>".join(i_rows)
             impl_content[i] += "</tr>"
 
@@ -917,7 +1043,8 @@ c = (
     "<li>The number of DOFs associated with each sub-entity of the cell is the same as Symfem.</li>"
     "<li>The element has the same continuity between cells as Symfem.</li>"
     "</ul>"
-    "The symbols in the table have the following meaning:")
+    "The symbols in the table have the following meaning:"
+)
 content += c
 content += (
     "<table style='margin:auto' class='bordered align-left'>"
@@ -927,7 +1054,8 @@ content += (
     f"<tr><td>{red_check}</td><td>Verification fails for all examples</td></tr>"
     "</table>"
     "<br /><br />You can view more details of which examples pass and fail on the "
-    "<a href='/verification/detailed.html'>verification with full detail page</a>.")
+    "<a href='/verification/detailed.html'>verification with full detail page</a>."
+)
 long_content += c
 long_content += (
     "<table style='margin:auto' class='bordered align-left'>"
@@ -936,7 +1064,8 @@ long_content += (
     f"<tr><td>{blue_minus}</td><td>Example not implemented</td></tr>"
     "</table>"
     "<br /><br />You can view a summarised version of this information on the "
-    "<a href='/verification/index.html'>verification page</a>.")
+    "<a href='/verification/index.html'>verification page</a>."
+)
 for i in impl_content:
     impl_content[i] += c
     impl_content[i] += (
@@ -945,11 +1074,14 @@ for i in impl_content:
         f"<tr><td>{red_check}</td><td>Verification fails</td></tr>"
         "</table>"
         "<br /><br />You can information about verification of other libraries on the "
-        "<a href='/verification/index.html'>verification page</a>.")
+        "<a href='/verification/index.html'>verification page</a>."
+    )
 if os.path.isfile(settings.verification_json):
     os.system(f"cp {settings.verification_json} {settings.html_path}/verification.json")
-    c = ("<br /><br />The verification data is also available "
-         "<a href='/verification.json' target='new'>in JSON format</a>.")
+    c = (
+        "<br /><br />The verification data is also available "
+        "<a href='/verification.json' target='new'>in JSON format</a>."
+    )
     content += c
     long_content += c
 
@@ -968,7 +1100,8 @@ for i in verifications:
         "<td style='font-size:80%;font-family:monospace'>"
         f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
         f"({url})</td>"
-        "</tr>")
+        "</tr>"
+    )
     if i in impl_content:
         impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
         impl_content[i] += (
@@ -980,15 +1113,20 @@ for i in verifications:
             f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
             f"(https://defelement.org/verification/{i}.html)</td>"
             "</tr>"
-            "</table>")
+            "</table>"
+        )
 
 c += "</table>"
 content += c
 long_content += c
-write_html_page(os.path.join(settings.html_path, "verification/index.html"),
-                "Verification", content)
-write_html_page(os.path.join(settings.html_path, "verification/detailed.html"),
-                "Verification: full detail", long_content)
+write_html_page(
+    os.path.join(settings.html_path, "verification/index.html"), "Verification", content
+)
+write_html_page(
+    os.path.join(settings.html_path, "verification/detailed.html"),
+    "Verification: full detail",
+    long_content,
+)
 with open(os.path.join(settings.html_path, "verification.html"), "w") as f:
     f.write(make_html_forwarding_page("/verification/"))
 
@@ -996,10 +1134,13 @@ for i in verifications:
     if i != "symfem":
         write_html_page(
             os.path.join(settings.html_path, f"verification/{i}.html"),
-            f"{implementations[i].name} verification", impl_content[i],
+            f"{implementations[i].name} verification",
+            impl_content[i],
             extra_head=(
                 "<script src='https://cdn.plot.ly/plotly-2.27.0.min.js' charset='utf-8' "
-                "type='text/javascript'></script>"))
+                "type='text/javascript'></script>"
+            ),
+        )
 
 
 def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str = ""):
@@ -1012,15 +1153,22 @@ def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str 
     for eg in egs:
         start = datetime.now()
 
-        element = create_element(*eg['args'], **eg['kwargs'])
+        element = create_element(*eg["args"], **eg["kwargs"])
 
         markup_example(
-            element, eg['html_name'], f"/elements/{eg['element_filename']}",
-            eg['filename'], eg['legacy-filenames'] if "legacy-filenames" in eg else [])
+            element,
+            eg["html_name"],
+            f"/elements/{eg['element_filename']}",
+            eg["filename"],
+            eg["legacy-filenames"] if "legacy-filenames" in eg else [],
+        )
 
         end = datetime.now()
-        print(f"  {process}{eg['args'][0]} {eg['args'][1]} {eg['args'][2]}"
-              f" (completed in {(end - start).total_seconds():.2f}s)", flush=True)
+        print(
+            f"  {process}{eg['args'][0]} {eg['args'][1]} {eg['args'][2]}"
+            f" (completed in {(end - start).total_seconds():.2f}s)",
+            flush=True,
+        )
 
 
 # Make example pages
@@ -1037,7 +1185,10 @@ else:
     for pindex in range(p):
         process = multiprocessing.Process(
             target=build_examples,
-            args=(all_examples[n_egs * pindex // p: n_egs * (pindex + 1) // p], f"[{pindex}] ")
+            args=(
+                all_examples[n_egs * pindex // p : n_egs * (pindex + 1) // p],
+                f"[{pindex}] ",
+            ),
         )
         jobs.append(process)
 
@@ -1071,8 +1222,12 @@ content += "}\n"
 content += "function do_filter_cat(){\n"
 content += "    if(document.getElementById('check-cat-all').checked){\n"
 content += "        if("
-content += " || ".join([f"document.getElementById('check-cat-{c}').checked"
-                        for c in categoriser.categories])
+content += " || ".join(
+    [
+        f"document.getElementById('check-cat-{c}').checked"
+        for c in categoriser.categories
+    ]
+)
 content += "){\n"
 content += "            document.getElementById('check-cat-all').checked = false\n"
 content += "        }\n"
@@ -1082,8 +1237,12 @@ content += "}\n"
 content += "function do_filter_ref(){\n"
 content += "    if(document.getElementById('check-ref-all').checked){\n"
 content += "        if("
-content += " || ".join([f"document.getElementById('check-ref-{r}').checked"
-                        for r in categoriser.references])
+content += " || ".join(
+    [
+        f"document.getElementById('check-ref-{r}').checked"
+        for r in categoriser.references
+    ]
+)
 content += "){\n"
 content += "            document.getElementById('check-ref-all').checked = false\n"
 content += "        }\n"
@@ -1098,7 +1257,6 @@ content += "        if(document.getElementById('check-ref-all').checked){\n"
 content += "            ref_show = true\n"
 content += "        } else {\n"
 for r in categoriser.references:
-
     content += f"            if(document.getElementById('check-ref-{r}').checked"
     content += f" && els[i].id.indexOf('ref-{r}') != -1){{ref_show = true}}\n"
 content += "        }\n"
@@ -1107,7 +1265,6 @@ content += "        if(document.getElementById('check-cat-all').checked){\n"
 content += "            cat_show = true\n"
 content += "        } else {\n"
 for c in categoriser.categories:
-
     content += f"            if(document.getElementById('check-cat-{c}').checked"
     content += f" && els[i].id.indexOf('cat-{c}') != -1){{cat_show = true}}\n"
 content += "        }\n"
@@ -1155,50 +1312,74 @@ content += (
     "&nbsp;Show alternative names</label> "
     "<label><input type='checkbox' id='show-abrv-names' onchange='do_filter()'>"
     "&nbsp;Show abbreviated names</label> "
-    "</td></tr>")
+    "</td></tr>"
+)
 content += "<tr><td>Reference&nbsp;cells</td><td>"
 content += "<label><input type='checkbox' checked id='check-ref-all' onchange='do_filter_refall()'"
 content += ">&nbsp;show all</label> "
 for r in categoriser.references:
-    content += f"<label><input type='checkbox' id='check-ref-{r}' onchange='do_filter_ref()'"
+    content += (
+        f"<label><input type='checkbox' id='check-ref-{r}' onchange='do_filter_ref()'"
+    )
     content += f">&nbsp;{r}</label> "
 content += "</td></tr>"
 content += "<tr><td>Categories</td><td>"
 content += "<label><input type='checkbox' checked id='check-cat-all'onchange='do_filter_catall()'"
 content += ">&nbsp;show all</label> "
 for c in categoriser.categories:
-    content += f"<label><input type='checkbox' id='check-cat-{c}'onchange='do_filter_cat()'"
+    content += (
+        f"<label><input type='checkbox' id='check-cat-{c}'onchange='do_filter_cat()'"
+    )
     content += f">&nbsp;{categoriser.get_category_name(c)}</label> "
 content += "</td></tr>"
 content += "</table>\n"
 # Write element list
 elementlist = []
 for e in categoriser.elements:
-    id = " ".join([f"ref-{r}" for r in e.reference_cells(False)]
-                  + [f"cat-{c}" for c in e.categories(False, False)])
-    elementlist.append((e.html_name.lower(),
-                        f"<li class='element-on-list' id='{id} name-main'>"
-                        f"<a href='/elements/{e.html_filename}'>{e.html_name}</a></li>"))
+    id = " ".join(
+        [f"ref-{r}" for r in e.reference_cells(False)]
+        + [f"cat-{c}" for c in e.categories(False, False)]
+    )
+    elementlist.append(
+        (
+            e.html_name.lower(),
+            f"<li class='element-on-list' id='{id} name-main'>"
+            f"<a href='/elements/{e.html_filename}'>{e.html_name}</a></li>",
+        )
+    )
     for name in e.alternative_names(False, False, False, True):
-        elementlist.append((name.lower(),
-                            f"<li class='element-on-list' id='{id} name-alt'>"
-                            f"<a href='/elements/{e.html_filename}'>{name}</a></li>"))
+        elementlist.append(
+            (
+                name.lower(),
+                f"<li class='element-on-list' id='{id} name-alt'>"
+                f"<a href='/elements/{e.html_filename}'>{name}</a></li>",
+            )
+        )
     for name in e.short_names(False):
-        elementlist.append((name.lower(),
-                            f"<li class='element-on-list' id='{id} name-abrv'>"
-                            f"<a href='/elements/{e.html_filename}'>{name}</a></li>"))
+        elementlist.append(
+            (
+                name.lower(),
+                f"<li class='element-on-list' id='{id} name-abrv'>"
+                f"<a href='/elements/{e.html_filename}'>{name}</a></li>",
+            )
+        )
 elementlist.sort(key=lambda x: x[0])
 content += "<ul>" + "\n".join([i[1] for i in elementlist]) + "</ul>"
 content += "<script type='text/javascript'>do_filter()</script>"
 
-write_html_page(os.path.join(settings.htmlelement_path, "index.html"),
-                "Index of elements", content)
+write_html_page(
+    os.path.join(settings.htmlelement_path, "index.html"), "Index of elements", content
+)
 
 # Recently updated elements
-rss_icon = ("<span style='color:#FF8800;padding-left:10px'>"
-            "<i class='fa fa-rss' aria-hidden='true'></i></span>")
+rss_icon = (
+    "<span style='color:#FF8800;padding-left:10px'>"
+    "<i class='fa fa-rss' aria-hidden='true'></i></span>"
+)
 content = heading_with_self_ref("h1", "Recent elements")
-content += f"<h2>Recently added elements <a href='/new-elements.xml'>{rss_icon}</a></h2>\n"
+content += (
+    f"<h2>Recently added elements <a href='/new-elements.xml'>{rss_icon}</a></h2>\n"
+)
 content += "<ul>\n"
 for e in categoriser.recently_added(10):
     content += f"<li><a href='/elements/{e.html_filename}'>{e.html_name}</a>"
@@ -1216,17 +1397,29 @@ for e in categoriser.recently_updated(10):
     content += "</li>\n"
 content += "</ul>\n"
 
-write_html_page(os.path.join(settings.htmlindices_path, "recent.html"),
-                "Recent elements", content)
+write_html_page(
+    os.path.join(settings.htmlindices_path, "recent.html"), "Recent elements", content
+)
 
 with open(os.path.join(settings.html_path, "new-elements.xml"), "w") as f:
-    f.write(make_rss(categoriser.recently_added(10), "recently added elements",
-                     "Finite elements that have recently been added to DefElement", "created"))
+    f.write(
+        make_rss(
+            categoriser.recently_added(10),
+            "recently added elements",
+            "Finite elements that have recently been added to DefElement",
+            "created",
+        )
+    )
 
 with open(os.path.join(settings.html_path, "updated-elements.xml"), "w") as f:
-    f.write(make_rss(categoriser.recently_updated(10), "recently updated elements",
-                     "Finite element whose pages on DefElement have recently been updated",
-                     "modified"))
+    f.write(
+        make_rss(
+            categoriser.recently_updated(10),
+            "recently updated elements",
+            "Finite element whose pages on DefElement have recently been updated",
+            "modified",
+        )
+    )
 
 # Category index
 os.mkdir(os.path.join(settings.htmlindices_path, "categories"))
@@ -1235,13 +1428,19 @@ for c in categoriser.categories:
     category_pages = []
     for e in categoriser.elements_in_category(c):
         for name in [e.html_name]:
-            category_pages.append((name.lower(),
-                                   f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>"))
+            category_pages.append(
+                (
+                    name.lower(),
+                    f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>",
+                )
+            )
 
     category_pages.sort(key=lambda x: x[0])
 
-    content += (f"<h2><a href='/lists/categories/{c}.html'>{categoriser.get_category_name(c)}"
-                "</a></h2>\n<ul>")
+    content += (
+        f"<h2><a href='/lists/categories/{c}.html'>{categoriser.get_category_name(c)}"
+        "</a></h2>\n<ul>"
+    )
     content += "".join([i[1] for i in category_pages])
     content += "</ul>"
 
@@ -1250,11 +1449,17 @@ for c in categoriser.categories:
     sub_content += "".join([i[1] for i in category_pages])
     sub_content += "</ul>"
 
-    write_html_page(os.path.join(settings.htmlindices_path, f"categories/{c}.html"),
-                    categoriser.get_category_name(c), sub_content)
+    write_html_page(
+        os.path.join(settings.htmlindices_path, f"categories/{c}.html"),
+        categoriser.get_category_name(c),
+        sub_content,
+    )
 
-write_html_page(os.path.join(settings.htmlindices_path, "categories/index.html"),
-                "Categories", content)
+write_html_page(
+    os.path.join(settings.htmlindices_path, "categories/index.html"),
+    "Categories",
+    content,
+)
 
 # Implementations index
 os.mkdir(os.path.join(settings.htmlindices_path, "implementations"))
@@ -1270,13 +1475,19 @@ for c, info in implementations.items():
                     refs.add(cname)
                     break
         for name in names:
-            category_pages.append((name.lower(),
-                                   f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>"))
+            category_pages.append(
+                (
+                    name.lower(),
+                    f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>",
+                )
+            )
 
     category_pages.sort(key=lambda x: x[0])
 
-    content += (f"<h2><a href='/lists/implementations/{c}.html'>Implemented in {info.name}"
-                "</a></h2>\n<ul>")
+    content += (
+        f"<h2><a href='/lists/implementations/{c}.html'>Implemented in {info.name}"
+        "</a></h2>\n<ul>"
+    )
     content += "".join([i[1] for i in category_pages])
     content += "</ul>"
 
@@ -1284,11 +1495,17 @@ for c, info in implementations.items():
     sub_content += "".join([i[1] for i in category_pages])
     sub_content += "</ul>"
 
-    write_html_page(os.path.join(settings.htmlindices_path, f"implementations/{c}.html"),
-                    f"Implemented in {info.name}", sub_content)
+    write_html_page(
+        os.path.join(settings.htmlindices_path, f"implementations/{c}.html"),
+        f"Implemented in {info.name}",
+        sub_content,
+    )
 
-write_html_page(os.path.join(settings.htmlindices_path, "implementations/index.html"),
-                "Implemented elements", content)
+write_html_page(
+    os.path.join(settings.htmlindices_path, "implementations/index.html"),
+    "Implemented elements",
+    content,
+)
 
 # Reference cells index
 os.mkdir(os.path.join(settings.htmlindices_path, "references"))
@@ -1297,8 +1514,12 @@ for c in categoriser.references:
     refels = []
     for e in categoriser.elements_by_reference(c):
         for name in [e.html_name]:
-            refels.append((name.lower(),
-                           f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>"))
+            refels.append(
+                (
+                    name.lower(),
+                    f"<li><a href='/elements/{e.html_filename}'>{name}</a></li>",
+                )
+            )
 
     refels.sort(key=lambda x: x[0])
 
@@ -1312,26 +1533,39 @@ for c in categoriser.references:
     sub_content = heading_with_self_ref("h1", title)
     sub_content += "<ul>" + "".join([i[1] for i in refels]) + "</ul>"
 
-    write_html_page(os.path.join(settings.htmlindices_path, f"references/{c}.html"),
-                    title, sub_content)
+    write_html_page(
+        os.path.join(settings.htmlindices_path, f"references/{c}.html"),
+        title,
+        sub_content,
+    )
 
-write_html_page(os.path.join(settings.htmlindices_path, "references/index.html"),
-                "Reference cells", content)
+write_html_page(
+    os.path.join(settings.htmlindices_path, "references/index.html"),
+    "Reference cells",
+    content,
+)
 
 # Page showing numbering of references
 content = heading_with_self_ref("h1", "Reference cell numbering")
-content += "<p>This page illustrates the entity numbering used for each reference cell.</p>"
+content += (
+    "<p>This page illustrates the entity numbering used for each reference cell.</p>"
+)
 for cell in categoriser.references.keys():
     if cell == "dual polygon":
         for nsides in [4, 5, 6]:
             content += heading_with_self_ref("h2", f"Dual polygon ({nsides})")
-            content += plotting.plot_reference(symfem.create_reference(f"dual polygon({nsides})"))
+            content += plotting.plot_reference(
+                symfem.create_reference(f"dual polygon({nsides})")
+            )
     else:
         content += heading_with_self_ref("h2", cap_first(cell))
         content += plotting.plot_reference(symfem.create_reference(cell))
 
-write_html_page(os.path.join(settings.html_path, "reference_numbering.html"),
-                "Reference cell numbering", content)
+write_html_page(
+    os.path.join(settings.html_path, "reference_numbering.html"),
+    "Reference cell numbering",
+    content,
+)
 
 
 # Families
@@ -1352,12 +1586,17 @@ def linked_names(dim: str, fname: str, cell: str) -> str:
             out.append(
                 f"<a href='/families/{fname}.html'>"
                 "\\(" + cname(data[key], cell=cell, dim=dim) + "\\)"
-                "</a>")
+                "</a>"
+            )
     return ", ".join(out)
 
 
-def de_rham_row(family: typing.Dict[str, typing.Dict[str, typing.List[str]]],
-                fname: str, cell: str, diff_form_deg: typing.List[str]) -> str:
+def de_rham_row(
+    family: typing.Dict[str, typing.Dict[str, typing.List[str]]],
+    fname: str,
+    cell: str,
+    diff_form_deg: typing.List[str],
+) -> str:
     """Create HTML string of FEs.
 
     Args:
@@ -1372,7 +1611,7 @@ def de_rham_row(family: typing.Dict[str, typing.Dict[str, typing.List[str]]],
     row = ""
     if all(i in family[cell] for i in diff_form_deg):
         row += "<tr>"
-        row += f"<td>{linked_names(str(len(diff_form_deg)-1), fname, cell)}</td>"
+        row += f"<td>{linked_names(str(len(diff_form_deg) - 1), fname, cell)}</td>"
         for o in diff_form_deg:
             row += f"<td><a href='/elements/{family[cell][o][1]}'"
             row += " style='text-decoration:none'>"
@@ -1402,7 +1641,6 @@ for fname, data in categoriser.families["de-rham"].items():
     sub_content += "<ul>"
     for cell in ["simplex", "tp"]:
         if cell in family:
-
             for o in ["0", "1", "d-1", "d"]:
                 if o in family[cell]:
                     sub_content += f"<li><a href='/elements/{family[cell][o][1]}'"
@@ -1419,8 +1657,11 @@ for fname, data in categoriser.families["de-rham"].items():
             de_rham_2d_hcurl.append(de_rham_row(family, fname, cell, ["0", "1", "d"]))
         sub_content += "</ul>"
 
-    write_html_page(os.path.join(settings.htmlfamilies_path, f"{fname}.html"),
-                    "The " + " or ".join(cnames) + " family", sub_content)
+    write_html_page(
+        os.path.join(settings.htmlfamilies_path, f"{fname}.html"),
+        "The " + " or ".join(cnames) + " family",
+        sub_content,
+    )
 
 content = heading_with_self_ref("h1", "Complex families")
 content += "<p>You can find some information about how these familes are defined "
@@ -1440,8 +1681,12 @@ content += "</tr>\n"
 content += "\n".join(de_rham_3d)
 content += "</table>"
 content += heading_with_self_ref("h2", "De Rham complex in 2D")
-content += "<p>In 2D, \\(\\textbf{H}(\\text{div})\\) and \\(\\textbf{H}(\\text{curl})\\) "
-content += "are isomorphic via a 90 degree rotation \\(R\\). This means that we can define "
+content += (
+    "<p>In 2D, \\(\\textbf{H}(\\text{div})\\) and \\(\\textbf{H}(\\text{curl})\\) "
+)
+content += (
+    "are isomorphic via a 90 degree rotation \\(R\\). This means that we can define "
+)
 content += "the de Rham complex in two ways.</p>"
 content += "<p>One variant uses \\(\\textbf{H}(\\text{div})\\) and the vector-valued "
 content += "\\(\\textbf{curl}\\) operator, "
@@ -1458,10 +1703,14 @@ content += "<td>\\(L_2\\)</td>"
 content += "</tr>\n"
 content += "\n".join(de_rham_2d_hdiv)
 content += "</table>"
-content += "<p>The second variant uses \\(\\textbf{H}(\\text{curl})\\) and the scalar-valued "
+content += (
+    "<p>The second variant uses \\(\\textbf{H}(\\text{curl})\\) and the scalar-valued "
+)
 content += "\\(\\text{curl}\\) operator, "
 content += "\\(\\text{curl} \\, \\mathbf{u} = \\partial_x u_y - \\partial_y u_x\\). "
-content += "Note that \\(\\text{curl} \\, \\mathbf{u} = \\nabla\\cdot R \\mathbf{u}\\).</p>"
+content += (
+    "Note that \\(\\text{curl} \\, \\mathbf{u} = \\nabla\\cdot R \\mathbf{u}\\).</p>"
+)
 content += "<table class='families'>\n"
 content += "<tr>"
 content += "<td><small>Name(s)</small></td>"
@@ -1478,19 +1727,29 @@ content += "double element diagrams in the orange boxes in the "
 content += "<a href=https://www-users.cse.umn.edu/~arnold/femtable>"
 content += "Periodic table of the finite elements</a>. That is also why the "
 content += "boxes are orange, and not red nor yellow as in 3D.</p>"
-write_html_page(os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content)
+write_html_page(
+    os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content
+)
 
 # List of lists
 content = heading_with_self_ref("h1", "Lists of elements")
 content += "<ul>\n"
 content += "<li><a href='/lists/categories'>Finite elements by category</a></li>\n"
-content += "<li><a href='/lists/references'>Finite elements by reference cell</a></li>\n"
-content += "<li><a href='/lists/recent.html'>Recently added/updated finite elements</a></li>\n"
+content += (
+    "<li><a href='/lists/references'>Finite elements by reference cell</a></li>\n"
+)
+content += (
+    "<li><a href='/lists/recent.html'>Recently added/updated finite elements</a></li>\n"
+)
 content += "</ul>"
-write_html_page(os.path.join(settings.htmlindices_path, "index.html"), "Lists of elements", content)
+write_html_page(
+    os.path.join(settings.htmlindices_path, "index.html"), "Lists of elements", content
+)
 
 # Site map
-sitemap[html_local(os.path.join(settings.html_path, "sitemap.html"))] = "List of all pages"
+sitemap[html_local(os.path.join(settings.html_path, "sitemap.html"))] = (
+    "List of all pages"
+)
 
 
 def list_pages(folder: str) -> str:
@@ -1507,7 +1766,7 @@ def list_pages(folder: str) -> str:
         items.append(("A", "<li><a href='/index.html'>Front page</a>"))
     for i, j in sitemap.items():
         if i.startswith(folder):
-            file = i[len(folder) + 1:]
+            file = i[len(folder) + 1 :]
             if "/" in file:
                 subfolder, subfile = file.split("/", 1)
                 if subfile == "index.html":

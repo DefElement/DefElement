@@ -3,14 +3,21 @@
 import typing
 
 from defelement.implementations.basix import BasixImplementation
-from defelement.implementations.core import Array, Element, Implementation, parse_example
+from defelement.implementations.core import (
+    Array,
+    Element,
+    Implementation,
+    parse_example,
+)
 
 
 class BasixUFLImplementation(Implementation):
     """Basix.UFL implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -20,7 +27,9 @@ class BasixUFLImplementation(Implementation):
         Returns:
             Formatted implementation string
         """
-        out = BasixImplementation.format(string, {i: j for i, j in params.items() if i != "shape"})
+        out = BasixImplementation.format(
+            string, {i: j for i, j in params.items() if i != "shape"}
+        )
         if "shape" in params:
             out += f", shape={params['shape']}"
         return out
@@ -42,14 +51,17 @@ class BasixUFLImplementation(Implementation):
 
             try:
                 basix_name, input_deg, params = element.get_implementation_string(
-                    "basix.ufl", ref, deg, variant)
+                    "basix.ufl", ref, deg, variant
+                )
             except NotImplementedError:
                 continue
 
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
             out += "element = basix.ufl.element("
-            out += f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {input_deg}"
+            out += (
+                f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {input_deg}"
+            )
             if "lagrange_variant" in params:
                 out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
             if "dpc_variant" in params:
@@ -71,7 +83,9 @@ class BasixUFLImplementation(Implementation):
     @staticmethod
     def verify(
         element: Element, example: str
-    ) -> typing.Tuple[typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]]:
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
         """Get verification data.
 
         Args:
@@ -89,12 +103,15 @@ class BasixUFLImplementation(Implementation):
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
         basix_name, input_deg, params = element.get_implementation_string(
-            "basix.ufl", ref, deg, variant)
+            "basix.ufl", ref, deg, variant, any_variant=True
+        )
         kwargs = {}
         if "lagrange_variant" in params:
-            kwargs["lagrange_variant"] = getattr(basix.LagrangeVariant, params['lagrange_variant'])
+            kwargs["lagrange_variant"] = getattr(
+                basix.LagrangeVariant, params["lagrange_variant"]
+            )
         if "dpc_variant" in params:
-            kwargs["dpc_variant"] = getattr(basix.DPCVariant, params['dpc_variant'])
+            kwargs["dpc_variant"] = getattr(basix.DPCVariant, params["dpc_variant"])
         if "discontinuous" in params:
             kwargs["discontinuous"] = params["discontinuous"] == "True"
         if "shape" in params:
@@ -105,13 +122,20 @@ class BasixUFLImplementation(Implementation):
             else:
                 dim = 3
             kwargs["shape"] = tuple(
-                dim if i == "dim" else int(i) for i in params["shape"][1:-1].split(",") if i != "")
+                dim if i == "dim" else int(i)
+                for i in params["shape"][1:-1].split(",")
+                if i != ""
+            )
 
         e = basix.ufl.element(
-            getattr(basix.ElementFamily, basix_name), getattr(basix.CellType, ref),
-            input_deg, **kwargs)
+            getattr(basix.ElementFamily, basix_name),
+            getattr(basix.CellType, ref),
+            input_deg,
+            **kwargs,
+        )
         return e.entity_dofs, lambda points: e.tabulate(0, points)[0].reshape(
-            points.shape[0], e.reference_value_size, -1)
+            points.shape[0], e.reference_value_size, -1
+        )
 
     id = "basix.ufl"
     name = "Basix.UFL"

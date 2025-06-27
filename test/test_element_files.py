@@ -34,7 +34,9 @@ def test_parse():
     assert set(docs["all"]) == set(docs["req"] + docs["opt"])
 
 
-@pytest.mark.parametrize("e", [e for e in os.listdir(element_path) if e.endswith(".def")])
+@pytest.mark.parametrize(
+    "e", [e for e in os.listdir(element_path) if e.endswith(".def")]
+)
 def test_element_page(e):
     with open(os.path.join(element_path, e)) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
@@ -48,7 +50,9 @@ def test_element_page(e):
         assert key in data
 
 
-@pytest.mark.parametrize("e", [e for e in os.listdir(element_path) if e.endswith(".def")])
+@pytest.mark.parametrize(
+    "e", [e for e in os.listdir(element_path) if e.endswith(".def")]
+)
 def test_symfem_no_degreemap(e):
     def no_degreemap(impl):
         if isinstance(impl, dict):

@@ -102,7 +102,10 @@ settings.re_extras = [
     (r"{{plot::([^,]+),([^,]+),([0-9]+)::([0-9]+)}}", plot_single_element),
     (r"{{reference::([^}]+)}}", plot_reference),
     (r"{{img::([^}]+)}}", plot_img),
-    (r"{{symbols\.([^}\(]+)\(([0-9]+)\)}}", lambda m: getattr(symbols, m[1])(int(m[2]))),
+    (
+        r"{{symbols\.([^}\(]+)\(([0-9]+)\)}}",
+        lambda m: getattr(symbols, m[1])(int(m[2])),
+    ),
     (r"{{symbols\.([^}]+)}}", lambda m: getattr(symbols, m[1])),
 ]
 settings.str_extras = [

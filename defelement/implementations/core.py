@@ -9,6 +9,7 @@ if typing.TYPE_CHECKING:
     from numpy.typing import NDArray
 
     from defelement.element import Element
+
     Array = NDArray[float64]
 else:
     Array = typing.Any
@@ -20,7 +21,9 @@ class Implementation(ABC):
 
     @staticmethod
     @abstractmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -46,7 +49,9 @@ class Implementation(ABC):
     @staticmethod
     def verify(
         element: Element, example: str
-    ) -> typing.Tuple[typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]]:
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
         """Get verification data.
 
         Args:
@@ -59,9 +64,7 @@ class Implementation(ABC):
         raise NotImplementedError()
 
     @staticmethod
-    def notes(
-        element: Element
-    ) -> typing.List[str]:
+    def notes(element: Element) -> typing.List[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -73,9 +76,7 @@ class Implementation(ABC):
         return []
 
     @staticmethod
-    def references(
-        element: Element
-    ) -> typing.List[typing.Dict[str, str]]:
+    def references(element: Element) -> typing.List[typing.Dict[str, str]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:
@@ -131,10 +132,12 @@ def _parse_value(v: str) -> ValueType:
 
 
 def parse_example(
-    e: str
+    e: str,
 ) -> typing.Tuple[
-    str, int, typing.Optional[str],
-    typing.Dict[str, typing.Union[int, str, typing.List[ValueType]]]
+    str,
+    int,
+    typing.Optional[str],
+    typing.Dict[str, typing.Union[int, str, typing.List[ValueType]]],
 ]:
     """Parse an example.
 

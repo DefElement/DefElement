@@ -23,8 +23,9 @@ def to_tex(
         Function,
         sympy.core.expr.Expr,
         typing.List[typing.Union[Function, sympy.core.expr.Expr]],
-        typing.Tuple[typing.Union[Function, sympy.core.expr.Expr], ...]],
-    tfrac: bool = False
+        typing.Tuple[typing.Union[Function, sympy.core.expr.Expr], ...],
+    ],
+    tfrac: bool = False,
 ) -> str:
     """Convert function to TeX.
 
@@ -46,8 +47,11 @@ def to_tex(
             return to_tex(sub_f)
 
     if isinstance(f, (list, tuple)):
-        return "\\left(\\begin{array}{c}" + "\\\\".join(
-            ["\\displaystyle " + to_tex(i) for i in f]) + "\\end{array}\\right)"
+        return (
+            "\\left(\\begin{array}{c}"
+            + "\\\\".join(["\\displaystyle " + to_tex(i) for i in f])
+            + "\\end{array}\\right)"
+        )
     elif isinstance(f, Function):
         out = f.as_tex()
     else:
@@ -76,7 +80,9 @@ def entity_name(dim: int) -> str:
     return ["vertex", "edge", "face", "volume"][dim]
 
 
-def describe_dof(element: FiniteElement, d: BaseFunctional) -> typing.Tuple[str, typing.List[str]]:
+def describe_dof(
+    element: FiniteElement, d: BaseFunctional
+) -> typing.Tuple[str, typing.List[str]]:
     """Describe a DOF.
 
     Args:
@@ -98,7 +104,7 @@ def describe_dof(element: FiniteElement, d: BaseFunctional) -> typing.Tuple[str,
             if dim == 1:
                 new_s += defelement_t[0]
             else:
-                new_s += ','.join(defelement_t[:dim])
+                new_s += ",".join(defelement_t[:dim])
             new_s += f"\\) is a parametrisation of \\({d.entity_tex()}\\)"
             symb.append(new_s)
             break
@@ -107,7 +113,10 @@ def describe_dof(element: FiniteElement, d: BaseFunctional) -> typing.Tuple[str,
 
 
 def markup_example(
-    element: FiniteElement, html_name: str, element_page: str, fname: str,
+    element: FiniteElement,
+    html_name: str,
+    element_page: str,
+    fname: str,
     legacy_filenames: typing.List[str] = [],
 ) -> str:
     """Markup examples.
@@ -123,7 +132,8 @@ def markup_example(
         Example as HTML
     """
     eg = heading_with_self_ref(
-        "h1", f"Degree {element.order} {html_name} on a {element.reference.name}")
+        "h1", f"Degree {element.order} {html_name} on a {element.reference.name}"
+    )
     eg += "\n"
     eg += f"<a href='{element_page}'><small>&#9664; Back to {html_name} definition page"
     eg += "</a></small>\n"
@@ -136,7 +146,9 @@ def markup_example(
     if isinstance(element, CiarletElement) and element.reference.name != "dual polygon":
         # Polynomial set
         eg += f"<li>\\({symbols.polyset}\\) is spanned by: "
-        eg += ", ".join(["\\(" + to_tex(i) + "\\)" for i in element.get_polynomial_basis()])
+        eg += ", ".join(
+            ["\\(" + to_tex(i) + "\\)" for i in element.get_polynomial_basis()]
+        )
         eg += "</li>\n"
 
         # Dual basis
@@ -144,7 +156,10 @@ def markup_example(
         eg += f"...,{symbols.functional}_{{{len(element.dofs) - 1}}}\\}}\\)</li>\n"
 
     # Basis functions
-    if not isinstance(element, CiarletElement) or element.reference.name == "dual polygon":
+    if (
+        not isinstance(element, CiarletElement)
+        or element.reference.name == "dual polygon"
+    ):
         eg += "<li>Basis functions:</li>"
     else:
         eg += "<li>Functionals and basis functions:</li>"
@@ -180,9 +195,13 @@ def markup_example(
             if element.range_dim == 1:
                 basis += f"\\(\\displaystyle {symbols.basis_function}_{{{dof_i}}} = "
             elif element.range_shape is None or len(element.range_shape) == 1:
-                basis += f"\\(\\displaystyle {symbols.vector_basis_function}_{{{dof_i}}} = "
+                basis += (
+                    f"\\(\\displaystyle {symbols.vector_basis_function}_{{{dof_i}}} = "
+                )
             else:
-                basis += f"\\(\\displaystyle {symbols.matrix_basis_function}_{{{dof_i}}} = "
+                basis += (
+                    f"\\(\\displaystyle {symbols.matrix_basis_function}_{{{dof_i}}} = "
+                )
             basis += to_tex(func) + "\\)"
             if isinstance(element, CiarletElement):
                 if len(element.dofs) > 0:
@@ -202,11 +221,15 @@ def markup_example(
 
     eg += basis
 
-    with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", fname)), "w") as f:
+    with open(
+        os.path.join(os.path.join(settings.htmlelement_path, "examples", fname)), "w"
+    ) as f:
         f.write(make_html_page(eg))
 
     for i in legacy_filenames:
-        with open(os.path.join(os.path.join(settings.htmlelement_path, "examples", i)), "w") as f:
+        with open(
+            os.path.join(os.path.join(settings.htmlelement_path, "examples", i)), "w"
+        ) as f:
             f.write(make_html_forwarding_page(f"/elements/examples/{fname}"))
 
     return f"/elements/examples/{fname}"

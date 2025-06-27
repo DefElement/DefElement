@@ -4,7 +4,11 @@ import typing
 
 
 def arnold_logg_name(
-    family: str, r: str = "r", cell: typing.Optional[str] = None, degree: str = "k", dim: str = "d"
+    family: str,
+    r: str = "r",
+    cell: typing.Optional[str] = None,
+    degree: str = "k",
+    dim: str = "d",
 ) -> str:
     """Get the name used in the Periodic Table of Finite Elements.
 
@@ -34,7 +38,11 @@ def arnold_logg_name(
 
 
 def cockburn_fu_name(
-    family: str, r: str = "r", cell: typing.Optional[str] = None, degree: str = "k", dim: str = "d"
+    family: str,
+    r: str = "r",
+    cell: typing.Optional[str] = None,
+    degree: str = "k",
+    dim: str = "d",
 ) -> str:
     """Get the name used in the Cockburn-Fu paper.
 
@@ -65,7 +73,11 @@ def cockburn_fu_name(
 
 
 def custom_name(
-    family: str, r: str = "r", cell: typing.Optional[str] = None, degree: str = "k", dim: str = "d"
+    family: str,
+    r: str = "r",
+    cell: typing.Optional[str] = None,
+    degree: str = "k",
+    dim: str = "d",
 ):
     """Get a custom name.
 
@@ -98,7 +110,7 @@ arnold_logg_reference = {
     "year": "2014",
     "volume": "47",
     "number": "9",
-    "url": "https://www.siam.org/publications/siam-news/issues/volume-47-number-09-november-2014/"
+    "url": "https://www.siam.org/publications/siam-news/issues/volume-47-number-09-november-2014/",
 }
 
 cockburn_fu_reference = {
@@ -110,7 +122,7 @@ cockburn_fu_reference = {
     "pagestart": "1650",
     "pageend": "1688",
     "year": "2017",
-    "doi": "10.1137/16M1073352"
+    "doi": "10.1137/16M1073352",
 }
 
 keys_and_names = [

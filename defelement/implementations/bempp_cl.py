@@ -9,7 +9,9 @@ class BemppClImplementation(Implementation):
     """Bempp-cl implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -19,7 +21,7 @@ class BemppClImplementation(Implementation):
         Returns:
             Formatted implementation string
         """
-        return f"\"{string}\""
+        return f'"{string}"'
 
     @staticmethod
     def example(element: Element) -> str:
@@ -40,14 +42,15 @@ class BemppClImplementation(Implementation):
 
             try:
                 bempp_name, input_deg, params = element.get_implementation_string(
-                    "bempp-cl", ref, deg, variant)
+                    "bempp-cl", ref, deg, variant
+                )
             except NotImplementedError:
                 continue
 
             out += "\n\n"
             out += f"# Create {element.name} degree {deg}\n"
             out += "element = bempp_cl.api.function_space(grid, "
-            out += f"\"{bempp_name}\", {input_deg})"
+            out += f'"{bempp_name}", {input_deg})'
         return out
 
     id = "bempp-cl"

@@ -4,7 +4,12 @@ import typing
 
 import sympy
 
-from defelement.implementations.core import Array, Element, Implementation, parse_example
+from defelement.implementations.core import (
+    Array,
+    Element,
+    Implementation,
+    parse_example,
+)
 
 # TODO make this a FIAT attribute
 true_space_dimension = {
@@ -20,7 +25,9 @@ class FIATImplementation(Implementation):
     """FIAT implementation."""
 
     @staticmethod
-    def format(string: typing.Optional[str], params: typing.Dict[str, typing.Any]) -> str:
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
         """Format implementation string.
 
         Args:
@@ -37,7 +44,7 @@ class FIATImplementation(Implementation):
                 if not started:
                     out += "(..."
                     started = True
-                out += f", {p}=\"{v}\""
+                out += f', {p}="{v}"'
             elif p in ["subdegree", "reduced"]:
                 if not started:
                     out += "(..."
@@ -66,14 +73,15 @@ class FIATImplementation(Implementation):
 
             try:
                 fiat_name, input_deg, params = element.get_implementation_string(
-                    "fiat", ref, deg, variant)
+                    "fiat", ref, deg, variant
+                )
             except NotImplementedError:
                 continue
 
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg}\n"
             if ref in ["interval", "triangle", "tetrahedron"]:
-                cell = f"FIAT.ufc_cell(\"{ref}\")"
+                cell = f'FIAT.ufc_cell("{ref}")'
             elif ref == "quadrilateral":
                 cell = "FIAT.reference_element.UFCQuadrilateral()"
             elif ref == "hexahedron":
@@ -85,7 +93,7 @@ class FIATImplementation(Implementation):
                 out += f", {input_deg}"
             for i, j in params.items():
                 if i == "variant":
-                    out += f", {i}=\"{j}\""
+                    out += f', {i}="{j}"'
                 if i == "subdegree":
                     out += f", {i}={sympy.S(j).subs(sympy.Symbol('k'), deg)}"
                 if i == "reduced":
@@ -96,7 +104,9 @@ class FIATImplementation(Implementation):
     @staticmethod
     def verify(
         element: Element, example: str
-    ) -> typing.Tuple[typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]]:
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
         """Get verification data.
 
         Args:
@@ -111,7 +121,9 @@ class FIATImplementation(Implementation):
         ref, deg, variant, kwargs = parse_example(example)
         assert len(kwargs) == 0
 
-        fiat_name, input_deg, params = element.get_implementation_string("fiat", ref, deg, variant)
+        fiat_name, input_deg, params = element.get_implementation_string(
+            "fiat", ref, deg, variant, any_variant=True
+        )
 
         if ref in ["interval", "triangle", "tetrahedron"]:
             cell = FIAT.ufc_cell(ref)
@@ -148,19 +160,48 @@ class FIATImplementation(Implementation):
             ]
         if ref == "hexahedron":
             edofs = [
-                [edofs[0][0], edofs[0][4], edofs[0][2], edofs[0][6],
-                 edofs[0][1], edofs[0][5], edofs[0][3], edofs[0][7]],
-                [edofs[1][8], edofs[1][4], edofs[1][0], edofs[1][6], edofs[1][2], edofs[1][10],
-                 edofs[1][1], edofs[1][3], edofs[1][9], edofs[1][5], edofs[1][7], edofs[1][11]],
-                [edofs[2][4], edofs[2][2], edofs[2][0], edofs[2][1], edofs[2][3], edofs[2][5]],
+                [
+                    edofs[0][0],
+                    edofs[0][4],
+                    edofs[0][2],
+                    edofs[0][6],
+                    edofs[0][1],
+                    edofs[0][5],
+                    edofs[0][3],
+                    edofs[0][7],
+                ],
+                [
+                    edofs[1][8],
+                    edofs[1][4],
+                    edofs[1][0],
+                    edofs[1][6],
+                    edofs[1][2],
+                    edofs[1][10],
+                    edofs[1][1],
+                    edofs[1][3],
+                    edofs[1][9],
+                    edofs[1][5],
+                    edofs[1][7],
+                    edofs[1][11],
+                ],
+                [
+                    edofs[2][4],
+                    edofs[2][2],
+                    edofs[2][0],
+                    edofs[2][1],
+                    edofs[2][3],
+                    edofs[2][5],
+                ],
                 [edofs[3][0]],
             ]
 
         sd = cell.get_spatial_dimension()
-        if element.name in {"Bernardi-Raugel",
-                            "Guzman-Neilan (first kind)",
-                            "Guzman-Neilan (second kind)"}:
-            reduced_dim = e.space_dimension() - (sd+1) * (sd-1)
+        if element.name in {
+            "Bernardi-Raugel",
+            "Guzman-Neilan (first kind)",
+            "Guzman-Neilan (second kind)",
+        }:
+            reduced_dim = e.space_dimension() - (sd + 1) * (sd - 1)
         else:
             reduced_dim = true_space_dimension.get(element.name)
 
@@ -170,13 +211,12 @@ class FIATImplementation(Implementation):
                     edofs[dim][i] = [dof for dof in edofs[dim][i] if dof < reduced_dim]
 
         z = (0,) * sd
-        return edofs, lambda points: e.tabulate(0, points)[z][slice(reduced_dim)].T.reshape(
-                points.shape[0], value_size, -1)
+        return edofs, lambda points: e.tabulate(0, points)[z][
+            slice(reduced_dim)
+        ].T.reshape(points.shape[0], value_size, -1)
 
     @staticmethod
-    def notes(
-        element: Element
-    ) -> typing.List[str]:
+    def notes(element: Element) -> typing.List[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -186,14 +226,14 @@ class FIATImplementation(Implementation):
             List of notes
         """
         if element.name in true_space_dimension:
-            return ["This implementation includes additional DOFs that are used then filtered "
-                    "out when mapping the element, as described in Kirby (2018)."]
+            return [
+                "This implementation includes additional DOFs that are used then filtered "
+                "out when mapping the element, as described in Kirby (2018)."
+            ]
         return []
 
     @staticmethod
-    def references(
-        element: Element
-    ) -> typing.List[typing.Dict[str, typing.Any]]:
+    def references(element: Element) -> typing.List[typing.Dict[str, typing.Any]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:
@@ -203,16 +243,18 @@ class FIATImplementation(Implementation):
             List of references
         """
         if element.name in true_space_dimension:
-            return [{
-                'title': 'A general approach to transforming finite elements',
-                'author': ['Kirby, Robert C.'],
-                'year': 2018,
-                'journal': 'SMAI Journal of Computational Mathematics',
-                'volume': 4,
-                'pagestart': 197,
-                'pageend': 224,
-                'doi': '10.5802/smai-jcm.33',
-            }]
+            return [
+                {
+                    "title": "A general approach to transforming finite elements",
+                    "author": ["Kirby, Robert C."],
+                    "year": 2018,
+                    "journal": "SMAI Journal of Computational Mathematics",
+                    "volume": 4,
+                    "pagestart": 197,
+                    "pageend": 224,
+                    "doi": "10.5802/smai-jcm.33",
+                }
+            ]
         return []
 
     id = "fiat"

@@ -73,12 +73,22 @@ def check_oeis(oeis, seq):
         seq = {i: j for i, j in seq.items() if is_satisfied(condition, i)}
     seq = {i: j for i, j in seq.items() if j > 0}
     if oeis not in oeis_cache:
-        with urllib.request.urlopen(urllib.request.Request(
-            f"http://oeis.org/{oeis}/list", headers={"User-Agent": "DefElement test runner"}
-        )) as f:
-            oeis_cache[oeis] = "".join([
-                i.strip() for i in f.read().decode('utf-8').split(
-                    "<pre>[")[1].split("]</pre>")[0].split("\n")])
+        with urllib.request.urlopen(
+            urllib.request.Request(
+                f"http://oeis.org/{oeis}/list",
+                headers={"User-Agent": "DefElement test runner"},
+            )
+        ) as f:
+            oeis_cache[oeis] = "".join(
+                [
+                    i.strip()
+                    for i in f.read()
+                    .decode("utf-8")
+                    .split("<pre>[")[1]
+                    .split("]</pre>")[0]
+                    .split("\n")
+                ]
+            )
     assert ",".join([str(i) for i in seq.values()]) in oeis_cache[oeis]
 
 
@@ -135,7 +145,9 @@ def test_sequence(file, cellname):
             signal.alarm(25)
             if "variant=" in symfem_name:
                 elementname, variant = symfem_name.split(" variant=")
-                term = symfem.create_element(cellname, elementname, k, variant=variant).space_dim
+                term = symfem.create_element(
+                    cellname, elementname, k, variant=variant
+                ).space_dim
             else:
                 term = symfem.create_element(cellname, symfem_name, k).space_dim
             seq[k] = term
@@ -174,8 +186,16 @@ def test_entity_sequences(file, cellname):
     else:
         symfem_name = data["implementations"]["symfem"]
 
-    seq = {"vertices": {}, "edges": {}, "faces": {}, "volumes": {},
-           "cell": {}, "facets": {}, "ridges": {}, "peaks": {}}
+    seq = {
+        "vertices": {},
+        "edges": {},
+        "faces": {},
+        "volumes": {},
+        "cell": {},
+        "facets": {},
+        "ridges": {},
+        "peaks": {},
+    }
     if "min-degree" in data:
         mink = parse_degree(data["min-degree"], cellname)
     else:
@@ -193,11 +213,13 @@ def test_entity_sequences(file, cellname):
                 e = symfem.create_element(cellname, elementname, k, variant=variant)
             else:
                 e = symfem.create_element(cellname, symfem_name, k)
-            for d, e_name in zip(range(e.reference.tdim),
-                                 ["vertices", "edges", "faces", "volumes"]):
+            for d, e_name in zip(
+                range(e.reference.tdim), ["vertices", "edges", "faces", "volumes"]
+            ):
                 seq[e_name][k] = len(e.entity_dofs(d, 0))
-            for co_d, e_name in zip(range(e.reference.tdim),
-                                    ["cell", "facets", "ridges", "peaks"]):
+            for co_d, e_name in zip(
+                range(e.reference.tdim), ["cell", "facets", "ridges", "peaks"]
+            ):
                 seq[e_name][k] = len(e.entity_dofs(e.reference.tdim - co_d, 0))
         except NotImplementedError:
             pass
