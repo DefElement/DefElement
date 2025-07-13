@@ -327,7 +327,7 @@ for e in categoriser.elements:
     # Polynomial set
     psets = e.make_polynomial_set_html()
     if len(psets) > 0:
-        element_data.append(("Polynomial set", psets))
+        element_data.append(("Finite dimensional space", psets))
 
     # DOFs
     dofs = e.make_dof_descriptions()
