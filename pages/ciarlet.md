@@ -39,8 +39,10 @@ The Ciarlet definition <ref type="book" title="The Finite Element Method for Ell
 defines a finite element by a triple \(({{symbols.reference}},{{symbols.polyset}},{{symbols.dual_basis}})\), where
 
 * \({{symbols.reference}}\subset\mathbb{R}^d\) is the reference cell, usually a polygon or polyhedron;
-* \({{symbols.polyset}}\) is a finite dimensional polynomial space on \({{symbols.reference}}\) of dimension \(n\);
+* \({{symbols.polyset}}\) is a finite dimensional space on \({{symbols.reference}}\) of dimension \(n\), usually a space of polynomials;
 * \({{symbols.dual_basis}}=\{{{symbols.functional}}_0,...,{{symbols.functional}}_{n-1}\}\) is a basis of the dual space \({{symbols.polyset}}^*=\{f:{{symbols.polyset}}\to\mathbb{R}|f\text{ is linear}\}\). Each functional \({{symbols.functional}}_i\) is associated with a subentity of the reference cell \({{symbols.reference}}\).
+
+Note that on pyramid cells, a space of rationomials (rational polynomials) is typically used for \({{symbols.polyset}}\). For all other cells, a space of polynomials is typically used.
 
 The basis functions \(\{{{symbols.basis_function}}_0,...,{{symbols.basis_function}}_{n-1}\}\)
 of the finite element space are defined by
@@ -174,19 +176,22 @@ choices for where exactly to locate the point evaluation functionals.
 We refer to a pair of elements as variants of each other if:
 
 * They are defined on the same reference cell \({{symbols.reference}}\);
-* They are defined using the same polynomial set \({{symbols.polyset}}\);
+* They are defined using the same space \({{symbols.polyset}}\);
 * The functionals in \({{symbols.dual_basis}}\) associated with each facet, ridge, and peak of the
   cell, and the push forward/pull back map used lead to the same type of continuity between cells.
 
 Commonly used variants of elements are shown on each element's page.
 
 ## The degree of a finite element
-There are a few different ways to describe the (polynomial) degree of a finite element:
+There are a few different ways to describe the degree of a finite element. For non-pyramid cells, these are defined by:
 
 * The polynomial subdegree is the degree of the highest degree complete polynomial space that is a subspace of this element's polynomial space.
 * The polynomial superdegree is the degree of the lowest degree complete polynomial space that is a superspace of this element's polynomial space.
 * The Lagrange subdegree is the degree of the highest degree Lagrange space that is a subspace of this element's polynomial space.
 * The Lagrange superdegree is the degree of the lowest degree Lagrange space that is a superspace of this element's polynomial space.
+
+For pyramid cells, the Lagrange degrees are defined using the natural rationomial spaces instead of the Lagrange spaces. The degree \(k\) natural rationomial space is defined to be
+$$\mathbb{P}_k=\operatorname{span}\left\{\frac{x^{p_0}y^{p_1}z^{p_2}}{(1-z)^{p_0+p_1}}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0\leqslant k,\,p_1\leqslant k,\,p_2\leqslant k\right\}.$$
 
 On each element's page, the value of these is shown, as well as information about which one is used as the canonical degree of that element.
 In general, the polynomial subdegree is used to index every element whenever possible; the numbering on DefElement therefore differs from that used
@@ -197,7 +202,7 @@ Throughout this website, the notation given here in this section is used.
 
 <table>
 <tr><td style='padding-right:10px'>\({{symbols.reference}}\)</td><td>A reference cell</td></tr>
-<tr><td style='padding-right:10px'>\({{symbols.polyset}}\)</td><td>A polynomial set</td></tr>
+<tr><td style='padding-right:10px'>\({{symbols.polyset}}\)</td><td>A finite dimensional space</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.dual_basis}}\)</td><td>A dual basis</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.functional}}_i\)</td><td>A functional in the dual basis</td></tr>
 <tr><td style='padding-right:10px'>\({{symbols.basis_function}}_i\)</td><td>A scalar basis function</td></tr>

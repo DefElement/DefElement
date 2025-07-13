@@ -574,7 +574,7 @@ class Element:
         return make_dof_d(self.data["dofs"])
 
     def make_polynomial_set_html(self) -> str:
-        """Format polynomial set as HTML.
+        """Format polynomial set / finite dimensional space as HTML.
 
         Returns:
             Formatted polynomial set
@@ -605,10 +605,10 @@ class Element:
         if len(extra) > 0:
             out += "<a id='show_pset_link' href='javascript:show_psets()'"
             out += " style='display:block'>"
-            out += "&darr; Show polynomial set definitions &darr;</a>"
+            out += "&darr; Show set definitions &darr;</a>"
             out += "<a id='hide_pset_link' href='javascript:hide_psets()'"
             out += " style='display:none'>"
-            out += "&uarr; Hide polynomial set definitions &uarr;</a>"
+            out += "&uarr; Hide set definitions &uarr;</a>"
             out += "<div id='psets' style='display:none'>"
             out += extra
             out += "</div>"
