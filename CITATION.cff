@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+authors:
+  - family-names: Scroggs
+    given-names: Matthew W.
+    orcid: 0000-0002-4658-2443
+title: "DefElement: an encyclopedia of finite element definitions"
+license: MIT
+url: https://github.com/DefElement/DefElement
+preferred-citation:
+  type: article
+  authors:
+  - family-names: Scroggs
+    given-names: Matthew W.
+    orcid: https://orcid.org/0000-0002-4658-2443
+  - family-names: Brubeck
+    given-names: Pablo D.
+    orcid: https://orcid.org/0000-0002-3824-0080
+  - family-names: Dean
+    given-names: Joseph P.
+    orcid: https://orcid.org/0000-0001-7499-3373
+  - family-names: Dokken
+    given-names: Jørgen S.
+    orcid: https://orcid.org/0000-0001-6489-8858
+  - family-names: Marsden
+    given-names: India
+    orcid: https://orcid.org/0009-0006-0152-4780
+  doi: 10.48550/arXiv.2506.20188
+  journal: submitted to Computational Science and Engineering
+  title: "DefElement: an encyclopedia of finite element definitions"
+  year: 2025
