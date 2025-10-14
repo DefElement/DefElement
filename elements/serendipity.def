@@ -25,13 +25,13 @@ ndofs:
   quadrilateral:
     formula:
     - k=1: 4
-    - k>1: k(k+3)/2+3
+    - k>1: (k+1)(k+2)/2+2
     oeis: A340266
   hexahedron:
     formula:
     - k=1,2,3: 12k-4
     - k=4,5: 3k^2-3k+14
-    - k>6: k(k-1)(k+1)/6+k^2+5k+4
+    - k>6: (k+1)(k+2)(k+3)/6+3k+3
 sobolev: H1
 mapping: identity
 dofs:
