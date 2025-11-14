@@ -6,6 +6,18 @@ authors:
 # How to define a finite element
 This page describes how finite elements are defined in the DefElement database.
 
+## Reference cells
+The reference cell on which an element is defined is arbitrary, and there are multiple different standard cells that are used. In DefElement, we use the following reference cells,
+with subentities numbered as shown on the [reference numbering page](reference_numbering.md).
+
+* The reference interval is \(\left\{x\,\middle|\,0\leqslant x\leqslant 1\right\}\).
+* The reference triangle is \(\left\{(x,y)\,\middle|\,0\leqslant x,\,0\leqslant y,\,x+y\leqslant1\right\}\).
+* The reference quadrilateral is \(\left\{(x,y)\,\middle|\,0\leqslant x\leqslant1,\,0\leqslant y\leqslant1\right\}\).
+* The reference tetrahedron is \(\left\{(x,y,z)\,\middle|\,0\leqslant x,\,0\leqslant y,\,0\leqslant z,\,x+y+z\leqslant1\right\}\).
+* The reference hexahedron is \(\left\{(x,y,z)\,\middle|\,0\leqslant x\leqslant1,\,0\leqslant y\leqslant1,\,0\leqslant z\leqslant1\right\}\).
+* The reference prism is \(\left\{(x,y,z)\,\middle|\,0\leqslant x,\,0\leqslant y,\,x+y\leqslant1,\,0\leqslant z\leqslant1\right\}\).
+* The reference pyramid is \(\left\{(x,y,z)\,\middle|\,0\leqslant x,\,0\leqslant y,\,0\leqslant z\leqslant1,\,x+z\leqslant1,\,y+z\leqslant1\right\}\).
+
 ## Cell subentities
 Throughout this website, the subentities of a reference cell will be referred to as described here.
 
@@ -133,23 +145,23 @@ The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geomet
 
 ### Scalar-valued basis functions
 The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
-$$\left({{symbols.mapping}}^\text{id}{{symbols.basis_function}}\right)(\boldsymbol{x})
-:={{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
+\[\left({{symbols.mapping}}^\text{id}{{symbols.basis_function}}\right)(\boldsymbol{x})
+:={{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).\]
 The term \({{symbols.geometry_map}}^{-1}(\boldsymbol{x})\) is the point on the reference cell corresponding to the point \(\boldsymbol{x}\), so this mapping
 maps a value of the function on the reference to the same value at the corresponding point.
 
 The L2 Piola mapping&mdash;used to map scalar discontinuous elements, \({{symbols.basis_function}}\)&mdash;is defined by
-$$\left({{symbols.mapping}}^\text{L2}{{symbols.basis_function}}\right)(\boldsymbol{x})
-:=\frac1{\det {{symbols.jacobian}}}{{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).$$
+\[\left({{symbols.mapping}}^\text{L2}{{symbols.basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\det {{symbols.jacobian}}}{{symbols.basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})).\]
 
 ### Vector-valued basis functions
 For vector-valued basis functions, \({{symbols.vector_basis_function}}\), the
 <b>covariant Piola</b> (\({{symbols.mapping}}^\text{curl}\)) and
 <b>contravariant Piola</b> (\({{symbols.mapping}}^\text{div}\)) mappings are defined:
-$$\left({{symbols.mapping}}^\text{curl}{{symbols.vector_basis_function}}\right)(\boldsymbol{x})
-:={{symbols.jacobian}}^{-T}{{symbols.vector_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x}))$$
-$$\left({{symbols.mapping}}^\text{div}{{symbols.vector_basis_function}}\right)(\boldsymbol{x})
-:=\frac1{\det {{symbols.jacobian}}}{{symbols.jacobian}}{{symbols.vector_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x}))$$
+\[\left({{symbols.mapping}}^\text{curl}{{symbols.vector_basis_function}}\right)(\boldsymbol{x})
+:={{symbols.jacobian}}^{-T}{{symbols.vector_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x}))\]
+\[\left({{symbols.mapping}}^\text{div}{{symbols.vector_basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\det {{symbols.jacobian}}}{{symbols.jacobian}}{{symbols.vector_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x}))\]
 The covariant Piola mapping preserves the tangential component of basis functions on edges and facets,
 and are typically used to map H(curl) elements.
 The contravariant Piola mapping preserves the normal component of basis functions on facets,
@@ -161,12 +173,12 @@ For matrix-valued basis functions, \({{symbols.matrix_basis_function}}\), the
 <b>double contravariant Piola</b> (\({{symbols.mapping}}^\text{div div}\)) and
 <b>covariant-contravariant Piola</b> (\({{symbols.mapping}}^\text{curl div}\))
 mappings are defined:
-$$\left({{symbols.mapping}}^\text{curl curl}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
-:={{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^{-1}$$
-$$\left({{symbols.mapping}}^\text{div div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
-:=\frac1{\left(\det {{symbols.jacobian}}\right)^2}{{symbols.jacobian}}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T$$
-$$\left({{symbols.mapping}}^\text{curl div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
-:=\frac1{\left(\det {{symbols.jacobian}}\right)}{{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T$$
+\[\left({{symbols.mapping}}^\text{curl curl}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
+:={{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^{-1}\]
+\[\left({{symbols.mapping}}^\text{div div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\left(\det {{symbols.jacobian}}\right)^2}{{symbols.jacobian}}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T\]
+\[\left({{symbols.mapping}}^\text{curl div}{{symbols.matrix_basis_function}}\right)(\boldsymbol{x})
+:=\frac1{\left(\det {{symbols.jacobian}}\right)}{{symbols.jacobian}}^{-T}{{symbols.matrix_basis_function}}({{symbols.geometry_map}}^{-1}(\boldsymbol{x})){{symbols.jacobian}}^T\]
 
 ## Variants of finite elements
 For many elements, there are a number of different choices that could be made for the functionals
@@ -183,17 +195,28 @@ We refer to a pair of elements as variants of each other if:
 Commonly used variants of elements are shown on each element's page.
 
 ## The degree of a finite element
-There are a few different ways to describe the degree of a finite element. For non-pyramid cells, these are defined by:
+There are a few different ways to describe the degree of a finite element.
+These are defined by:
 
 * The polynomial subdegree is the degree of the highest degree complete polynomial space that is a subspace of this element's polynomial space.
 * The polynomial superdegree is the degree of the lowest degree complete polynomial space that is a superspace of this element's polynomial space.
-* The Lagrange subdegree is the degree of the highest degree Lagrange space that is a subspace of this element's polynomial space.
-* The Lagrange superdegree is the degree of the lowest degree Lagrange space that is a superspace of this element's polynomial space.
+* The Lagrange subdegree is the degree of the highest degree natural space that is a subspace of this element's polynomial space.
+* The Lagrange superdegree is the degree of the lowest degree natural space that is a superspace of this element's polynomial space.
 
-For pyramid cells, the Lagrange degrees are defined using the natural rationomial spaces instead of the Lagrange spaces. The degree \(k\) natural rationomial space is defined to be
-$$\mathbb{P}_k=\operatorname{span}\left\{\frac{x^{p_0}y^{p_1}z^{p_2}}{(1-z)^{p_0+p_1}}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0\leqslant k,\,p_1\leqslant k,\,p_2\leqslant k\right\}.$$
+The natural polynomial (or rationomial for pyramids) spaces of degree \(k\) on an interval, triangle, quadrilateral,
+tetrahedron, hexahedron, triangular prism and square-based pyramid are defined by
 
-On each element's page, the value of these is shown, as well as information about which one is used as the canonical degree of that element.
+\[\mathbb{P}^{\text{interval}}_k=\operatorname{span}\left\{x^{p_0}\,\middle|\,p_0\in\mathbb{N},\,p_0\leqslant k\right\},\]
+\[\mathbb{P}^{\text{triangle}}_k=\operatorname{span}\left\{x^{p_0}y^{p_1}\,\middle|\,p_0,p_1\in\mathbb{N}_0,\,p_0+p_1\leqslant k\right\},\]
+\[\mathbb{P}^{\text{quadrilateral}}_k=\operatorname{span}\left\{x^{p_0}y^{p_1}\,\middle|\,p_0,p_1\in\mathbb{N}_0,\,p_0\leqslant k,\,p_1\leqslant k\right\},\]
+\[\mathbb{P}^{\text{tetrahedron}}_k=\operatorname{span}\left\{x^{p_0}y^{p_1}z^{p_2}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0+p_1+p_2\leqslant k\right\},\]
+\[\mathbb{P}^{\text{hexahedron}}_k=\operatorname{span}\left\{x^{p_0}y^{p_1}z^{p_2}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0\leqslant k,\,p_1\leqslant k,\,p_2\leqslant k\right\},\]
+\[\mathbb{P}^{\text{prism}}_k=\operatorname{span}\left\{x^{p_0}y^{p_1}z^{p_2}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0+p_1\leqslant k,\,p_2\leqslant k\right\},\]
+\[\mathbb{P}^{\text{pyramid}}_k=\operatorname{span}\left\{\frac{x^{p_0}y^{p_1}z^{p_2}}{(1-z)^{p_0+p_1}}\,\middle|\,p_0,p_1,p_2\in\mathbb{N}_0,\,p_0\leqslant k,\,p_1\leqslant k,\,p_2\leqslant k\right\}.\]
+
+For non-pyramid cell types, these coincide with the polynomial space of a [Lagrange element](element::lagrange), hence the names Lagrange subdegree and Lagrange superdegree
+
+On each element's page, the values of these is shown, as well as information about which one is used as the canonical degree of that element.
 In general, the polynomial subdegree is used to index every element whenever possible; the numbering on DefElement therefore differs from that used
 in some implementations (most notably FEniCS and UFL, where the Lagrange superdegree is used to index the majority of elements).
 
