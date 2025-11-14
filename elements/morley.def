@@ -23,7 +23,6 @@ mapping: identity
 sobolev: L2
 implementations:
   symfem: Morley
-  ufl: Morley
   fiat: Morley DEGREEMAP=None
 examples:
   - triangle,2

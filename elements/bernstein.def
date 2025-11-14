@@ -36,7 +36,6 @@ mapping: identity
 sobolev: H1
 implementations:
   symfem: Bernstein
-  ufl: Bernstein
   fiat: Bernstein
 examples:
   - interval,1

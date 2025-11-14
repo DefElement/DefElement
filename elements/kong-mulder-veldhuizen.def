@@ -12,7 +12,6 @@ lagrange-subdegree: k
 degree: polynomial-subdegree
 implementations:
   symfem: KMV
-  ufl: KMV
   fiat: KongMulderVeldhuizen
 examples:
   - triangle,1

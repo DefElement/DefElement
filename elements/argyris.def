@@ -29,7 +29,6 @@ mapping: identity
 sobolev: H2
 implementations:
   symfem: Argyris
-  ufl: Argyris
   fiat: Argyris
 examples:
   - triangle,5

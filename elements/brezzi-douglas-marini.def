@@ -52,8 +52,6 @@ implementations:
     display: BDM
     lagrange: BDM lagrange_variant=equispaced
     legendre: BDM
-  ufl:
-    lagrange: BDM
   fiat:
     legendre: BrezziDouglasMarini variant=integral
 examples:
