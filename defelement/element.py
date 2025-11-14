@@ -733,6 +733,8 @@ class Element:
         Returns:
             True if implemented, otherwise False
         """
+        if lib.startswith("*(") and lib.endswith(")"):
+            lib, _ = lib[2:-1].split(" -> ")
         return "implementations" in self.data and lib in self.data["implementations"]
 
     def get_implementation_string(
@@ -822,6 +824,9 @@ class Element:
             List of implemtation strings
         """
         assert self.implemented(lib)
+
+        if lib.startswith("*(") and lib.endswith(")"):
+            return "<small><em>Uses custom element code</em></small>"
 
         if "display" in self.data["implementations"][lib]:
             d = implementations[lib].format(

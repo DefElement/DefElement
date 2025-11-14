@@ -101,7 +101,7 @@ a#show-flink, a#hide-flink,
 a#show_pset_link, a#hide_pset_link,
 a.show_eg_link, a.hide_eg_link {font-size:80%;padding-top:10px;padding-bottom:10px}
 
-p.pcode {margin-left:50px;margin-right:50px;font-family:monospace;white-space:nowrap;}
+p.pcode {margin-left:50px;margin-right:50px;font-family:monospace;white-space:nowrap;overflow:scroll;max-width:50vw}
 
 table.families tr td {text-align:center; border-top:2px solid #000000; font-size:small; padding:5px}
 table.families tr:first-of-type td {border-top:none; font-size:unset;}
