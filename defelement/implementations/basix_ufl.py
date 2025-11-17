@@ -141,4 +141,119 @@ class BasixUFLImplementation(Implementation):
     name = "Basix.UFL"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    install = "pip3 install fenics-basix fenics-ufl"
+    install = "pip3 install git+https://github.com/FEniCS/basix fenics-ufl"
+
+
+class CustomBasixUFLImplementation(BasixUFLImplementation):
+    """Basix.UFL implementation via custom element."""
+
+    @staticmethod
+    def format(
+        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+    ) -> str:
+        """Format implementation string.
+
+        Args:
+            string: Implementation string
+            params: Parameters
+
+        Returns:
+            Formatted implementation string
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    def example(element: Element) -> str:
+        """Generate examples.
+
+        Args:
+            element: The element
+
+        Returns:
+            Example code
+        """
+        import symfem
+        import symfem.basix_interface
+
+        out = "import basix\nimport basix.ufl\nimport numpy as np"
+
+        for e in element.examples:
+            cell, degree, variant, kwargs = parse_example(e)
+            symfem_name, symfem_degree, params = element.get_implementation_string(
+                "symfem", cell, degree, variant
+            )
+            if "variant" in params:
+                kwargs["variant"] = params["variant"]
+            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+
+            out += "\n\n"
+            out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
+
+            out += symfem.basix_interface.generate_basix_element_code(
+                symfem_e, include_comment=False, include_imports=False, ufl=True
+            )
+
+        return out
+
+    @staticmethod
+    def verify(
+        element: Element, example: str
+    ) -> typing.Tuple[
+        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
+    ]:
+        """Get verification data.
+
+        Args:
+            element: Element data
+            example: Example data
+
+        Returns:
+            List of entity dofs, and tabulation function
+        """
+        import symfem
+        import symfem.basix_interface
+
+        cell, degree, variant, kwargs = parse_example(example)
+        symfem_name, symfem_degree, params = element.get_implementation_string(
+            "symfem", cell, degree, variant
+        )
+        if "variant" in params:
+            kwargs["variant"] = params["variant"]
+        symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+
+        e = symfem.basix_interface.create_basix_element(symfem_e, ufl=True)
+
+        return e.entity_dofs, lambda points: e.tabulate(0, points)[0].reshape(
+            points.shape[0], e.reference_value_size, -1
+        )
+
+    @staticmethod
+    def implemented(element: Element) -> bool:
+        """Check if an element is implemented.
+
+        This can be used to overrule Element's implemented function.
+
+        Args:
+            element: The element
+
+        Returns:
+            Example code
+        """
+        import symfem
+        import symfem.basix_interface
+
+        for e in element.examples:
+            cell, degree, variant, kwargs = parse_example(e)
+            symfem_name, symfem_degree, params = element.get_implementation_string(
+                "symfem", cell, degree, variant
+            )
+            if "variant" in params:
+                kwargs["variant"] = params["variant"]
+            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+            try:
+                symfem.basix_interface.generate_basix_element_code(symfem_e)
+            except (NotImplementedError, KeyError):
+                return False
+        return True
+
+    id = "*(symfem -> basix.ufl)"
