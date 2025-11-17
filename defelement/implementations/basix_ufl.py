@@ -252,7 +252,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
             try:
                 symfem.basix_interface.generate_basix_element_code(symfem_e)
-            except NotImplementedError:
+            except (NotImplementedError, KeyError):
                 return False
         return True
 
