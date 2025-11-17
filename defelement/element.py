@@ -733,7 +733,6 @@ class Element:
         Returns:
             True if implemented, otherwise False
         """
-
         if not implementations[lib].implemented(self):
             return False
 

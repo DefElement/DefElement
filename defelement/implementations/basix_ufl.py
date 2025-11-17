@@ -229,6 +229,16 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
 
     @staticmethod
     def implemented(element: Element) -> bool:
+        """Check if an element is implemented.
+
+        This can be used to overrule Element's implemented function.
+
+        Args:
+            element: The element
+
+        Returns:
+            Example code
+        """
         import symfem
         import symfem.basix_interface
 
