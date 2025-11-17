@@ -406,7 +406,7 @@ for e in categoriser.elements:
                 example_code = e.make_implementation_examples(codename)
 
         # Make the HTML for the examples
-        if jscodename is not None:
+        if jscodename is not None and example_code is not None:
             info = e.list_of_implementation_strings(codename)
             assert libname is not None
             short_info = libname

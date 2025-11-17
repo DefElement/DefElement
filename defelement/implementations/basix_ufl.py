@@ -184,7 +184,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             )
             if "variant" in params:
                 kwargs["variant"] = params["variant"]
-            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)
+            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
 
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
@@ -219,7 +219,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         )
         if "variant" in params:
             kwargs["variant"] = params["variant"]
-        symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)
+        symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
 
         e = symfem.basix_interface.create_basix_element(symfem_e, ufl=True)
 
