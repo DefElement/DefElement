@@ -139,7 +139,11 @@ def verify_examples(
                 output_code = i
 
             if output_code not in results[e.filename]:
-                results[e.filename][output_code] = {"pass": [], "fail": [], "not implemented": []}
+                results[e.filename][output_code] = {
+                    "pass": [],
+                    "fail": [],
+                    "not implemented": [],
+                }
 
             # Do the verification
             try:
