@@ -29,7 +29,6 @@ lagrange-superdegree: k
 degree: polynomial-subdegree
 implementations:
   symfem: vector Lagrange
-  ufl: Lagrange type=VectorElement
   basix.ufl: P shape=(dim,) lagrange_variant=equispaced
 examples:
   - triangle,1

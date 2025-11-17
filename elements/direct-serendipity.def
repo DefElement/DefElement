@@ -7,7 +7,6 @@ reference-cells:
   - quadrilateral
 implementations:
   symfem: direct serendipity
-  ufl: Sdirect
 mapping: identity
 sobolev: H1
 examples:

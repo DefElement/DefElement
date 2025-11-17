@@ -88,12 +88,6 @@ implementations:
     display: RT
     lagrange: RT lagrange_variant=equispaced DEGREEMAP=k+1
     legendre: RT DEGREEMAP=k+1
-  ufl:
-    lagrange:
-      triangle: RT DEGREEMAP=k+1
-      tetrahedron: RT DEGREEMAP=k+1
-      quadrilateral: RTCF DEGREEMAP=k+1
-      hexahedron: NCF DEGREEMAP=k+1
   bempp-cl:
     lagrange:
       triangle: RWG DEGREES=0

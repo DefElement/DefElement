@@ -54,8 +54,6 @@ implementations:
     display: N2E
     lagrange: N2E lagrange_variant=equispaced
     legendre: N2E
-  ufl:
-    lagrange: N2curl
   fiat:
     legendre:
       triangle: NedelecSecondKind variant=integral

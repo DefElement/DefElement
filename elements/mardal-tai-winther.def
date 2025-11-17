@@ -35,8 +35,6 @@ mapping: contravariant Piola
 sobolev: H(div)
 implementations:
   symfem: MTW
-  ufl:
-    triangle: MTW DEGREEMAP=k+2
   fiat:
     triangle: MardalTaiWinther DEGREEMAP=k+2
 examples:

@@ -28,7 +28,6 @@ lagrange-superdegree: k
 degree: polynomial-subdegree
 implementations:
   symfem: vector dPc
-  ufl: DPC type=VectorElement discontinuous=true
   basix.ufl: DPC shape=(dim,) discontinuous=True dpc_variant=simplex_equispaced
 examples:
   - quadrilateral,1

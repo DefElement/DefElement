@@ -26,8 +26,6 @@ sobolev: H(div div)
 mapping: double contravariant Piola
 implementations:
   symfem: HHJ
-  ufl:
-    triangle: HHJ
   fiat: HellanHerrmannJohnson
   basix: HHJ
   basix.ufl: HHJ

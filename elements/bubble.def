@@ -42,7 +42,6 @@ implementations:
   symfem: bubble
   basix: bubble
   basix.ufl: bubble
-  ufl: Bubble
   fiat: Bubble
 examples:
   - interval,2

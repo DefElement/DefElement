@@ -156,13 +156,6 @@ implementations:
       interval: P lagrange_variant=gll_warped discontinuous=True
       quadrilateral: P lagrange_variant=gll_warped discontinuous=True
       hexahedron: P lagrange_variant=gll_warped discontinuous=True
-  ufl:
-    equispaced:
-      interval: Discontinuous Lagrange
-      triangle: Discontinuous Lagrange
-      tetrahedron: Discontinuous Lagrange
-      quadrilateral: DQ
-      hexahedron: DQ
   bempp-cl:
     equispaced:
       triangle: DP DEGREES=0,1
