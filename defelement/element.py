@@ -733,6 +733,10 @@ class Element:
         Returns:
             True if implemented, otherwise False
         """
+
+        if not implementations[lib].implemented(self):
+            return False
+
         if lib.startswith("*(") and lib.endswith(")"):
             lib, _ = lib[2:-1].split(" -> ")
         return "implementations" in self.data and lib in self.data["implementations"]

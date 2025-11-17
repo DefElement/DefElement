@@ -227,4 +227,23 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             points.shape[0], e.reference_value_size, -1
         )
 
+    @staticmethod
+    def implemented(element: Element) -> bool:
+        import symfem
+        import symfem.basix_interface
+
+        for e in element.examples:
+            cell, degree, variant, kwargs = parse_example(e)
+            symfem_name, symfem_degree, params = element.get_implementation_string(
+                "symfem", cell, degree, variant
+            )
+            if "variant" in params:
+                kwargs["variant"] = params["variant"]
+            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+            try:
+                symfem.basix_interface.generate_basix_element_code(symfem_e)
+            except NotImplementedError:
+                return False
+        return True
+
     id = "*(symfem -> basix.ufl)"
