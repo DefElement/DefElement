@@ -142,7 +142,6 @@ class BasixUFLImplementation(Implementation):
     url = "https://github.com/FEniCS/basix"
     verification = True
     install = "pip3 install git+https://github.com/FEniCS/basix fenics-ufl"
-    # install = "pip3 install fenics-basix fenics-ufl"
 
 
 class CustomBasixUFLImplementation(BasixUFLImplementation):
