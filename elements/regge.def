@@ -31,7 +31,6 @@ implementations:
   symfem: Regge
   basix: Regge
   basix.ufl: Regge
-  ufl: Regge
   fiat: Regge
 examples:
   - triangle,1

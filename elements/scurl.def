@@ -43,9 +43,6 @@ polynomial-set:
   hexahedron: poly[k]^d && apoly[k-1] && <k>[\left\{\nabla p\middle|p\in{{serendipity[k+1]}}\right\}]
 implementations:
   symfem: Scurl
-  ufl:
-    quadrilateral: BDMCE
-    hexahedron: AAE
 examples:
   - quadrilateral,1
   - quadrilateral,2

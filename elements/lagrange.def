@@ -148,15 +148,6 @@ implementations:
       interval: P lagrange_variant=gll_warped
       quadrilateral: P lagrange_variant=gll_warped
       hexahedron: P lagrange_variant=gll_warped
-  ufl:
-    equispaced:
-      interval: Lagrange
-      triangle: Lagrange
-      tetrahedron: Lagrange
-      quadrilateral: Q
-      hexahedron: Q
-    lobatto:
-      interval: Lobatto
   bempp-cl:
     equispaced:
       triangle: P DEGREES=1

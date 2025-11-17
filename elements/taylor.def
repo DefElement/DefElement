@@ -35,7 +35,6 @@ polynomial-set:
   tetrahedron: poly[k]
 implementations:
   symfem: Taylor
-  ufl: TDG
   fiat: DiscontinuousTaylor
 examples:
   - interval,1

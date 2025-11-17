@@ -23,7 +23,6 @@ mapping: double contravariant Piola
 sobolev: H(div div)
 implementations:
   symfem: nonconforming AW
-  ufl: AWnc DEGREEMAP=k+1
   fiat: ArnoldWintherNC DEGREEMAP=k+1
 examples:
   - triangle,1

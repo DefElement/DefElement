@@ -60,9 +60,6 @@ implementations:
     hexahedron: Rannacher-Turek
   basix: CR
   basix.ufl: CR
-  ufl:
-    triangle: Crouzeix-Raviart
-    tetrahedron: Crouzeix-Raviart
   fiat:
     triangle: CrouzeixRaviart
     tetrahedron: CrouzeixRaviart
