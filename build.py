@@ -402,6 +402,8 @@ for e in categoriser.elements:
                 if example_code is None:
                     jscodename = None
                     save_cache(cache_id, symfem.__version__, "_NONE")
+                else:
+                    save_cache(cache_id, symfem.__version__, example_code)
             else:
                 if c == "_NONE":
                     jscodename = None
