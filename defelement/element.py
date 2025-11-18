@@ -845,7 +845,7 @@ class Element:
         """
         if include_dependent_implementations:
             assert not lib.startswith("*(")
-            imp_list = []
+            imp_list: typing.List[str] = []
             if self.implemented(lib):
                 imp_list += self.list_of_implementation_strings(lib, None)
             for other_lib in implementations:
