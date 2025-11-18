@@ -238,21 +238,60 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         Returns:
             Example code
         """
-        return element.name not in [
+        # Elements with DOFs that include derivatives
+        if element.name in [
             "alfeld-sorokina",
             "argyris",
             "arnold-boffi-falk",
             "bell",
-            "bernardi-raugel",
             "bogner-fox-schmitt",
-            "buffa-christiansen",
-            "dual",
+            "wu-xu",
+        ]:
+            return False
+
+        # D(div curl) elements
+        if element.name in [
             "gopalakrishnan-lederer-schoberlhermite",
-            "rotated-buffa-christiansen",
+        ]:
+            return False
+
+        # Macro elements
+        if element.name in [
+            "alfeld-sorokina",
+            "guzman-neilan",
+            "guzman-neilan2",
+            "hsieh-clough-tocher",
+            "johnson-mercier",
+            "p1-iso-p2",
+            "p1-macro",
+            "reduced-hsieh-clough-tocher",
+        ]:
+            return False
+
+        # Elements with different numbers of DOFs on entities of the same type
+        if element.name in [
+            "fortin-soulie",
             "transition",
+        ]:
+            return False
+
+        # Mixed elements
+        if element.name in [
+            "mini",
+            "pechstein-schoberl",
             "taylor-hood",
             "scott-vogelius",
-            "wu-xu",
-        ]
+        ]:
+            return False
+
+        # Dual elements
+        if element.name in [
+            "buffa-christiansen",
+            "dual",
+            "rotated-buffa-christiansen",
+        ]:
+            return False
+
+        return True
 
     id = "*(symfem -> basix.ufl)"
