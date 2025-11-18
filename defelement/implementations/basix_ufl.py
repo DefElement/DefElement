@@ -247,8 +247,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             "bogner-fox-schmitt",
             "buffa-christiansen",
             "dual",
-            "gopalakrishnan-lederer-schoberl"
-            "hermite",
+            "gopalakrishnan-lederer-schoberlhermite",
             "rotated-buffa-christiansen",
             "transition",
             "taylor-hood",
