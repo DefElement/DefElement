@@ -2,6 +2,7 @@
 
 import typing
 
+from defelement.caching import load_cache, save_cache
 from defelement.implementations.basix import BasixImplementation
 from defelement.implementations.core import (
     Array,
@@ -175,25 +176,32 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         import symfem
         import symfem.basix_interface
 
-        out = "import basix\nimport basix.ufl\nimport numpy as np"
+        cache_id = f"{element.filename}-(symfem -> basix.ufl)-examples"
+        code = load_cache(cache_id, symfem.__version__)
+        if code is None:
+            code = "import basix\nimport basix.ufl\nimport numpy as np"
 
-        for e in element.examples:
-            cell, degree, variant, kwargs = parse_example(e)
-            symfem_name, symfem_degree, params = element.get_implementation_string(
-                "symfem", cell, degree, variant
-            )
-            if "variant" in params:
-                kwargs["variant"] = params["variant"]
-            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+            for e in element.examples:
+                cell, degree, variant, kwargs = parse_example(e)
+                symfem_name, symfem_degree, params = element.get_implementation_string(
+                    "symfem", cell, degree, variant
+                )
+                if "variant" in params:
+                    kwargs["variant"] = params["variant"]
+                symfem_e = symfem.create_element(
+                    cell, symfem_name, symfem_degree, **kwargs
+                )  # type: ignore
 
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
+                code += "\n\n"
+                code += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
 
-            out += symfem.basix_interface.generate_basix_element_code(
-                symfem_e, include_comment=False, include_imports=False, ufl=True
-            )
+                code += symfem.basix_interface.generate_basix_element_code(
+                    symfem_e, include_comment=False, include_imports=False, ufl=True
+                )
 
-        return out
+            save_cache(cache_id, symfem.__version__, code)
+
+        return code
 
     @staticmethod
     def verify(
