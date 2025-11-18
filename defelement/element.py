@@ -564,9 +564,16 @@ class Element:
                 if j in data:
                     if isinstance(data[j], dict):
                         for shape, sub_data in data[j].items():
-                            dof_data.append(
-                                f"{i} ({shape}){post}: {dofs_on_entity(j, sub_data)}"
-                            )
+                            if i.startswith("On each"):
+                                dof_data.append(
+                                    f"{i} (of a {shape}){post}: {dofs_on_entity(j, sub_data)}"
+                                )
+                            else:
+                                assert i == "On the interior of the reference cell"
+                                dof_data.append(
+                                    f"On the interior of a reference {shape}{post}: {dofs_on_entity(j, sub_data)}"
+                                )
+
                     else:
                         dof_data.append(f"{i}{post}: {dofs_on_entity(j, data[j])}")
             return "<br />\n".join(dof_data)
