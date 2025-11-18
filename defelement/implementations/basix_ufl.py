@@ -242,6 +242,9 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         import symfem
         import symfem.basix_interface
 
+        if element.filename == "transition":
+            return False
+
         for e in element.examples:
             cell, degree, variant, kwargs = parse_example(e)
             symfem_name, symfem_degree, params = element.get_implementation_string(
