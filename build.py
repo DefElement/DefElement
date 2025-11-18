@@ -69,6 +69,11 @@ parser.add_argument(
 sitemap = {}
 
 
+def jsify(text):
+    """Convert to a safe variable name for Javascript."""
+    return text.replace(".", "_").replace("-", "_")
+
+
 def write_html_page(
     path: str,
     title: typing.Optional[str],
@@ -389,10 +394,9 @@ for e in categoriser.elements:
                 input_code, output_code = codename[2:-1].split(" -> ")
                 jscodename = output_code.replace(".", "_").replace("-", "_")
                 if c is None:
-                    if e.implemented(input_code) and not e.implemented(output_code):
+                    if not e.implemented(output_code) and e.implemented(codename):
                         try:
                             example_code = e.make_implementation_examples(codename)
-
                             if (
                                 e.filename in verification
                                 and output_code in verification[e.filename]
@@ -400,6 +404,7 @@ for e in categoriser.elements:
                                 v = verification[e.filename][output_code]
                         except (NotImplementedError, KeyError):
                             pass
+
                     if example_code is None:
                         jscodename = None
                         save_cache(cache_id, symfem.__version__, "_NONE")
@@ -414,7 +419,7 @@ for e in categoriser.elements:
         # Standard implementations
         elif e.implemented(codename):
             if e.has_implementation_examples(codename):
-                jscodename = codename.replace(".", "_").replace("-", "_")
+                jscodename = jsify(codename)
                 if e.filename in verification and codename in verification[e.filename]:
                     v = verification[e.filename][codename]
 
@@ -575,7 +580,7 @@ for e in categoriser.elements:
 
             impl.append(
                 (
-                    f"<a href='/lists/implementations/{libname}.html'>{libname}</a>",
+                    f"<a href='/lists/implementations/{jscodename}.html'>{libname}</a>",
                     info,
                     short_info,
                 )
@@ -1500,12 +1505,18 @@ write_html_page(
 os.mkdir(os.path.join(settings.htmlindices_path, "implementations"))
 content = heading_with_self_ref("h1", "Implemented elements")
 for c, info in implementations.items():
+    if c.startswith("*("):
+        continue
     category_pages = []
-    for e in categoriser.elements_in_implementation(c):
+    for e in categoriser.elements_in_implementation(
+        c, include_dependent_implementations=True
+    ):
         names = {e.html_name}
         refs = set()
         for cname in categoriser.references:
-            for i_str in e.list_of_implementation_strings(c, None):
+            for i_str in e.list_of_implementation_strings(
+                c, None, include_dependent_implementations=True
+            ):
                 if "(" not in i_str or f"({cname})" in i_str:
                     refs.add(cname)
                     break
@@ -1520,7 +1531,7 @@ for c, info in implementations.items():
     category_pages.sort(key=lambda x: x[0])
 
     content += (
-        f"<h2><a href='/lists/implementations/{c}.html'>Implemented in {info.name}"
+        f"<h2><a href='/lists/implementations/{jsify(c)}.html'>Implemented in {info.name}"
         "</a></h2>\n<ul>"
     )
     content += "".join([i[1] for i in category_pages])
@@ -1531,7 +1542,7 @@ for c, info in implementations.items():
     sub_content += "</ul>"
 
     write_html_page(
-        os.path.join(settings.htmlindices_path, f"implementations/{c}.html"),
+        os.path.join(settings.htmlindices_path, f"implementations/{jsify(c)}.html"),
         f"Implemented in {info.name}",
         sub_content,
     )
