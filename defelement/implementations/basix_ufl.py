@@ -55,7 +55,6 @@ class BasixUFLImplementation(Implementation):
                 )
             except NotImplementedError:
                 continue
-
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
             out += "element = basix.ufl.element("
@@ -239,21 +238,22 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         Returns:
             Example code
         """
-        import symfem
-        import symfem.basix_interface
-
-        for e in element.examples:
-            cell, degree, variant, kwargs = parse_example(e)
-            symfem_name, symfem_degree, params = element.get_implementation_string(
-                "symfem", cell, degree, variant
-            )
-            if "variant" in params:
-                kwargs["variant"] = params["variant"]
-            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
-            try:
-                symfem.basix_interface.generate_basix_element_code(symfem_e)
-            except (NotImplementedError, KeyError):
-                return False
-        return True
+        return element.name not in [
+            "alfeld-sorokina",
+            "argyris",
+            "arnold-boffi-falk",
+            "bell",
+            "bernardi-raugel",
+            "bogner-fox-schmitt",
+            "buffa-christiansen",
+            "dual",
+            "gopalakrishnan-lederer-schoberl"
+            "hermite",
+            "rotated-buffa-christiansen",
+            "transition",
+            "taylor-hood",
+            "scott-vogelius",
+            "wu-xu",
+        ]
 
     id = "*(symfem -> basix.ufl)"
