@@ -20,7 +20,9 @@ dofs:
   vertices: point evaluations
   edges: point evaluations of normal derivatives at midpoints
 mapping: identity
-sobolev: L2
+sobolev: H1
+notes:
+  - The normal derivatives of the basis functions are continuous between cells
 implementations:
   symfem: Morley
   fiat: Morley DEGREEMAP=None
