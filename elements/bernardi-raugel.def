@@ -31,7 +31,7 @@ dofs:
   edges: (if \(k>1\)) point evaluations in coordinate directions at midpoints
   facets:
     - normal integral moments with (lagrange,0)
-mapping: contravariant Piola
+mapping: see {{citation::kirby_mapping}}
 sobolev: H1
 implementations:
   symfem: Bernardi-Raugel

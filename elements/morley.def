@@ -19,7 +19,7 @@ polynomial-set:
 dofs:
   vertices: point evaluations
   edges: point evaluations of normal derivatives at midpoints
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 sobolev: L2
 implementations:
   symfem: Morley

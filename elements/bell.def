@@ -21,7 +21,7 @@ dofs:
     - point evaluations
     - point evaluations of first derivatives
     - point evaluations of second derivatives
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 sobolev: H3
 implementations:
   symfem: Bell

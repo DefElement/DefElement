@@ -24,7 +24,7 @@ lagrange-subdegree: k
 lagrange-superdegree: k
 degree: polynomial-subdegree
 sobolev: H1
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 dofs:
   cell:
     - integral over cell

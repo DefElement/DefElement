@@ -13,7 +13,7 @@ entity-ndofs:
   faces:
     formula: 0
 sobolev: H1(div)
-mapping: contravariant Piola
+mapping: see {{citation::kirby_mapping}}
 min-degree: 2
 max-degree: 2
 categories:
