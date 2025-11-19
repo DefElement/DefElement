@@ -11,7 +11,6 @@ import sympy
 import yaml
 from github import Github
 
-from webtools.citations import markup_citation
 from defelement import citations, settings
 from defelement.families import keys_and_names
 from defelement.implementations import (
