@@ -127,21 +127,28 @@ cell to an actual mesh, an appropriate mapping must be defined.
 Let \({{symbols.geometry_map}}\) be a transformation that maps the reference cell to a cell in the mesh,
 and let \(\boldsymbol{x}\) be a point in the cell.
 
-The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geometry_map}}\) is
-\(\displaystyle\frac{\mathrm{d}F}{\mathrm{d}x}\) for 1D reference cells,
-\(\displaystyle\left(
-\begin{array}{cc}
-\frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}\\
-\frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}
-\end{array}
-\right)\) for 2D reference cells, or
-\(\displaystyle\left(
-\begin{array}{ccc}
-\frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}&\frac{\partial F_1}{\partial z}\\
-\frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}&\frac{\partial F_2}{\partial z}\\
-\frac{\partial F_3}{\partial x}&\frac{\partial F_3}{\partial y}&\frac{\partial F_3}{\partial z}
-\end{array}
-\right)\) for 3D reference cells.
+The Jacobian, \({{symbols.jacobian}}\), of the transformation \({{symbols.geometry_map}}\) is:
+
+* \(\displaystyle\frac{\mathrm{d}F}{\mathrm{d}x}\) for 1D reference cells (with 1D physical cells),
+* \(\displaystyle\left(
+  \begin{array}{cc}
+  \frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}\\
+  \frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}
+  \end{array}
+  \right)\) for 2D reference cells (with 2D physical cells),
+* \(\displaystyle\left(
+  \begin{array}{ccc}
+  \frac{\partial F_1}{\partial x}&\frac{\partial F_1}{\partial y}&\frac{\partial F_1}{\partial z}\\
+  \frac{\partial F_2}{\partial x}&\frac{\partial F_2}{\partial y}&\frac{\partial F_2}{\partial z}\\
+  \frac{\partial F_3}{\partial x}&\frac{\partial F_3}{\partial y}&\frac{\partial F_3}{\partial z}
+  \end{array}
+  \right)\) for 3D reference cells (with 3D physical cells).
+
+If the dimensions of the reference and physical cells are not equal (eg for a surface mesh of 2D cells embedded in 3D)
+then \({{symbols.jacobian}}\) will be a rectangular matrix. In this case then in the definitions below,
+the determinant \(\det({{symbols.jacobian}})\) should be replaced by \(\sqrt{\det({{symbols.jacobian}}^T{{symbols.jacobian}})}\)
+and the inverse matrix \({{symbols.jacobian}}^{-1}\) should be replaced by the left pseudoinverse matrix
+\({{symbols.jacobian}}^\dagger\) that satisfies \({{symbols.jacobian}}^\dagger{{symbols.jacobian}} = \mathbf{I}\).
 
 ### Scalar-valued basis functions
 The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by

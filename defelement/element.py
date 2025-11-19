@@ -731,7 +731,9 @@ class Element:
         """
         return f"<a href='/elements/{self.html_filename}'>{self.html_name}</a>"
 
-    def implemented(self, lib: str) -> bool:
+    def implemented(
+        self, lib: str, include_dependent_implementations: bool = False
+    ) -> bool:
         """Check if element in implemented in a library.
 
         Args:
@@ -742,10 +744,22 @@ class Element:
         """
         if not implementations[lib].implemented(self):
             return False
+        if "implementations" in self.data and lib in self.data["implementations"]:
+            return True
 
         if lib.startswith("*(") and lib.endswith(")"):
-            lib, _ = lib[2:-1].split(" -> ")
-        return "implementations" in self.data and lib in self.data["implementations"]
+            assert not include_dependent_implementations
+            in_lib, _ = lib[2:-1].split(" -> ")
+            return (
+                "implementations" in self.data
+                and in_lib in self.data["implementations"]
+            )
+        elif include_dependent_implementations:
+            for i in implementations:
+                if i.endswith(f"-> {lib})") and self.implemented(i):
+                    return True
+
+        return False
 
     def get_implementation_string(
         self,
@@ -822,7 +836,10 @@ class Element:
         return out, input_deg, params
 
     def list_of_implementation_strings(
-        self, lib: str, joiner: typing.Union[None, str] = "<br />"
+        self,
+        lib: str,
+        joiner: typing.Union[None, str] = "<br />",
+        include_dependent_implementations: bool = False,
     ) -> typing.Union[str, typing.List[str]]:
         """Get a list of implementation strings.
 
@@ -833,54 +850,68 @@ class Element:
         Returns:
             List of implemtation strings
         """
-        assert self.implemented(lib)
+        if include_dependent_implementations:
+            assert not lib.startswith("*(")
+            imp_list: typing.List[str] = []
+            if self.implemented(lib):
+                imp_list += self.list_of_implementation_strings(lib, None)
+            for other_lib in implementations:
+                if other_lib.endswith(f" -> {lib}") and self.implemented(other_lib):
+                    imp_list += self.list_of_implementation_strings(other_lib, None)
 
-        if lib.startswith("*(") and lib.endswith(")"):
-            return "<small><em>Uses custom element code</em></small>"
-
-        if "display" in self.data["implementations"][lib]:
-            d = implementations[lib].format(
-                self.data["implementations"][lib]["display"], {}
-            )
-            return f"<code>{d}</code>"
-        if "variants" in self.data:
-            variants = self.data["variants"]
         else:
-            variants = {None: {}}
+            assert self.implemented(lib)
 
-        i_dict: typing.Dict[str, typing.List[str]] = {}
-        for v, vinfo in variants.items():
-            if v is None:
-                data = self.data["implementations"][lib]
+            if lib.startswith("*(") and lib.endswith(")"):
+                return "<small><em>Uses custom element code</em></small>"
+
+            if "display" in self.data["implementations"][lib]:
+                d = implementations[lib].format(
+                    self.data["implementations"][lib]["display"], {}
+                )
+                return f"<code>{d}</code>"
+            if "variants" in self.data:
+                variants = self.data["variants"]
             else:
-                if v not in self.data["implementations"][lib]:
-                    continue
-                data = self.data["implementations"][lib][v]
-            if isinstance(data, str):
-                istring, _, params = self.get_implementation_string(lib, None, None, v)
-                s = implementations[lib].format(istring, params)
-                if s not in i_dict:
-                    i_dict[s] = []
+                variants = {None: {}}
+
+            i_dict: typing.Dict[str, typing.List[str]] = {}
+            for v, vinfo in variants.items():
                 if v is None:
-                    i_dict[s].append("")
+                    data = self.data["implementations"][lib]
                 else:
-                    i_dict[s].append(vinfo["variant-name"])
-            else:
-                for i, j in data.items():
-                    istring, _, params = self.get_implementation_string(lib, i, None, v)
+                    if v not in self.data["implementations"][lib]:
+                        continue
+                    data = self.data["implementations"][lib][v]
+                if isinstance(data, str):
+                    istring, _, params = self.get_implementation_string(
+                        lib, None, None, v
+                    )
                     s = implementations[lib].format(istring, params)
                     if s not in i_dict:
                         i_dict[s] = []
                     if v is None:
-                        i_dict[s].append(i)
+                        i_dict[s].append("")
                     else:
-                        i_dict[s].append(f"{i}, {vinfo['variant-name']}")
-        if len(i_dict) == 1:
-            return f"<code>{list(i_dict.keys())[0]}</code>"
-        imp_list = [
-            f"<code>{i}</code> <span style='font-size:60%'>({'; '.join(j)})</span>"
-            for i, j in i_dict.items()
-        ]
+                        i_dict[s].append(vinfo["variant-name"])
+                else:
+                    for i, j in data.items():
+                        istring, _, params = self.get_implementation_string(
+                            lib, i, None, v
+                        )
+                        s = implementations[lib].format(istring, params)
+                        if s not in i_dict:
+                            i_dict[s] = []
+                        if v is None:
+                            i_dict[s].append(i)
+                        else:
+                            i_dict[s].append(f"{i}, {vinfo['variant-name']}")
+            if len(i_dict) == 1:
+                return f"<code>{list(i_dict.keys())[0]}</code>"
+            imp_list = [
+                f"<code>{i}</code> <span style='font-size:60%'>({'; '.join(j)})</span>"
+                for i, j in i_dict.items()
+            ]
         if joiner is None:
             return imp_list
         else:
@@ -1273,7 +1304,9 @@ class Categoriser:
         """
         return [e for e in self.elements if c in e.categories(False, False)]
 
-    def elements_in_implementation(self, i: str) -> typing.List[Element]:
+    def elements_in_implementation(
+        self, i: str, include_dependent_implementations=False
+    ) -> typing.List[Element]:
         """Get elements in an implementation.
 
         Args:
@@ -1282,7 +1315,13 @@ class Categoriser:
         Returns:
             List of elements
         """
-        return [e for e in self.elements if e.implemented(i)]
+        return [
+            e
+            for e in self.elements
+            if e.implemented(
+                i, include_dependent_implementations=include_dependent_implementations
+            )
+        ]
 
     def elements_by_reference(self, r: str) -> typing.List[Element]:
         """Get elements on a reference.
