@@ -244,14 +244,19 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             "argyris",
             "arnold-boffi-falk",
             "bell",
+            "bernardi-raugel",
             "bogner-fox-schmitt",
+            "hermite",
+            "morley",
+            "morley-wang-xu",
+            "taylor",
             "wu-xu",
         ]:
             return False
 
         # D(div curl) elements
         if element.filename in [
-            "gopalakrishnan-lederer-schoberlhermite",
+            "gopalakrishnan-lederer-schoberl",
         ]:
             return False
 
@@ -288,6 +293,15 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         if element.filename in [
             "buffa-christiansen",
             "dual",
+            "rotated-buffa-christiansen",
+        ]:
+            return False
+
+        # non-Ciarlet elements
+        if element.filename in [
+            "direct-serendipity",
+            "enriched-galerkin",
+            "lfeg",
             "rotated-buffa-christiansen",
         ]:
             return False
