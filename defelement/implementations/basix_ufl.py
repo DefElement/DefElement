@@ -239,7 +239,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             Example code
         """
         # Elements with DOFs that include derivatives
-        if element.name in [
+        if element.filename in [
             "alfeld-sorokina",
             "argyris",
             "arnold-boffi-falk",
@@ -250,13 +250,13 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             return False
 
         # D(div curl) elements
-        if element.name in [
+        if element.filename in [
             "gopalakrishnan-lederer-schoberlhermite",
         ]:
             return False
 
         # Macro elements
-        if element.name in [
+        if element.filename in [
             "alfeld-sorokina",
             "guzman-neilan",
             "guzman-neilan2",
@@ -269,14 +269,14 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             return False
 
         # Elements with different numbers of DOFs on entities of the same type
-        if element.name in [
+        if element.filename in [
             "fortin-soulie",
             "transition",
         ]:
             return False
 
         # Mixed elements
-        if element.name in [
+        if element.filename in [
             "mini",
             "pechstein-schoberl",
             "taylor-hood",
@@ -285,7 +285,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             return False
 
         # Dual elements
-        if element.name in [
+        if element.filename in [
             "buffa-christiansen",
             "dual",
             "rotated-buffa-christiansen",
