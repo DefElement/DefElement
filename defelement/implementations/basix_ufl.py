@@ -55,7 +55,6 @@ class BasixUFLImplementation(Implementation):
                 )
             except NotImplementedError:
                 continue
-
             out += "\n\n"
             out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
             out += "element = basix.ufl.element("
@@ -175,7 +174,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         import symfem
         import symfem.basix_interface
 
-        out = "import basix\nimport basix.ufl\nimport numpy as np"
+        code = "import basix\nimport basix.ufl\nimport numpy as np"
 
         for e in element.examples:
             cell, degree, variant, kwargs = parse_example(e)
@@ -186,14 +185,14 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
                 kwargs["variant"] = params["variant"]
             symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
 
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
+            code += "\n\n"
+            code += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
 
-            out += symfem.basix_interface.generate_basix_element_code(
+            code += symfem.basix_interface.generate_basix_element_code(
                 symfem_e, include_comment=False, include_imports=False, ufl=True
             )
 
-        return out
+        return code
 
     @staticmethod
     def verify(
@@ -239,24 +238,74 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         Returns:
             Example code
         """
-        import symfem
-        import symfem.basix_interface
-
-        if element.filename == "transition":
+        # Elements with DOFs that include derivatives
+        if element.filename in [
+            "alfeld-sorokina",
+            "argyris",
+            "arnold-boffi-falk",
+            "bell",
+            "bernardi-raugel",
+            "bogner-fox-schmitt",
+            "hermite",
+            "morley",
+            "morley-wang-xu",
+            "taylor",
+            "wu-xu",
+        ]:
             return False
 
-        for e in element.examples:
-            cell, degree, variant, kwargs = parse_example(e)
-            symfem_name, symfem_degree, params = element.get_implementation_string(
-                "symfem", cell, degree, variant
-            )
-            if "variant" in params:
-                kwargs["variant"] = params["variant"]
-            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
-            try:
-                symfem.basix_interface.generate_basix_element_code(symfem_e)
-            except (NotImplementedError, KeyError):
-                return False
+        # D(div curl) elements
+        if element.filename in [
+            "gopalakrishnan-lederer-schoberl",
+        ]:
+            return False
+
+        # Macro elements
+        if element.filename in [
+            "alfeld-sorokina",
+            "guzman-neilan",
+            "guzman-neilan2",
+            "hsieh-clough-tocher",
+            "johnson-mercier",
+            "p1-iso-p2",
+            "p1-macro",
+            "reduced-hsieh-clough-tocher",
+        ]:
+            return False
+
+        # Elements with different numbers of DOFs on entities of the same type
+        if element.filename in [
+            "fortin-soulie",
+            "transition",
+        ]:
+            return False
+
+        # Mixed elements
+        if element.filename in [
+            "mini",
+            "pechstein-schoberl",
+            "taylor-hood",
+            "scott-vogelius",
+        ]:
+            return False
+
+        # Dual elements
+        if element.filename in [
+            "buffa-christiansen",
+            "dual",
+            "rotated-buffa-christiansen",
+        ]:
+            return False
+
+        # non-Ciarlet elements
+        if element.filename in [
+            "direct-serendipity",
+            "enriched-galerkin",
+            "lfeg",
+            "rotated-buffa-christiansen",
+        ]:
+            return False
+
         return True
 
     id = "*(symfem -> basix.ufl)"

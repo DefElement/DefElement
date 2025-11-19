@@ -170,7 +170,7 @@ def markup_example(
     cache_key = f"markup_example-{html_name}-{element.order}-{element.reference.name}"
     for i, j in element.init_kwargs().items():
         cache_key += f"-{i}-{j}"
-    basis = load_cache(cache_key, element)
+    basis = load_cache(cache_key, element.last_updated)
 
     if basis is None:
         basis = ""
@@ -217,7 +217,7 @@ def markup_example(
                 basis += " of the reference cell."
             basis += "</div>"
             basis += "</div>"
-        save_cache(cache_key, element, basis)
+        save_cache(cache_key, element.last_updated, basis)
 
     eg += basis
 
