@@ -119,7 +119,7 @@ def do_the_plot(
         ]:
             c = None
             if cache_element is not None:
-                c = load_cache(f"plot-{fname}", cache_element)
+                c = load_cache(f"plot-{fname}", cache_element.last_updated)
             if c is not None:
                 with open(os.path.join(settings.htmlimg_path, fname), "wb") as f:
                     f.write(base64.b64decode(c))
@@ -129,7 +129,7 @@ def do_the_plot(
                     with open(os.path.join(settings.htmlimg_path, fname), "rb") as f:
                         save_cache(
                             f"plot-{fname}",
-                            cache_element,
+                            cache_element.last_updated,
                             base64.b64encode(f.read()).decode("utf-8"),
                         )
 
