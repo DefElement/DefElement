@@ -107,7 +107,11 @@ def insert_citation(matches: typing.Match[str]) -> str:
         HTML for citation
     """
     id = matches[1]
-    return "<ref " + " ".join(f'{i}="{j}"' for i, j in getattr(citations, id).items()) + ">"
+    return (
+        "<ref "
+        + " ".join(f'{i}="{j}"' for i, j in getattr(citations, id).items())
+        + ">"
+    )
 
 
 settings.re_extras = [

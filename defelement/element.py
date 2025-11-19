@@ -1028,15 +1028,9 @@ class Element:
                     else:
                         fam, ext, cell, k = e_s
                     data = self._c.families[key][fam]
-                    if (
-                        "arnold-logg" in data
-                        and arnold_logg_citation not in references
-                    ):
+                    if "arnold-logg" in data and arnold_logg_citation not in references:
                         references.append(arnold_logg_citation)
-                    if (
-                        "cockburn-fu" in data
-                        and cockburn_fu_citation not in references
-                    ):
+                    if "cockburn-fu" in data and cockburn_fu_citation not in references:
                         references.append(cockburn_fu_citation)
                     if "references" in data:
                         for r in references:
