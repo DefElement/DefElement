@@ -11,7 +11,8 @@ import sympy
 import yaml
 from github import Github
 
-from defelement import settings
+from webtools.citations import markup_citation
+from defelement import citations, settings
 from defelement.families import keys_and_names
 from defelement.implementations import (
     DegreeNotImplemented,
@@ -359,7 +360,18 @@ class Element:
         """
         if "mapping" not in self.data:
             return None
-        return self.data["mapping"]
+        mapping = self.data["mapping"]
+        while "{{citation::" in mapping:
+            pre, post = mapping.split("{{citation::", 1)
+            id, post = post.split("}}", 1)
+            c = getattr(citations, id)
+            if "references" not in self.data:
+                self.data["references"] = []
+            if c not in self.data["references"]:
+                self.data["references"].append(c)
+            index = self.data["references"].index(c) + 1
+            mapping = f'{pre}<a href="#ref{index}">[{index}]</a>{post}'
+        return mapping
 
     def sobolev(self) -> typing.Union[None, str]:
         """Get Sobolev space name.
