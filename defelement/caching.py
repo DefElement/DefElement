@@ -14,7 +14,7 @@ cache_version = "1.0.0"
 
 def load_cache(
     item_key: str,
-    e: symfem.finite_element.FiniteElement,
+    last_updated: str,
 ) -> typing.Optional[str]:
     """Load item from cache."""
     if not settings.caching:
@@ -24,7 +24,7 @@ def load_cache(
             data = json.load(f)
         if data.get("symfem_version") != symfem.__version__:
             return None
-        if data.get("last_updated") != e.last_updated:
+        if data.get("last_updated") != last_updated:
             return None
         if data.get("cache_version") != cache_version:
             return None
@@ -33,7 +33,7 @@ def load_cache(
         return None
 
 
-def save_cache(item_key: str, e: symfem.finite_element.FiniteElement, item: str):
+def save_cache(item_key: str, last_updated: str, item: str):
     """Save item to cache."""
     if not settings.caching:
         return
@@ -42,7 +42,7 @@ def save_cache(item_key: str, e: symfem.finite_element.FiniteElement, item: str)
     data = {
         "content": item,
         "symfem_version": symfem.__version__,
-        "last_updated": e.last_updated,
+        "last_updated": last_updated,
         "cache_version": cache_version,
     }
     with open(join(settings.cache_path, f"{item_key}.json"), "w") as f:
