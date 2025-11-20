@@ -24,7 +24,7 @@ polynomial-set:
   interval: poly[k]
   triangle: poly[k]
   tetrahedron: poly[k]
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 sobolev: H1
 notes:
   - The derivatives of the basis functions are continuous between cells at the vertices of the element

@@ -37,7 +37,7 @@ polynomial-set:
   interval: poly[k]
   triangle: poly[k] && <1>[\left\{xy(1-x-y)p\middle|p\in{{poly[k]}}\setminus{{poly[0]}}\right\}]
   tetrahedron: poly[k] && <1>[\left\{xyz(1-x-y-z)p\middle|p\in{{poly[k]}}\setminus{{poly[0]}}\right\}]
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 sobolev: H1
 dofs:
   vertices: point evaluations

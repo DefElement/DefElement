@@ -11,12 +11,8 @@ import sympy
 import yaml
 from github import Github
 
-from defelement import settings
-from defelement.families import (
-    arnold_logg_reference,
-    cockburn_fu_reference,
-    keys_and_names,
-)
+from defelement import citations, settings
+from defelement.families import keys_and_names
 from defelement.implementations import (
     DegreeNotImplemented,
     NotImplementedOnReference,
@@ -26,6 +22,8 @@ from defelement.implementations import (
 )
 from defelement.markup import insert_links
 from defelement.polyset import make_extra_info, make_poly_set
+from defelement.citations import arnold_logg as arnold_logg_citation
+from defelement.citations import cockburn_fu as cockburn_fu_citation
 
 
 def make_dof_data(
@@ -361,7 +359,18 @@ class Element:
         """
         if "mapping" not in self.data:
             return None
-        return self.data["mapping"]
+        mapping = self.data["mapping"]
+        while "{{citation::" in mapping:
+            pre, post = mapping.split("{{citation::", 1)
+            id, post = post.split("}}", 1)
+            c = getattr(citations, id)
+            if "references" not in self.data:
+                self.data["references"] = []
+            if c not in self.data["references"]:
+                self.data["references"].append(c)
+            index = self.data["references"].index(c) + 1
+            mapping = f'{pre}<a href="#ref{index}">[{index}]</a>{post}'
+        return mapping
 
     def sobolev(self) -> typing.Union[None, str]:
         """Get Sobolev space name.
@@ -1037,16 +1046,10 @@ class Element:
                     else:
                         fam, ext, cell, k = e_s
                     data = self._c.families[key][fam]
-                    if (
-                        "arnold-logg" in data
-                        and arnold_logg_reference not in references
-                    ):
-                        references.append(arnold_logg_reference)
-                    if (
-                        "cockburn-fu" in data
-                        and cockburn_fu_reference not in references
-                    ):
-                        references.append(cockburn_fu_reference)
+                    if "arnold-logg" in data and arnold_logg_citation not in references:
+                        references.append(arnold_logg_citation)
+                    if "cockburn-fu" in data and cockburn_fu_citation not in references:
+                        references.append(cockburn_fu_citation)
                     if "references" in data:
                         for r in references:
                             if r not in references:

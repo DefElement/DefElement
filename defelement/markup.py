@@ -7,7 +7,7 @@ import symfem
 from webtools import settings
 from webtools.markup import insert_links as _insert_links
 
-from defelement import info, plotting, symbols
+from defelement import info, plotting, symbols, citations
 
 page_references: typing.List[str] = []
 
@@ -97,6 +97,23 @@ def plot_img(matches: typing.Match[str]) -> str:
     return f"<center>{plotting.plot_img(e)}</center>"
 
 
+def insert_citation(matches: typing.Match[str]) -> str:
+    """Insert a citation.
+
+    Args:
+        matches: Citation info
+
+    Returns:
+        HTML for citation
+    """
+    id = matches[1]
+    return (
+        "<ref "
+        + " ".join(f'{i}="{j}"' for i, j in getattr(citations, id).items())
+        + ">"
+    )
+
+
 settings.re_extras = [
     (r"{{plot::([^,]+),([^,]+),([0-9]+)}}", plot_element),
     (r"{{plot::([^,]+),([^,]+),([0-9]+)::([0-9]+)}}", plot_single_element),
@@ -107,6 +124,7 @@ settings.re_extras = [
         lambda m: getattr(symbols, m[1])(int(m[2])),
     ),
     (r"{{symbols\.([^}]+)}}", lambda m: getattr(symbols, m[1])),
+    (r"{{citation::([^}]+)}}", insert_citation),
 ]
 settings.str_extras = [
     ("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>"),

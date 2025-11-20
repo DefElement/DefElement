@@ -38,7 +38,7 @@ dofs:
   edges: integrals of normal derivatives
   faces: integrals of normal derivatives
   volumes: integrals of normal derivatives
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 implementations:
   symfem: MWX
 examples:

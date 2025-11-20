@@ -25,7 +25,7 @@ dofs:
 ndofs:
   triangle:
     formula: 21+6(k-5)+(k-5)(k-4)/2
-mapping: identity
+mapping: see {{citation::kirby_mapping}}
 sobolev: H2
 implementations:
   symfem: Argyris

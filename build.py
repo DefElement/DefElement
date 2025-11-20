@@ -698,7 +698,7 @@ for e in categoriser.elements:
         content += heading_with_self_ref("h2", "References")
         content += "<ul class='citations'>\n"
         for rindex, r in enumerate(refs):
-            content += f"<li>{markup_citation(r)}"
+            content += f"<li>[{rindex + 1}] {markup_citation(r)}"
             content += f" [<a href='/elements/bibtex/{e.filename}-{rindex}.bib'>BibTeX</a>]</li>\n"
             with open(
                 os.path.join(
