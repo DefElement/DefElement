@@ -117,6 +117,6 @@ class NDElementImplementation(Implementation):
 
     id = "ndelement"
     name = "NDElement"
-    url = "https://github.com/bempp/ndelement"
+    url = "https://github.com/bempp/nd"
     verification = True
     install = "pip3 install ndelement"
