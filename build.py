@@ -396,12 +396,9 @@ for e in categoriser.elements:
                 if c is None:
                     if not e.implemented(output_code) and e.implemented(codename):
                         try:
+                            print(1)
                             example_code = e.make_implementation_examples(codename)
-                            if (
-                                e.filename in verification
-                                and output_code in verification[e.filename]
-                            ):
-                                v = verification[e.filename][output_code]
+                            print(2)
                         except (NotImplementedError, KeyError):
                             pass
 
@@ -415,6 +412,11 @@ for e in categoriser.elements:
                         jscodename = None
                     else:
                         example_code = c
+                if (
+                    e.filename in verification
+                    and output_code in verification[e.filename]
+                ):
+                    v = verification[e.filename][output_code]
 
         # Standard implementations
         elif e.implemented(codename):
