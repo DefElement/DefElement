@@ -78,13 +78,22 @@ class NDElementImplementation(Implementation):
 
     @staticmethod
     def verify(
-        element: Element, example: str
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
     ) -> typing.Tuple[
         typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
     ]:
         """Get verification data.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: Element data
             example: Example data
 
@@ -94,17 +103,12 @@ class NDElementImplementation(Implementation):
         from ndelement.ciarlet import Continuity, Family, create_family
         from ndelement.reference_cell import ReferenceCellType, entity_counts
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-        name, input_deg, params = element.get_implementation_string(
-            "ndelement", ref, deg, variant, any_variant=True
-        )
         kwargs = {}
         if "continuity" in params:
             kwargs["continuity"] = getattr(Continuity, params["continuity"])
 
-        cell = getattr(ReferenceCellType, ref[0].upper() + ref[1:])
-        e = create_family(getattr(Family, name), input_deg, **kwargs).element(cell)
+        cell = getattr(ReferenceCellType, reference[0].upper() + reference[1:])
+        e = create_family(getattr(Family, name), degree, **kwargs).element(cell)
         entity_dofs = [
             [e.entity_dofs(dim, entity) for entity in range(n)]
             for dim, n in enumerate(entity_counts(cell))

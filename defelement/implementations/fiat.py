@@ -103,13 +103,22 @@ class FIATImplementation(Implementation):
 
     @staticmethod
     def verify(
-        element: Element, example: str
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
     ) -> typing.Tuple[
         typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
     ]:
         """Get verification data.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: Element data
             example: Example data
 
@@ -118,27 +127,20 @@ class FIATImplementation(Implementation):
         """
         import FIAT
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-
-        fiat_name, input_deg, params = element.get_implementation_string(
-            "fiat", ref, deg, variant, any_variant=True
-        )
-
-        if ref in ["interval", "triangle", "tetrahedron"]:
-            cell = FIAT.ufc_cell(ref)
-        elif ref == "quadrilateral":
+        if reference in ["interval", "triangle", "tetrahedron"]:
+            cell = FIAT.ufc_cell(reference)
+        elif reference == "quadrilateral":
             cell = FIAT.reference_element.UFCQuadrilateral()
-        elif ref == "hexahedron":
+        elif reference == "hexahedron":
             cell = FIAT.reference_element.UFCHexahedron()
         else:
-            raise ValueError(f"Unsupported cell: {ref}")
+            raise ValueError(f"Unsupported cell: {reference}")
 
         args = []
         kwargs = {}
 
-        if input_deg is not None:
-            args.append(input_deg)
+        if params.get("degree", "") != "None":
+            args.append(degree)
 
         if "variant" in params:
             kwargs["variant"] = params["variant"]
@@ -146,19 +148,19 @@ class FIATImplementation(Implementation):
         if "reduced" in params:
             kwargs["reduced"] = bool(params["reduced"])
 
-        e = getattr(FIAT, fiat_name)(cell, *args, **kwargs)
+        e = getattr(FIAT, name)(cell, *args, **kwargs)
 
         value_size = 1
         for i in e.value_shape():
             value_size *= i
         edofs = [list(i.values()) for i in e.entity_dofs().values()]
-        if ref == "quadrilateral":
+        if reference == "quadrilateral":
             edofs = [
                 [edofs[0][0], edofs[0][2], edofs[0][1], edofs[0][3]],
                 [edofs[1][2], edofs[1][0], edofs[1][1], edofs[1][3]],
                 [edofs[2][0]],
             ]
-        if ref == "hexahedron":
+        if reference == "hexahedron":
             edofs = [
                 [
                     edofs[0][0],

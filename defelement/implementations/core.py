@@ -62,13 +62,22 @@ class Implementation(ABC):
 
     @staticmethod
     def verify(
-        element: Element, example: str
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
     ) -> typing.Tuple[
         typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
     ]:
         """Get verification data.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: Element data
             example: Example data
 

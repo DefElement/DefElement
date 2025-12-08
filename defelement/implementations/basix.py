@@ -79,13 +79,22 @@ class BasixImplementation(Implementation):
 
     @staticmethod
     def verify(
-        element: Element, example: str
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
     ) -> typing.Tuple[
         typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
     ]:
         """Get verification data.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: Element data
             example: Example data
 
@@ -94,11 +103,6 @@ class BasixImplementation(Implementation):
         """
         import basix
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-        basix_name, input_deg, params = element.get_implementation_string(
-            "basix", ref, deg, variant, any_variant=True
-        )
         kwargs = {}
         if "lagrange_variant" in params:
             kwargs["lagrange_variant"] = getattr(
@@ -109,12 +113,10 @@ class BasixImplementation(Implementation):
         if "discontinuous" in params:
             kwargs["discontinuous"] = params["discontinuous"] == "True"
 
-        assert input_deg is not None
-
         e = basix.create_element(
-            getattr(basix.ElementFamily, basix_name),
-            getattr(basix.CellType, ref),
-            input_deg,
+            getattr(basix.ElementFamily, name),
+            getattr(basix.CellType, reference),
+            degree,
             **kwargs,
         )
         return e.entity_dofs, lambda points: e.tabulate(0, points)[0].transpose(

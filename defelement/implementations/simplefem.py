@@ -41,30 +41,39 @@ class SimplefemImplementation(Implementation):
         """
         out = "import simplefem"
         for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
+            ref, degree, variant, kwargs = parse_example(e)
             assert len(kwargs) == 0
 
             try:
-                simplefem_name, input_deg, params = element.get_implementation_string(
-                    "simplefem", ref, deg, variant
+                name, input_degree, params = element.get_implementation_string(
+                    "simplefem", ref, degree, variant
                 )
             except NotImplementedError:
                 continue
 
             out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            out += f"element = simplefem.{simplefem_name}({input_deg})"
+            out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {ref}\n"
+            out += f"element = simplefem.{name}({input_degree})"
         return out
 
     @staticmethod
     def verify(
-        element: Element, example: str
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
     ) -> typing.Tuple[
         typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
     ]:
         """Get verification data.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: Element data
             example: Example data
 
@@ -74,39 +83,33 @@ class SimplefemImplementation(Implementation):
         import simplefem
         import numpy as np
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-        simplefem_name, deg, params = element.get_implementation_string(
-            "simplefem", ref, deg, variant, any_variant=True
-        )
-        assert deg is not None
-        assert simplefem_name == "lagrange_element"
+        assert name == "lagrange_element"
 
-        e = simplefem.lagrange_element(deg)
+        e = simplefem.lagrange_element(degree)
 
-        ndofs = (deg + 1) * (deg + 2) // 2
+        ndofs = (degree + 1) * (degree + 2) // 2
 
         entity_dofs = [[], [], []]
         # DOFs associated with vertices
         entity_dofs[0].append([0])
-        entity_dofs[0].append([deg])
+        entity_dofs[0].append([degree])
         entity_dofs[0].append([ndofs - 1])
         # DOFs associated with edges
         entity_dofs[1].append([])
         entity_dofs[1].append([])
-        dof_index = deg + 1
-        for i in range(1, deg):
+        dof_index = degree + 1
+        for i in range(1, degree):
             entity_dofs[1][1].append(dof_index)
-            dof_index += deg - i
+            dof_index += degree - i
             entity_dofs[1][0].append(dof_index)
             dof_index += 1
-        entity_dofs[1].append(list(range(1, deg)))
+        entity_dofs[1].append(list(range(1, degree)))
         # DOFs associated with interior of cell
         entity_dofs[2].append([])
-        dof_start = deg + 2
-        for i in range(deg - 2):
-            entity_dofs[2][0] += list(range(dof_start, dof_start + deg - 2 - i))
-            dof_start += deg - i
+        dof_start = degree + 2
+        for i in range(degree - 2):
+            entity_dofs[2][0] += list(range(dof_start, dof_start + degree - 2 - i))
+            dof_start += degree - i
 
         def tabulate(points):
             mapped_points = np.array([[2 * p[0] + p[1] - 1, p[1]] for p in points])
