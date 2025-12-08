@@ -56,17 +56,6 @@ class SimplefemImplementation(Implementation):
         Returns:
             Example code
         """
-
-    @classmethod
-    def example(cls, element: Element) -> str:
-        """Generate examples.
-
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
         return "element = simplefem.{name}({degree})"
 
     @classmethod

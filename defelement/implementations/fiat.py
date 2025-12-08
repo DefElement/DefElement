@@ -143,7 +143,7 @@ class FIATImplementation(Implementation):
             raise ValueError(f"Unsupported cell: {reference}")
 
         args = []
-        kwargs = {}
+        kwargs: dict[str, typing.Any] = {}
 
         if params.get("degree", "") != "None":
             args.append(degree)

@@ -168,7 +168,7 @@ class SymfemImplementation(Implementation):
 
         if reference == "dual polygon":
             reference += "(4)"
-        e = symfem.create_element(reference, name, degree, **params)
+        e = symfem.create_element(reference, name, degree, **params)  # type: ignore
         edofs = [
             [e.entity_dofs(i, j) for j in range(e.reference.sub_entity_count(i))]
             for i in range(e.reference.tdim + 1)

@@ -58,6 +58,7 @@ class Implementation:
             Example code
         """
         code = cls.example_import()
+        assert cls.id is not None
         for eg in element.examples:
             reference, defelement_degree, variant, kwargs = parse_example(eg)
             try:
@@ -67,7 +68,12 @@ class Implementation:
             except NotImplementedError:
                 continue
             code += "\n\n"
-            code = f"# Create {element.name_with_variant(variant)} degree {degree} on a {reference}\n"
+            code = "# Create "
+            if variant is None:
+                code += element.name
+            else:
+                code += element.name_with_variant(variant)
+            code += f" degree {degree} on a {reference}\n"
             code += cls.single_example(name, reference, degree, params, element, eg)
         return code
 
