@@ -382,6 +382,8 @@ for e in categoriser.elements:
     libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
     libraries.sort(key=lambda i: i[0])
     for codename, libname, url, pip in libraries:
+        if codename == "simplefem":
+            continue
         jscodename: typing.Optional[str] = None
         v: typing.Optional[typing.Dict] = None
         example_code: typing.Optional[str] = None
@@ -976,12 +978,13 @@ vs = []
 for i in verifications:
     if i != "symfem":
         vs.append(i)
-        content += (
-            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        )
-        long_content += (
-            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        )
+        if i != "simplefem":
+            content += (
+                f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+            )
+            long_content += (
+                f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+            )
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
@@ -990,18 +993,19 @@ for e in categoriser.elements:
     row = "<tr>"
     row += f"<td><a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
     for i in vs:
-        row += "<td>"
-        if e.filename in verification and i in verification[e.filename]:
-            result = verification[e.filename][i]
-            if len(result["pass"]) > 0 or len(result["fail"]) > 0:
-                n += 1
-                if len(result["fail"]) == 0:
-                    row += green_check
-                elif len(result["pass"]) > 0:
-                    row += orange_check
-                else:
-                    row += red_check
-        row += "</td>"
+        if i != "simplefem":
+            row += "<td>"
+            if e.filename in verification and i in verification[e.filename]:
+                result = verification[e.filename][i]
+                if len(result["pass"]) > 0 or len(result["fail"]) > 0:
+                    n += 1
+                    if len(result["fail"]) == 0:
+                        row += green_check
+                    elif len(result["pass"]) > 0:
+                        row += orange_check
+                    else:
+                        row += red_check
+            row += "</td>"
     row += "</tr>"
 
     examples = []
@@ -1133,15 +1137,16 @@ for i in verifications:
         url = "https://defelement.org/verification/"
     else:
         url = f"https://defelement.org/verification/{i}.html"
-    c += (
-        "<tr>"
-        f"<td>{implementations[i].name}</td>"
-        f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
-        "<td style='font-size:80%;font-family:monospace'>"
-        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-        f"({url})</td>"
-        "</tr>"
-    )
+    if i != "simplefem":
+        c += (
+            "<tr>"
+            f"<td>{implementations[i].name}</td>"
+            f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
+            "<td style='font-size:80%;font-family:monospace'>"
+            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+            f"({url})</td>"
+            "</tr>"
+        )
     if i in impl_content:
         impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
         impl_content[i] += (
