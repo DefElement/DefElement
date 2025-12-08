@@ -26,6 +26,7 @@ class SimplefemImplementation(Implementation):
         Returns:
             Formatted implementation string
         """
+        assert string is not None
         return string
 
     @staticmethod
