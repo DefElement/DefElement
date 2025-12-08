@@ -777,7 +777,7 @@ class Element:
         degree: typing.Optional[int],
         variant: typing.Optional[str] = None,
         any_variant: typing.Optional[bool] = False,
-    ) -> typing.Tuple[str, int, typing.Dict[str, typing.Any]]:
+    ) -> typing.Tuple[str, typing.Optional[int], typing.Dict[str, typing.Any]]:
         """Get implementation string.
 
         Args:
