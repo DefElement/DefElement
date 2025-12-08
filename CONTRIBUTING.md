@@ -83,7 +83,7 @@ implementations:
 
 There are a few special parameters (written in ALL CAPS) that can be used here:
 
-<table>
+<table class='bordered align-left'>
 <thead>
 <tr><td>Parameter</td><td>Purpose</td></tr>
 </thead>
@@ -154,9 +154,10 @@ This class should include:
 <tr><td>`verification`</td><td>variable (optional)</td><td>Should be set to `True` if the `verify` function is implemented.</td></tr>
 </table>
 
-Once these steps are done, you can start adding implementation details for your library to
+Once this is done, you can start adding implementation details for your library to
 the `implementation` field of elements in the [`elements`](https://github.com/DefElement/DefElement/blob/main/elements)
-folder.
+folder. The [adding an implementation to DefElement walkthough](https://defelement.org/guides/adding-an-element.html)
+is a more detailed guide to the steps involved in adding an implementation.
 
 ## Style guide
 When contributing to DefElement, you should follow [the DefElement style guide](https://defelement.org/style-guide.html).
