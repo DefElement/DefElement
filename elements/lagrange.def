@@ -163,6 +163,9 @@ implementations:
       quadrilateral: Lagrange
       tetrahedron: Lagrange
       hexahedron: Lagrange
+  simplefem:
+    equispaced:
+      triangle: lagrange_element
 examples:
   - interval,1,equispaced
   - interval,2,equispaced
