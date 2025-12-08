@@ -92,7 +92,7 @@ class SimplefemImplementation(Implementation):
 
         ndofs = (degree + 1) * (degree + 2) // 2
 
-        entity_dofs = [[], [], []]
+        entity_dofs: list[list[list[int]]] = [[], [], []]
         # DOFs associated with vertices
         entity_dofs[0].append([0])
         entity_dofs[0].append([degree])

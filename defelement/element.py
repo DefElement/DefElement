@@ -777,7 +777,7 @@ class Element:
         degree: typing.Optional[int],
         variant: typing.Optional[str] = None,
         any_variant: typing.Optional[bool] = False,
-    ) -> typing.Tuple[str, typing.Optional[int], typing.Dict[str, typing.Any]]:
+    ) -> typing.Tuple[str, int, typing.Dict[str, typing.Any]]:
         """Get implementation string.
 
         Args:
@@ -834,12 +834,9 @@ class Element:
         input_deg: typing.Optional[int] = degree
         if "DEGREEMAP" in params:
             if degree is not None:
-                if params["DEGREEMAP"] == "None":
-                    input_deg = None
-                else:
-                    input_deg = int(
-                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
-                    )
+                input_deg = int(
+                    sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
+                )
             del params["DEGREEMAP"]
 
         return out, input_deg, params
