@@ -116,8 +116,12 @@ class SimplefemImplementation(Implementation):
 
         def tabulate(points):
             mapped_points = np.array([[2 * p[0] + p[1] - 1, p[1]] for p in points])
-            table = e.tabulate(mapped_points)
-            return table.T.reshape([table.shape[1], 1, table.shape[0]])
+            table = np.zeros([points.shape[0], 1, ndofs])
+
+            for i, p in enumerate(mapped_points):
+                for j in range(ndofs):
+                    table[i, 0, j] = e.evaluate(j, p)
+            return table
 
         return entity_dofs, tabulate
 
