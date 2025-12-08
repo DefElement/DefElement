@@ -24,9 +24,9 @@ true_space_dimension = {
 class FIATImplementation(Implementation):
     """FIAT implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -50,59 +50,65 @@ class FIATImplementation(Implementation):
                     out += "(..."
                     started = True
                 out += f", {p}={v}"
-            else:
+            elif p != "degree":
                 raise ValueError(f"Unexpected parameter: {p}")
         if started:
             out += ")"
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import FIAT"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
-                Example code
+            Example code
         """
-        out = "import FIAT"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                fiat_name, input_deg, params = element.get_implementation_string(
-                    "fiat", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg}\n"
-            if ref in ["interval", "triangle", "tetrahedron"]:
-                cell = f'FIAT.ufc_cell("{ref}")'
-            elif ref == "quadrilateral":
-                cell = "FIAT.reference_element.UFCQuadrilateral()"
-            elif ref == "hexahedron":
-                cell = "FIAT.reference_element.UFCHexahedron()"
-            else:
-                raise ValueError(f"Unsupported cell: {ref}")
-            out += f"element = FIAT.{fiat_name}({cell}"
-            if input_deg is not None:
-                out += f", {input_deg}"
-            for i, j in params.items():
-                if i == "variant":
-                    out += f', {i}="{j}"'
-                if i == "subdegree":
-                    out += f", {i}={sympy.S(j).subs(sympy.Symbol('k'), deg)}"
-                if i == "reduced":
-                    out += f", {i}={j}"
-            out += ")"
+        if reference in ["interval", "triangle", "tetrahedron"]:
+            cell = f'FIAT.ufc_cell("{reference}")'
+        elif reference == "quadrilateral":
+            cell = "FIAT.reference_element.UFCQuadrilateral()"
+        elif reference == "hexahedron":
+            cell = "FIAT.reference_element.UFCHexahedron()"
+        else:
+            raise ValueError(f"Unsupported cell: {reference}")
+        out = f"element = FIAT.{name}({cell}"
+        if params.get("degree", "") != "None":
+            out += f", {degree}"
+        for i, j in params.items():
+            if i == "variant":
+                out += f', {i}="{j}"'
+            if i == "subdegree":
+                subdegree = parse_example(example)[1]
+                out += f", {i}={sympy.S(j).subs(sympy.Symbol('k'), subdegree)}"
+            if i == "reduced":
+                out += f", {i}={j}"
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,
@@ -217,8 +223,8 @@ class FIATImplementation(Implementation):
             slice(reduced_dim)
         ].T.reshape(points.shape[0], value_size, -1)
 
-    @staticmethod
-    def notes(element: Element) -> typing.List[str]:
+    @classmethod
+    def notes(cls, element: Element) -> typing.List[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -234,8 +240,8 @@ class FIATImplementation(Implementation):
             ]
         return []
 
-    @staticmethod
-    def references(element: Element) -> typing.List[typing.Dict[str, typing.Any]]:
+    @classmethod
+    def references(cls, element: Element) -> typing.List[typing.Dict[str, typing.Any]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:

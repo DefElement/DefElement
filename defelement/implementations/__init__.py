@@ -37,5 +37,5 @@ for file in os.listdir(this_dir):
                     implementations[c.id] = c
 
 formats = {id: i.format for id, i in implementations.items()}
-examples = {id: i.example for id, i in implementations.items()}
+examples = {id: i.examples for id, i in implementations.items()}
 verifications = {id: i.verify for id, i in implementations.items() if i.verification}

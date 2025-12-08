@@ -935,7 +935,7 @@ class Element:
         Returns:
             Examples
         """
-        return implementations[lib].example(self)
+        return implementations[lib].examples(self)
 
     def has_implementation_examples(self, lib: str) -> bool:
         """Check if element has implementation examples for a library.

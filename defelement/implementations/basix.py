@@ -6,16 +6,15 @@ from defelement.implementations.core import (
     Array,
     Element,
     Implementation,
-    parse_example,
 )
 
 
 class BasixImplementation(Implementation):
     """Basix implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -39,46 +38,51 @@ class BasixImplementation(Implementation):
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import basix"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
         """Generate examples.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
         """
-        out = "import basix"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                basix_name, input_deg, params = element.get_implementation_string(
-                    "basix", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            out += "element = basix.create_element("
+        out = "element = basix.create_element("
+        out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
+        if "lagrange_variant" in params:
             out += (
-                f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {input_deg}"
+                f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
             )
-            if "lagrange_variant" in params:
-                out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
-            if "dpc_variant" in params:
-                out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
-            if "discontinuous" in params:
-                assert params["discontinuous"] in ["True", "False"]
-                out += f", discontinuous={params['discontinuous']}"
-            out += ")"
+        if "dpc_variant" in params:
+            out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
+        if "discontinuous" in params:
+            assert params["discontinuous"] in ["True", "False"]
+            out += f", discontinuous={params['discontinuous']}"
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,

@@ -6,16 +6,15 @@ from defelement.implementations.core import (
     Array,
     Element,
     Implementation,
-    parse_example,
 )
 
 
 class SimplefemImplementation(Implementation):
     """Simplefem implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -29,8 +28,37 @@ class SimplefemImplementation(Implementation):
         assert string is not None
         return string
 
-    @staticmethod
-    def example(element: Element) -> str:
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import simplefem"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
+
+        Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The element
+            example: Example data
+
+        Returns:
+            Example code
+        """
+
+    @classmethod
+    def example(cls, element: Element) -> str:
         """Generate examples.
 
         Args:
@@ -39,25 +67,11 @@ class SimplefemImplementation(Implementation):
         Returns:
             Example code
         """
-        out = "import simplefem"
-        for e in element.examples:
-            ref, degree, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
+        return "element = simplefem.{name}({degree})"
 
-            try:
-                name, input_degree, params = element.get_implementation_string(
-                    "simplefem", ref, degree, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {degree} on a {ref}\n"
-            out += f"element = simplefem.{name}({input_degree})"
-        return out
-
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,

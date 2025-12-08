@@ -2,7 +2,6 @@
 
 import re
 import typing
-from abc import ABC, abstractmethod
 
 if typing.TYPE_CHECKING:
     from numpy import float64
@@ -16,13 +15,12 @@ else:
     Element = typing.Any
 
 
-class Implementation(ABC):
+class Implementation:
     """An implementation."""
 
-    @staticmethod
-    @abstractmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -33,9 +31,10 @@ class Implementation(ABC):
         Returns:
             Formatted implementation string
         """
+        raise NotImplementedError()
 
-    @staticmethod
-    def implemented(element: Element) -> bool:
+    @classmethod
+    def implemented(cls, element: Element) -> bool:
         """Check if an element is implemented.
 
         This can be used to overrule Element's implemented function.
@@ -48,9 +47,8 @@ class Implementation(ABC):
         """
         return True
 
-    @staticmethod
-    @abstractmethod
-    def example(element: Element) -> str:
+    @classmethod
+    def examples(cls, element: Element) -> str:
         """Generate examples.
 
         Args:
@@ -59,9 +57,53 @@ class Implementation(ABC):
         Returns:
             Example code
         """
+        code = cls.example_import()
+        for eg in element.examples:
+            reference, defelement_degree, variant, kwargs = parse_example(eg)
+            try:
+                name, degree, params = element.get_implementation_string(
+                    cls.id, reference, defelement_degree, variant
+                )
+            except NotImplementedError:
+                continue
+            code += "\n\n"
+            code = f"# Create {element.name_with_variant(variant)} degree {degree} on a {reference}\n"
+            code += cls.single_example(name, reference, degree, params, element, eg)
+        return code
 
-    @staticmethod
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        raise NotImplementedError()
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
+
+        Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The element
+            example: Example data
+
+        Returns:
+            Example code
+        """
+        raise NotImplementedError()
+
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,
@@ -86,8 +128,8 @@ class Implementation(ABC):
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def notes(element: Element) -> typing.List[str]:
+    @classmethod
+    def notes(cls, element: Element) -> typing.List[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -98,8 +140,8 @@ class Implementation(ABC):
         """
         return []
 
-    @staticmethod
-    def references(element: Element) -> typing.List[typing.Dict[str, str]]:
+    @classmethod
+    def references(cls, element: Element) -> typing.List[typing.Dict[str, str]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:

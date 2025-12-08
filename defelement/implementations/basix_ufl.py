@@ -14,9 +14,9 @@ from defelement.implementations.core import (
 class BasixUFLImplementation(Implementation):
     """Basix.UFL implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -34,53 +34,59 @@ class BasixUFLImplementation(Implementation):
             out += f", shape={params['shape']}"
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import basix\nimport basix.ufl"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
         """
-        out = "import basix\nimport basix.ufl"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                basix_name, input_deg, params = element.get_implementation_string(
-                    "basix.ufl", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            out += "element = basix.ufl.element("
+        out = "element = basix.ufl.element("
+        out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
+        if "lagrange_variant" in params:
             out += (
-                f"basix.ElementFamily.{basix_name}, basix.CellType.{ref}, {input_deg}"
+                f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
             )
-            if "lagrange_variant" in params:
-                out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
-            if "dpc_variant" in params:
-                out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
-            if "discontinuous" in params:
-                assert params["discontinuous"] in ["True", "False"]
-                out += f", discontinuous={params['discontinuous']}"
-            if "shape" in params:
-                if ref == "interval":
-                    dim = 1
-                elif ref in ["triangle", "quadrilateral"]:
-                    dim = 2
-                else:
-                    dim = 3
-                out += ", shape=" + params["shape"].replace("dim", f"{dim}")
-            out += ")"
+        if "dpc_variant" in params:
+            out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
+        if "discontinuous" in params:
+            assert params["discontinuous"] in ["True", "False"]
+            out += f", discontinuous={params['discontinuous']}"
+        if "shape" in params:
+            if reference == "interval":
+                dim = 1
+            elif reference in ["triangle", "quadrilateral"]:
+                dim = 2
+            else:
+                dim = 3
+            out += ", shape=" + params["shape"].replace("dim", f"{dim}")
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,
@@ -148,9 +154,9 @@ class BasixUFLImplementation(Implementation):
 class CustomBasixUFLImplementation(BasixUFLImplementation):
     """Basix.UFL implementation via custom element."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -163,12 +169,30 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import basix\nimport basix.ufl\nimport numpy as np"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
@@ -176,28 +200,21 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         import symfem
         import symfem.basix_interface
 
-        code = "import basix\nimport basix.ufl\nimport numpy as np"
+        cell, degree, variant, kwargs = parse_example(example)
+        symfem_name, symfem_degree, params = element.get_implementation_string(
+            "symfem", cell, degree, variant
+        )
+        if "variant" in params:
+            kwargs["variant"] = params["variant"]
+        symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
 
-        for e in element.examples:
-            cell, degree, variant, kwargs = parse_example(e)
-            symfem_name, symfem_degree, params = element.get_implementation_string(
-                "symfem", cell, degree, variant
-            )
-            if "variant" in params:
-                kwargs["variant"] = params["variant"]
-            symfem_e = symfem.create_element(cell, symfem_name, symfem_degree, **kwargs)  # type: ignore
+        return symfem.basix_interface.generate_basix_element_code(
+            symfem_e, include_comment=False, include_imports=False, ufl=True
+        )
 
-            code += "\n\n"
-            code += f"# Create {element.name_with_variant(variant)} degree {degree} on a {cell}\n"
-
-            code += symfem.basix_interface.generate_basix_element_code(
-                symfem_e, include_comment=False, include_imports=False, ufl=True
-            )
-
-        return code
-
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,
@@ -230,8 +247,8 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             points.shape[0], e.reference_value_size, -1
         )
 
-    @staticmethod
-    def implemented(element: Element) -> bool:
+    @classmethod
+    def implemented(cls, element: Element) -> bool:
         """Check if an element is implemented.
 
         This can be used to overrule Element's implemented function.

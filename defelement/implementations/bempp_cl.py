@@ -2,15 +2,15 @@
 
 import typing
 
-from defelement.implementations.core import Element, Implementation, parse_example
+from defelement.implementations.core import Element, Implementation
 
 
 class BemppClImplementation(Implementation):
     """Bempp-cl implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -23,35 +23,35 @@ class BemppClImplementation(Implementation):
         """
         return f'"{string}"'
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import bempp_cl.api\ngrid = bempp_cl.api.shapes.regular_sphere(1)"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
         """
-        out = "import bempp_cl.api"
-        out += "\n"
-        out += "grid = bempp_cl.api.shapes.regular_sphere(1)"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                bempp_name, input_deg, params = element.get_implementation_string(
-                    "bempp-cl", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name} degree {deg}\n"
-            out += "element = bempp_cl.api.function_space(grid, "
-            out += f'"{bempp_name}", {input_deg})'
-        return out
+        return f'element = bempp_cl.api.function_space(grid, "{name}", {degree})'
 
     id = "bempp-cl"
     name = "Bempp-cl"

@@ -25,15 +25,15 @@ def symfem_create_element(element: Element, example: str) -> FiniteElement:
     """
     import symfem
 
-    ref, deg, variant, kwargs = parse_example(example)
-    symfem_name, input_deg, params = element.get_implementation_string(
-        "symfem", ref, deg, variant
+    ref, defelement_deg, variant, kwargs = parse_example(example)
+    symfem_name, deg, params = element.get_implementation_string(
+        "symfem", ref, defelement_deg, variant
     )
     assert symfem_name is not None
     if ref == "dual polygon":
         ref += "(4)"
-    assert isinstance(input_deg, int)
-    return symfem.create_element(ref, symfem_name, input_deg, **params)
+    assert isinstance(deg, int)
+    return symfem.create_element(ref, symfem_name, deg, **params)
 
 
 class CachedSymfemTabulator:
@@ -73,9 +73,9 @@ class CachedSymfemTabulator:
 class SymfemImplementation(Implementation):
     """Symfem implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -94,43 +94,54 @@ class SymfemImplementation(Implementation):
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import symfem"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
         """Generate examples.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
         """
-        out = "import symfem"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            symfem_name, input_deg, params = element.get_implementation_string(
-                "symfem", ref, deg, variant
-            )
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            if ref == "dual polygon":
-                out += f'element = symfem.create_element("{ref}(4)",'
+        out = "element = symfem.create_element("
+        if reference == "dual polygon":
+            out += f'"{reference}(4)",'
+        else:
+            out += f'"{reference}",'
+        if "variant" in params:
+            out += f' "{name}", {degree}, variant="{params["variant"]}"'
+        else:
+            out += f' "{name}", {degree}'
+        for i, j in params.items():
+            if isinstance(j, str):
+                out += f', {i}="{j}"'
             else:
-                out += f'element = symfem.create_element("{ref}",'
-            if "variant" in params:
-                out += f' "{symfem_name}", {input_deg}, variant="{params["variant"]}"'
-            else:
-                out += f' "{symfem_name}", {input_deg}'
-            for i, j in kwargs.items():
-                if isinstance(j, str):
-                    out += f', {i}="{j}"'
-                else:
-                    out += f", {i}={j}"
-            out += ")"
+                out += f", {i}={j}"
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,

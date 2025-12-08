@@ -6,16 +6,15 @@ from defelement.implementations.core import (
     Array,
     Element,
     Implementation,
-    parse_example,
 )
 
 
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
-    @staticmethod
+    @classmethod
     def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
+        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
     ) -> str:
         """Format implementation string.
 
@@ -35,49 +34,46 @@ class NDElementImplementation(Implementation):
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
 
         Args:
+            name: The name of this element for this implementation
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
             element: The element
+            example: Example data
 
         Returns:
             Example code
         """
-        out = "\nfrom ndelement.reference_cell import ReferenceCellType"
-        cont = False
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                name, input_deg, params = element.get_implementation_string(
-                    "ndelement", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            out += "family = create_family("
-            out += f"Family.{name}, {input_deg}"
-            if "continuity" in params:
-                cont = True
-                assert params["continuity"] in ["Standard", "Discontinuous"]
-                out += f", continuity=Continuity.{params['continuity']}"
-            out += ")\n"
-            out += f"element = family.element(ReferenceCellType.{ref[0].upper() + ref[1:]})"
-        if cont:
-            out = (
-                "from ndelement.ciarlet import Continuity, Family, create_family" + out
-            )
-        else:
-            out = "from ndelement.ciarlet import Family, create_family" + out
+        out = "family = ciarlet.create_family("
+        out += f"ciarlet.Family.{name}, {degree}"
+        if "continuity" in params:
+            assert params["continuity"] in ["Standard", "Discontinuous"]
+            out += f", continuity=ciarlet.Continuity.{params['continuity']}"
+        out += ")\n"
+        out += f"element = family.element(ReferenceCellType.{reference[0].upper() + reference[1:]})"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
+        cls,
         name: str,
         reference: str,
         degree: int,
