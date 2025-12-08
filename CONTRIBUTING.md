@@ -156,7 +156,7 @@ This class should include:
 
 Once this is done, you can start adding implementation details for your library to
 the `implementation` field of elements in the [`elements`](https://github.com/DefElement/DefElement/blob/main/elements)
-folder. The [adding an implementation to DefElement walkthough](https://defelement.org/guides/adding-an-element.html)
+folder. The [adding an implementation to DefElement walkthough](https://defelement.org/adding-an-implementation.html)
 is a more detailed guide to the steps involved in adding an implementation.
 
 ## Style guide
