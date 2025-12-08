@@ -396,9 +396,7 @@ for e in categoriser.elements:
                 if c is None:
                     if not e.implemented(output_code) and e.implemented(codename):
                         try:
-                            print(1)
                             example_code = e.make_implementation_examples(codename)
-                            print(2)
                         except (NotImplementedError, KeyError):
                             pass
 
