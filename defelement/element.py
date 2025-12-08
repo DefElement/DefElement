@@ -831,7 +831,7 @@ class Element:
                     raise DegreeNotImplemented()
             del params["DEGREES"]
 
-        input_deg: typing.Optional[int] = degree
+        input_deg = degree
         if "DEGREEMAP" in params:
             if degree is not None:
                 input_deg = int(
