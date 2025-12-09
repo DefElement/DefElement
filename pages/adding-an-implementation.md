@@ -8,6 +8,10 @@ authors:
 This walkthrough will take you through all the steps involved in adding an implementation to
 DefElement.
 
+Detailed documentation of the class methods and variables used in this walkthrough, as well as
+other optional method, can be found in the file
+[defelement/implementations/core.py](https://github.com/DefElement/DefElement/tree/main/defelement/implementations/core.py).
+
 ## simplefem
 As an example, this walkthrough will look at adding the
 [simplefem](https://github.com/DefElement/simplefem) library to DefElement. simplefem is a simple

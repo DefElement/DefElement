@@ -22,9 +22,14 @@ class Implementation:
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
+        This function is passed the string and parameters set in a .def file for an
+        implementation and should return the string to display on the element's page.
+
+        This function must be implemented.
+
         Args:
-            string: Implementation string
-            params: Parameters
+            string: Implementation string as set in the .def file
+            params: Additional parameters set in the .def file
 
         Returns:
             Formatted implementation string
@@ -37,6 +42,8 @@ class Implementation:
 
         This can be used to overrule Element's implemented function.
 
+        Implementation of this function is optional.
+
         Args:
             element: The element
 
@@ -46,8 +53,118 @@ class Implementation:
         return True
 
     @classmethod
+    def example_import(cls) -> str:
+        """Get code for imports to include at start of examples snippet.
+
+        This function must be implemented.
+
+        Returns:
+            Python code for imports
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
+
+        This function takes the element string and parameters (as set in the .def file)
+        and the reference cell and degree for an example and should return a string of Python code
+        that will create the example element.
+
+        The additional inputs element and example may be needed in some more complex cases.
+
+        This function must be implemented.
+
+        Args:
+            name: Implementation string as set in the .def file
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The DefElement element object
+            example: Raw example data
+
+        Returns:
+            Example code
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def verify(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+        """Get information needed to run verification.
+
+        Implementation of this function is options, but it must be implemented for verification
+        to be carried out. If this function is implemented, then the class variable `verification`
+        should be set to `True` to activate verification.
+
+        Args:
+            name: Implementation string as set in the .def file
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The DefElement element object
+            example: Raw example data
+
+        Returns:
+            This function returns two things:
+            - A list of lists of lists that gives the degrees of freedom (DOFs) associated with
+              each sub-entity. The entry `[i][j][k]` of this returned value is the `k`th dof that
+              is associated with the `j`th sub-entity of dimension `i`.
+            - A function thtat takes a set of points on the DefElement reference cell as input and
+              returns the a Numpy array containing the values of the basis functions at every point.
+              The entry `[i, j, k]` in this Numpy array is the `j`th component of the `k`th basis
+              function evaluated at the `i`th point.
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def notes(cls, element: Element) -> list[str]:
+        """Return a list of notes to include for the implementation of this element.
+
+        Implementation of this function is optional.
+
+        Args:
+            element: Element data
+
+        Returns:
+            List of notes
+        """
+        return []
+
+    @classmethod
+    def references(cls, element: Element) -> list[dict[str, str]]:
+        """Return a list of additional references to include for the implementation of this element.
+
+        Implementation of this function is optional.
+
+        Args:
+            element: Element data
+
+        Returns:
+            List of references
+        """
+        return []
+
+    @classmethod
     def examples(cls, element: Element) -> str:
-        """Generate examples.
+        """Generate code for all examples.
+
+        This function should not be overridden in subclasses.
 
         Args:
             element: The element
@@ -75,85 +192,6 @@ class Implementation:
             code += f" degree {degree} on a {reference}\n"
             code += cls.single_example(name, reference, degree, params, element, eg)
         return code
-
-    @classmethod
-    def example_import(cls) -> str:
-        """Get imports to include at start of example."""
-        raise NotImplementedError()
-
-    @classmethod
-    def single_example(
-        cls,
-        name: str,
-        reference: str,
-        degree: int,
-        params: dict[str, str],
-        element: Element,
-        example: str,
-    ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
-        raise NotImplementedError()
-
-    @classmethod
-    def verify(
-        cls,
-        name: str,
-        reference: str,
-        degree: int,
-        params: dict[str, str],
-        element: Element,
-        example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
-        raise NotImplementedError()
-
-    @classmethod
-    def notes(cls, element: Element) -> list[str]:
-        """Return a list of notes to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of notes
-        """
-        return []
-
-    @classmethod
-    def references(cls, element: Element) -> list[dict[str, str]]:
-        """Return a list of additional references to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of references
-        """
-        return []
 
     # Unique identifier used in implementation section of .def files
     id: str | None = None
