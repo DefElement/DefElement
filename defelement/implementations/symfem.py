@@ -46,7 +46,7 @@ class CachedSymfemTabulator:
             element: Symfem element
         """
         self.element = element
-        self.tables: typing.List[typing.Tuple[Array, Array]] = []
+        self.tables: list[tuple[Array, Array]] = []
 
     def tabulate(self, points: Array) -> Array:
         """Tabulate this element.
@@ -74,9 +74,7 @@ class SymfemImplementation(Implementation):
     """Symfem implementation."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:
@@ -148,9 +146,7 @@ class SymfemImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data.
 
         Args:

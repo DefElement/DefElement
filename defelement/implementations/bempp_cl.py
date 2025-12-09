@@ -9,9 +9,7 @@ class BemppClImplementation(Implementation):
     """Bempp-cl implementation."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:

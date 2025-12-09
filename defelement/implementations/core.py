@@ -19,9 +19,7 @@ class Implementation:
     """An implementation."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:
@@ -117,9 +115,7 @@ class Implementation:
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data.
 
         Args:
@@ -136,7 +132,7 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
-    def notes(cls, element: Element) -> typing.List[str]:
+    def notes(cls, element: Element) -> list[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -148,7 +144,7 @@ class Implementation:
         return []
 
     @classmethod
-    def references(cls, element: Element) -> typing.List[typing.Dict[str, str]]:
+    def references(cls, element: Element) -> list[dict[str, str]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:
@@ -160,13 +156,13 @@ class Implementation:
         return []
 
     # Unique identifier used in implementation section of .def files
-    id: typing.Optional[str] = None
+    id: str | None = None
     # The name of the implementation
-    name: typing.Optional[str] = None
+    name: str | None = None
     # Snippet to install the implementation
-    install: typing.Optional[str] = None
+    install: str | None = None
     # URL of source of implementation (eg GitHub link)
-    url: typing.Optional[str] = None
+    url: str | None = None
     # Set to true if this implementation should be verified
     verification = False
 
@@ -183,7 +179,7 @@ class NotImplementedOnReference(NotImplementedError):
     """Error for element not implemented on a reference cell."""
 
 
-ValueType = typing.Union[int, str, typing.List["ValueType"]]
+ValueType = typing.Union[int, str, list["ValueType"]]
 
 
 def _parse_value(v: str) -> ValueType:
@@ -205,12 +201,7 @@ def _parse_value(v: str) -> ValueType:
 
 def parse_example(
     e: str,
-) -> typing.Tuple[
-    str,
-    int,
-    typing.Optional[str],
-    typing.Dict[str, typing.Union[int, str, typing.List[ValueType]]],
-]:
+) -> tuple[str, int, str | None, dict[str, int | str | list[ValueType]]]:
     """Parse an example.
 
     Args:

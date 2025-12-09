@@ -25,9 +25,7 @@ class FIATImplementation(Implementation):
     """FIAT implementation."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:
@@ -115,9 +113,7 @@ class FIATImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data.
 
         Args:
@@ -224,7 +220,7 @@ class FIATImplementation(Implementation):
         ].T.reshape(points.shape[0], value_size, -1)
 
     @classmethod
-    def notes(cls, element: Element) -> typing.List[str]:
+    def notes(cls, element: Element) -> list[str]:
         """Return a list of notes to include for the implementation of this element.
 
         Args:
@@ -241,7 +237,7 @@ class FIATImplementation(Implementation):
         return []
 
     @classmethod
-    def references(cls, element: Element) -> typing.List[typing.Dict[str, typing.Any]]:
+    def references(cls, element: Element) -> list[dict[str, typing.Any]]:
         """Return a list of additional references to include for the implementation of this element.
 
         Args:

@@ -15,9 +15,7 @@ class BasixUFLImplementation(Implementation):
     """Basix.UFL implementation."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:
@@ -93,9 +91,7 @@ class BasixUFLImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data.
 
         Args:
@@ -155,9 +151,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
     """Basix.UFL implementation via custom element."""
 
     @classmethod
-    def format(
-        cls, string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:
@@ -221,9 +215,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data.
 
         Args:
