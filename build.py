@@ -399,7 +399,7 @@ for e in categoriser.elements:
                 cache_id = f"{e.name}-{codename}-implementation-code"
                 c = load_cache(cache_id, symfem.__version__)
                 input_code, output_code = codename[2:-1].split(" -> ")
-                jscodename = output_code.replace(".", "_").replace("-", "_")
+                jscodename = jsify(output_code)
                 if c is None:
                     if not e.implemented(output_code) and e.implemented(codename):
                         try:

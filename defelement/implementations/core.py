@@ -177,9 +177,17 @@ class Implementation:
         for eg in element.examples:
             reference, defelement_degree, variant, kwargs = parse_example(eg)
             try:
-                name, degree, params = element.get_implementation_string(
-                    cls.id, reference, defelement_degree, variant
-                )
+                if cls.id.startswith("*(") and cls.id.endswith(")"):
+                    name, degree, params = element.get_implementation_string(
+                        cls.id[2:-1].split(" -> ")[0],
+                        reference,
+                        defelement_degree,
+                        variant,
+                    )
+                else:
+                    name, degree, params = element.get_implementation_string(
+                        cls.id, reference, defelement_degree, variant
+                    )
             except NotImplementedError:
                 continue
             assert degree is not None
