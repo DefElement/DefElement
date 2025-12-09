@@ -184,7 +184,7 @@ class Implementation:
                 continue
             assert degree is not None
             code += "\n\n"
-            code = "# Create "
+            code += "# Create "
             if variant is None:
                 code += element.name
             else:
