@@ -19,7 +19,7 @@ class Implementation:
     """An implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
         Args:

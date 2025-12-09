@@ -25,16 +25,8 @@ class FIATImplementation(Implementation):
     """FIAT implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f"FIAT.{string}"
         started = False
         for p, v in params.items():
@@ -69,19 +61,7 @@ class FIATImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         if reference in ["interval", "triangle", "tetrahedron"]:
             cell = f'FIAT.ufc_cell("{reference}")'
         elif reference == "quadrilateral":
@@ -114,19 +94,7 @@ class FIATImplementation(Implementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         import FIAT
 
         if reference in ["interval", "triangle", "tetrahedron"]:
@@ -221,14 +189,7 @@ class FIATImplementation(Implementation):
 
     @classmethod
     def notes(cls, element: Element) -> list[str]:
-        """Return a list of notes to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of notes
-        """
+        """Return a list of notes to include for the implementation of this element."""
         if element.name in true_space_dimension:
             return [
                 "This implementation includes additional DOFs that are used then filtered "
@@ -238,14 +199,7 @@ class FIATImplementation(Implementation):
 
     @classmethod
     def references(cls, element: Element) -> list[dict[str, typing.Any]]:
-        """Return a list of additional references to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of references
-        """
+        """Return a list of additional references to include for the implementation of this element."""
         if element.name in true_space_dimension:
             return [
                 {

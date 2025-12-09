@@ -15,16 +15,8 @@ class BasixUFLImplementation(Implementation):
     """Basix.UFL implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = BasixImplementation.format(
             string, {i: j for i, j in params.items() if i != "shape"}
         )
@@ -47,19 +39,7 @@ class BasixUFLImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         out = "element = basix.ufl.element("
         out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
         if "lagrange_variant" in params:
@@ -92,19 +72,7 @@ class BasixUFLImplementation(Implementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         import basix
         import basix.ufl
 
@@ -151,16 +119,8 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
     """Basix.UFL implementation via custom element."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         raise NotImplementedError()
 
     @classmethod
@@ -178,19 +138,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         import symfem
         import symfem.basix_interface
 
@@ -216,15 +164,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         import symfem
         import symfem.basix_interface
 
@@ -241,16 +181,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
 
     @classmethod
     def implemented(cls, element: Element) -> bool:
-        """Check if an element is implemented.
-
-        This can be used to overrule Element's implemented function.
-
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
+        """Check if an element is implemented."""
         # Elements with DOFs that include derivatives
         if element.filename in [
             "alfeld-sorokina",

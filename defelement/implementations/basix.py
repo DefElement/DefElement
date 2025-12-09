@@ -13,16 +13,8 @@ class BasixImplementation(Implementation):
     """Basix implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f"basix.ElementFamily.{string}"
         for p, v in params.items():
             out += f", {p}="
@@ -51,19 +43,7 @@ class BasixImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate examples.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate examples."""
         out = "element = basix.create_element("
         out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
         if "lagrange_variant" in params:
@@ -88,19 +68,7 @@ class BasixImplementation(Implementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         import basix
 
         kwargs = {}

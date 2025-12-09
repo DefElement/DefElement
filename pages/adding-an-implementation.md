@@ -24,4 +24,25 @@ e = simplefem.lagrange_element(3)
 value = e.evaluate(5, np.array([0.3, 0.1]))
 ```
 
-## Adding snippets to element pages
+## Adding simplefem snippets to element pages
+To add simplefem to DefElement, a file in the folder
+[defelement/implementations](https://github.com/DefElement/DefElement/tree/main/defelement/implementations)
+must be created. In this case, we called the file
+[simplefem.py](https://github.com/DefElement/DefElement/tree/main/defelement/implementations/simplefem.py).
+In this file, we begin by importing functionality from the file
+[core.py](https://github.com/DefElement/DefElement/tree/main/defelement/implementations/core.py):
+
+{{snippet::defelement/implementations/simplefem.py::intro}}
+
+In order to information about an implementation to DefElement, we must implement three class methods
+and set the values of four variables in this class. The first method to implement is `format`:
+
+{{snippet::defelement/implementations/simplefem.py::format}}
+
+{{snippet::defelement/implementations/simplefem.py::example}}
+
+{{snippet::defelement/implementations/simplefem.py::variables}}
+
+{{snippet::defelement/implementations/simplefem.py::verify}}
+
+{{snippet::defelement/implementations/simplefem.py::verificationvariable}}

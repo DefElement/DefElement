@@ -13,16 +13,8 @@ class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f"Family.{string}"
         for p, v in params.items():
             out += f", {p}="
@@ -47,19 +39,7 @@ class NDElementImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         out = "family = ciarlet.create_family("
         out += f"ciarlet.Family.{name}, {degree}"
         if "continuity" in params:
@@ -79,19 +59,7 @@ class NDElementImplementation(Implementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         from ndelement.ciarlet import Continuity, Family, create_family
         from ndelement.reference_cell import ReferenceCellType, entity_counts
 

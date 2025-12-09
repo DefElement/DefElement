@@ -1,5 +1,6 @@
 """Simplefem implementation."""
 
+# <intro>
 import typing
 
 from defelement.implementations.core import (
@@ -11,21 +12,16 @@ from defelement.implementations.core import (
 
 class SimplefemImplementation(Implementation):
     """Simplefem implementation."""
+# </intro>
 
+# <format>
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
-        assert string is not None
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         return string
+# </format>
 
+# <example>
     @classmethod
     def example_import(cls) -> str:
         """Get imports to include at start of example."""
@@ -41,21 +37,11 @@ class SimplefemImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         return "element = simplefem.{name}({degree})"
+# </example>
 
+# <verify>
     @classmethod
     def verify(
         cls,
@@ -66,19 +52,7 @@ class SimplefemImplementation(Implementation):
         element: Element,
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
-        """Get verification data.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        """Get verification data."""
         import simplefem
         import numpy as np
 
@@ -120,9 +94,14 @@ class SimplefemImplementation(Implementation):
             return table
 
         return entity_dofs, tabulate
+# </verify>
 
+# <variables>
     id = "simplefem"
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
-    verification = True
     install = "pip3 install git+https://github.com/DefElement/simplefem"
+# </variables>
+# <verificationvariable>
+    verification = True
+# </verificationvariable>

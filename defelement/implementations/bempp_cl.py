@@ -9,16 +9,8 @@ class BemppClImplementation(Implementation):
     """Bempp-cl implementation."""
 
     @classmethod
-    def format(cls, string: str | None, params: dict[str, typing.Any]) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         return f'"{string}"'
 
     @classmethod
@@ -36,19 +28,7 @@ class BemppClImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example.
-
-        Args:
-            name: The name of this element for this implementation
-            reference: The name of the reference cell
-            degree: The degree of this example
-            params: Additional parameters set in the .def file
-            element: The element
-            example: Example data
-
-        Returns:
-            Example code
-        """
+        """Generate code for a single example."""
         return f'element = bempp_cl.api.function_space(grid, "{name}", {degree})'
 
     id = "bempp-cl"
