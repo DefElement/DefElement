@@ -39,7 +39,9 @@ parser.add_argument(
     "--print-reasons", action="store_true", help="Show reasons for failed verification"
 )
 parser.add_argument(
-    "--assert-passing", action="store_true", help="Assert that verification passes for all elements"
+    "--assert-passing",
+    action="store_true",
+    help="Assert that verification passes for all elements",
 )
 parser.add_argument(
     "--impl", metavar="impl", default=None, help="libraries to run verification for"
