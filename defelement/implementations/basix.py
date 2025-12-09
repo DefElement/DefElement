@@ -87,7 +87,15 @@ class BasixImplementation(Implementation):
             degree,
             **kwargs,
         )
-        return e.entity_dofs, lambda points: e.tabulate(0, points)[0].transpose(
+
+        entity_dofs = e.entity_dofs
+        if reference == "triangle":
+            entity_dofs[1] = [entity_dofs[1][2], entity_dofs[1][1], entity_dofs[1][0]]
+        elif reference == "tetrahedron":
+            entity_dofs[1] = [entity_dofs[1][5], entity_dofs[1][4], entity_dofs[1][3], entity_dofs[1][2], entity_dofs[1][1], entity_dofs[1][0]]
+            entity_dofs[2] = [entity_dofs[2][3], entity_dofs[2][2], entity_dofs[2][1], entity_dofs[2][0]]
+
+        return entity_dofs, lambda points: e.tabulate(0, points)[0].transpose(
             (0, 2, 1)
         )
 
