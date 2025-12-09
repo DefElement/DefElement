@@ -67,7 +67,7 @@ class SimplefemImplementation(Implementation):
         # </verify3>
 
         # <verify4>
-        entity_dofs = [[[], [], []], [[], [], []], [[]]]
+        entity_dofs: list[list[list[int]]] = [[[], [], []], [[], [], []], [[]]]
 
         for i, p in enumerate(e.evaluation_points):
             # DOFs associated with vertices
