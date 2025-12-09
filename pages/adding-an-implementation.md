@@ -39,7 +39,7 @@ In this file, we begin by importing functionality from the file
 
 {{snippet::defelement/implementations/simplefem.py::intro}}
 
-In order to information about an implementation to DefElement, we must implement three class methods
+In order to add information about a finite element library to DefElement, we must implement three class methods
 and set the values of four variables in this class.
 
 ### `format`
