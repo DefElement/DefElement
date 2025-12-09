@@ -87,7 +87,7 @@ For simplefem, these class methods are defined as follows:
 
 The funtion `example_import` gives code to import simplefem. The inputs to class method `single_example`
 will be `name="lagrange_element"`, `reference="triangle"`, and `params={}`. The degree used in
-DefElement (in this case, the [polynomial subdegree](ciarlet.md#The+degree+of+a+finite+element) 1, 2, or 3) will be substituted into the `DEGREEMAP`
+DefElement (in this case, the [polynomial subdegree](/ciarlet.html#The+degree+of+a+finite+element) 1, 2, or 3) will be substituted into the `DEGREEMAP`
 special parameter as `k` before this method is called (so the values 3, 6, and 10 will be passed in).
 In this way, DefElement's notion of degree can be automatically converted to the number of points
 input that simplefem uses.
