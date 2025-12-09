@@ -32,12 +32,12 @@ parser.add_argument(
     help="The number of processes to run the verification on.",
 )
 parser.add_argument(
-    "--skip-missing-libraries",
-    default="true",
-    help="Skip verification if library is not installed.",
+    "--fail-on-missing-libraries",
+    action="store_true",
+    help="Fail if library is not installed.",
 )
 parser.add_argument(
-    "--print-reasons", default="false", help="Show reasons for failed verification"
+    "--print-reasons", action="store_true", help="Show reasons for failed verification"
 )
 parser.add_argument(
     "--impl", metavar="impl", default=None, help="libraries to run verification for"
@@ -73,8 +73,8 @@ if args.impl is None:
     test_implementations = None
 else:
     test_implementations = args.impl.split(",")
-skip_missing = args.skip_missing_libraries == "true"
-print_reasons = args.print_reasons == "true"
+skip_missing = not args.fail_on_missing_libraries
+print_reasons = args.print_reasons
 
 categoriser = Categoriser()
 categoriser.load_references(os.path.join(settings.data_path, "references"))

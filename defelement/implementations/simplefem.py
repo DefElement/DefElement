@@ -38,10 +38,10 @@ class SimplefemImplementation(Implementation):
         example: str,
     ) -> str:
         """Generate code for a single example."""
-        return "element = simplefem.{name}({degree})"
+        return f"element = simplefem.{name}({degree})"
 # </example>
 
-# <verify>
+# <verify1>
     @classmethod
     def verify(
         cls,
@@ -53,48 +53,53 @@ class SimplefemImplementation(Implementation):
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data."""
+# </verify1>
+# <verify2>
         import simplefem
         import numpy as np
+# </verify2>
 
-        assert name == "lagrange_element"
+# <verify3>
+        e = getattr(simplefem, name)(degree)
+# </verify3>
 
-        e = simplefem.lagrange_element(degree)
+# <verify4>
+        entity_dofs = [[[], [], []], [[], [], []], [[]]]
 
-        ndofs = (degree + 1) * (degree + 2) // 2
+        for i, p in enumerate(e.evaluation_points):
+            # DOFs associated with vertices
+            if np.allclose(p, [-1, 0]):
+                entity_dofs[0][0].append(i)
+            elif np.allclose(p, [1, 0]):
+                entity_dofs[0][1].append(i)
+            elif np.allclose(p, [0, 1]):
+                entity_dofs[0][2].append(i)
+            # DOFs associated with edges
+            elif np.isclose(p[1] + p[0], 1):
+                entity_dofs[1][0].append(i)
+            elif np.isclose(p[1] - p[0], 1):
+                entity_dofs[1][1].append(i)
+            elif np.isclose(p[1], 0):
+                entity_dofs[1][2].append(i)
+            # DOFs associated with interior of cell
+            else:
+                entity_dofs[2][0].append(i)
+# </verify4>
 
-        entity_dofs: list[list[list[int]]] = [[], [], []]
-        # DOFs associated with vertices
-        entity_dofs[0].append([0])
-        entity_dofs[0].append([degree])
-        entity_dofs[0].append([ndofs - 1])
-        # DOFs associated with edges
-        entity_dofs[1].append([])
-        entity_dofs[1].append([])
-        dof_index = degree + 1
-        for i in range(1, degree):
-            entity_dofs[1][1].append(dof_index)
-            dof_index += degree - i
-            entity_dofs[1][0].append(dof_index)
-            dof_index += 1
-        entity_dofs[1].append(list(range(1, degree)))
-        # DOFs associated with interior of cell
-        entity_dofs[2].append([])
-        dof_start = degree + 2
-        for i in range(degree - 2):
-            entity_dofs[2][0] += list(range(dof_start, dof_start + degree - 2 - i))
-            dof_start += degree - i
-
+# <verify5>
         def tabulate(points):
             mapped_points = np.array([[2 * p[0] + p[1] - 1, p[1]] for p in points])
-            table = np.zeros([points.shape[0], 1, ndofs])
+            table = np.zeros([points.shape[0], 1, degree])
 
             for i, p in enumerate(mapped_points):
-                for j in range(ndofs):
+                for j in range(degree):
                     table[i, 0, j] = e.evaluate(j, p)
             return table
+# </verify5>
 
+# <verify6>
         return entity_dofs, tabulate
-# </verify>
+# </verify6>
 
 # <variables>
     id = "simplefem"

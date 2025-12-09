@@ -65,6 +65,9 @@ parser.add_argument(
 parser.add_argument(
     "--no-cache", action="store_true", help="Build without using cache."
 )
+parser.add_argument(
+    "--include-simplefem", action="store_true", help="Include simplefem on all pages."
+)
 
 sitemap = {}
 
@@ -93,6 +96,7 @@ def write_html_page(
         sitemap[html_local(path)] = title
     with open(path, "w") as f:
         f.write(make_html_page(content, title, extra_head=extra_head))
+
 
 
 args = parser.parse_args()
@@ -131,6 +135,8 @@ elif args.test == "auto":
     ]
 else:
     test_elements = args.test.split(",")
+
+include_simplefem = args.include_simplefem
 
 # Prepare paths
 if os.path.isdir(settings.html_path):
@@ -382,7 +388,7 @@ for e in categoriser.elements:
     libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
     libraries.sort(key=lambda i: i[0])
     for codename, libname, url, pip in libraries:
-        if codename == "simplefem":
+        if not include_simplefem and codename == "simplefem":
             continue
         jscodename: typing.Optional[str] = None
         v: typing.Optional[typing.Dict] = None
@@ -978,9 +984,10 @@ vs = []
 for i in verifications:
     if i != "symfem":
         vs.append(i)
-        if i != "simplefem":
-            content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-            long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        if not include_simplefem and i == "simplefem":
+            continue
+        content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
@@ -989,19 +996,20 @@ for e in categoriser.elements:
     row = "<tr>"
     row += f"<td><a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
     for i in vs:
-        if i != "simplefem":
-            row += "<td>"
-            if e.filename in verification and i in verification[e.filename]:
-                result = verification[e.filename][i]
-                if len(result["pass"]) > 0 or len(result["fail"]) > 0:
-                    n += 1
-                    if len(result["fail"]) == 0:
-                        row += green_check
-                    elif len(result["pass"]) > 0:
-                        row += orange_check
-                    else:
-                        row += red_check
-            row += "</td>"
+        if not include_simplefem and i == "simplefem":
+            continue
+        row += "<td>"
+        if e.filename in verification and i in verification[e.filename]:
+            result = verification[e.filename][i]
+            if len(result["pass"]) > 0 or len(result["fail"]) > 0:
+                n += 1
+                if len(result["fail"]) == 0:
+                    row += green_check
+                elif len(result["pass"]) > 0:
+                    row += orange_check
+                else:
+                    row += red_check
+        row += "</td>"
     row += "</tr>"
 
     examples = []
@@ -1133,16 +1141,17 @@ for i in verifications:
         url = "https://defelement.org/verification/"
     else:
         url = f"https://defelement.org/verification/{i}.html"
-    if i != "simplefem":
-        c += (
-            "<tr>"
-            f"<td>{implementations[i].name}</td>"
-            f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
-            "<td style='font-size:80%;font-family:monospace'>"
-            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-            f"({url})</td>"
-            "</tr>"
-        )
+    if not include_simplefem and i == "simplefem":
+        continue
+    c += (
+        "<tr>"
+        f"<td>{implementations[i].name}</td>"
+        f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
+        "<td style='font-size:80%;font-family:monospace'>"
+        f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+        f"({url})</td>"
+        "</tr>"
+    )
     if i in impl_content:
         impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
         impl_content[i] += (
