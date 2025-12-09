@@ -14,9 +14,10 @@ other optional method, can be found in the file
 
 ## simplefem
 As an example, this walkthrough will look at adding the
-[simplefem](https://github.com/DefElement/simplefem) library to DefElement. simplefem is a simple
-example finite element library (that was created in order to be used in this walkthrough): it can
-create Lagrange elements on triangles and evaluate their basis functions. For example, the following
+[simplefem](https://github.com/DefElement/simplefem) library to DefElement.
+simplefem has been created to serve as an illustration library for this walkthrough, and should not be considered as a fully fledged library. 
+It only features Lagrange elements on triangles and can evaluate their basis functions.
+For example, the following
 snippet will create a Lagrange element on a triangle with 10 basis functions and evaluate its basis
 function with index 5 at the point (0.3, 0.1):
 
