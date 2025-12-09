@@ -8,9 +8,8 @@ from datetime import datetime
 
 from defelement import settings
 from defelement.element import Categoriser, Element
-from defelement.implementations import verifications
+from defelement.implementations import parse_example, verifications
 from defelement.verification import verify
-from defelement.implementations.core import parse_example
 
 start_all = datetime.now()
 
