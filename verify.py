@@ -39,6 +39,11 @@ parser.add_argument(
     "--print-reasons", action="store_true", help="Show reasons for failed verification"
 )
 parser.add_argument(
+    "--assert-passing",
+    action="store_true",
+    help="Assert that verification passes for all elements",
+)
+parser.add_argument(
     "--impl", metavar="impl", default=None, help="libraries to run verification for"
 )
 
@@ -74,6 +79,7 @@ else:
     test_implementations = args.impl.split(",")
 skip_missing = not args.fail_on_missing_libraries
 print_reasons = args.print_reasons
+assert_passing = args.assert_passing
 
 categoriser = Categoriser()
 categoriser.load_references(os.path.join(settings.data_path, "references"))
@@ -265,6 +271,10 @@ for impl in set(j for i in data.values() for j in i):
             ),
         }
     )
+
+if assert_passing:
+    for d in data.values():
+        assert len(d[impl]["fail"]) == 0
 
 with open(settings.verification_json, "w") as f:
     json.dump(
