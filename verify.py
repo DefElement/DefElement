@@ -273,8 +273,8 @@ for impl in set(j for i in data.values() for j in i):
     )
 
 if assert_passing:
-    for i in data.values():
-        assert len(i[impl]["fail"]) == 0
+    for d in data.values():
+        assert len(d[impl]["fail"]) == 0
 
 with open(settings.verification_json, "w") as f:
     json.dump(
