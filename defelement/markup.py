@@ -129,7 +129,7 @@ def insert_snippet(matches: typing.Match[str]) -> str:
     with open(file) as f:
         content = f.read().split(f"# <{tag}>\n")[1].split(f"# </{tag}>\n")[0]
     out = ""
-    for part in re.split(r"\n\n+", content.strip("\n")):
+    for part in re.split(r"\n\n+", content.rstrip(" \n").lstrip("\n")):
         out += "<p class='pcode'>"
         if file.endswith(".py"):
             out += _code_highlight(part, "python")
@@ -137,6 +137,7 @@ def insert_snippet(matches: typing.Match[str]) -> str:
             out += _code_highlight(part)
         out += "</p>"
     return out
+
 
 settings.re_extras = [
     (r"{{plot::([^,]+),([^,]+),([0-9]+)}}", plot_element),

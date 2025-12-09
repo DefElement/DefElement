@@ -12,16 +12,18 @@ from defelement.implementations.core import (
 
 class SimplefemImplementation(Implementation):
     """Simplefem implementation."""
-# </intro>
 
-# <format>
+    # </intro>
+
+    # <format>
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
         """Format implementation string."""
         return string
-# </format>
 
-# <example>
+    # </format>
+
+    # <example>
     @classmethod
     def example_import(cls) -> str:
         """Get imports to include at start of example."""
@@ -39,9 +41,10 @@ class SimplefemImplementation(Implementation):
     ) -> str:
         """Generate code for a single example."""
         return f"element = simplefem.{name}({degree})"
-# </example>
 
-# <verify1>
+    # </example>
+
+    # <verify1>
     @classmethod
     def verify(
         cls,
@@ -53,17 +56,17 @@ class SimplefemImplementation(Implementation):
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get verification data."""
-# </verify1>
-# <verify2>
+        # </verify1>
+        # <verify2>
         import simplefem
         import numpy as np
-# </verify2>
+        # </verify2>
 
-# <verify3>
+        # <verify3>
         e = getattr(simplefem, name)(degree)
-# </verify3>
+        # </verify3>
 
-# <verify4>
+        # <verify4>
         entity_dofs = [[[], [], []], [[], [], []], [[]]]
 
         for i, p in enumerate(e.evaluation_points):
@@ -84,9 +87,9 @@ class SimplefemImplementation(Implementation):
             # DOFs associated with interior of cell
             else:
                 entity_dofs[2][0].append(i)
-# </verify4>
+        # </verify4>
 
-# <verify5>
+        # <verify5>
         def tabulate(points):
             mapped_points = np.array([[2 * p[0] + p[1] - 1, p[1]] for p in points])
             table = np.zeros([points.shape[0], 1, degree])
@@ -95,18 +98,22 @@ class SimplefemImplementation(Implementation):
                 for j in range(degree):
                     table[i, 0, j] = e.evaluate(j, p)
             return table
-# </verify5>
 
-# <verify6>
+        # </verify5>
+
+        # <verify6>
         return entity_dofs, tabulate
-# </verify6>
 
-# <variables>
+    # </verify6>
+
+    # <variables>
     id = "simplefem"
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
     install = "pip3 install git+https://github.com/DefElement/simplefem"
-# </variables>
-# <verificationvariable>
+    # </variables>
+    # <verificationvariable>
     verification = True
+
+
 # </verificationvariable>

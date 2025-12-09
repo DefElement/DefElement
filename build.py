@@ -98,7 +98,6 @@ def write_html_page(
         f.write(make_html_page(content, title, extra_head=extra_head))
 
 
-
 args = parser.parse_args()
 if args.destination is not None:
     settings.set_html_path(args.destination)
@@ -986,8 +985,12 @@ for i in verifications:
         vs.append(i)
         if not include_simplefem and i == "simplefem":
             continue
-        content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        content += (
+            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        )
+        long_content += (
+            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        )
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
