@@ -6,6 +6,7 @@ import typing
 import symfem
 from webtools import settings
 from webtools.markup import insert_links as _insert_links
+from webtools.code_markup import code_highlight as _code_highlight
 
 from defelement import info, plotting, symbols, citations
 
@@ -114,6 +115,30 @@ def insert_citation(matches: typing.Match[str]) -> str:
     )
 
 
+def insert_snippet(matches: typing.Match[str]) -> str:
+    """Insert a snippet.
+
+    Args:
+        matches: Snippet info
+
+    Returns:
+        HTML for snippet
+    """
+    file = matches[1]
+    tag = matches[2]
+    with open(file) as f:
+        content = f.read().split(f"# <{tag}>\n")[1].split(f"# </{tag}>\n")[0]
+    out = ""
+    for part in re.split(r"\n\n+", content.rstrip(" \n").lstrip("\n")):
+        out += "<p class='pcode'>"
+        if file.endswith(".py"):
+            out += _code_highlight(part, "python")
+        else:
+            out += _code_highlight(part)
+        out += "</p>"
+    return out
+
+
 settings.re_extras = [
     (r"{{plot::([^,]+),([^,]+),([0-9]+)}}", plot_element),
     (r"{{plot::([^,]+),([^,]+),([0-9]+)::([0-9]+)}}", plot_single_element),
@@ -125,6 +150,7 @@ settings.re_extras = [
     ),
     (r"{{symbols\.([^}]+)}}", lambda m: getattr(symbols, m[1])),
     (r"{{citation::([^}]+)}}", insert_citation),
+    (r"{{snippet::([^:]*)::([A-Za-z0-9\-]+)}}", insert_snippet),
 ]
 settings.str_extras = [
     ("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>"),

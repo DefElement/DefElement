@@ -831,15 +831,12 @@ class Element:
                     raise DegreeNotImplemented()
             del params["DEGREES"]
 
-        input_deg: typing.Optional[int] = degree
+        input_deg = degree
         if "DEGREEMAP" in params:
             if degree is not None:
-                if params["DEGREEMAP"] == "None":
-                    input_deg = None
-                else:
-                    input_deg = int(
-                        sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
-                    )
+                input_deg = int(
+                    sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
+                )
             del params["DEGREEMAP"]
 
         return out, input_deg, params
@@ -935,7 +932,7 @@ class Element:
         Returns:
             Examples
         """
-        return implementations[lib].example(self)
+        return implementations[lib].examples(self)
 
     def has_implementation_examples(self, lib: str) -> bool:
         """Check if element has implementation examples for a library.

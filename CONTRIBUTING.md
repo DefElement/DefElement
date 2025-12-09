@@ -83,7 +83,7 @@ implementations:
 
 There are a few special parameters (written in ALL CAPS) that can be used here:
 
-<table>
+<table class='bordered align-left'>
 <thead>
 <tr><td>Parameter</td><td>Purpose</td></tr>
 </thead>
@@ -143,8 +143,9 @@ This class should include:
 <tr><td>Item</td><td>Type</td><td>Use</td></tr>
 </thead>
 <tr><td>`format`</td><td>method</td><td>This method should take an implementation string and a set of parameters as inputs and return the implementation information for the library, as it will be displayed on each element's page.</td></tr>
-<tr><td>`example`</td><td>method</td><td>This method should take a DefElement `Element` object as an input and return a block of Python (as a string) that creates all the examples of that element using the library.</td></tr>
-<tr><td>`verify`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object, an example, and a set of points as inputs and returns the element for that example tabulated at the set of points and the number of DOFs associated with each sub-entity as a tuple of tuples. The shape of the first output is `(number of points, value size, number of basis functions)`. These functions are used to [verify](https://defelement.org/verification.html) that the implementation spans the same space as Symfem.</td></tr>
+<tr><td>`example_import`</td><td>method</td><td>This method should return the imports to include at the start of a Python example code.</td></tr>
+<tr><td>`single_example`</td><td>method</td><td>This method should take an element name, reference, degree, and parameters and return a block of Python (as a string) that creates the example element using the library. A DefElement element and the example string are additionally passed into this function in case they are needed by the function.</td></tr>
+<tr><td>`verify`</td><td>method (optional)</td><td>This method should take an element name, reference, degree, and parameters, and a set of points as inputs and returns the element for that example tabulated at the set of points and the number of DOFs associated with each sub-entity as a tuple of tuples. The shape of the first output is `(number of points, value size, number of basis functions)`. These functions are used to [verify](https://defelement.org/verification.html) that the implementation spans the same space as Symfem. A DefElement element and the example string are additionally passed into this function in case they are needed by the function.</td></tr>
 <tr><td>`notes`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object and return a list of notes about the implementation to include on the element's page.</td></tr>
 <tr><td>`references`</td><td>method (optional)</td><td>This method should take a DefElement `Element` object and return a list of references relevant to the implementation to include on the element's page.</td></tr>
 <tr><td>`id`</td><td>variable</td><td>The unique identifier for your library. This will be used in .def files.</td></tr>
@@ -154,9 +155,10 @@ This class should include:
 <tr><td>`verification`</td><td>variable (optional)</td><td>Should be set to `True` if the `verify` function is implemented.</td></tr>
 </table>
 
-Once these steps are done, you can start adding implementation details for your library to
+Once this is done, you can start adding implementation details for your library to
 the `implementation` field of elements in the [`elements`](https://github.com/DefElement/DefElement/blob/main/elements)
-folder.
+folder. The [adding an implementation to DefElement walkthough](https://defelement.org/adding-an-implementation.html)
+is a more detailed guide to the steps involved in adding an implementation.
 
 ## Style guide
 When contributing to DefElement, you should follow [the DefElement style guide](https://defelement.org/style-guide.html).

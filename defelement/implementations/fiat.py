@@ -24,19 +24,9 @@ true_space_dimension = {
 class FIATImplementation(Implementation):
     """FIAT implementation."""
 
-    @staticmethod
-    def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    @classmethod
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f"FIAT.{string}"
         started = False
         for p, v in params.items():
@@ -50,95 +40,77 @@ class FIATImplementation(Implementation):
                     out += "(..."
                     started = True
                 out += f", {p}={v}"
-            else:
+            elif p != "degree":
                 raise ValueError(f"Unexpected parameter: {p}")
         if started:
             out += ")"
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import FIAT"
 
-        Args:
-            element: The element
-
-        Returns:
-                Example code
-        """
-        out = "import FIAT"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                fiat_name, input_deg, params = element.get_implementation_string(
-                    "fiat", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg}\n"
-            if ref in ["interval", "triangle", "tetrahedron"]:
-                cell = f'FIAT.ufc_cell("{ref}")'
-            elif ref == "quadrilateral":
-                cell = "FIAT.reference_element.UFCQuadrilateral()"
-            elif ref == "hexahedron":
-                cell = "FIAT.reference_element.UFCHexahedron()"
-            else:
-                raise ValueError(f"Unsupported cell: {ref}")
-            out += f"element = FIAT.{fiat_name}({cell}"
-            if input_deg is not None:
-                out += f", {input_deg}"
-            for i, j in params.items():
-                if i == "variant":
-                    out += f', {i}="{j}"'
-                if i == "subdegree":
-                    out += f", {i}={sympy.S(j).subs(sympy.Symbol('k'), deg)}"
-                if i == "reduced":
-                    out += f", {i}={j}"
-            out += ")"
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example."""
+        if reference in ["interval", "triangle", "tetrahedron"]:
+            cell = f'FIAT.ufc_cell("{reference}")'
+        elif reference == "quadrilateral":
+            cell = "FIAT.reference_element.UFCQuadrilateral()"
+        elif reference == "hexahedron":
+            cell = "FIAT.reference_element.UFCHexahedron()"
+        else:
+            raise ValueError(f"Unsupported cell: {reference}")
+        out = f"element = FIAT.{name}({cell}"
+        if params.get("degree", "") != "None":
+            out += f", {degree}"
+        for i, j in params.items():
+            if i == "variant":
+                out += f', {i}="{j}"'
+            if i == "subdegree":
+                subdegree = parse_example(example)[1]
+                out += f", {i}={sympy.S(j).subs(sympy.Symbol('k'), subdegree)}"
+            if i == "reduced":
+                out += f", {i}={j}"
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
-        element: Element, example: str
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
-        """Get verification data.
-
-        Args:
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+        """Get verification data."""
         import FIAT
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-
-        fiat_name, input_deg, params = element.get_implementation_string(
-            "fiat", ref, deg, variant, any_variant=True
-        )
-
-        if ref in ["interval", "triangle", "tetrahedron"]:
-            cell = FIAT.ufc_cell(ref)
-        elif ref == "quadrilateral":
+        if reference in ["interval", "triangle", "tetrahedron"]:
+            cell = FIAT.ufc_cell(reference)
+        elif reference == "quadrilateral":
             cell = FIAT.reference_element.UFCQuadrilateral()
-        elif ref == "hexahedron":
+        elif reference == "hexahedron":
             cell = FIAT.reference_element.UFCHexahedron()
         else:
-            raise ValueError(f"Unsupported cell: {ref}")
+            raise ValueError(f"Unsupported cell: {reference}")
 
         args = []
-        kwargs = {}
+        kwargs: dict[str, typing.Any] = {}
 
-        if input_deg is not None:
-            args.append(input_deg)
+        if params.get("degree", "") != "None":
+            args.append(degree)
 
         if "variant" in params:
             kwargs["variant"] = params["variant"]
@@ -146,19 +118,19 @@ class FIATImplementation(Implementation):
         if "reduced" in params:
             kwargs["reduced"] = bool(params["reduced"])
 
-        e = getattr(FIAT, fiat_name)(cell, *args, **kwargs)
+        e = getattr(FIAT, name)(cell, *args, **kwargs)
 
         value_size = 1
         for i in e.value_shape():
             value_size *= i
         edofs = [list(i.values()) for i in e.entity_dofs().values()]
-        if ref == "quadrilateral":
+        if reference == "quadrilateral":
             edofs = [
                 [edofs[0][0], edofs[0][2], edofs[0][1], edofs[0][3]],
                 [edofs[1][2], edofs[1][0], edofs[1][1], edofs[1][3]],
                 [edofs[2][0]],
             ]
-        if ref == "hexahedron":
+        if reference == "hexahedron":
             edofs = [
                 [
                     edofs[0][0],
@@ -215,16 +187,9 @@ class FIATImplementation(Implementation):
             slice(reduced_dim)
         ].T.reshape(points.shape[0], value_size, -1)
 
-    @staticmethod
-    def notes(element: Element) -> typing.List[str]:
-        """Return a list of notes to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of notes
-        """
+    @classmethod
+    def notes(cls, element: Element) -> list[str]:
+        """Return a list of notes to include for the implementation of this element."""
         if element.name in true_space_dimension:
             return [
                 "This implementation includes additional DOFs that are used then filtered "
@@ -232,16 +197,9 @@ class FIATImplementation(Implementation):
             ]
         return []
 
-    @staticmethod
-    def references(element: Element) -> typing.List[typing.Dict[str, typing.Any]]:
-        """Return a list of additional references to include for the implementation of this element.
-
-        Args:
-            element: Element data
-
-        Returns:
-            List of references
-        """
+    @classmethod
+    def references(cls, element: Element) -> list[dict[str, typing.Any]]:
+        """Return a list of additional references to include for the implementation of this element."""
         if element.name in true_space_dimension:
             return [
                 {

@@ -25,7 +25,7 @@ notes:
   - The normal derivatives of the basis functions are continuous between cells
 implementations:
   symfem: Morley
-  fiat: Morley DEGREEMAP=None
+  fiat: Morley degree=None
 examples:
   - triangle,2
 references:

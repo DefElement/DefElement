@@ -84,7 +84,7 @@ jobs:
 
       - run: python3 -m pip install -r requirements.txt
         name: Install requirements
-      - run: python3 build.py _test_html --no-cache --verification-json verification/verification.json --test auto --processes 4
+      - run: python3 build.py _test_html --no-cache --verification-json verification/verification.json --test auto --processes 4 --include-simplefem
         name: Build website HTML
 
   build-website:
@@ -133,7 +133,7 @@ jobs:
           python3 -m pip install setuptools
           python3 install_implementations.py --install-type verification
 
-      - run: python3 verify.py verification.json --test auto --processes 4 --skip-missing-libraries false
+      - run: python3 verify.py verification.json --test auto --processes 4 --fail-on-missing-libraries
         name: Run verification test
 
   run-tests:

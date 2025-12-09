@@ -65,6 +65,9 @@ parser.add_argument(
 parser.add_argument(
     "--no-cache", action="store_true", help="Build without using cache."
 )
+parser.add_argument(
+    "--include-simplefem", action="store_true", help="Include simplefem on all pages."
+)
 
 sitemap = {}
 
@@ -131,6 +134,8 @@ elif args.test == "auto":
     ]
 else:
     test_elements = args.test.split(",")
+
+include_simplefem = args.include_simplefem
 
 # Prepare paths
 if os.path.isdir(settings.html_path):
@@ -382,6 +387,8 @@ for e in categoriser.elements:
     libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
     libraries.sort(key=lambda i: i[0])
     for codename, libname, url, pip in libraries:
+        if not include_simplefem and codename == "simplefem":
+            continue
         jscodename: typing.Optional[str] = None
         v: typing.Optional[typing.Dict] = None
         example_code: typing.Optional[str] = None
@@ -392,13 +399,11 @@ for e in categoriser.elements:
                 cache_id = f"{e.name}-{codename}-implementation-code"
                 c = load_cache(cache_id, symfem.__version__)
                 input_code, output_code = codename[2:-1].split(" -> ")
-                jscodename = output_code.replace(".", "_").replace("-", "_")
+                jscodename = jsify(output_code)
                 if c is None:
                     if not e.implemented(output_code) and e.implemented(codename):
                         try:
-                            print(1)
                             example_code = e.make_implementation_examples(codename)
-                            print(2)
                         except (NotImplementedError, KeyError):
                             pass
 
@@ -978,6 +983,8 @@ vs = []
 for i in verifications:
     if i != "symfem":
         vs.append(i)
+        if not include_simplefem and i == "simplefem":
+            continue
         content += (
             f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
         )
@@ -992,6 +999,8 @@ for e in categoriser.elements:
     row = "<tr>"
     row += f"<td><a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
     for i in vs:
+        if not include_simplefem and i == "simplefem":
+            continue
         row += "<td>"
         if e.filename in verification and i in verification[e.filename]:
             result = verification[e.filename][i]
@@ -1135,6 +1144,8 @@ for i in verifications:
         url = "https://defelement.org/verification/"
     else:
         url = f"https://defelement.org/verification/{i}.html"
+    if not include_simplefem and i == "simplefem":
+        continue
     c += (
         "<tr>"
         f"<td>{implementations[i].name}</td>"

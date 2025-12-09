@@ -2,7 +2,6 @@
 
 import re
 import typing
-from abc import ABC, abstractmethod
 
 if typing.TYPE_CHECKING:
     from numpy import float64
@@ -16,29 +15,114 @@ else:
     Element = typing.Any
 
 
-class Implementation(ABC):
+class Implementation:
     """An implementation."""
 
-    @staticmethod
-    @abstractmethod
-    def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
+    @classmethod
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
         """Format implementation string.
 
+        This function is passed the string and parameters set in a .def file for an
+        implementation and should return the string to display on the element's page.
+
+        This function must be implemented.
+
         Args:
-            string: Implementation string
-            params: Parameters
+            string: Implementation string as set in the .def file
+            params: Additional parameters set in the .def file
 
         Returns:
             Formatted implementation string
         """
+        raise NotImplementedError()
 
-    @staticmethod
-    def implemented(element: Element) -> bool:
+    @classmethod
+    def example_import(cls) -> str:
+        """Get code for imports to include at start of examples snippet.
+
+        This function must be implemented.
+
+        Returns:
+            Python code for imports
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example.
+
+        This function takes the element string and parameters (as set in the .def file)
+        and the reference cell and degree for an example and should return a string of Python code
+        that will create the example element.
+
+        The additional inputs element and example may be needed in some more complex cases.
+
+        This function must be implemented.
+
+        Args:
+            name: Implementation string as set in the .def file
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The DefElement element object
+            example: Raw example data
+
+        Returns:
+            Example code
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def verify(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+        """Get information needed to run verification.
+
+        Implementation of this function is optional, but it must be implemented for verification
+        to be carried out. If this function is implemented, then the class variable `verification`
+        should be set to `True` to activate verification.
+
+        Args:
+            name: Implementation string as set in the .def file
+            reference: The name of the reference cell
+            degree: The degree of this example
+            params: Additional parameters set in the .def file
+            element: The DefElement element object
+            example: Raw example data
+
+        Returns:
+            This function returns two things:
+            - A list of lists of lists that gives the degrees of freedom (DOFs) associated with
+              each sub-entity. The entry `[i][j][k]` of this returned value is the `k`th dof that
+              is associated with the `j`th sub-entity of dimension `i`.
+            - A function thtat takes a set of points on the DefElement reference cell as input and
+              returns the a Numpy array containing the values of the basis functions at every point.
+              The entry `[i, j, k]` in this Numpy array is the `j`th component of the `k`th basis
+              function evaluated at the `i`th point.
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def implemented(cls, element: Element) -> bool:
         """Check if an element is implemented.
 
         This can be used to overrule Element's implemented function.
+
+        Implementation of this function is optional.
 
         Args:
             element: The element
@@ -48,38 +132,11 @@ class Implementation(ABC):
         """
         return True
 
-    @staticmethod
-    @abstractmethod
-    def example(element: Element) -> str:
-        """Generate examples.
-
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
-
-    @staticmethod
-    def verify(
-        element: Element, example: str
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
-        """Get verification data.
-
-        Args:
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
-        raise NotImplementedError()
-
-    @staticmethod
-    def notes(element: Element) -> typing.List[str]:
+    @classmethod
+    def notes(cls, element: Element) -> list[str]:
         """Return a list of notes to include for the implementation of this element.
+
+        Implementation of this function is optional.
 
         Args:
             element: Element data
@@ -89,9 +146,11 @@ class Implementation(ABC):
         """
         return []
 
-    @staticmethod
-    def references(element: Element) -> typing.List[typing.Dict[str, str]]:
+    @classmethod
+    def references(cls, element: Element) -> list[dict[str, str]]:
         """Return a list of additional references to include for the implementation of this element.
+
+        Implementation of this function is optional.
 
         Args:
             element: Element data
@@ -101,14 +160,60 @@ class Implementation(ABC):
         """
         return []
 
+    @classmethod
+    def examples(cls, element: Element) -> str:
+        """Generate code for all examples.
+
+        This function should not be overridden in subclasses.
+
+        Args:
+            element: The element
+
+        Returns:
+            Example code
+        """
+        code = cls.example_import()
+        assert cls.id is not None
+        for eg in element.examples:
+            reference, defelement_degree, variant, kwargs = parse_example(eg)
+            try:
+                if cls.id.startswith("*(") and cls.id.endswith(")"):
+                    name, degree, params = element.get_implementation_string(
+                        cls.id[2:-1].split(" -> ")[0],
+                        reference,
+                        defelement_degree,
+                        variant,
+                    )
+                else:
+                    name, degree, params = element.get_implementation_string(
+                        cls.id, reference, defelement_degree, variant
+                    )
+            except NotImplementedError:
+                continue
+
+            for i, j in kwargs.items():
+                assert i not in params
+                params[i] = j
+
+            assert degree is not None
+            code += "\n\n"
+            code += "# Create "
+            if variant is None:
+                code += element.name
+            else:
+                code += element.name_with_variant(variant)
+            code += f" degree {degree} on a {reference}\n"
+            code += cls.single_example(name, reference, degree, params, element, eg)
+        return code
+
     # Unique identifier used in implementation section of .def files
-    id: typing.Optional[str] = None
+    id: str | None = None
     # The name of the implementation
-    name: typing.Optional[str] = None
+    name: str | None = None
     # Snippet to install the implementation
-    install: typing.Optional[str] = None
+    install: str | None = None
     # URL of source of implementation (eg GitHub link)
-    url: typing.Optional[str] = None
+    url: str | None = None
     # Set to true if this implementation should be verified
     verification = False
 
@@ -125,7 +230,7 @@ class NotImplementedOnReference(NotImplementedError):
     """Error for element not implemented on a reference cell."""
 
 
-ValueType = typing.Union[int, str, typing.List["ValueType"]]
+ValueType = typing.Union[int, str, list["ValueType"]]
 
 
 def _parse_value(v: str) -> ValueType:
@@ -147,12 +252,7 @@ def _parse_value(v: str) -> ValueType:
 
 def parse_example(
     e: str,
-) -> typing.Tuple[
-    str,
-    int,
-    typing.Optional[str],
-    typing.Dict[str, typing.Union[int, str, typing.List[ValueType]]],
-]:
+) -> tuple[str, int, str | None, dict[str, int | str | list[ValueType]]]:
     """Parse an example.
 
     Args:

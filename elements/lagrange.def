@@ -163,6 +163,9 @@ implementations:
       quadrilateral: Lagrange
       tetrahedron: Lagrange
       hexahedron: Lagrange
+  simplefem:
+    equispaced:
+      triangle: lagrange_element DEGREEMAP=(k+1)*(k+2)//2
 examples:
   - interval,1,equispaced
   - interval,2,equispaced

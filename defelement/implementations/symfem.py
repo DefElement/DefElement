@@ -25,15 +25,15 @@ def symfem_create_element(element: Element, example: str) -> FiniteElement:
     """
     import symfem
 
-    ref, deg, variant, kwargs = parse_example(example)
-    symfem_name, input_deg, params = element.get_implementation_string(
-        "symfem", ref, deg, variant
+    ref, defelement_deg, variant, kwargs = parse_example(example)
+    symfem_name, deg, params = element.get_implementation_string(
+        "symfem", ref, defelement_deg, variant
     )
     assert symfem_name is not None
     if ref == "dual polygon":
         ref += "(4)"
-    assert isinstance(input_deg, int)
-    return symfem.create_element(ref, symfem_name, input_deg, **params)
+    assert isinstance(deg, int)
+    return symfem.create_element(ref, symfem_name, deg, **params)
 
 
 class CachedSymfemTabulator:
@@ -46,7 +46,7 @@ class CachedSymfemTabulator:
             element: Symfem element
         """
         self.element = element
-        self.tables: typing.List[typing.Tuple[Array, Array]] = []
+        self.tables: list[tuple[Array, Array]] = []
 
     def tabulate(self, points: Array) -> Array:
         """Tabulate this element.
@@ -73,19 +73,9 @@ class CachedSymfemTabulator:
 class SymfemImplementation(Implementation):
     """Symfem implementation."""
 
-    @staticmethod
-    def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    @classmethod
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f'"{string}"'
         for p, v in params.items():
             if p == "variant":
@@ -94,66 +84,52 @@ class SymfemImplementation(Implementation):
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "import symfem"
 
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
-        out = "import symfem"
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            symfem_name, input_deg, params = element.get_implementation_string(
-                "symfem", ref, deg, variant
-            )
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            if ref == "dual polygon":
-                out += f'element = symfem.create_element("{ref}(4)",'
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate examples."""
+        out = "element = symfem.create_element("
+        if reference == "dual polygon":
+            out += f'"{reference}(4)",'
+        else:
+            out += f'"{reference}",'
+        out += f' "{name}", {degree}'
+        for i, j in params.items():
+            if isinstance(j, str):
+                out += f', {i}="{j}"'
             else:
-                out += f'element = symfem.create_element("{ref}",'
-            if "variant" in params:
-                out += f' "{symfem_name}", {input_deg}, variant="{params["variant"]}"'
-            else:
-                out += f' "{symfem_name}", {input_deg}'
-            for i, j in kwargs.items():
-                if isinstance(j, str):
-                    out += f', {i}="{j}"'
-                else:
-                    out += f", {i}={j}"
-            out += ")"
+                out += f", {i}={j}"
+        out += ")"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
-        element: Element, example: str
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
-        """Get verification data.
-
-        Args:
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+        """Get verification data."""
         import symfem
 
-        ref, deg, variant, kwargs = parse_example(example)
-        symfem_name, input_deg, params = element.get_implementation_string(
-            "symfem", ref, deg, variant
-        )
-        if ref == "dual polygon":
-            ref += "(4)"
-        assert isinstance(input_deg, int)
-        e = symfem.create_element(ref, symfem_name, input_deg, **params)
+        if reference == "dual polygon":
+            reference += "(4)"
+        e = symfem.create_element(reference, name, degree, **params)  # type: ignore
         edofs = [
             [e.entity_dofs(i, j) for j in range(e.reference.sub_entity_count(i))]
             for i in range(e.reference.tdim + 1)

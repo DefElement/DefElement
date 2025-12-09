@@ -22,7 +22,16 @@ def test_snippets(element, library):
     if not e.implemented(library):
         pytest.skip()
 
-    code = e.make_implementation_examples(library)
+    if library.startswith("*(") and library.endswith(")"):
+        input_code, output_code = library[2:-1].split(" -> ")
+        if e.implemented(output_code):
+            pytest.skip()
+        try:
+            code = e.make_implementation_examples(library)
+        except (NotImplementedError, KeyError):
+            pytest.skip()
+    else:
+        code = e.make_implementation_examples(library)
     lines = code.split("\n")
     for i, j in enumerate(lines):
         print(j)

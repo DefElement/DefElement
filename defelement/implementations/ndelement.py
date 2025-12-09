@@ -6,26 +6,15 @@ from defelement.implementations.core import (
     Array,
     Element,
     Implementation,
-    parse_example,
 )
 
 
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
-    @staticmethod
-    def format(
-        string: typing.Optional[str], params: typing.Dict[str, typing.Any]
-    ) -> str:
-        """Format implementation string.
-
-        Args:
-            string: Implementation string
-            params: Parameters
-
-        Returns:
-            Formatted implementation string
-        """
+    @classmethod
+    def format(cls, string: str, params: dict[str, typing.Any]) -> str:
+        """Format implementation string."""
         out = f"Family.{string}"
         for p, v in params.items():
             out += f", {p}="
@@ -35,76 +24,51 @@ class NDElementImplementation(Implementation):
                 raise ValueError(f"Unexpected parameter: {p}")
         return out
 
-    @staticmethod
-    def example(element: Element) -> str:
-        """Generate examples.
+    @classmethod
+    def example_import(cls) -> str:
+        """Get imports to include at start of example."""
+        return "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
 
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
-        out = "\nfrom ndelement.reference_cell import ReferenceCellType"
-        cont = False
-        for e in element.examples:
-            ref, deg, variant, kwargs = parse_example(e)
-            assert len(kwargs) == 0
-
-            try:
-                name, input_deg, params = element.get_implementation_string(
-                    "ndelement", ref, deg, variant
-                )
-            except NotImplementedError:
-                continue
-
-            out += "\n\n"
-            out += f"# Create {element.name_with_variant(variant)} degree {deg} on a {ref}\n"
-            out += "family = create_family("
-            out += f"Family.{name}, {input_deg}"
-            if "continuity" in params:
-                cont = True
-                assert params["continuity"] in ["Standard", "Discontinuous"]
-                out += f", continuity=Continuity.{params['continuity']}"
-            out += ")\n"
-            out += f"element = family.element(ReferenceCellType.{ref[0].upper() + ref[1:]})"
-        if cont:
-            out = (
-                "from ndelement.ciarlet import Continuity, Family, create_family" + out
-            )
-        else:
-            out = "from ndelement.ciarlet import Family, create_family" + out
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example."""
+        out = "family = ciarlet.create_family("
+        out += f"ciarlet.Family.{name}, {degree}"
+        if "continuity" in params:
+            assert params["continuity"] in ["Standard", "Discontinuous"]
+            out += f", continuity=ciarlet.Continuity.{params['continuity']}"
+        out += ")\n"
+        out += f"element = family.element(ReferenceCellType.{reference[0].upper() + reference[1:]})"
         return out
 
-    @staticmethod
+    @classmethod
     def verify(
-        element: Element, example: str
-    ) -> typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ]:
-        """Get verification data.
-
-        Args:
-            element: Element data
-            example: Example data
-
-        Returns:
-            List of entity dofs, and tabulation function
-        """
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+        """Get verification data."""
         from ndelement.ciarlet import Continuity, Family, create_family
         from ndelement.reference_cell import ReferenceCellType, entity_counts
 
-        ref, deg, variant, kwargs = parse_example(example)
-        assert len(kwargs) == 0
-        name, input_deg, params = element.get_implementation_string(
-            "ndelement", ref, deg, variant, any_variant=True
-        )
         kwargs = {}
         if "continuity" in params:
             kwargs["continuity"] = getattr(Continuity, params["continuity"])
 
-        cell = getattr(ReferenceCellType, ref[0].upper() + ref[1:])
-        e = create_family(getattr(Family, name), input_deg, **kwargs).element(cell)
+        cell = getattr(ReferenceCellType, reference[0].upper() + reference[1:])
+        e = create_family(getattr(Family, name), degree, **kwargs).element(cell)
         entity_dofs = [
             [e.entity_dofs(dim, entity) for entity in range(n)]
             for dim, n in enumerate(entity_counts(cell))
