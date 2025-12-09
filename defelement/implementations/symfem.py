@@ -107,6 +107,7 @@ class SymfemImplementation(Implementation):
             out += f'"{reference}",'
         if "variant" in params:
             out += f' "{name}", {degree}, variant="{params["variant"]}"'
+            del params["variant"]
         else:
             out += f' "{name}", {degree}'
         for i, j in params.items():
