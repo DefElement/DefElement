@@ -37,22 +37,6 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
-    def implemented(cls, element: Element) -> bool:
-        """Check if an element is implemented.
-
-        This can be used to overrule Element's implemented function.
-
-        Implementation of this function is optional.
-
-        Args:
-            element: The element
-
-        Returns:
-            Example code
-        """
-        return True
-
-    @classmethod
     def example_import(cls) -> str:
         """Get code for imports to include at start of examples snippet.
 
@@ -108,7 +92,7 @@ class Implementation:
     ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
         """Get information needed to run verification.
 
-        Implementation of this function is options, but it must be implemented for verification
+        Implementation of this function is optional, but it must be implemented for verification
         to be carried out. If this function is implemented, then the class variable `verification`
         should be set to `True` to activate verification.
 
@@ -131,6 +115,22 @@ class Implementation:
               function evaluated at the `i`th point.
         """
         raise NotImplementedError()
+
+    @classmethod
+    def implemented(cls, element: Element) -> bool:
+        """Check if an element is implemented.
+
+        This can be used to overrule Element's implemented function.
+
+        Implementation of this function is optional.
+
+        Args:
+            element: The element
+
+        Returns:
+            Example code
+        """
+        return True
 
     @classmethod
     def notes(cls, element: Element) -> list[str]:
