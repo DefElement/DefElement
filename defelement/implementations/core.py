@@ -190,6 +190,11 @@ class Implementation:
                     )
             except NotImplementedError:
                 continue
+
+            for i, j in kwargs.items():
+                assert i not in params
+                params[i] = j
+
             assert degree is not None
             code += "\n\n"
             code += "# Create "
