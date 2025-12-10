@@ -39,12 +39,7 @@ def points(ref: str) -> Array:
 
     if ref == "hexahedron":
         return np.array(
-            [
-                [i / 10, j / 10, k / 10]
-                for i in range(11)
-                for j in range(11)
-                for k in range(11)
-            ]
+            [[i / 10, j / 10, k / 10] for i in range(11) for j in range(11) for k in range(11)]
         )
     if ref == "tetrahedron":
         return np.array(
@@ -57,12 +52,7 @@ def points(ref: str) -> Array:
         )
     if ref == "prism":
         return np.array(
-            [
-                [i / 10, j / 10, k / 10]
-                for i in range(11)
-                for j in range(11 - i)
-                for k in range(11)
-            ]
+            [[i / 10, j / 10, k / 10] for i in range(11) for j in range(11 - i) for k in range(11)]
         )
     if ref == "pyramid":
         return np.array(
@@ -98,8 +88,7 @@ def entity_points(ref: str) -> typing.List[typing.List[Array]]:
             row.append(
                 np.array(
                     [
-                        to_array(e.origin)
-                        + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
+                        to_array(e.origin) + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
                         for p in epts
                     ]
                 )
@@ -121,9 +110,7 @@ def closure_dofs(
         Entity closure DOFs
     """
     r = symfem.create_reference(ref)
-    out: typing.List[typing.List[typing.List[int]]] = [
-        [[] for j in i] for i in entity_dofs
-    ]
+    out: typing.List[typing.List[typing.List[int]]] = [[[] for j in i] for i in entity_dofs]
     for dim in range(r.tdim + 1):
         for e_n, e in enumerate(r.sub_entities(dim)):
             for subdim in range(dim + 1):

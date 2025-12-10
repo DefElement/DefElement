@@ -47,9 +47,7 @@ class BasixImplementation(Implementation):
         out = "element = basix.create_element("
         out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
         if "lagrange_variant" in params:
-            out += (
-                f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
-            )
+            out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
         if "dpc_variant" in params:
             out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
         if "discontinuous" in params:
@@ -73,9 +71,7 @@ class BasixImplementation(Implementation):
 
         kwargs = {}
         if "lagrange_variant" in params:
-            kwargs["lagrange_variant"] = getattr(
-                basix.LagrangeVariant, params["lagrange_variant"]
-            )
+            kwargs["lagrange_variant"] = getattr(basix.LagrangeVariant, params["lagrange_variant"])
         if "dpc_variant" in params:
             kwargs["dpc_variant"] = getattr(basix.DPCVariant, params["dpc_variant"])
         if "discontinuous" in params:

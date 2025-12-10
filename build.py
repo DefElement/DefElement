@@ -62,9 +62,7 @@ parser.add_argument(
     default=None,
     help="Provide a verification JSON.",
 )
-parser.add_argument(
-    "--no-cache", action="store_true", help="Build without using cache."
-)
+parser.add_argument("--no-cache", action="store_true", help="Build without using cache.")
 parser.add_argument(
     "--include-simplefem", action="store_true", help="Include simplefem on all pages."
 )
@@ -200,13 +198,9 @@ cdescs = {
     "H1(div)": "Function values and divergence are continuous.",
 }
 
-VHistoryDict = typing.TypedDict(
-    "VHistoryDict", {"date": str, "pass": int, "total": int}
-)
+VHistoryDict = typing.TypedDict("VHistoryDict", {"date": str, "pass": int, "total": int})
 
-verification: typing.Dict[
-    str, typing.Dict[str, typing.Dict[str, typing.List[str]]]
-] = {}
+verification: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
 vhistory: typing.Dict[str, typing.List[VHistoryDict]] = {}
 v_date = None
 if os.path.isfile(settings.verification_json):
@@ -229,9 +223,7 @@ orange_check = (
     "<i class='fa-solid fa-square-xmark' style='color:"
     f"{symfem.plotting.Colors.ORANGE};{icon_style}'></i>"
 )
-red_check = (
-    f"<i class='fa-solid fa-square-xmark' style='color:#FF0000;{icon_style}'></i>"
-)
+red_check = f"<i class='fa-solid fa-square-xmark' style='color:#FF0000;{icon_style}'></i>"
 blue_minus = (
     "<i class='fa-solid fa-square-minus' style='color:"
     f"{symfem.plotting.Colors.BLUE};{icon_style}'></i>"
@@ -270,9 +262,7 @@ for e in categoriser.elements:
     # Variants
     variants = e.variants()
     if len(variants) > 0:
-        element_data.append(
-            ("Variants", "<br />".join([insert_links(v) for v in variants]))
-        )
+        element_data.append(("Variants", "<br />".join([insert_links(v) for v in variants])))
 
     simplex_only = (
         len(
@@ -366,9 +356,7 @@ for e in categoriser.elements:
             element_data.append(
                 (
                     "continuity",
-                    "<br />".join(
-                        [f"{cdescs[c]} (\\({n}\\))" for n, c in sobolev.items()]
-                    ),
+                    "<br />".join([f"{cdescs[c]} (\\({n}\\))" for n, c in sobolev.items()]),
                 )
             )
         else:
@@ -379,9 +367,7 @@ for e in categoriser.elements:
     if isinstance(notes, str):
         notes = [notes]
     if len(notes) > 0:
-        element_data.append(
-            ("Notes", "<br />\n".join([insert_links(i) for i in notes]))
-        )
+        element_data.append(("Notes", "<br />\n".join([insert_links(i) for i in notes])))
 
     # Implementations
     libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
@@ -417,10 +403,7 @@ for e in categoriser.elements:
                         jscodename = None
                     else:
                         example_code = c
-                if (
-                    e.filename in verification
-                    and output_code in verification[e.filename]
-                ):
+                if e.filename in verification and output_code in verification[e.filename]:
                     v = verification[e.filename][output_code]
 
         # Standard implementations
@@ -453,9 +436,7 @@ for e in categoriser.elements:
                 info += ". "
             else:
                 info += ":<p class='pcode'>" + pip.replace("\n", "<br />") + "</p>"
-            info += (
-                "This element can then be created with the following lines of Python:"
-            )
+            info += "This element can then be created with the following lines of Python:"
 
             info += "<p class='pcode'>" + python_highlight(example_code) + "</p>"
             info += "</div>"
@@ -566,9 +547,7 @@ for e in categoriser.elements:
             notes = e.implementation_notes(codename)
             if notes is not None:
                 for note in notes:
-                    info += (
-                        f"<div style='{text_style};margin-top:5px'>Note: {note}</div>"
-                    )
+                    info += f"<div style='{text_style};margin-top:5px'>Note: {note}</div>"
 
             info += (
                 "<script type='text/javascript'>\n"
@@ -601,9 +580,7 @@ for e in categoriser.elements:
     # Write element data
     content += "<table class='element-info'>"
     for i, j in element_data:
-        content += (
-            f"<tr><td>{i.replace(' ', '&nbsp;').replace('<breakable>', ' ')}</td>"
-        )
+        content += f"<tr><td>{i.replace(' ', '&nbsp;').replace('<breakable>', ' ')}</td>"
         content += f"<td>{j}</td></tr>"
     content += "</table>"
 
@@ -611,9 +588,7 @@ for e in categoriser.elements:
     if len(impl) > 0:
         content += heading_with_self_ref("h2", "Implementations")
         content += "This element is implemented in "
-        content += comma_and_join(
-            [f"<span style='white-space:nowrap'>{i[2]}</span>" for i in impl]
-        )
+        content += comma_and_join([f"<span style='white-space:nowrap'>{i[2]}</span>" for i in impl])
         content += "."
         content += (
             "<a class='show_eg_link' id='implementation-more-link' "
@@ -708,9 +683,7 @@ for e in categoriser.elements:
             content += f"<li>[{rindex + 1}] {markup_citation(r)}"
             content += f" [<a href='/elements/bibtex/{e.filename}-{rindex}.bib'>BibTeX</a>]</li>\n"
             with open(
-                os.path.join(
-                    settings.htmlelement_path, f"bibtex/{e.filename}-{rindex}.bib"
-                ),
+                os.path.join(settings.htmlelement_path, f"bibtex/{e.filename}-{rindex}.bib"),
                 "w",
             ) as f:
                 f.write(make_bibtex(f"{e.filename}-{rindex}", r))
@@ -726,9 +699,7 @@ for e in categoriser.elements:
         content += "</table>"
 
     # Write file
-    write_html_page(
-        os.path.join(settings.htmlelement_path, e.html_filename), e.html_name, content
-    )
+    write_html_page(os.path.join(settings.htmlelement_path, e.html_filename), e.html_name, content)
 
     # Make redirects from legacy filenames
     for fname in e.legacy_filenames:
@@ -854,9 +825,7 @@ if v_date is not None:
 for i in impl_content:
     if i in vhistory:
         hist = vhistory[i]
-        impl_content[i] += (
-            "<div id='verification-plot'></div><script type='text/javascript'>\n"
-        )
+        impl_content[i] += "<div id='verification-plot'></div><script type='text/javascript'>\n"
 
         impl_content[i] += "var vpassing = {\n  x: ["
         impl_content[i] += ",".join(f'"{i["date"]}"' for i in hist)
@@ -985,12 +954,8 @@ for i in verifications:
         vs.append(i)
         if not include_simplefem and i == "simplefem":
             continue
-        content += (
-            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        )
-        long_content += (
-            f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
-        )
+        content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
+        long_content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
 content += "</tr></thead>"
 long_content += "</tr></thead>"
 rows = []
@@ -1059,9 +1024,7 @@ for e in categoriser.elements:
                     long_row += green_check
                 elif eg in result["fail"]:
                     long_row += red_check
-                    impl_rows[i].append(
-                        f"<td style='font-size:80%'>{eg}</td><td>{red_check}</td>"
-                    )
+                    impl_rows[i].append(f"<td style='font-size:80%'>{eg}</td><td>{red_check}</td>")
                 else:
                     long_row += blue_minus
             else:
@@ -1276,10 +1239,7 @@ content += "function do_filter_cat(){\n"
 content += "    if(document.getElementById('check-cat-all').checked){\n"
 content += "        if("
 content += " || ".join(
-    [
-        f"document.getElementById('check-cat-{c}').checked"
-        for c in categoriser.categories
-    ]
+    [f"document.getElementById('check-cat-{c}').checked" for c in categoriser.categories]
 )
 content += "){\n"
 content += "            document.getElementById('check-cat-all').checked = false\n"
@@ -1291,10 +1251,7 @@ content += "function do_filter_ref(){\n"
 content += "    if(document.getElementById('check-ref-all').checked){\n"
 content += "        if("
 content += " || ".join(
-    [
-        f"document.getElementById('check-ref-{r}').checked"
-        for r in categoriser.references
-    ]
+    [f"document.getElementById('check-ref-{r}').checked" for r in categoriser.references]
 )
 content += "){\n"
 content += "            document.getElementById('check-ref-all').checked = false\n"
@@ -1371,18 +1328,14 @@ content += "<tr><td>Reference&nbsp;cells</td><td>"
 content += "<label><input type='checkbox' checked id='check-ref-all' onchange='do_filter_refall()'"
 content += ">&nbsp;show all</label> "
 for r in categoriser.references:
-    content += (
-        f"<label><input type='checkbox' id='check-ref-{r}' onchange='do_filter_ref()'"
-    )
+    content += f"<label><input type='checkbox' id='check-ref-{r}' onchange='do_filter_ref()'"
     content += f">&nbsp;{r}</label> "
 content += "</td></tr>"
 content += "<tr><td>Categories</td><td>"
 content += "<label><input type='checkbox' checked id='check-cat-all'onchange='do_filter_catall()'"
 content += ">&nbsp;show all</label> "
 for c in categoriser.categories:
-    content += (
-        f"<label><input type='checkbox' id='check-cat-{c}'onchange='do_filter_cat()'"
-    )
+    content += f"<label><input type='checkbox' id='check-cat-{c}'onchange='do_filter_cat()'"
     content += f">&nbsp;{categoriser.get_category_name(c)}</label> "
 content += "</td></tr>"
 content += "</table>\n"
@@ -1420,9 +1373,7 @@ elementlist.sort(key=lambda x: x[0])
 content += "<ul>" + "\n".join([i[1] for i in elementlist]) + "</ul>"
 content += "<script type='text/javascript'>do_filter()</script>"
 
-write_html_page(
-    os.path.join(settings.htmlelement_path, "index.html"), "Index of elements", content
-)
+write_html_page(os.path.join(settings.htmlelement_path, "index.html"), "Index of elements", content)
 
 # Recently updated elements
 rss_icon = (
@@ -1430,9 +1381,7 @@ rss_icon = (
     "<i class='fa fa-rss' aria-hidden='true'></i></span>"
 )
 content = heading_with_self_ref("h1", "Recent elements")
-content += (
-    f"<h2>Recently added elements <a href='/new-elements.xml'>{rss_icon}</a></h2>\n"
-)
+content += f"<h2>Recently added elements <a href='/new-elements.xml'>{rss_icon}</a></h2>\n"
 content += "<ul>\n"
 for e in categoriser.recently_added(10):
     content += f"<li><a href='/elements/{e.html_filename}'>{e.html_name}</a>"
@@ -1450,9 +1399,7 @@ for e in categoriser.recently_updated(10):
     content += "</li>\n"
 content += "</ul>\n"
 
-write_html_page(
-    os.path.join(settings.htmlindices_path, "recent.html"), "Recent elements", content
-)
+write_html_page(os.path.join(settings.htmlindices_path, "recent.html"), "Recent elements", content)
 
 with open(os.path.join(settings.html_path, "new-elements.xml"), "w") as f:
     f.write(
@@ -1521,9 +1468,7 @@ for c, info in implementations.items():
     if c.startswith("*("):
         continue
     category_pages = []
-    for e in categoriser.elements_in_implementation(
-        c, include_dependent_implementations=True
-    ):
+    for e in categoriser.elements_in_implementation(c, include_dependent_implementations=True):
         names = {e.html_name}
         refs = set()
         for cname in categoriser.references:
@@ -1606,16 +1551,12 @@ write_html_page(
 
 # Page showing numbering of references
 content = heading_with_self_ref("h1", "Reference cell numbering")
-content += (
-    "<p>This page illustrates the entity numbering used for each reference cell.</p>"
-)
+content += "<p>This page illustrates the entity numbering used for each reference cell.</p>"
 for cell in categoriser.references.keys():
     if cell == "dual polygon":
         for nsides in [4, 5, 6]:
             content += heading_with_self_ref("h2", f"Dual polygon ({nsides})")
-            content += plotting.plot_reference(
-                symfem.create_reference(f"dual polygon({nsides})")
-            )
+            content += plotting.plot_reference(symfem.create_reference(f"dual polygon({nsides})"))
     else:
         content += heading_with_self_ref("h2", cap_first(cell))
         content += plotting.plot_reference(symfem.create_reference(cell))
@@ -1740,12 +1681,8 @@ content += "</tr>\n"
 content += "\n".join(de_rham_3d)
 content += "</table>"
 content += heading_with_self_ref("h2", "De Rham complex in 2D")
-content += (
-    "<p>In 2D, \\(\\textbf{H}(\\text{div})\\) and \\(\\textbf{H}(\\text{curl})\\) "
-)
-content += (
-    "are isomorphic via a 90 degree rotation \\(R\\). This means that we can define "
-)
+content += "<p>In 2D, \\(\\textbf{H}(\\text{div})\\) and \\(\\textbf{H}(\\text{curl})\\) "
+content += "are isomorphic via a 90 degree rotation \\(R\\). This means that we can define "
 content += "the de Rham complex in two ways.</p>"
 content += "<p>One variant uses \\(\\textbf{H}(\\text{div})\\) and the vector-valued "
 content += "\\(\\textbf{curl}\\) operator, "
@@ -1762,14 +1699,10 @@ content += "<td>\\(L_2\\)</td>"
 content += "</tr>\n"
 content += "\n".join(de_rham_2d_hdiv)
 content += "</table>"
-content += (
-    "<p>The second variant uses \\(\\textbf{H}(\\text{curl})\\) and the scalar-valued "
-)
+content += "<p>The second variant uses \\(\\textbf{H}(\\text{curl})\\) and the scalar-valued "
 content += "\\(\\text{curl}\\) operator, "
 content += "\\(\\text{curl} \\, \\mathbf{u} = \\partial_x u_y - \\partial_y u_x\\). "
-content += (
-    "Note that \\(\\text{curl} \\, \\mathbf{u} = \\nabla\\cdot R \\mathbf{u}\\).</p>"
-)
+content += "Note that \\(\\text{curl} \\, \\mathbf{u} = \\nabla\\cdot R \\mathbf{u}\\).</p>"
 content += "<table class='families'>\n"
 content += "<tr>"
 content += "<td><small>Name(s)</small></td>"
@@ -1786,29 +1719,19 @@ content += "double element diagrams in the orange boxes in the "
 content += "<a href=https://www-users.cse.umn.edu/~arnold/femtable>"
 content += "Periodic table of the finite elements</a>. That is also why the "
 content += "boxes are orange, and not red nor yellow as in 3D.</p>"
-write_html_page(
-    os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content
-)
+write_html_page(os.path.join(settings.htmlfamilies_path, "index.html"), "Complex families", content)
 
 # List of lists
 content = heading_with_self_ref("h1", "Lists of elements")
 content += "<ul>\n"
 content += "<li><a href='/lists/categories'>Finite elements by category</a></li>\n"
-content += (
-    "<li><a href='/lists/references'>Finite elements by reference cell</a></li>\n"
-)
-content += (
-    "<li><a href='/lists/recent.html'>Recently added/updated finite elements</a></li>\n"
-)
+content += "<li><a href='/lists/references'>Finite elements by reference cell</a></li>\n"
+content += "<li><a href='/lists/recent.html'>Recently added/updated finite elements</a></li>\n"
 content += "</ul>"
-write_html_page(
-    os.path.join(settings.htmlindices_path, "index.html"), "Lists of elements", content
-)
+write_html_page(os.path.join(settings.htmlindices_path, "index.html"), "Lists of elements", content)
 
 # Site map
-sitemap[html_local(os.path.join(settings.html_path, "sitemap.html"))] = (
-    "List of all pages"
-)
+sitemap[html_local(os.path.join(settings.html_path, "sitemap.html"))] = "List of all pages"
 
 
 def list_pages(folder: str) -> str:

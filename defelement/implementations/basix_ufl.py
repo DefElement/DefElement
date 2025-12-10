@@ -17,9 +17,7 @@ class BasixUFLImplementation(Implementation):
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
         """Format implementation string."""
-        out = BasixImplementation.format(
-            string, {i: j for i, j in params.items() if i != "shape"}
-        )
+        out = BasixImplementation.format(string, {i: j for i, j in params.items() if i != "shape"})
         if "shape" in params:
             out += f", shape={params['shape']}"
         return out
@@ -43,9 +41,7 @@ class BasixUFLImplementation(Implementation):
         out = "element = basix.ufl.element("
         out += f"basix.ElementFamily.{name}, basix.CellType.{reference}, {degree}"
         if "lagrange_variant" in params:
-            out += (
-                f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
-            )
+            out += f", lagrange_variant=basix.LagrangeVariant.{params['lagrange_variant']}"
         if "dpc_variant" in params:
             out += f", dpc_variant=basix.DPCVariant.{params['dpc_variant']}"
         if "discontinuous" in params:
@@ -78,9 +74,7 @@ class BasixUFLImplementation(Implementation):
 
         kwargs = {}
         if "lagrange_variant" in params:
-            kwargs["lagrange_variant"] = getattr(
-                basix.LagrangeVariant, params["lagrange_variant"]
-            )
+            kwargs["lagrange_variant"] = getattr(basix.LagrangeVariant, params["lagrange_variant"])
         if "dpc_variant" in params:
             kwargs["dpc_variant"] = getattr(basix.DPCVariant, params["dpc_variant"])
         if "discontinuous" in params:
@@ -93,9 +87,7 @@ class BasixUFLImplementation(Implementation):
             else:
                 dim = 3
             kwargs["shape"] = tuple(
-                dim if i == "dim" else int(i)
-                for i in params["shape"][1:-1].split(",")
-                if i != ""
+                dim if i == "dim" else int(i) for i in params["shape"][1:-1].split(",") if i != ""
             )
 
         e = basix.ufl.element(

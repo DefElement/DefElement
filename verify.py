@@ -21,9 +21,7 @@ parser.add_argument(
     default=None,
     help="Name of output json file.",
 )
-parser.add_argument(
-    "--test", metavar="test", default=None, help="Verify fewer elements."
-)
+parser.add_argument("--test", metavar="test", default=None, help="Verify fewer elements.")
 parser.add_argument(
     "--processes",
     metavar="processes",
@@ -107,9 +105,7 @@ def verify_examples(
     egs: typing.List[typing.Tuple[Element, str, typing.List[str]]],
     process: str = "",
     result_dict: typing.Optional[
-        typing.Dict[
-            str, typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]
-        ]
+        typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]]
     ] = None,
 ) -> typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]:
     """Verify examples.
@@ -172,9 +168,7 @@ def verify_examples(
                     variant,
                 )
                 assert impl_degree is not None
-                vinfo = verifications[i](
-                    impl_name, reference, impl_degree, impl_params, e, eg
-                )
+                vinfo = verifications[i](impl_name, reference, impl_degree, impl_params, e, eg)
                 v, info = verify(cell, vinfo, sym_info)
                 if v:
                     results[e.filename][output_code]["pass"].append(eg)
@@ -265,9 +259,7 @@ for impl in set(j for i in data.values() for j in i):
             "date": now,
             "pass": sum(len(i[impl]["pass"]) for i in data.values() if impl in i),
             "total": sum(
-                len(i[impl]["pass"]) + len(i[impl]["fail"])
-                for i in data.values()
-                if impl in i
+                len(i[impl]["pass"]) + len(i[impl]["fail"]) for i in data.values() if impl in i
             ),
         }
     )

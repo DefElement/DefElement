@@ -27,7 +27,9 @@ class NDElementImplementation(Implementation):
     @classmethod
     def example_import(cls) -> str:
         """Get imports to include at start of example."""
-        return "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
+        return (
+            "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
+        )
 
     @classmethod
     def single_example(
@@ -93,9 +95,7 @@ class NDElementImplementation(Implementation):
                 entity_dofs[2][0],
             ]
 
-        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose(
-            (2, 0, 1)
-        )
+        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose((2, 0, 1))
 
     id = "ndelement"
     name = "NDElement"

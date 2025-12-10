@@ -24,9 +24,7 @@ def test_self():
         variant,
     )
 
-    info = verifications["symfem"](
-        symfem_name, reference, symfem_degree, symfem_params, e, eg
-    )
+    info = verifications["symfem"](symfem_name, reference, symfem_degree, symfem_params, e, eg)
     assert verify("triangle", info, info)[0]
 
 
@@ -75,9 +73,7 @@ def test_hermite_vs_lagrange():
         defelement_degree,
         variant,
     )
-    info0 = verifications["symfem"](
-        symfem_name, reference, symfem_degree, symfem_params, e, eg
-    )
+    info0 = verifications["symfem"](symfem_name, reference, symfem_degree, symfem_params, e, eg)
 
     with open(os.path.join(element_path, "hermite.def")) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
@@ -90,9 +86,7 @@ def test_hermite_vs_lagrange():
         defelement_degree,
         variant,
     )
-    info1 = verifications["symfem"](
-        symfem_name, reference, symfem_degree, symfem_params, e, eg
-    )
+    info1 = verifications["symfem"](symfem_name, reference, symfem_degree, symfem_params, e, eg)
 
     assert not verify("triangle", info0, info1)[0]
 
@@ -121,10 +115,6 @@ def test_verify_bdm_vs_n2():
         variant,
     )
 
-    info0 = verifications["symfem"](
-        symfem_name0, reference, symfem_degree0, symfem_params0, e0, eg
-    )
-    info1 = verifications["symfem"](
-        symfem_name1, reference, symfem_degree1, symfem_params1, e1, eg
-    )
+    info0 = verifications["symfem"](symfem_name0, reference, symfem_degree0, symfem_params0, e0, eg)
+    info1 = verifications["symfem"](symfem_name1, reference, symfem_degree1, symfem_params1, e1, eg)
     assert not verify("triangle", info0, info1)[0]

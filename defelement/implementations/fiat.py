@@ -196,9 +196,9 @@ class FIATImplementation(Implementation):
                     edofs[dim][i] = [dof for dof in edofs[dim][i] if dof < reduced_dim]
 
         z = (0,) * sd
-        return edofs, lambda points: e.tabulate(0, points)[z][
-            slice(reduced_dim)
-        ].T.reshape(points.shape[0], value_size, -1)
+        return edofs, lambda points: e.tabulate(0, points)[z][slice(reduced_dim)].T.reshape(
+            points.shape[0], value_size, -1
+        )
 
     @classmethod
     def notes(cls, element: Element) -> list[str]:

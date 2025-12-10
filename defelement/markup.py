@@ -47,11 +47,7 @@ def plot_element(matches: typing.Match[str]) -> str:
     else:
         e = symfem.create_element(matches[1], matches[2], int(matches[3]))
 
-    return (
-        "<center>"
-        f"{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}"
-        "</center>"
-    )
+    return f"<center>{''.join([plotting.plot_function(e, i) for i in range(e.space_dim)])}</center>"
 
 
 def plot_single_element(matches: typing.Match[str]) -> str:
@@ -108,11 +104,7 @@ def insert_citation(matches: typing.Match[str]) -> str:
         HTML for citation
     """
     id = matches[1]
-    return (
-        "<ref "
-        + " ".join(f'{i}="{j}"' for i, j in getattr(citations, id).items())
-        + ">"
-    )
+    return "<ref " + " ".join(f'{i}="{j}"' for i, j in getattr(citations, id).items()) + ">"
 
 
 def insert_snippet(matches: typing.Match[str]) -> str:

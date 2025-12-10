@@ -27,9 +27,7 @@ from defelement.citations import cockburn_fu as cockburn_fu_citation
 
 
 def make_dof_data(
-    ndofs: typing.Union[
-        typing.Dict[str, typing.Any], typing.List[typing.Dict[str, typing.Any]]
-    ],
+    ndofs: typing.Union[typing.Dict[str, typing.Any], typing.List[typing.Dict[str, typing.Any]]],
 ) -> str:
     """Make DOF data.
 
@@ -69,9 +67,7 @@ def make_formula(data: typing.Dict[str, typing.Any]) -> str:
         txt += "\\("
         if isinstance(data["formula"], list):
             txt += "\\begin{cases}"
-            txt += "\\\\".join(
-                [f"{c}&{b}" for a in data["formula"] for b, c in a.items()]
-            )
+            txt += "\\\\".join([f"{c}&{b}" for a in data["formula"] for b, c in a.items()])
             txt += "\\end{cases}"
         else:
             txt += f"{data['formula']}"
@@ -159,10 +155,7 @@ class Element:
         """
         if "variants" not in self.data:
             return []
-        return [
-            f"{v['variant-name']}: {v['description']}"
-            for v in self.data["variants"].values()
-        ]
+        return [f"{v['variant-name']}: {v['description']}" for v in self.data["variants"].values()]
 
     def min_degree(self, ref: str) -> int:
         """Get the minimum degree.
@@ -217,10 +210,7 @@ class Element:
             if isinstance(txt, dict):
                 return ", ".join(
                     [
-                        to_tex(j)
-                        + " ("
-                        + ("otherwise" if i == "_" else f"degree={i}")
-                        + ")"
+                        to_tex(j) + " (" + ("otherwise" if i == "_" else f"degree={i}") + ")"
                         for i, j in txt.items()
                     ]
                 )
@@ -346,9 +336,7 @@ class Element:
         if include_variants and "variants" in self.data:
             for v in self.data["variants"].values():
                 if "short-names" in v:
-                    out += [
-                        f"{i} ({v['variant-name']} variant)" for i in v["short-names"]
-                    ]
+                    out += [f"{i} ({v['variant-name']} variant)" for i in v["short-names"]]
         return out
 
     def mapping(self) -> typing.Union[None, str]:
@@ -502,9 +490,7 @@ class Element:
         if "dofs" not in self.data:
             return ""
 
-        def dofs_on_entity(
-            entity: str, dofs: typing.Union[str, typing.List[str]]
-        ) -> str:
+        def dofs_on_entity(entity: str, dofs: typing.Union[str, typing.List[str]]) -> str:
             """Get DOFs on an entity.
 
             Args:
@@ -524,9 +510,7 @@ class Element:
                 mom_type, space_info = dofs.split(" with ")
                 space_info = space_info.strip()
                 if space_info.startswith("{") and space_info.endswith("}"):
-                    return (
-                        f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
-                    )
+                    return f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
                 if space_info.startswith('"') and space_info.endswith('"'):
                     return f"{mom_type} with {insert_links(space_info[1:-1])}"
 
@@ -630,21 +614,13 @@ class Element:
             out += "</div>"
             out += "<script type='text/javascript'>\n"
             out += "function show_psets(){\n"
-            out += (
-                "  document.getElementById('show_pset_link').style.display = 'none'\n"
-            )
-            out += (
-                "  document.getElementById('hide_pset_link').style.display = 'block'\n"
-            )
+            out += "  document.getElementById('show_pset_link').style.display = 'none'\n"
+            out += "  document.getElementById('hide_pset_link').style.display = 'block'\n"
             out += "  document.getElementById('psets').style.display = 'block'\n"
             out += "}\n"
             out += "function hide_psets(){\n"
-            out += (
-                "  document.getElementById('show_pset_link').style.display = 'block'\n"
-            )
-            out += (
-                "  document.getElementById('hide_pset_link').style.display = 'none'\n"
-            )
+            out += "  document.getElementById('show_pset_link').style.display = 'block'\n"
+            out += "  document.getElementById('hide_pset_link').style.display = 'none'\n"
             out += "  document.getElementById('psets').style.display = 'none'\n"
             out += "}\n"
             out += "</script>"
@@ -740,9 +716,7 @@ class Element:
         """
         return f"<a href='/elements/{self.html_filename}'>{self.html_name}</a>"
 
-    def implemented(
-        self, lib: str, include_dependent_implementations: bool = False
-    ) -> bool:
+    def implemented(self, lib: str, include_dependent_implementations: bool = False) -> bool:
         """Check if element in implemented in a library.
 
         Args:
@@ -759,10 +733,7 @@ class Element:
         if lib.startswith("*(") and lib.endswith(")"):
             assert not include_dependent_implementations
             in_lib, _ = lib[2:-1].split(" -> ")
-            return (
-                "implementations" in self.data
-                and in_lib in self.data["implementations"]
-            )
+            return "implementations" in self.data and in_lib in self.data["implementations"]
         elif include_dependent_implementations:
             for i in implementations:
                 if i.endswith(f"-> {lib})") and self.implemented(i):
@@ -834,9 +805,7 @@ class Element:
         input_deg = degree
         if "DEGREEMAP" in params:
             if degree is not None:
-                input_deg = int(
-                    sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
-                )
+                input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
             del params["DEGREEMAP"]
 
         return out, input_deg, params
@@ -872,9 +841,7 @@ class Element:
                 return "<small><em>Uses custom element code</em></small>"
 
             if "display" in self.data["implementations"][lib]:
-                d = implementations[lib].format(
-                    self.data["implementations"][lib]["display"], {}
-                )
+                d = implementations[lib].format(self.data["implementations"][lib]["display"], {})
                 return f"<code>{d}</code>"
             if "variants" in self.data:
                 variants = self.data["variants"]
@@ -890,9 +857,7 @@ class Element:
                         continue
                     data = self.data["implementations"][lib][v]
                 if isinstance(data, str):
-                    istring, _, params = self.get_implementation_string(
-                        lib, None, None, v
-                    )
+                    istring, _, params = self.get_implementation_string(lib, None, None, v)
                     s = implementations[lib].format(istring, params)
                     if s not in i_dict:
                         i_dict[s] = []
@@ -902,9 +867,7 @@ class Element:
                         i_dict[s].append(vinfo["variant-name"])
                 else:
                     for i, j in data.items():
-                        istring, _, params = self.get_implementation_string(
-                            lib, i, None, v
-                        )
+                        istring, _, params = self.get_implementation_string(lib, i, None, v)
                         s = implementations[lib].format(istring, params)
                         if s not in i_dict:
                             i_dict[s] = []
@@ -969,9 +932,7 @@ class Element:
                         ("polynomial-superdegree", "polynomial superdegree"),
                         ("lagrange-subdegree", "Lagrange subdegree"),
                     ]:
-                        if id in self.data and degreemap_equal(
-                            degreemap, self.data[id]
-                        ):
+                        if id in self.data and degreemap_equal(degreemap, self.data[id]):
                             notes.append(
                                 f"This element uses the {info} as the canonical degree "
                                 "of this element"
@@ -1175,9 +1136,7 @@ class Categoriser:
                 self.add_element(Element(data, fname))
 
         if settings.github_token is None:
-            warnings.warn(
-                "Building without GitHub token. Timestamps will not be obtained."
-            )
+            warnings.warn("Building without GitHub token. Timestamps will not be obtained.")
         else:
             g = Github(settings.github_token)
             repo = g.get_repo("DefElement/DefElement")
@@ -1318,9 +1277,7 @@ class Categoriser:
         return [
             e
             for e in self.elements
-            if e.implemented(
-                i, include_dependent_implementations=include_dependent_implementations
-            )
+            if e.implemented(i, include_dependent_implementations=include_dependent_implementations)
         ]
 
     def elements_by_reference(self, r: str) -> typing.List[Element]:
