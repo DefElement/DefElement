@@ -124,13 +124,26 @@ class FIATImplementation(Implementation):
         for i in e.value_shape():
             value_size *= i
         edofs = [list(i.values()) for i in e.entity_dofs().values()]
-        if reference == "quadrilateral":
+
+        if reference == "triangle":
+            edofs[1] = [edofs[1][2], edofs[1][1], edofs[1][0]]
+        elif reference == "tetrahedron":
+            edofs[1] = [
+                edofs[1][5],
+                edofs[1][4],
+                edofs[1][3],
+                edofs[1][2],
+                edofs[1][1],
+                edofs[1][0],
+            ]
+            edofs[2] = [edofs[2][3], edofs[2][2], edofs[2][1], edofs[2][0]]
+        elif reference == "quadrilateral":
             edofs = [
                 [edofs[0][0], edofs[0][2], edofs[0][1], edofs[0][3]],
                 [edofs[1][2], edofs[1][0], edofs[1][1], edofs[1][3]],
                 [edofs[2][0]],
             ]
-        if reference == "hexahedron":
+        elif reference == "hexahedron":
             edofs = [
                 [
                     edofs[0][0],
