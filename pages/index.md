@@ -2,11 +2,11 @@
 <div>{{plot::triangle,Raviart-Thomas,0::1}}</div>
 <div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 0 [Raviart&ndash;Thomas space](element::raviart-thomas) on a triangle</div>
 <div>{{plot::quadrilateral,Q,2::3}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 2 [Q space](element::lagrange) on a quadrilateral</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 2 [Lagrange space](element::lagrange) on a quadrilateral</div>
 <div>{{plot::tetrahedron,N1curl,0::4}}</div>
 <div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 0 [N&eacute;d&eacute;lec (first kind) space](element::nedelec1) on a tetrahedron</div>
 <div>{{plot::hexahedron,Scurl,1::13}}</div>
-<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 1 [Arnold&ndash;Awanou H(curl) space](element::scurl) on a hexahedron</div>
+<div style='font-size:80%;color:#AAAAAA;text-align:center'>A basis function of a degree 1 [serendipity H(curl) space](element::scurl) on a hexahedron</div>
 </div>
 
 Welcome to DefElement: an encyclopedia of finite element definitions.
