@@ -78,11 +78,11 @@ class SimplefemImplementation(Implementation):
             elif np.allclose(p, [0, 1]):
                 entity_dofs[0][2].append(i)
             # DOFs associated with edges
-            elif np.isclose(p[1] + p[0], 1):
+            elif np.isclose(p[1], 0):
                 entity_dofs[1][0].append(i)
             elif np.isclose(p[1] - p[0], 1):
                 entity_dofs[1][1].append(i)
-            elif np.isclose(p[1], 0):
+            elif np.isclose(p[1] + p[0], 1):
                 entity_dofs[1][2].append(i)
             # DOFs associated with interior of cell
             else:
