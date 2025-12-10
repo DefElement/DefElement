@@ -1,7 +1,6 @@
 """Examples."""
 
 import os
-import typing
 
 import sympy
 from symfem.finite_element import CiarletElement, DirectElement, FiniteElement
@@ -19,7 +18,10 @@ defelement_t = ["s_{0}", "s_{1}", "s_{2}"]
 
 
 def to_tex(
-    f: Function | sympy.core.expr.Expr | list[Function | sympy.core.expr.Expr] | tuple[Function | sympy.core.expr.Expr, ...],
+    f: Function
+    | sympy.core.expr.Expr
+    | list[Function | sympy.core.expr.Expr]
+    | tuple[Function | sympy.core.expr.Expr, ...],
     tfrac: bool = False,
 ) -> str:
     """Convert function to TeX.

@@ -225,9 +225,7 @@ def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
     )
 
 
-def plot_basis_functions(
-    element: FiniteElement, link: bool = True
-) -> list[str | None]:
+def plot_basis_functions(element: FiniteElement, link: bool = True) -> list[str | None]:
     """Plot basis functions of an element.
 
     Args:

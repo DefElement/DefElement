@@ -131,8 +131,12 @@ jobs:
           python3 -m pip install setuptools
           python3 install_implementations.py --install-type verification
 
-      - run: python3 verify.py verification.json --test auto --processes 4 --fail-on-missing-libraries
-        name: Run verification test
+      - run: python3 verify.py verification-serial.json --test auto --fail-on-missing-libraries
+        name: Run verification test in serial
+      - run: python3 verify.py verification-4.json --test auto --processes 4 --fail-on-missing-libraries
+        name: Run verification test on 4 processes
+      - name: Check that two verifications runs give the same results
+        run: python3 .github/scripts/compare_json.py verification-serial.json verification-4.json
 
   run-tests:
     name: Run tests

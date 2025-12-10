@@ -1,7 +1,6 @@
 """RSS."""
 
 import html
-import typing
 
 from defelement.element import Element
 

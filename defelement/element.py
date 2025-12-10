@@ -13,13 +13,6 @@ from github import Github
 
 from defelement import citations, settings
 from defelement.families import keys_and_names
-from defelement.implementations import (
-    DegreeNotImplemented,
-    NotImplementedOnReference,
-    VariantNotImplemented,
-    examples,
-    implementations,
-)
 from defelement.markup import insert_links
 from defelement.polyset import make_extra_info, make_poly_set
 from defelement.citations import arnold_logg as arnold_logg_citation
@@ -370,9 +363,7 @@ class Element:
             return None
         return self.data["sobolev"]
 
-    def complexes(
-        self, link: bool = True, names: bool = True
-    ) -> dict[str, list[str]]:
+    def complexes(self, link: bool = True, names: bool = True) -> dict[str, list[str]]:
         """Get complexes.
 
         Args:
@@ -725,6 +716,8 @@ class Element:
         Returns:
             True if implemented, otherwise False
         """
+        from defelement.implementations import implementations
+
         if not implementations[lib].implemented(self):
             return False
         if "implementations" in self.data and lib in self.data["implementations"]:
@@ -761,6 +754,12 @@ class Element:
         Returns:
             Implementation string, degree and parameters to pass to implementation
         """
+        from defelement.implementations import (
+            DegreeNotImplemented,
+            NotImplementedOnReference,
+            VariantNotImplemented,
+        )
+
         assert self.implemented(lib)
         if variant is None:
             data = self.data["implementations"][lib]
@@ -825,6 +824,8 @@ class Element:
         Returns:
             List of implemtation strings
         """
+        from defelement.implementations import implementations
+
         if include_dependent_implementations:
             assert not lib.startswith("*(")
             imp_list: list[str] = []
@@ -895,6 +896,8 @@ class Element:
         Returns:
             Examples
         """
+        from defelement.implementations import implementations
+
         return implementations[lib].examples(self)
 
     def has_implementation_examples(self, lib: str) -> bool:
@@ -906,6 +909,8 @@ class Element:
         Returns:
             True if library has examples, otherwise False
         """
+        from defelement.implementations import examples
+
         return lib in examples
 
     def implementation_notes(self, lib: str) -> list[str]:
@@ -917,6 +922,8 @@ class Element:
         Returns:
             Implementation notes
         """
+        from defelement.implementations import implementations
+
         notes = implementations[lib].notes(self)
 
         if "implementations" in self.data and lib in self.data["implementations"]:
@@ -954,6 +961,8 @@ class Element:
         Returns:
             Implementation notes
         """
+        from defelement.implementations import implementations
+
         return implementations[lib].references(self)
 
     def categories(self, link: bool = True, map_name: bool = True) -> list[str]:
@@ -988,6 +997,8 @@ class Element:
         Returns:
             reference cells
         """
+        from defelement.implementations import implementations
+
         assert self._c is not None
 
         references = self.data["references"] if "references" in self.data else []

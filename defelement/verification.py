@@ -92,9 +92,7 @@ def entity_points(ref: str) -> list[list[NDArray[float64]]]:
     return out
 
 
-def closure_dofs(
-    entity_dofs: list[list[list[int]]], ref: str
-) -> list[list[list[int]]]:
+def closure_dofs(entity_dofs: list[list[list[int]]], ref: str) -> list[list[list[int]]]:
     """Make lists of DOFs associated with the closure of an entity.
 
     Args:
@@ -150,12 +148,8 @@ def same_span(table0: NDArray[float64], table1: NDArray[float64], complete: bool
 
 def verify(
     ref: str,
-    info0: tuple[
-        list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]
-    ],
-    info1: tuple[
-        list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]
-    ],
+    info0: tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]],
+    info1: tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]],
 ) -> tuple[bool, str | None]:
     """Run verification.
 

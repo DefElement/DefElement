@@ -1,7 +1,5 @@
 """Element families."""
 
-import typing
-
 
 def arnold_logg_name(
     family: str,
