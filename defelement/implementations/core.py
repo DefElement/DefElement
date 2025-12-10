@@ -81,6 +81,17 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation.
+
+        This muse be implemented if verification is implemented.
+
+        Returns:
+            Version number
+        """
+        raise NotImplementedError()
+
+    @classmethod
     def verify(
         cls,
         name: str,

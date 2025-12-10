@@ -31,7 +31,14 @@ class BemppClImplementation(Implementation):
         """Generate code for a single example."""
         return f'element = bempp_cl.api.function_space(grid, "{name}", {degree})'
 
+    @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        import bempp_cl
+        return bempp_cl.__version__
+
     id = "bempp-cl"
     name = "Bempp-cl"
     url = "https://github.com/bempp/bempp-cl"
     install = "pip3 install numba scipy meshio\npip3 install bempp-cl"
+

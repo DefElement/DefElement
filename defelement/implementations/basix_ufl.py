@@ -63,6 +63,12 @@ class BasixUFLImplementation(Implementation):
         return out
 
     @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        import basix
+        return basix.__version__
+
+    @classmethod
     def verify(
         cls,
         name: str,

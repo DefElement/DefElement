@@ -44,6 +44,14 @@ class SimplefemImplementation(Implementation):
 
     # </example>
 
+    # <version>
+    @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        import simplefem
+        return simplefem.__version__
+    # </version>
+
     # <verify1>
     @classmethod
     def verify(
@@ -103,7 +111,6 @@ class SimplefemImplementation(Implementation):
 
         # <verify6>
         return entity_dofs, tabulate
-
     # </verify6>
 
     # <variables>

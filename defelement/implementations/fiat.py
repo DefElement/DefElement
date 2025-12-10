@@ -85,6 +85,12 @@ class FIATImplementation(Implementation):
         return out
 
     @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        import FIAT
+        return FIAT.__version__
+
+    @classmethod
     def verify(
         cls,
         name: str,

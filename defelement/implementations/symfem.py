@@ -115,6 +115,12 @@ class SymfemImplementation(Implementation):
         return out
 
     @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        import symfem
+        return symfem.__version__
+
+    @classmethod
     def verify(
         cls,
         name: str,
