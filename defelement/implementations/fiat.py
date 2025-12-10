@@ -126,7 +126,7 @@ class FIATImplementation(Implementation):
         edofs = [list(i.values()) for i in e.entity_dofs().values()]
 
         if reference == "triangle":
-            edofs[2] = [edofs[1][2], edofs[1][1], edofs[1][0]]
+            edofs[1] = [edofs[1][2], edofs[1][1], edofs[1][0]]
         elif reference == "tetrahedron":
             edofs[1] = [
                 edofs[1][5],
