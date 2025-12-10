@@ -859,14 +859,30 @@ for i in impl_content:
         )
 
         impl_content[i] += "var vpassing = {\n  x: ["
-        impl_content[i] += ",".join(f'"{i["date"]}"' for i in hist)
+        impl_content[i] += ",".join(f'"{p["date"]}"' for p in hist)
         impl_content[i] += "],\n  y: ["
-        impl_content[i] += ",".join(f'"{i["pass"]}"' for i in hist)
+        impl_content[i] += ",".join(
+            f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
+            for p in hist
+        )
+        impl_content[i] += "],\n  text: ["
+        impl_content[i] += ",".join(
+            f'"{100 if p["total"] == 0 else 100 * p["pass"] // p["total"]}% '
+            f"({p['pass']}/{p['total']})"
+            + (
+                f"<br />({implementations[i].name} {p['version']})"
+                if "version" in p
+                else ""
+            )
+            + '"'
+            for p in hist
+        )
         impl_content[i] += (
             "],\n"
             "  type: 'scatter',\n"
             "  mode: 'lines',\n"
-            '  name: "Number of elements with passing verification"\n,'
+            '  name: "Elements with passing verification (%)",\n'
+            "  hoverinfo: 'x+text',\n"
             "  line: {\n"
             f"    color: '{symfem.plotting.Colors.GREEN}',\n"
             "    width: 2"
@@ -874,39 +890,26 @@ for i in impl_content:
             "};\n"
         )
 
-        impl_content[i] += "var vtotal = {\n  x: ["
-        impl_content[i] += ",".join(f'"{i["date"]}"' for i in hist)
-        impl_content[i] += "],\n  y: ["
-        impl_content[i] += ",".join(f'"{i["total"]}"' for i in hist)
-        impl_content[i] += (
-            "],\n"
-            "  type: 'scatter',\n"
-            "  mode: 'lines',\n"
-            '  name: "Number of elements implemented"\n,'
-            "  line: {\n"
-            "    dash: 'dash',\n"
-            "    color: '#000000',\n"
-            "    width: 3\n"
-            "  }\n"
-            "};\n"
-        )
-
-        plotme = "vtotal, vpassing"
+        plotme = "vpassing"
 
         green_hist = [h for h in hist if h["pass"] == h["total"]]
         if len(green_hist) > 0:
             impl_content[i] += "var vpassing_green = {\n  x: ["
-            impl_content[i] += ",".join(f'"{i["date"]}"' for i in green_hist)
+            impl_content[i] += ",".join(f'"{p["date"]}"' for p in green_hist)
             impl_content[i] += "],\n  y: ["
-            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in green_hist)
+            impl_content[i] += ",".join(
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
+                for p in green_hist
+            )
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
                 "  mode: 'markers',\n"
                 "  marker: {\n"
                 f"    color: '{symfem.plotting.Colors.GREEN}',\n"
-                "    size: 8"
-                "  }\n"
+                "    size: 8\n"
+                "  },\n"
+                "  hoverinfo: 'skip',\n"
                 "};\n"
             )
             plotme += ", vpassing_green"
@@ -914,17 +917,21 @@ for i in impl_content:
         amber_hist = [h for h in hist if h["total"] / 2 <= h["pass"] < h["total"]]
         if len(amber_hist) > 0:
             impl_content[i] += "var vpassing_amber = {\n  x: ["
-            impl_content[i] += ",".join(f'"{i["date"]}"' for i in amber_hist)
+            impl_content[i] += ",".join(f'"{p["date"]}"' for p in amber_hist)
             impl_content[i] += "],\n  y: ["
-            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in amber_hist)
+            impl_content[i] += ",".join(
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
+                for p in amber_hist
+            )
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
                 "  mode: 'markers',\n"
                 "  marker: {\n"
                 f"    color: '{symfem.plotting.Colors.ORANGE}',\n"
-                "    size: 8"
-                "  }\n"
+                "    size: 8\n"
+                "  },\n"
+                "  hoverinfo: 'skip',\n"
                 "};\n"
             )
             plotme += ", vpassing_amber"
@@ -932,17 +939,21 @@ for i in impl_content:
         red_hist = [h for h in hist if h["pass"] < h["total"] / 2]
         if len(red_hist) > 0:
             impl_content[i] += "var vpassing_red = {\n  x: ["
-            impl_content[i] += ",".join(f'"{i["date"]}"' for i in red_hist)
+            impl_content[i] += ",".join(f'"{p["date"]}"' for p in red_hist)
             impl_content[i] += "],\n  y: ["
-            impl_content[i] += ",".join(f'"{i["pass"]}"' for i in red_hist)
+            impl_content[i] += ",".join(
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
+                for p in red_hist
+            )
             impl_content[i] += (
                 "],\n"
                 "  type: 'scatter',\n"
                 "  mode: 'markers',\n"
                 "  marker: {\n"
                 "    color: '#FF0000',\n"
-                "    size: 8"
-                "  }\n"
+                "    size: 8\n"
+                "  },\n"
+                "  hoverinfo: 'skip',\n"
                 "};\n"
             )
             plotme += ", vpassing_red"
@@ -951,12 +962,12 @@ for i in impl_content:
             "var layout = {\n"
             "  showlegend: false,\n"
             "  height: 450,\n"
-            "  xaxis: {title: 'Date'},\n"
-            "  yaxis: {title: 'Number of elements', rangemode: 'tozero'},\n"
-            "  margin: {t: 15}\n"
+            "  xaxis: {title: 'Date', hoverformat: '<b>%d %B %Y</b>'},\n"
+            "  yaxis: {title: 'Elements passing verification (%)', range: [0, 105]},\n"
+            "  margin: {t: 15},\n"
+            "  hovermode: 'x unified'\n"
             "};\n"
             f"Plotly.newPlot('verification-plot', [{plotme}], layout);"
-            "</script>"
         )
 
         impl_content[i] += "</script>"

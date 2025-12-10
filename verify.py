@@ -276,7 +276,6 @@ for impl in set(j for i in data.values() for j in i):
     )
 
 
-
 with open(settings.verification_json, "w") as f:
     json.dump(
         {
