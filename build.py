@@ -30,6 +30,7 @@ from defelement.rss import make_rss
 
 
 def mkdir(folder):
+    """Make a directory if it doesn't exist."""
     try:
         os.mkdir(folder)
     except FileExistsError:
