@@ -84,7 +84,7 @@ class Implementation:
     def version(cls) -> str:
         """Get the version number of this implementation.
 
-        This muse be implemented if verification is implemented.
+        This fucntion must be implemented.
 
         Returns:
             Version number

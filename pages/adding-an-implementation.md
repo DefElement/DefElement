@@ -39,7 +39,7 @@ In this file, we begin by importing functionality from the file
 
 {{snippet::defelement/implementations/simplefem.py::intro}}
 
-In order to add information about a finite element library to DefElement, we must implement three class methods
+In order to add information about a finite element library to DefElement, we must implement four class methods
 and set the values of four variables in this class.
 
 ### `format`
@@ -92,6 +92,12 @@ DefElement (in this case, the [polynomial subdegree](/ciarlet.html#The+degree+of
 special parameter as `k` before this method is called (so the values 3, 6, and 10 will be passed in).
 In this way, DefElement's notion of degree can be automatically converted to the number of points
 input that simplefem uses.
+
+### `version`
+The final class method that must be implemented is `version`, which should return the version
+number of the implementation library. For simplefem, this is implemented as follows:
+
+{{snippet::defelement/implementations/simplefem.py::version}}
 
 ### Variables
 Finally, four variables need to be defined:
