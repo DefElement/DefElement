@@ -1159,63 +1159,42 @@ for i in verifications:
         )
 
 
-def build_examples(egs: typing.List[typing.Dict[str, typing.Any]], process: str = ""):
+def build_example(eg: typing.Dict[str, typing.Any]):
     """Build examples.
 
     Args:
-        egs: Examples
-        process: String to print on this process
+        eg: Example
     """
-    for eg in egs:
-        start = datetime.now()
+    start = datetime.now()
 
-        element = create_element(*eg["args"], **eg["kwargs"])
+    element = create_element(*eg["args"], **eg["kwargs"])
 
-        markup_example(
-            element,
-            eg["html_name"],
-            f"/elements/{eg['element_filename']}",
-            eg["filename"],
-            eg["legacy-filenames"] if "legacy-filenames" in eg else [],
-        )
+    markup_example(
+        element,
+        eg["html_name"],
+        f"/elements/{eg['element_filename']}",
+        eg["filename"],
+        eg["legacy-filenames"] if "legacy-filenames" in eg else [],
+    )
 
-        end = datetime.now()
-        print(
-            f"  {process}{eg['args'][0]} {eg['args'][1]} {eg['args'][2]}"
-            f" (completed in {(end - start).total_seconds():.2f}s)",
-            flush=True,
-        )
+    end = datetime.now()
+    print(
+        f"  {eg['args'][0]} {eg['args'][1]} {eg['args'][2]}"
+        f" (completed in {(end - start).total_seconds():.2f}s)",
+        flush=True,
+    )
 
 
 # Make example pages
 print("Making examples")
 if settings.processes == 1:
-    build_examples(all_examples)
+    for e in all_examples:
+        build_example(e)
 else:
-    import multiprocessing
+    from multiprocessing import Pool
 
-    p = settings.processes
-    n_egs = len(all_examples)
-
-    jobs = []
-    for pindex in range(p):
-        process = multiprocessing.Process(
-            target=build_examples,
-            args=(
-                all_examples[n_egs * pindex // p : n_egs * (pindex + 1) // p],
-                f"[{pindex}] ",
-            ),
-        )
-        jobs.append(process)
-
-    for job in jobs:
-        job.start()
-
-    for job in jobs:
-        job.join()
-
-    for job in jobs:
-        assert job.exitcode == 0
+    with Pool(settings.processes) as p:
+        p.map(build_example, all_examples)
 
 # Index page
 content = heading_with_self_ref("h1", "Index of elements")
