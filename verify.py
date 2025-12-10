@@ -112,7 +112,6 @@ def verify_example(
     Returns:
         Results of verification
     """
-
     e, eg, implementations = element
 
     green = "\033[32m"
