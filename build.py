@@ -210,7 +210,9 @@ cdescs = {
 }
 
 VHistoryDict = typing.TypedDict(
-    "VHistoryDict", {"date": str, "pass": int, "total": int, "version": str}, total=False,
+    "VHistoryDict",
+    {"date": str, "pass": int, "total": int, "version": str},
+    total=False,
 )
 
 verification: dict[str, dict[str, dict[str, list[str]]]] = {}
