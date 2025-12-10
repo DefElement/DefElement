@@ -845,18 +845,13 @@ for i in impl_content:
         impl_content[i] += ",".join(f'"{p["date"]}"' for p in hist)
         impl_content[i] += "],\n  y: ["
         impl_content[i] += ",".join(
-            f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
-            for p in hist
+            f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"' for p in hist
         )
         impl_content[i] += "],\n  text: ["
         impl_content[i] += ",".join(
             f'"{100 if p["total"] == 0 else 100 * p["pass"] // p["total"]}% '
             f"({p['pass']}/{p['total']})"
-            + (
-                f"<br />({implementations[i].name} {p['version']})"
-                if "version" in p
-                else ""
-            )
+            + (f"<br />({implementations[i].name} {p['version']})" if "version" in p else "")
             + '"'
             for p in hist
         )
@@ -881,8 +876,7 @@ for i in impl_content:
             impl_content[i] += ",".join(f'"{p["date"]}"' for p in green_hist)
             impl_content[i] += "],\n  y: ["
             impl_content[i] += ",".join(
-                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
-                for p in green_hist
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"' for p in green_hist
             )
             impl_content[i] += (
                 "],\n"
@@ -903,8 +897,7 @@ for i in impl_content:
             impl_content[i] += ",".join(f'"{p["date"]}"' for p in amber_hist)
             impl_content[i] += "],\n  y: ["
             impl_content[i] += ",".join(
-                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
-                for p in amber_hist
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"' for p in amber_hist
             )
             impl_content[i] += (
                 "],\n"
@@ -925,8 +918,7 @@ for i in impl_content:
             impl_content[i] += ",".join(f'"{p["date"]}"' for p in red_hist)
             impl_content[i] += "],\n  y: ["
             impl_content[i] += ",".join(
-                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"'
-                for p in red_hist
+                f'"{100 if p["total"] == 0 else 100 * p["pass"] / p["total"]}"' for p in red_hist
             )
             impl_content[i] += (
                 "],\n"
