@@ -1,6 +1,5 @@
 """Check that dependencies are up to date."""
 
-import json
 import os
 import requests
 
