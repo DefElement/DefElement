@@ -192,27 +192,25 @@ def verify_example(
 
 
 if settings.processes == 1:
-    data = {e[0].filename: verify_example(e) for e in elements_to_verify}
+    results = [verify_example(e) for e in elements_to_verify]
 else:
     from multiprocessing import Pool
 
     with Pool(settings.processes) as p:
         results = p.map(verify_example, elements_to_verify)
 
-    print(results)
-
-    data = {}
-    for r in results:
-        for i0, j0 in r.items():
-            if i0 not in data:
-                data[i0] = {}
-            for i1, j1 in j0.items():
-                if i1 not in data[i0]:
-                    data[i0][i1] = {}
-                for i2, j2 in j1.items():
-                    if i2 not in data[i0][i1]:
-                        data[i0][i1][i2] = []
-                    data[i0][i1][i2] += j2
+data: dict[str, dict[str, dict[str, list[str]]]] = {}
+for r in results:
+    for i0, j0 in r.items():
+        if i0 not in data:
+            data[i0] = {}
+        for i1, j1 in j0.items():
+            if i1 not in data[i0]:
+                data[i0][i1] = {}
+            for i2, j2 in j1.items():
+                if i2 not in data[i0][i1]:
+                    data[i0][i1][i2] = []
+                data[i0][i1][i2] += j2
 
 now = datetime.now().strftime("%Y-%m-%d")
 
