@@ -18,7 +18,7 @@ If you want to suggest a new feature or improvement to DefElement, suggest it on
 using the *Suggest an improvement* template.
 
 ### Discussion ideas for new features
-You can use [GitHub's Discussions](https://github.com/DefElement/DefElement/discussions) to discuss
+You can use [Github's Discussions](https://github.com/DefElement/DefElement/discussions) to discuss
 ideas you have for features (that perhaps aren't fully formed enough yet to make an issue) or to
 discuss other people's ideas. You're welcome to also use the Discussions to just chat to other
 members of the community.
@@ -26,7 +26,7 @@ members of the community.
 ## Contributing directly
 
 ### Submitting a pull request
-If you want to directly submit changes to DefElement, you can do this by forking the [DefElement GitHub repository](https://github.com/DefElement/DefElement),
+If you want to directly submit changes to DefElement, you can do this by forking the [DefElement Github repository](https://github.com/DefElement/DefElement),
 making changes, then submitting a pull request.
 If you want to contribute, but are unsure where to start, have a look at the
 [issue tracker](https://github.com/DefElement/DefElement/labels/good%20first%20issue) for issues labelled "good first issue".
@@ -92,7 +92,7 @@ There are a few special parameters (written in ALL CAPS) that can be used here:
 </table>
 
 ### Testing your contribution
-When you open a pull request, a series of tests and style checks will run via GitHub Actions.
+When you open a pull request, a series of tests and style checks will run via Github Actions.
 (You may have to wait for manual approval for these to run.)
 These tests and checks must pass before the pull request can be merged.
 If the tests and checks fail, you can click on them on the pull request page to see where the failure is happening.
@@ -151,7 +151,7 @@ This class should include:
 <tr><td>`id`</td><td>variable</td><td>The unique identifier for your library. This will be used in .def files.</td></tr>
 <tr><td>`name`</td><td>variable</td><td>The name of your library.</td></tr>
 <tr><td>`install`</td><td>variable</td><td>Code snippet to install you library (preferably using `pip3`)</td></tr>
-<tr><td>`url`</td><td>variable</td><td>URL where the source code of your library is avaliable (eg a GitHub link).</td></tr>
+<tr><td>`url`</td><td>variable</td><td>URL where the source code of your library is avaliable (eg a Github link).</td></tr>
 <tr><td>`verification`</td><td>variable (optional)</td><td>Should be set to `True` if the `verify` function is implemented.</td></tr>
 </table>
 

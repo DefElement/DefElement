@@ -206,7 +206,7 @@ class Implementation:
     name: str | None = None
     # Snippet to install the implementation
     install: str | None = None
-    # URL of source of implementation (eg GitHub link)
+    # URL of source of implementation (eg Github link)
     url: str | None = None
     # Set to true if this implementation should be verified
     verification = False

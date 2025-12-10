@@ -1147,7 +1147,7 @@ class Categoriser:
                 self.add_element(Element(data, fname))
 
         if settings.github_token is None:
-            warnings.warn("Building without GitHub token. Timestamps will not be obtained.")
+            warnings.warn("Building without Github token. Timestamps will not be obtained.")
         else:
             g = Github(settings.github_token)
             repo = g.get_repo("DefElement/DefElement")

@@ -13,7 +13,7 @@ The DefElement logo can be found on the [branding page](branding.md).
 
 ## Citing DefElement
 
-The code used to generate this website is available on [GitHub](https://github.com/DefElement/DefElement)
+The code used to generate this website is available on [Github](https://github.com/DefElement/DefElement)
 under an [MIT license](https://github.com/DefElement/DefElement/blob/main/LICENSE).
 
 On each of the element definition pages, you can find citations for the paper(s) that introduced

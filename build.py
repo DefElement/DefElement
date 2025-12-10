@@ -48,7 +48,7 @@ parser.add_argument(
     "--github-token",
     metavar="github_token",
     default=None,
-    help="Provide a GitHub token to get update timestamps.",
+    help="Provide a Github token to get update timestamps.",
 )
 parser.add_argument(
     "--processes",
@@ -1099,7 +1099,7 @@ if os.path.isfile(settings.verification_json):
     content += c
     long_content += c
 
-c = heading_with_self_ref("h2", "Verification GitHub badges")
+c = heading_with_self_ref("h2", "Verification Github badges")
 c += "<table class='bordered align-left'>"
 c += "<thead><tr><td>Implementation</td><td>Badge</td><td>Markdown</td></tr></thead>"
 for i in verifications:
@@ -1119,7 +1119,7 @@ for i in verifications:
         "</tr>"
     )
     if i in impl_content:
-        impl_content[i] += heading_with_self_ref("h2", "Verification GitHub badge")
+        impl_content[i] += heading_with_self_ref("h2", "Verification Github badge")
         impl_content[i] += (
             "<table class='bordered align-left'>"
             "<thead><tr><td>Badge</td><td>Markdown</td></tr></thead>"

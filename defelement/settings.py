@@ -70,7 +70,7 @@ def set_processes(n: int):
 
 
 def set_github_token(token):
-    """Set GitHub token."""
+    """Set Github token."""
     global github_token
     github_token = token
     settings.github_token = token
