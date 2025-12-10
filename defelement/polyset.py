@@ -9,8 +9,8 @@ import yaml
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/polysets")) as f:
     poly_sets = yaml.load(f, Loader=yaml.FullLoader)
 
-named: typing.Dict[str, typing.Tuple[str, str, typing.Dict[str, str]]] = {}
-defs: typing.Dict[str, str] = {}
+named: dict[str, tuple[str, str, dict[str, str]]] = {}
+defs: dict[str, str] = {}
 
 
 def make_name(i: int) -> str:

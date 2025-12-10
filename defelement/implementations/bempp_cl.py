@@ -2,7 +2,8 @@
 
 import typing
 
-from defelement.implementations.core import Element, Implementation
+from defelement.implementations.core import Implementation
+from defelement.element import Element
 
 
 class BemppClImplementation(Implementation):

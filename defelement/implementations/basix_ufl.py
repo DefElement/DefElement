@@ -1,11 +1,12 @@
 """Basix.UFL implementation."""
 
 import typing
+from numpy import float64
+from numpy.typing import NDArray
 
 from defelement.implementations.basix import BasixImplementation
+from defelement.element import Element
 from defelement.implementations.core import (
-    Array,
-    Element,
     Implementation,
     parse_example,
 )
@@ -67,7 +68,7 @@ class BasixUFLImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import basix
         import basix.ufl
@@ -175,7 +176,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import symfem
         import symfem.basix_interface

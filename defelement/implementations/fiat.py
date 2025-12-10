@@ -3,10 +3,11 @@
 import typing
 
 import sympy
+from numpy import float64
+from numpy.typing import NDArray
 
+from defelement.element import Element
 from defelement.implementations.core import (
-    Array,
-    Element,
     Implementation,
     parse_example,
 )
@@ -93,7 +94,7 @@ class FIATImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import FIAT
 

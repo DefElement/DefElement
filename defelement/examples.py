@@ -19,12 +19,7 @@ defelement_t = ["s_{0}", "s_{1}", "s_{2}"]
 
 
 def to_tex(
-    f: typing.Union[
-        Function,
-        sympy.core.expr.Expr,
-        typing.List[typing.Union[Function, sympy.core.expr.Expr]],
-        typing.Tuple[typing.Union[Function, sympy.core.expr.Expr], ...],
-    ],
+    f: Function | sympy.core.expr.Expr | list[Function | sympy.core.expr.Expr] | tuple[Function | sympy.core.expr.Expr, ...],
     tfrac: bool = False,
 ) -> str:
     """Convert function to TeX.
@@ -80,7 +75,7 @@ def entity_name(dim: int) -> str:
     return ["vertex", "edge", "face", "volume"][dim]
 
 
-def describe_dof(element: FiniteElement, d: BaseFunctional) -> typing.Tuple[str, typing.List[str]]:
+def describe_dof(element: FiniteElement, d: BaseFunctional) -> tuple[str, list[str]]:
     """Describe a DOF.
 
     Args:
@@ -115,7 +110,7 @@ def markup_example(
     html_name: str,
     element_page: str,
     fname: str,
-    legacy_filenames: typing.List[str] = [],
+    legacy_filenames: list[str] = [],
 ) -> str:
     """Markup examples.
 

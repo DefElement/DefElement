@@ -3,16 +3,10 @@
 import re
 import typing
 
-if typing.TYPE_CHECKING:
-    from numpy import float64
-    from numpy.typing import NDArray
+from numpy import float64
+from numpy.typing import NDArray
 
-    from defelement.element import Element
-
-    Array = NDArray[float64]
-else:
-    Array = typing.Any
-    Element = typing.Any
+from defelement.element import Element
 
 
 class Implementation:
@@ -89,7 +83,7 @@ class Implementation:
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get information needed to run verification.
 
         Implementation of this function is optional, but it must be implemented for verification

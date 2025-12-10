@@ -63,11 +63,11 @@ def do_the_plot(
     filename: str,
     desc: str,
     plot: typing.Callable,
-    args: typing.List[typing.Any] = [],
+    args: list[typing.Any] = [],
     png_width: int = 180,
     scale: int = 250,
     link: bool = True,
-    cache_element: typing.Optional[symfem.finite_element.FiniteElement] = None,
+    cache_element: FiniteElement | None = None,
 ) -> str:
     """Create a plot.
 
@@ -227,7 +227,7 @@ def plot_function(element: FiniteElement, dof_i: int, link: bool = True) -> str:
 
 def plot_basis_functions(
     element: FiniteElement, link: bool = True
-) -> typing.List[typing.Optional[str]]:
+) -> list[str | None]:
     """Plot basis functions of an element.
 
     Args:
@@ -247,7 +247,7 @@ def plot_basis_functions(
     return [plot_function(element, i, link=link) for i in range(element.space_dim)]
 
 
-def _parse_point(points: typing.List[str], n: int) -> typing.Tuple[float, float]:
+def _parse_point(points: list[str], n: int) -> tuple[float, float]:
     """Parge a point.
 
     Args:
@@ -288,7 +288,7 @@ def plot_img(img_filename: str, link: bool = True) -> str:
 
     def actual_plot(
         filename: str,
-        plot_options: typing.Dict[str, typing.Any] = {},
+        plot_options: dict[str, typing.Any] = {},
         **kwargs: typing.Any,
     ):
         img = Picture(**kwargs)

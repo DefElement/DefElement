@@ -1,12 +1,11 @@
 """Basix implementation."""
 
+from numpy import float64
+from numpy.typing import NDArray
 import typing
 
-from defelement.implementations.core import (
-    Array,
-    Element,
-    Implementation,
-)
+from defelement.element import Element
+from defelement.implementations.core import Implementation
 
 
 class BasixImplementation(Implementation):
@@ -65,7 +64,7 @@ class BasixImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import basix
 

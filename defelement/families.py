@@ -6,7 +6,7 @@ import typing
 def arnold_logg_name(
     family: str,
     r: str = "r",
-    cell: typing.Optional[str] = None,
+    cell: str | None = None,
     degree: str = "k",
     dim: str = "d",
 ) -> str:
@@ -40,7 +40,7 @@ def arnold_logg_name(
 def cockburn_fu_name(
     family: str,
     r: str = "r",
-    cell: typing.Optional[str] = None,
+    cell: str | None = None,
     degree: str = "k",
     dim: str = "d",
 ) -> str:
@@ -75,7 +75,7 @@ def cockburn_fu_name(
 def custom_name(
     family: str,
     r: str = "r",
-    cell: typing.Optional[str] = None,
+    cell: str | None = None,
     degree: str = "k",
     dim: str = "d",
 ):

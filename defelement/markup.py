@@ -10,7 +10,7 @@ from webtools.code_markup import code_highlight as _code_highlight
 
 from defelement import info, plotting, symbols, citations
 
-page_references: typing.List[str] = []
+page_references: list[str] = []
 
 
 def insert_links(txt: str, root_dir: str = "") -> str:

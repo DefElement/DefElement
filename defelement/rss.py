@@ -6,7 +6,7 @@ import typing
 from defelement.element import Element
 
 
-def make_rss(elements: typing.List[Element], title: str, desc: str, date: str) -> str:
+def make_rss(elements: list[Element], title: str, desc: str, date: str) -> str:
     """Make RSS XML.
 
     Args:
