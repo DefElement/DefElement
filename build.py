@@ -28,6 +28,14 @@ from defelement.implementations import implementations, parse_example, verificat
 from defelement.markup import insert_links
 from defelement.rss import make_rss
 
+
+def mkdir(folder):
+    try:
+        os.mkdir(folder)
+    except FileExistsError:
+        pass
+
+
 start_all = datetime.now()
 
 parser = argparse.ArgumentParser(description="Build defelement.org")
@@ -140,16 +148,16 @@ include_simplefem = args.include_simplefem
 # Prepare paths
 if os.path.isdir(settings.html_path):
     os.system(f"rm -rf {settings.html_path}")
-os.mkdir(settings.html_path)
-os.mkdir(settings.htmlelement_path)
-os.mkdir(settings.htmlindices_path)
-os.mkdir(settings.htmlfamilies_path)
-os.mkdir(settings.htmlimg_path)
-os.mkdir(os.path.join(settings.html_path, "badges"))
+mkdir(settings.html_path)
+mkdir(settings.htmlelement_path)
+mkdir(settings.htmlindices_path)
+mkdir(settings.htmlfamilies_path)
+mkdir(settings.htmlimg_path)
+mkdir(os.path.join(settings.html_path, "badges"))
 
 os.system(f"cp -r {settings.dir_path}/people {settings.htmlimg_path}")
-os.mkdir(os.path.join(settings.htmlelement_path, "bibtex"))
-os.mkdir(os.path.join(settings.htmlelement_path, "examples"))
+mkdir(os.path.join(settings.htmlelement_path, "bibtex"))
+mkdir(os.path.join(settings.htmlelement_path, "examples"))
 
 os.system(f"cp -r {settings.files_path}/* {settings.html_path}")
 
@@ -804,7 +812,7 @@ with open(os.path.join(badges, "symfem.svg"), "w") as f:
     )
 
 # Make verification pages
-os.mkdir(os.path.join(settings.html_path, "verification"))
+mkdir(os.path.join(settings.html_path, "verification"))
 
 impl_content = {i: "" for i in verifications if i != "symfem"}
 for i in impl_content:
@@ -1484,7 +1492,7 @@ with open(os.path.join(settings.html_path, "updated-elements.xml"), "w") as f:
     )
 
 # Category index
-os.mkdir(os.path.join(settings.htmlindices_path, "categories"))
+mkdir(os.path.join(settings.htmlindices_path, "categories"))
 content = heading_with_self_ref("h1", "Categories")
 for c in categoriser.categories:
     category_pages = []
@@ -1524,7 +1532,7 @@ write_html_page(
 )
 
 # Implementations index
-os.mkdir(os.path.join(settings.htmlindices_path, "implementations"))
+mkdir(os.path.join(settings.htmlindices_path, "implementations"))
 content = heading_with_self_ref("h1", "Implemented elements")
 for c, info in implementations.items():
     if c.startswith("*("):
@@ -1576,7 +1584,7 @@ write_html_page(
 )
 
 # Reference cells index
-os.mkdir(os.path.join(settings.htmlindices_path, "references"))
+mkdir(os.path.join(settings.htmlindices_path, "references"))
 content = heading_with_self_ref("h1", "Reference cells")
 for c in categoriser.references:
     refels = []
