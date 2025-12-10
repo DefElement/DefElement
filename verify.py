@@ -106,9 +106,7 @@ for e in categoriser.elements:
 def verify_examples(
     egs: list[tuple[Element, str, list[str]]],
     process: str = "",
-    result_dict: dict[
-        str, dict[str, dict[str, dict[str, list[str]]]]
-    ] | None = None,
+    result_dict: dict[str, dict[str, dict[str, dict[str, list[str]]]]] | None = None,
 ) -> dict[str, dict[str, dict[str, list[str]]]]:
     """Verify examples.
 
