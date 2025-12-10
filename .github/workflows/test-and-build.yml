@@ -20,11 +20,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - run: |
-          python3 -m pip install -r requirements.txt
+          python3 -m pip install .[style]
           python3 -m pip install numpy
-        name: Install requirements
-      - run: python3 -m pip install ruff mypy pydocstyle
-        name: Install linting tools
+        name: Install defelement
       - run: |
           python3 -m ruff format --check .
           python3 -m ruff check .
@@ -82,8 +80,8 @@ jobs:
           tar -xf cm-unicode-0.7.0-otf.tar.xz
           cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
       - run: python3 build.py _test_html --no-cache --verification-json verification/verification.json --test auto --processes 4 --include-simplefem
         name: Build website HTML
 
@@ -125,8 +123,8 @@ jobs:
             cd symfem
             python3 -m pip install .[optional]
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
 
       - name: Install implementations
         run: |
@@ -167,8 +165,8 @@ jobs:
             cd symfem
             python3 -m pip install .[optional]
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
       - name: Install implementations
         run: python3 install_implementations.py --install-type all
 

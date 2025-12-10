@@ -18,6 +18,9 @@ dependencies = [
     "website-build-tools==0.1.8"
 ]
 
+[project.optional-dependencies]
+style = ["ruff", "mypy", "pydocstyle"]
+
 [tool.ruff]
 line-length = 100
 indent-width = 4

@@ -61,8 +61,8 @@ jobs:
           tar -xf cm-unicode-0.7.0-otf.tar.xz
           cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
       - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
         name: Build website HTML
         if: ${{ !github.event.pull_request.head.repo.fork }}

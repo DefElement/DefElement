@@ -38,8 +38,8 @@ jobs:
             cd symfem
             python3 -m pip install .[optional]
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
 
       - name: Install implementations
         run: |
