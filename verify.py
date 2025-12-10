@@ -8,7 +8,7 @@ from datetime import datetime
 
 from defelement import settings
 from defelement.element import Categoriser, Element
-from defelement.implementations import parse_example, verifications
+from defelement.implementations import parse_example, verifications, versions
 from defelement.verification import verify
 
 start_all = datetime.now()
@@ -104,14 +104,10 @@ for e in categoriser.elements:
 
 
 def verify_examples(
-    egs: typing.List[typing.Tuple[Element, str, typing.List[str]]],
+    egs: list[tuple[Element, str, list[str]]],
     process: str = "",
-    result_dict: typing.Optional[
-        typing.Dict[
-            str, typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]
-        ]
-    ] = None,
-) -> typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]:
+    result_dict: dict[str, dict[str, dict[str, dict[str, list[str]]]]] | None = None,
+) -> dict[str, dict[str, dict[str, list[str]]]]:
     """Verify examples.
 
     Args:
@@ -127,7 +123,7 @@ def verify_examples(
     blue = "\033[34m"
     default = "\033[0m"
 
-    results: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
+    results: dict[str, dict[str, dict[str, list[str]]]] = {}
     for e, eg, implementations in egs:
         if e.filename not in results:
             results[e.filename] = {}
@@ -250,6 +246,7 @@ else:
                     data[i0][i1][i2] += j2
 
 now = datetime.now().strftime("%Y-%m-%d")
+metadata: dict[str, typing.Any] = {"date": now}
 
 try:
     with open(settings.verification_history_json) as f:
@@ -258,12 +255,14 @@ except FileNotFoundError:
     history = {}
 
 for impl in set(j for i in data.values() for j in i):
+    metadata[impl] = {"version": versions[impl]()}
     if impl not in history:
         history[impl] = []
     history[impl].append(
         {
             "date": now,
             "pass": sum(len(i[impl]["pass"]) for i in data.values() if impl in i),
+            "version": versions[impl](),
             "total": sum(
                 len(i[impl]["pass"]) + len(i[impl]["fail"])
                 for i in data.values()
@@ -272,17 +271,18 @@ for impl in set(j for i in data.values() for j in i):
         }
     )
 
-if assert_passing:
-    for d in data.values():
-        assert len(d[impl]["fail"]) == 0
 
 with open(settings.verification_json, "w") as f:
     json.dump(
         {
-            "metadata": {"date": now},
+            "metadata": metadata,
             "verification": data,
         },
         f,
     )
 with open(settings.verification_history_json, "w") as f:
     json.dump(history, f)
+
+if assert_passing:
+    for d in data.values():
+        assert len(d[impl]["fail"]) == 0

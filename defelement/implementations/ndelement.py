@@ -50,6 +50,13 @@ class NDElementImplementation(Implementation):
         return out
 
     @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        from importlib.metadata import version
+
+        return version("ndelement")
+
+    @classmethod
     def verify(
         cls,
         name: str,
