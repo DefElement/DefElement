@@ -104,14 +104,12 @@ for e in categoriser.elements:
 
 
 def verify_examples(
-    egs: typing.List[typing.Tuple[Element, str, typing.List[str]]],
+    egs: list[tuple[Element, str, list[str]]],
     process: str = "",
-    result_dict: typing.Optional[
-        typing.Dict[
-            str, typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]
-        ]
-    ] = None,
-) -> typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]]:
+    result_dict: dict[
+        str, dict[str, dict[str, dict[str, list[str]]]]
+    ] | None = None,
+) -> dict[str, dict[str, dict[str, list[str]]]]:
     """Verify examples.
 
     Args:
@@ -127,7 +125,7 @@ def verify_examples(
     blue = "\033[34m"
     default = "\033[0m"
 
-    results: typing.Dict[str, typing.Dict[str, typing.Dict[str, typing.List[str]]]] = {}
+    results: dict[str, dict[str, dict[str, list[str]]]] = {}
     for e, eg, implementations in egs:
         if e.filename not in results:
             results[e.filename] = {}
@@ -250,7 +248,7 @@ else:
                     data[i0][i1][i2] += j2
 
 now = datetime.now().strftime("%Y-%m-%d")
-metadata = {"date": now}
+metadata: dict[str, typing.Any] = {"date": now}
 
 try:
     with open(settings.verification_history_json) as f:
