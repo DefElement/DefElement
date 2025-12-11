@@ -1,4 +1,4 @@
-name: Archive DefElement
+name: Update version number
 
 on:
   schedule:
