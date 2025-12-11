@@ -71,6 +71,7 @@ jobs:
           tar -xf cm-unicode-0.7.0-otf.tar.xz
           cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
           rm -r cm-unicode-0.7.0
+          rm cm-unicode-0.7.0-otf.tar.xz
 
       - run: python3 -m pip install .
         name: Install defelement
