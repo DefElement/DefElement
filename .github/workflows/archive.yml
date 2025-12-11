@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - check-version-number
-    if: needs.check-version-number.outputs.release != "no"
+    if: needs.check-version-number.outputs.release != 'no'
     steps:
       - name: Set up Python
         uses: actions/setup-python@v5
