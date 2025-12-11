@@ -9,6 +9,7 @@ from defelement.implementations.core import (
     Element,
     Implementation,
     parse_example,
+    pypi_name,
 )
 
 # TODO make this a FIAT attribute
@@ -21,6 +22,7 @@ true_space_dimension = {
 }
 
 
+@pypi_name("firedrake-fiat")
 class FIATImplementation(Implementation):
     """FIAT implementation."""
 
@@ -83,13 +85,6 @@ class FIATImplementation(Implementation):
                 out += f", {i}={j}"
         out += ")"
         return out
-
-    @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        import FIAT
-
-        return FIAT.__version__
 
     @classmethod
     def verify(
@@ -239,4 +234,3 @@ class FIATImplementation(Implementation):
     name = "FIAT"
     url = "https://github.com/firedrakeproject/fiat"
     verification = True
-    install = "pip3 install git+https://github.com/firedrakeproject/fiat.git"

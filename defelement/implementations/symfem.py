@@ -9,6 +9,7 @@ from defelement.implementations.core import (
     Element,
     Implementation,
     parse_example,
+    pypi_name,
 )
 from defelement.tools import to_array
 
@@ -70,6 +71,7 @@ class CachedSymfemTabulator:
         return table
 
 
+@pypi_name("symfem")
 class SymfemImplementation(Implementation):
     """Symfem implementation."""
 
@@ -115,13 +117,6 @@ class SymfemImplementation(Implementation):
         return out
 
     @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        import symfem
-
-        return symfem.__version__
-
-    @classmethod
     def verify(
         cls,
         name: str,
@@ -147,5 +142,4 @@ class SymfemImplementation(Implementation):
     id = "symfem"
     name = "Symfem"
     url = "https://github.com/mscroggs/symfem"
-    install = "pip3 install symfem"
     verification = True
