@@ -27,7 +27,7 @@ new_branch = defelement.get_branch(version_branch)
 defelement.update_file(
     "pyproject.toml",
     "Update version number",
-    f'{pre_project}[project]\n{pre_version}version="{version}"\n{post_version}',
+    f'{pre_project}[project]\n{pre_version}version = "{version}"\n{post_version}',
     sha=pyproject_file.sha,
     branch=version_branch,
 )
