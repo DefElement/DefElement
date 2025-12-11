@@ -195,6 +195,7 @@ if settings.processes == 1:
     results = [verify_example(e) for e in elements_to_verify]
 else:
     import multiprocessing
+
     multiprocessing.set_start_method("fork")
 
     with multiprocessing.Pool(settings.processes) as p:
