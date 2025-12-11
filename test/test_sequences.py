@@ -1,6 +1,7 @@
 import os
 import re
 import signal
+import urllib
 import urllib.request
 import warnings
 
@@ -73,22 +74,25 @@ def check_oeis(oeis, seq):
         seq = {i: j for i, j in seq.items() if is_satisfied(condition, i)}
     seq = {i: j for i, j in seq.items() if j > 0}
     if oeis not in oeis_cache:
-        with urllib.request.urlopen(
-            urllib.request.Request(
-                f"http://oeis.org/{oeis}/list",
-                headers={"User-Agent": "DefElement test runner"},
-            )
-        ) as f:
-            oeis_cache[oeis] = "".join(
-                [
-                    i.strip()
-                    for i in f.read()
-                    .decode("utf-8")
-                    .split("<pre>[")[1]
-                    .split("]</pre>")[0]
-                    .split("\n")
-                ]
-            )
+        try:
+            with urllib.request.urlopen(
+                urllib.request.Request(
+                    f"http://oeis.org/{oeis}/list",
+                    headers={"User-Agent": "DefElement test runner"},
+                )
+            ) as f:
+                oeis_cache[oeis] = "".join(
+                    [
+                        i.strip()
+                        for i in f.read()
+                        .decode("utf-8")
+                        .split("<pre>[")[1]
+                        .split("]</pre>")[0]
+                        .split("\n")
+                    ]
+                )
+        except urllib.error.HTTPError:
+            pytest.xfail("Error reading from OEIS")
     assert ",".join([str(i) for i in seq.values()]) in oeis_cache[oeis]
 
 
