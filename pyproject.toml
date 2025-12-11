@@ -15,7 +15,7 @@ authors = [
 ]
 dependencies = [
     "cairosvg==2.8.2",
-    "symfem==2025.12.0",
+    "symfem[optional]==2025.12.0",
     "numpy==2.3.5",
     "sympy==1.14.0",
     "PyGithub==2.8.1",
