@@ -103,7 +103,11 @@ class BasixImplementation(Implementation):
                 entity_dofs[2][0],
             ]
 
-        return entity_dofs, lambda points: e.tabulate(0, points)[0].transpose((0, 2, 1))
+        def tabulate(points):
+            table = e.tabulate(0, points)[0]
+            return table.transpose((0, 2, 1))
+
+        return entity_dofs, tabulate
 
     id = "basix"
     name = "Basix"
