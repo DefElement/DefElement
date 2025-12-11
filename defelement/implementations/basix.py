@@ -2,13 +2,10 @@
 
 import typing
 
-from defelement.implementations.core import (
-    Array,
-    Element,
-    Implementation,
-)
+from defelement.implementations.core import Array, Element, Implementation, pypi_name
 
 
+@pypi_name("fenics-basix")
 class BasixImplementation(Implementation):
     """Basix implementation."""
 
@@ -57,13 +54,6 @@ class BasixImplementation(Implementation):
             out += f", discontinuous={params['discontinuous']}"
         out += ")"
         return out
-
-    @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        import basix
-
-        return basix.__version__
 
     @classmethod
     def verify(
@@ -120,4 +110,3 @@ class BasixImplementation(Implementation):
     name = "Basix"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    install = "pip3 install fenics-basix"

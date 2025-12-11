@@ -99,6 +99,13 @@ number of the implementation library. For simplefem, this is implemented as foll
 
 {{snippet::defelement/implementations/simplefem.py::version}}
 
+When an implementation can be installed from PyPI, the decorator `pypi_name` can be used.
+This decorator will automatically implement the method `version` and set the variable `install`
+(as described in the next section). For the ndelement library, for example, `pypi_name` is used as
+follows:
+
+{{snippet::defelement/implementations/ndelement.py::pypi_name}}
+
 ### Variables
 Finally, four variables need to be defined:
 
@@ -106,7 +113,8 @@ Finally, four variables need to be defined:
   and not contain any special characters.
 * `name` gives the name of the implementation as it will appear in text.
 * `url` gives the URL of the git repository of the inplementation.
-* `install` gives the pip command to install the implementation.
+* `install` gives the pip command to install the implementation. Note that this can be omitted
+  if the `pypi_name` decorator is used.
 
 For simplefem, these variables are set to the following values. In general, it is preferable for
 the install to be done from PyPI rather than via git, but as simplefem is merely an example library

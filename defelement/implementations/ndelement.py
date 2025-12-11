@@ -1,16 +1,20 @@
 """NDElement implementation."""
 
 import typing
+from numpy import float64
+from numpy.typing import NDArray
 
-from defelement.implementations.core import (
-    Array,
-    Element,
-    Implementation,
-)
+from defelement.implementations.core import Implementation, Element
+
+# <pypi_name>
+from defelement.implementations.core import pypi_name
 
 
+@pypi_name("ndelement")
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
+
+    # </pypi_name>
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
@@ -50,13 +54,6 @@ class NDElementImplementation(Implementation):
         return out
 
     @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        from importlib.metadata import version
-
-        return version("ndelement")
-
-    @classmethod
     def verify(
         cls,
         name: str,
@@ -65,7 +62,9 @@ class NDElementImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[
+        list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]
+    ]:
         """Get verification data."""
         from ndelement.ciarlet import Continuity, Family, create_family
         from ndelement.reference_cell import ReferenceCellType, entity_counts
@@ -108,4 +107,3 @@ class NDElementImplementation(Implementation):
     name = "NDElement"
     url = "https://github.com/bempp/nd"
     verification = True
-    install = "pip3 install ndelement"
