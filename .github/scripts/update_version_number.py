@@ -31,7 +31,9 @@ defelement.update_file(
     sha=pyproject_file.sha,
     branch=version_branch,
 )
-pr = defelement.create_pull(title="Update version number", body="", base="main", head=version_branch)
+pr = defelement.create_pull(
+    title="Update version number", body="", base="main", head=version_branch
+)
 pr.enable_automerge()
 
 print(f"branch={version_branch}")
