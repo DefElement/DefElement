@@ -9,9 +9,11 @@ from defelement.element import Element
 from defelement.implementations.core import (
     Implementation,
     parse_example,
+    pypi_name,
 )
 
 
+@pypi_name("fenics-basix", ["fenics-ufl"])
 class BasixUFLImplementation(Implementation):
     """Basix.UFL implementation."""
 
@@ -58,13 +60,6 @@ class BasixUFLImplementation(Implementation):
             out += ", shape=" + params["shape"].replace("dim", f"{dim}")
         out += ")"
         return out
-
-    @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        import basix
-
-        return basix.__version__
 
     @classmethod
     def verify(
@@ -132,7 +127,6 @@ class BasixUFLImplementation(Implementation):
     name = "Basix.UFL"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    install = "pip3 install git+https://github.com/FEniCS/basix fenics-ufl"
 
 
 class CustomBasixUFLImplementation(BasixUFLImplementation):

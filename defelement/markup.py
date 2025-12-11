@@ -142,7 +142,7 @@ settings.re_extras = [
     ),
     (r"{{symbols\.([^}]+)}}", lambda m: getattr(symbols, m[1])),
     (r"{{citation::([^}]+)}}", insert_citation),
-    (r"{{snippet::([^:]*)::([A-Za-z0-9\-]+)}}", insert_snippet),
+    (r"{{snippet::([^:]*)::([A-Za-z0-9\-_]+)}}", insert_snippet),
 ]
 settings.str_extras = [
     ("{{tick}}", "<i class='fa-solid fa-check' style='color:#55ff00'></i>"),

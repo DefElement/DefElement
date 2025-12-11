@@ -7,9 +7,15 @@ from numpy.typing import NDArray
 from defelement.element import Element
 from defelement.implementations.core import Implementation
 
+# <pypi_name>
+from defelement.implementations.core import pypi_name
 
+
+@pypi_name("ndelement")
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
+
+    # </pypi_name>
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
@@ -49,13 +55,6 @@ class NDElementImplementation(Implementation):
         out += ")\n"
         out += f"element = family.element(ReferenceCellType.{reference[0].upper() + reference[1:]})"
         return out
-
-    @classmethod
-    def version(cls) -> str:
-        """Get the version number of this implementation."""
-        from importlib.metadata import version
-
-        return version("ndelement")
 
     @classmethod
     def verify(
@@ -107,4 +106,3 @@ class NDElementImplementation(Implementation):
     name = "NDElement"
     url = "https://github.com/bempp/nd"
     verification = True
-    install = "pip3 install ndelement"

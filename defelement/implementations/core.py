@@ -9,6 +9,35 @@ from numpy.typing import NDArray
 from defelement.element import Element
 
 
+def pypi_name(package_name: str, dependencies: list[str] | None = None):
+    """Use the PyPI name of a package to define the install variable and version method.
+
+    Args:
+        package_name: The name of the package on PyPI
+        dependencies: Packages to install before installing the package
+
+    Returns:
+        A wrapped class
+    """
+
+    def pypi_name(Cls):
+        class Wrapped(Cls):
+            @classmethod
+            def version(cls) -> str:
+                """Get the version number of this implementation."""
+                from importlib.metadata import version
+
+                return version(package_name)
+
+            install = (
+                "" if dependencies is None else "pip install " + " ".join(dependencies) + "\n"
+            ) + f"pip install {package_name}"
+
+        return Wrapped
+
+    return pypi_name
+
+
 class Implementation:
     """An implementation."""
 
