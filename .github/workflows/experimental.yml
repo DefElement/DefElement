@@ -1,0 +1,41 @@
+name: EXPERIMENTING
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  check-version-number:
+    name: Check version number
+    runs-on: ubuntu-22.04
+    outputs:
+      release: ${{ steps.version.outputs.release }}
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/checkout@v4
+
+      - name: Install PyGitHub
+        run: python3 -m pip install PyGitHub
+
+      - name: Check version number
+        run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }}
+        id: version
+
+  build-archive:
+    name: Build archive
+    runs-on: ubuntu-22.04
+    needs:
+      - check-version-number
+    steps:
+      - name: Test
+        run: |
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"
+          echo "${{ needs.check-version-number.outputs.release }}"

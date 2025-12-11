@@ -30,6 +30,9 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - check-version-number
+    permissions:
+      id-token: write
+      contents: write
     if: needs.check-version-number.outputs.release != 'no'
     steps:
       - name: Set up Python
@@ -37,8 +40,6 @@ jobs:
         with:
           python-version: "3.14"
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.update-version-number.outputs.branch }}
       - name: Clone verification
         uses: actions/checkout@v4
         with:
@@ -46,6 +47,11 @@ jobs:
           repository: DefElement/DefElement
           ref: verification
         continue-on-error: true
+
+      - name: Move verification jsons
+        run: |
+          mv verification/*.json .
+          rm -r verification
 
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
@@ -55,24 +61,30 @@ jobs:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
           ref: master
-      - run: cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
+      - run: |
+          cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
+          rm -r varela-r
         name: Install Varela Round
       - name: Download and install Computer Modern
         run: |
           wget https://downloads.sourceforge.net/project/cm-unicode/cm-unicode/0.7.0/cm-unicode-0.7.0-otf.tar.xz
           tar -xf cm-unicode-0.7.0-otf.tar.xz
           cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
+          rm -r cm-unicode-0.7.0
 
       - run: python3 -m pip install .
         name: Install defelement
-      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
+      - run: python3 build.py _html --verification-json verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
         name: Build website HTML
+
+      - name: Remove build cache
+        run: rm -r .defelement-build-cache
 
       - name: Make lock file
         run: pip freeze > requirements.lock
 
       - name: Make tar.gz
-        run: tar -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
+        run: tar --exclude '.git' -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
 
       - name: Install PyGitHub
         run: python3 -m pip install PyGitHub

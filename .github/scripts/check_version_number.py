@@ -20,7 +20,7 @@ with open(
 ) as f:
     version = tomllib.load(f)["project"]["version"]
 
-access_key = sys.argv[-1]
+_, access_key = sys.argv
 
 git = github.Github(access_key)
 

@@ -6,7 +6,7 @@ import github
 version = datetime.now().strftime("%Y.%m")
 branch = f"v{version}"
 
-access_key = sys.argv[-1]
+_, access_key = sys.argv
 
 git = github.Github(access_key)
 

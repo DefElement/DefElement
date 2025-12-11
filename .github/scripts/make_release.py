@@ -3,9 +3,7 @@ from datetime import datetime
 
 import github
 
-tar_gz = sys.argv[-2]
-version = sys.argv[-2]
-access_key = sys.argv[-1]
+_, tar_gz, version, access_key = sys.argv
 
 assert version != "2025.09"  # Prevent release when initally merging
 
