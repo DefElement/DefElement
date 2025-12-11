@@ -1,12 +1,11 @@
 """RSS."""
 
 import html
-import typing
 
 from defelement.element import Element
 
 
-def make_rss(elements: typing.List[Element], title: str, desc: str, date: str) -> str:
+def make_rss(elements: list[Element], title: str, desc: str, date: str) -> str:
     """Make RSS XML.
 
     Args:
@@ -30,14 +29,10 @@ def make_rss(elements: typing.List[Element], title: str, desc: str, date: str) -
     for e in elements:
         out += "  <item>\n"
         out += f"    <title>{html.unescape(e.html_name)}</title>\n"
-        out += (
-            f"    <link>https://www.defelement.org/elements/{e.html_filename}</link>\n"
-        )
+        out += f"    <link>https://www.defelement.org/elements/{e.html_filename}</link>\n"
         out += f"    <description>{html.unescape(e.html_name)}</description>\n"
         if getattr(e, date) is not None:
-            out += (
-                f"    <pubDate>{getattr(e, date).strftime('%a, %d %b %Y')}</pubDate>\n"
-            )
+            out += f"    <pubDate>{getattr(e, date).strftime('%a, %d %b %Y')}</pubDate>\n"
         out += "  </item>\n"
 
     out += "</channel>\n</rss>\n"

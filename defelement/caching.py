@@ -2,7 +2,6 @@
 
 import json
 import os
-import typing
 
 import symfem
 from webtools.tools import join
@@ -15,7 +14,7 @@ cache_version = "1.0.0"
 def load_cache(
     item_key: str,
     last_updated: str,
-) -> typing.Optional[str]:
+) -> str | None:
     """Load item from cache."""
     if not settings.caching:
         return None

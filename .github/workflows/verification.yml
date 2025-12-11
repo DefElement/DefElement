@@ -2,7 +2,7 @@ name: Verification
 
 on:
   schedule:
-    - cron: "0 7 1,16 * *"
+    - cron: "0 7 1 * *"
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14"
 
       - uses: actions/checkout@v4
 
@@ -38,8 +38,8 @@ jobs:
             cd symfem
             python3 -m pip install .[optional]
 
-      - run: python3 -m pip install -r requirements.txt
-        name: Install requirements
+      - run: python3 -m pip install .
+        name: Install defelement
 
       - name: Install implementations
         run: |

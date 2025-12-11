@@ -13,13 +13,6 @@ from github import Github
 
 from defelement import citations, settings
 from defelement.families import keys_and_names
-from defelement.implementations import (
-    DegreeNotImplemented,
-    NotImplementedOnReference,
-    VariantNotImplemented,
-    examples,
-    implementations,
-)
 from defelement.markup import insert_links
 from defelement.polyset import make_extra_info, make_poly_set
 from defelement.citations import arnold_logg as arnold_logg_citation
@@ -27,9 +20,7 @@ from defelement.citations import cockburn_fu as cockburn_fu_citation
 
 
 def make_dof_data(
-    ndofs: typing.Union[
-        typing.Dict[str, typing.Any], typing.List[typing.Dict[str, typing.Any]]
-    ],
+    ndofs: dict[str, typing.Any] | list[dict[str, typing.Any]],
 ) -> str:
     """Make DOF data.
 
@@ -53,7 +44,7 @@ def make_dof_data(
     return "<br />".join(dof_text)
 
 
-def make_formula(data: typing.Dict[str, typing.Any]) -> str:
+def make_formula(data: dict[str, typing.Any]) -> str:
     """Make formula.
 
     Args:
@@ -69,9 +60,7 @@ def make_formula(data: typing.Dict[str, typing.Any]) -> str:
         txt += "\\("
         if isinstance(data["formula"], list):
             txt += "\\begin{cases}"
-            txt += "\\\\".join(
-                [f"{c}&{b}" for a in data["formula"] for b, c in a.items()]
-            )
+            txt += "\\\\".join([f"{c}&{b}" for a in data["formula"] for b, c in a.items()])
             txt += "\\end{cases}"
         else:
             txt += f"{data['formula']}"
@@ -114,7 +103,7 @@ def degreemap_equal(a, b) -> bool:
 class Element:
     """An element."""
 
-    def __init__(self, data: typing.Dict[str, typing.Any], fname: str):
+    def __init__(self, data: dict[str, typing.Any], fname: str):
         """Initialise.
 
         Args:
@@ -123,11 +112,11 @@ class Element:
         """
         self.data = data
         self.filename = fname
-        self._c: typing.Optional[Categoriser] = None
+        self._c: Categoriser | None = None
         self.created = None
         self.modified = None
 
-    def name_with_variant(self, variant: typing.Optional[str]) -> str:
+    def name_with_variant(self, variant: str | None) -> str:
         """Get name with variant.
 
         Args:
@@ -151,7 +140,7 @@ class Element:
         """
         return self.data["variants"][variant]["variant-name"]
 
-    def variants(self) -> typing.List[str]:
+    def variants(self) -> list[str]:
         """Get variants of the element.
 
         Returns:
@@ -159,10 +148,7 @@ class Element:
         """
         if "variants" not in self.data:
             return []
-        return [
-            f"{v['variant-name']}: {v['description']}"
-            for v in self.data["variants"].values()
-        ]
+        return [f"{v['variant-name']}: {v['description']}" for v in self.data["variants"].values()]
 
     def min_degree(self, ref: str) -> int:
         """Get the minimum degree.
@@ -179,7 +165,7 @@ class Element:
             return self.data["min-degree"][ref]
         return self.data["min-degree"]
 
-    def max_degree(self, ref: str) -> typing.Optional[int]:
+    def max_degree(self, ref: str) -> int | None:
         """Get the maximum degree.
 
         Args:
@@ -194,7 +180,7 @@ class Element:
             return self.data["max-degree"][ref]
         return self.data["max-degree"]
 
-    def degree_convention(self) -> typing.Optional[str]:
+    def degree_convention(self) -> str | None:
         """Get the degree convention.
 
         Returns:
@@ -204,7 +190,7 @@ class Element:
             return None
         return self.data["degree"]
 
-    def _edegree(self, dtype: str) -> typing.Optional[str]:
+    def _edegree(self, dtype: str) -> str | None:
         """Get an embedded degree.
 
         Returns:
@@ -217,10 +203,7 @@ class Element:
             if isinstance(txt, dict):
                 return ", ".join(
                     [
-                        to_tex(j)
-                        + " ("
-                        + ("otherwise" if i == "_" else f"degree={i}")
-                        + ")"
+                        to_tex(j) + " (" + ("otherwise" if i == "_" else f"degree={i}") + ")"
                         for i, j in txt.items()
                     ]
                 )
@@ -237,7 +220,7 @@ class Element:
             return "<br />".join([f"{cell}: {to_tex(deg)}" for cell, deg in d.items()])
         return to_tex(d)
 
-    def polynomial_subdegree(self) -> typing.Optional[str]:
+    def polynomial_subdegree(self) -> str | None:
         """Get the polynomial subdegree.
 
         Returns:
@@ -245,7 +228,7 @@ class Element:
         """
         return self._edegree("polynomial-subdegree")
 
-    def polynomial_superdegree(self) -> typing.Optional[str]:
+    def polynomial_superdegree(self) -> str | None:
         """Get the polynomial superdegree.
 
         Returns:
@@ -253,7 +236,7 @@ class Element:
         """
         return self._edegree("polynomial-superdegree")
 
-    def lagrange_subdegree(self) -> typing.Optional[str]:
+    def lagrange_subdegree(self) -> str | None:
         """Get the Lagrange subdegree.
 
         Returns:
@@ -261,7 +244,7 @@ class Element:
         """
         return self._edegree("lagrange-subdegree")
 
-    def lagrange_superdegree(self) -> typing.Optional[str]:
+    def lagrange_superdegree(self) -> str | None:
         """Get the polynomial superdegree.
 
         Returns:
@@ -269,7 +252,7 @@ class Element:
         """
         return self._edegree("lagrange-superdegree")
 
-    def reference_cells(self, link: bool = True) -> typing.List[str]:
+    def reference_cells(self, link: bool = True) -> list[str]:
         """Get reference cells.
 
         Args:
@@ -293,8 +276,8 @@ class Element:
         include_variants: bool = True,
         link: bool = True,
         strip_cell_name: bool = False,
-        cell: typing.Optional[str] = None,
-    ) -> typing.List[str]:
+        cell: str | None = None,
+    ) -> list[str]:
         """Get alternative names.
 
         Args:
@@ -331,7 +314,7 @@ class Element:
 
         return out
 
-    def short_names(self, include_variants: bool = True) -> typing.List[str]:
+    def short_names(self, include_variants: bool = True) -> list[str]:
         """Get short names.
 
         Args:
@@ -346,12 +329,10 @@ class Element:
         if include_variants and "variants" in self.data:
             for v in self.data["variants"].values():
                 if "short-names" in v:
-                    out += [
-                        f"{i} ({v['variant-name']} variant)" for i in v["short-names"]
-                    ]
+                    out += [f"{i} ({v['variant-name']} variant)" for i in v["short-names"]]
         return out
 
-    def mapping(self) -> typing.Union[None, str]:
+    def mapping(self) -> str | None:
         """Get mapping name.
 
         Returns:
@@ -372,7 +353,7 @@ class Element:
             mapping = f'{pre}<a href="#ref{index}">[{index}]</a>{post}'
         return mapping
 
-    def sobolev(self) -> typing.Union[None, str]:
+    def sobolev(self) -> str | None:
         """Get Sobolev space name.
 
         Returns:
@@ -382,9 +363,7 @@ class Element:
             return None
         return self.data["sobolev"]
 
-    def complexes(
-        self, link: bool = True, names: bool = True
-    ) -> typing.Dict[str, typing.List[str]]:
+    def complexes(self, link: bool = True, names: bool = True) -> dict[str, list[str]]:
         """Get complexes.
 
         Args:
@@ -399,7 +378,7 @@ class Element:
         if "complexes" not in self.data:
             return {}
 
-        out: typing.Dict[str, typing.List[str]] = {}
+        out: dict[str, list[str]] = {}
         com = self.data["complexes"]
         for key, families in com.items():
             out[key] = []
@@ -437,8 +416,8 @@ class Element:
         """
 
         def make_degree_data(
-            min_o: typing.Union[typing.Dict[str, int], int, None],
-            max_o: typing.Union[typing.Dict[str, int], int, None],
+            min_o: dict[str, int] | int | None,
+            max_o: dict[str, int] | int | None,
         ) -> str:
             """Make degree data.
 
@@ -473,7 +452,7 @@ class Element:
             self.data["max-degree"] if "max-degree" in self.data else None,
         )
 
-    def sub_elements(self, link: bool = True) -> typing.List[str]:
+    def sub_elements(self, link: bool = True) -> list[str]:
         """Get sub elements of a mixed element.
 
         Args:
@@ -502,9 +481,7 @@ class Element:
         if "dofs" not in self.data:
             return ""
 
-        def dofs_on_entity(
-            entity: str, dofs: typing.Union[str, typing.List[str]]
-        ) -> str:
+        def dofs_on_entity(entity: str, dofs: str | list[str]) -> str:
             """Get DOFs on an entity.
 
             Args:
@@ -524,9 +501,7 @@ class Element:
                 mom_type, space_info = dofs.split(" with ")
                 space_info = space_info.strip()
                 if space_info.startswith("{") and space_info.endswith("}"):
-                    return (
-                        f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
-                    )
+                    return f"{mom_type} with \\(\\left\\{{{space_info[1:-1]}\\right\\}}\\)"
                 if space_info.startswith('"') and space_info.endswith('"'):
                     return f"{mom_type} with {insert_links(space_info[1:-1])}"
 
@@ -537,7 +512,7 @@ class Element:
             dofs = re.sub(r"\(([A-Za-z0-9\-]+),([^\)]*)\)", insert_space_links, dofs)
             return dofs
 
-        def make_dof_d(data: typing.Dict[str, typing.Any], post: str = "") -> str:
+        def make_dof_d(data: dict[str, typing.Any], post: str = "") -> str:
             """Make a decription of a single DOF.
 
             Args:
@@ -598,7 +573,7 @@ class Element:
         # TODO: move some of this to polynomial file
         if "polynomial-set" not in self.data:
             return ""
-        psets: typing.Dict[str, typing.List[str]] = {}
+        psets: dict[str, list[str]] = {}
         if isinstance(self.data["polynomial-set"], dict):
             for i, j in self.data["polynomial-set"].items():
                 if j not in psets:
@@ -630,21 +605,13 @@ class Element:
             out += "</div>"
             out += "<script type='text/javascript'>\n"
             out += "function show_psets(){\n"
-            out += (
-                "  document.getElementById('show_pset_link').style.display = 'none'\n"
-            )
-            out += (
-                "  document.getElementById('hide_pset_link').style.display = 'block'\n"
-            )
+            out += "  document.getElementById('show_pset_link').style.display = 'none'\n"
+            out += "  document.getElementById('hide_pset_link').style.display = 'block'\n"
             out += "  document.getElementById('psets').style.display = 'block'\n"
             out += "}\n"
             out += "function hide_psets(){\n"
-            out += (
-                "  document.getElementById('show_pset_link').style.display = 'block'\n"
-            )
-            out += (
-                "  document.getElementById('hide_pset_link').style.display = 'none'\n"
-            )
+            out += "  document.getElementById('show_pset_link').style.display = 'block'\n"
+            out += "  document.getElementById('hide_pset_link').style.display = 'none'\n"
             out += "  document.getElementById('psets').style.display = 'none'\n"
             out += "}\n"
             out += "</script>"
@@ -680,7 +647,7 @@ class Element:
         return self.data["name"]
 
     @property
-    def legacy_filenames(self) -> typing.List[str]:
+    def legacy_filenames(self) -> list[str]:
         """Get any filenames that this element previously used.
 
         Returns:
@@ -691,7 +658,7 @@ class Element:
         return self.data["legacy-names"]
 
     @property
-    def notes(self) -> typing.List[str]:
+    def notes(self) -> list[str]:
         """Get notes.
 
         Returns:
@@ -740,9 +707,7 @@ class Element:
         """
         return f"<a href='/elements/{self.html_filename}'>{self.html_name}</a>"
 
-    def implemented(
-        self, lib: str, include_dependent_implementations: bool = False
-    ) -> bool:
+    def implemented(self, lib: str, include_dependent_implementations: bool = False) -> bool:
         """Check if element in implemented in a library.
 
         Args:
@@ -751,6 +716,8 @@ class Element:
         Returns:
             True if implemented, otherwise False
         """
+        from defelement.implementations import implementations
+
         if not implementations[lib].implemented(self):
             return False
         if "implementations" in self.data and lib in self.data["implementations"]:
@@ -759,10 +726,7 @@ class Element:
         if lib.startswith("*(") and lib.endswith(")"):
             assert not include_dependent_implementations
             in_lib, _ = lib[2:-1].split(" -> ")
-            return (
-                "implementations" in self.data
-                and in_lib in self.data["implementations"]
-            )
+            return "implementations" in self.data and in_lib in self.data["implementations"]
         elif include_dependent_implementations:
             for i in implementations:
                 if i.endswith(f"-> {lib})") and self.implemented(i):
@@ -773,11 +737,11 @@ class Element:
     def get_implementation_string(
         self,
         lib: str,
-        reference: typing.Optional[str],
-        degree: typing.Optional[int],
-        variant: typing.Optional[str] = None,
-        any_variant: typing.Optional[bool] = False,
-    ) -> typing.Tuple[str, typing.Optional[int], typing.Dict[str, typing.Any]]:
+        reference: str | None,
+        degree: int | None,
+        variant: str | None = None,
+        any_variant: bool | None = False,
+    ) -> tuple[str, int | None, dict[str, typing.Any]]:
         """Get implementation string.
 
         Args:
@@ -790,6 +754,12 @@ class Element:
         Returns:
             Implementation string, degree and parameters to pass to implementation
         """
+        from defelement.implementations import (
+            DegreeNotImplemented,
+            NotImplementedOnReference,
+            VariantNotImplemented,
+        )
+
         assert self.implemented(lib)
         if variant is None:
             data = self.data["implementations"][lib]
@@ -834,9 +804,7 @@ class Element:
         input_deg = degree
         if "DEGREEMAP" in params:
             if degree is not None:
-                input_deg = int(
-                    sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree)
-                )
+                input_deg = int(sympy.S(params["DEGREEMAP"]).subs(sympy.Symbol("k"), degree))
             del params["DEGREEMAP"]
 
         return out, input_deg, params
@@ -844,9 +812,9 @@ class Element:
     def list_of_implementation_strings(
         self,
         lib: str,
-        joiner: typing.Union[None, str] = "<br />",
+        joiner: str | None = "<br />",
         include_dependent_implementations: bool = False,
-    ) -> typing.Union[str, typing.List[str]]:
+    ) -> str | list[str]:
         """Get a list of implementation strings.
 
         Args:
@@ -856,9 +824,11 @@ class Element:
         Returns:
             List of implemtation strings
         """
+        from defelement.implementations import implementations
+
         if include_dependent_implementations:
             assert not lib.startswith("*(")
-            imp_list: typing.List[str] = []
+            imp_list: list[str] = []
             if self.implemented(lib):
                 imp_list += self.list_of_implementation_strings(lib, None)
             for other_lib in implementations:
@@ -872,16 +842,14 @@ class Element:
                 return "<small><em>Uses custom element code</em></small>"
 
             if "display" in self.data["implementations"][lib]:
-                d = implementations[lib].format(
-                    self.data["implementations"][lib]["display"], {}
-                )
+                d = implementations[lib].format(self.data["implementations"][lib]["display"], {})
                 return f"<code>{d}</code>"
             if "variants" in self.data:
                 variants = self.data["variants"]
             else:
                 variants = {None: {}}
 
-            i_dict: typing.Dict[str, typing.List[str]] = {}
+            i_dict: dict[str, list[str]] = {}
             for v, vinfo in variants.items():
                 if v is None:
                     data = self.data["implementations"][lib]
@@ -890,9 +858,7 @@ class Element:
                         continue
                     data = self.data["implementations"][lib][v]
                 if isinstance(data, str):
-                    istring, _, params = self.get_implementation_string(
-                        lib, None, None, v
-                    )
+                    istring, _, params = self.get_implementation_string(lib, None, None, v)
                     s = implementations[lib].format(istring, params)
                     if s not in i_dict:
                         i_dict[s] = []
@@ -902,9 +868,7 @@ class Element:
                         i_dict[s].append(vinfo["variant-name"])
                 else:
                     for i, j in data.items():
-                        istring, _, params = self.get_implementation_string(
-                            lib, i, None, v
-                        )
+                        istring, _, params = self.get_implementation_string(lib, i, None, v)
                         s = implementations[lib].format(istring, params)
                         if s not in i_dict:
                             i_dict[s] = []
@@ -932,6 +896,8 @@ class Element:
         Returns:
             Examples
         """
+        from defelement.implementations import implementations
+
         return implementations[lib].examples(self)
 
     def has_implementation_examples(self, lib: str) -> bool:
@@ -943,9 +909,11 @@ class Element:
         Returns:
             True if library has examples, otherwise False
         """
+        from defelement.implementations import examples
+
         return lib in examples
 
-    def implementation_notes(self, lib: str) -> typing.List[str]:
+    def implementation_notes(self, lib: str) -> list[str]:
         """Get implementation notes for a library.
 
         Args:
@@ -954,6 +922,8 @@ class Element:
         Returns:
             Implementation notes
         """
+        from defelement.implementations import implementations
+
         notes = implementations[lib].notes(self)
 
         if "implementations" in self.data and lib in self.data["implementations"]:
@@ -969,9 +939,7 @@ class Element:
                         ("polynomial-superdegree", "polynomial superdegree"),
                         ("lagrange-subdegree", "Lagrange subdegree"),
                     ]:
-                        if id in self.data and degreemap_equal(
-                            degreemap, self.data[id]
-                        ):
+                        if id in self.data and degreemap_equal(degreemap, self.data[id]):
                             notes.append(
                                 f"This element uses the {info} as the canonical degree "
                                 "of this element"
@@ -984,7 +952,7 @@ class Element:
                         )
         return notes
 
-    def implementation_references(self, lib: str) -> typing.List[typing.Dict[str, str]]:
+    def implementation_references(self, lib: str) -> list[dict[str, str]]:
         """Get implementation notes for a library.
 
         Args:
@@ -993,9 +961,11 @@ class Element:
         Returns:
             Implementation notes
         """
+        from defelement.implementations import implementations
+
         return implementations[lib].references(self)
 
-    def categories(self, link: bool = True, map_name: bool = True) -> typing.List[str]:
+    def categories(self, link: bool = True, map_name: bool = True) -> list[str]:
         """Get categories.
 
         Args:
@@ -1021,12 +991,14 @@ class Element:
         else:
             return [f"{cnames[c]}" for c in self.data["categories"]]
 
-    def references(self) -> typing.List[str]:
+    def references(self) -> list[str]:
         """Get reference cells.
 
         Returns:
             reference cells
         """
+        from defelement.implementations import implementations
+
         assert self._c is not None
 
         references = self.data["references"] if "references" in self.data else []
@@ -1077,7 +1049,7 @@ class Element:
         return "examples" in self.data
 
     @property
-    def examples(self) -> typing.List[str]:
+    def examples(self) -> list[str]:
         """Get exmaples.
 
         Returns:
@@ -1098,7 +1070,7 @@ class Categoriser:
         self.references = {}
         self.categories = {}
 
-    def recently_added(self, n: int) -> typing.List[Element]:
+    def recently_added(self, n: int) -> list[Element]:
         """Get recently added elements.
 
         Args:
@@ -1111,7 +1083,7 @@ class Categoriser:
             return self.elements[:n]
         return sorted(self.elements, key=lambda e: e.created)[: -n - 1 : -1]
 
-    def recently_updated(self, n: int) -> typing.List[Element]:
+    def recently_updated(self, n: int) -> list[Element]:
         """Get recently updated elements.
 
         Args:
@@ -1175,9 +1147,7 @@ class Categoriser:
                 self.add_element(Element(data, fname))
 
         if settings.github_token is None:
-            warnings.warn(
-                "Building without GitHub token. Timestamps will not be obtained."
-            )
+            warnings.warn("Building without Github token. Timestamps will not be obtained.")
         else:
             g = Github(settings.github_token)
             repo = g.get_repo("DefElement/DefElement")
@@ -1293,7 +1263,7 @@ class Categoriser:
             for i in k:
                 self.add_family(j, i, e.html_name, e.html_filename)
 
-    def elements_in_category(self, c: str) -> typing.List[Element]:
+    def elements_in_category(self, c: str) -> list[Element]:
         """Get elements in a category.
 
         Args:
@@ -1306,7 +1276,7 @@ class Categoriser:
 
     def elements_in_implementation(
         self, i: str, include_dependent_implementations=False
-    ) -> typing.List[Element]:
+    ) -> list[Element]:
         """Get elements in an implementation.
 
         Args:
@@ -1318,12 +1288,10 @@ class Categoriser:
         return [
             e
             for e in self.elements
-            if e.implemented(
-                i, include_dependent_implementations=include_dependent_implementations
-            )
+            if e.implemented(i, include_dependent_implementations=include_dependent_implementations)
         ]
 
-    def elements_by_reference(self, r: str) -> typing.List[Element]:
+    def elements_by_reference(self, r: str) -> list[Element]:
         """Get elements on a reference.
 
         Args:

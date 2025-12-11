@@ -6,16 +6,11 @@ import symfem
 
 from defelement.tools import to_array
 
-if typing.TYPE_CHECKING:
-    from numpy import float64
-    from numpy.typing import NDArray
-
-    Array = NDArray[float64]
-else:
-    Array = typing.Any
+from numpy import float64
+from numpy.typing import NDArray
 
 
-def points(ref: str) -> Array:
+def points(ref: str) -> NDArray[float64]:
     """Get tabulation points for a reference cell.
 
     Args:
@@ -39,12 +34,7 @@ def points(ref: str) -> Array:
 
     if ref == "hexahedron":
         return np.array(
-            [
-                [i / 10, j / 10, k / 10]
-                for i in range(11)
-                for j in range(11)
-                for k in range(11)
-            ]
+            [[i / 10, j / 10, k / 10] for i in range(11) for j in range(11) for k in range(11)]
         )
     if ref == "tetrahedron":
         return np.array(
@@ -57,12 +47,7 @@ def points(ref: str) -> Array:
         )
     if ref == "prism":
         return np.array(
-            [
-                [i / 10, j / 10, k / 10]
-                for i in range(11)
-                for j in range(11 - i)
-                for k in range(11)
-            ]
+            [[i / 10, j / 10, k / 10] for i in range(11) for j in range(11 - i) for k in range(11)]
         )
     if ref == "pyramid":
         return np.array(
@@ -77,7 +62,7 @@ def points(ref: str) -> Array:
     raise ValueError(f"Unsupported cell type: {ref}")
 
 
-def entity_points(ref: str) -> typing.List[typing.List[Array]]:
+def entity_points(ref: str) -> list[list[NDArray[float64]]]:
     """Get tabulation points for sub-entities of a reference cell.
 
     Args:
@@ -98,8 +83,7 @@ def entity_points(ref: str) -> typing.List[typing.List[Array]]:
             row.append(
                 np.array(
                     [
-                        to_array(e.origin)
-                        + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
+                        to_array(e.origin) + sum(i * to_array(a) for i, a in zip(p, e.axes))  # type: ignore
                         for p in epts
                     ]
                 )
@@ -108,9 +92,7 @@ def entity_points(ref: str) -> typing.List[typing.List[Array]]:
     return out
 
 
-def closure_dofs(
-    entity_dofs: typing.List[typing.List[typing.List[int]]], ref: str
-) -> typing.List[typing.List[typing.List[int]]]:
+def closure_dofs(entity_dofs: list[list[list[int]]], ref: str) -> list[list[list[int]]]:
     """Make lists of DOFs associated with the closure of an entity.
 
     Args:
@@ -121,9 +103,7 @@ def closure_dofs(
         Entity closure DOFs
     """
     r = symfem.create_reference(ref)
-    out: typing.List[typing.List[typing.List[int]]] = [
-        [[] for j in i] for i in entity_dofs
-    ]
+    out: list[list[list[int]]] = [[[] for j in i] for i in entity_dofs]
     for dim in range(r.tdim + 1):
         for e_n, e in enumerate(r.sub_entities(dim)):
             for subdim in range(dim + 1):
@@ -133,7 +113,7 @@ def closure_dofs(
     return out
 
 
-def same_span(table0: Array, table1: Array, complete: bool = True) -> bool:
+def same_span(table0: NDArray[float64], table1: NDArray[float64], complete: bool = True) -> bool:
     """Check if two tables span the same space.
 
     Args:
@@ -168,13 +148,9 @@ def same_span(table0: Array, table1: Array, complete: bool = True) -> bool:
 
 def verify(
     ref: str,
-    info0: typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ],
-    info1: typing.Tuple[
-        typing.List[typing.List[typing.List[int]]], typing.Callable[[Array], Array]
-    ],
-) -> typing.Tuple[bool, typing.Optional[str]]:
+    info0: tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]],
+    info1: tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]],
+) -> tuple[bool, str | None]:
     """Run verification.
 
     Args:

@@ -2,12 +2,11 @@
 
 # <intro>
 import typing
+from numpy import float64
+from numpy.typing import NDArray
 
-from defelement.implementations.core import (
-    Array,
-    Element,
-    Implementation,
-)
+from defelement.element import Element
+from defelement.implementations.core import Implementation
 
 
 class SimplefemImplementation(Implementation):
@@ -64,7 +63,7 @@ class SimplefemImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         # </verify1>
         # <verify2>

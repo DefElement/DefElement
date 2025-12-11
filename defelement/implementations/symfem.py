@@ -3,10 +3,11 @@
 import typing
 
 from symfem.finite_element import FiniteElement
+from numpy import float64
+from numpy.typing import NDArray
 
+from defelement.element import Element
 from defelement.implementations.core import (
-    Array,
-    Element,
     Implementation,
     parse_example,
     pypi_name,
@@ -47,9 +48,9 @@ class CachedSymfemTabulator:
             element: Symfem element
         """
         self.element = element
-        self.tables: list[tuple[Array, Array]] = []
+        self.tables: list[tuple[NDArray[float64], NDArray[float64]]] = []
 
-    def tabulate(self, points: Array) -> Array:
+    def tabulate(self, points: NDArray[float64]) -> NDArray[float64]:
         """Tabulate this element.
 
         Args:
@@ -125,7 +126,7 @@ class SymfemImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import symfem
 

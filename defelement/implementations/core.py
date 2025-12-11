@@ -3,16 +3,10 @@
 import re
 import typing
 
-if typing.TYPE_CHECKING:
-    from numpy import float64
-    from numpy.typing import NDArray
+from numpy import float64
+from numpy.typing import NDArray
 
-    from defelement.element import Element
-
-    Array = NDArray[float64]
-else:
-    Array = typing.Any
-    Element = typing.Any
+from defelement.element import Element
 
 
 def pypi_name(package_name: str, dependencies: list[str] | None = None):
@@ -36,9 +30,7 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
                 return version(package_name)
 
             install = (
-                ""
-                if dependencies is None
-                else "pip install " + " ".join(dependencies) + "\n"
+                "" if dependencies is None else "pip install " + " ".join(dependencies) + "\n"
             ) + f"pip install {package_name}"
 
         return Wrapped
@@ -131,7 +123,7 @@ class Implementation:
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get information needed to run verification.
 
         Implementation of this function is optional, but it must be implemented for verification
@@ -254,7 +246,7 @@ class Implementation:
     name: str | None = None
     # Snippet to install the implementation
     install: str | None = None
-    # URL of source of implementation (eg GitHub link)
+    # URL of source of implementation (eg Github link)
     url: str | None = None
     # Set to true if this implementation should be verified
     verification = False

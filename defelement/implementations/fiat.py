@@ -3,10 +3,11 @@
 import typing
 
 import sympy
+from numpy import float64
+from numpy.typing import NDArray
 
+from defelement.element import Element
 from defelement.implementations.core import (
-    Array,
-    Element,
     Implementation,
     parse_example,
     pypi_name,
@@ -95,7 +96,7 @@ class FIATImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[Array], Array]]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         import FIAT
 
@@ -198,9 +199,9 @@ class FIATImplementation(Implementation):
                     edofs[dim][i] = [dof for dof in edofs[dim][i] if dof < reduced_dim]
 
         z = (0,) * sd
-        return edofs, lambda points: e.tabulate(0, points)[z][
-            slice(reduced_dim)
-        ].T.reshape(points.shape[0], value_size, -1)
+        return edofs, lambda points: e.tabulate(0, points)[z][slice(reduced_dim)].T.reshape(
+            points.shape[0], value_size, -1
+        )
 
     @classmethod
     def notes(cls, element: Element) -> list[str]:

@@ -1,0 +1,21 @@
+name: Check dependencies are up to date
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+jobs:
+  check_dependency_versions:
+    name: Check dependencies are up to date
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: actions/checkout@v4
+
+      - run: python3 .github/scripts/check_dependency_versions.py
+        name: Run verification

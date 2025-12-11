@@ -6,13 +6,11 @@ import typing
 
 import yaml
 
-with open(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/polysets")
-) as f:
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../data/polysets")) as f:
     poly_sets = yaml.load(f, Loader=yaml.FullLoader)
 
-named: typing.Dict[str, typing.Tuple[str, str, typing.Dict[str, str]]] = {}
-defs: typing.Dict[str, str] = {}
+named: dict[str, tuple[str, str, dict[str, str]]] = {}
+defs: dict[str, str] = {}
 
 
 def make_name(i: int) -> str:
@@ -86,9 +84,7 @@ def make_poly_set(p: str) -> str:
         the_set = _get_match(r"^\<([^\]]+)\>\[(.+)\]$", p, 2)
         defs = {}
         the_set_out = re.sub(r"\@def\@([^\@]+)\@([^\@]+)\@", replace_def, the_set)
-        the_set_out = re.sub(
-            r"\@defmath\@([^\@]+)\@([^\@]+)\@", replace_defmath, the_set_out
-        )
+        the_set_out = re.sub(r"\@defmath\@([^\@]+)\@([^\@]+)\@", replace_defmath, the_set_out)
         if the_set not in named:
             named[the_set] = (make_name(len(named)), the_set_out, defs)
         return f"{named[the_set][0]}_{{{degree}}}"
@@ -97,9 +93,7 @@ def make_poly_set(p: str) -> str:
         the_set = _get_match(r"^\<([^\]]+)\>\[(.+)\]\^d$", p, 2)
         defs = {}
         the_set_out = re.sub(r"\@def\@([^\@]+)\@([^\@]+)\@", replace_def, the_set)
-        the_set_out = re.sub(
-            r"\@defmath\@([^\@]+)\@([^\@]+)\@", replace_defmath, the_set_out
-        )
+        the_set_out = re.sub(r"\@defmath\@([^\@]+)\@([^\@]+)\@", replace_defmath, the_set_out)
         if the_set not in named:
             named[the_set] = (make_name(len(named)), the_set_out, defs)
         return f"\\left({named[the_set][0]}_{{{degree}}}\\right)^d"
@@ -140,10 +134,7 @@ def make_extra_info(p: str) -> str:
                 if len(named[the_set][2]) > 0:
                     def_txt = "<br />where<ul>"
                     def_txt += "\n".join(
-                        [
-                            f"<li>\\({i}\\) is {j}</li>"
-                            for i, j in named[the_set][2].items()
-                        ]
+                        [f"<li>\\({i}\\) is {j}</li>" for i, j in named[the_set][2].items()]
                     )
                     def_txt += "</ul>"
                 out.append(
@@ -187,9 +178,7 @@ def insert_terms(the_set: str) -> str:
             rf"{escape(j)}_{{\1}}^{{d\\times d}}",
             the_set,
         )
-        the_set = re.sub(
-            rf"{{{{{i}\[([^\]]+)\]\^d}}}}", rf"{escape(j)}_{{\1}}^d", the_set
-        )
+        the_set = re.sub(rf"{{{{{i}\[([^\]]+)\]\^d}}}}", rf"{escape(j)}_{{\1}}^d", the_set)
         the_set = re.sub(rf"{{{{{i}\[([^\]]+)\]}}}}", rf"{escape(j)}_{{\1}}", the_set)
         the_set = re.sub(
             rf"{{{{{i}\[([^\]]+)\]\(([^\)]+)\)}}}}",

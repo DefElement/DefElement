@@ -4,7 +4,8 @@ import typing
 from numpy import float64
 from numpy.typing import NDArray
 
-from defelement.implementations.core import Implementation, Element
+from defelement.element import Element
+from defelement.implementations.core import Implementation
 
 # <pypi_name>
 from defelement.implementations.core import pypi_name
@@ -31,7 +32,9 @@ class NDElementImplementation(Implementation):
     @classmethod
     def example_import(cls) -> str:
         """Get imports to include at start of example."""
-        return "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
+        return (
+            "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
+        )
 
     @classmethod
     def single_example(
@@ -62,9 +65,7 @@ class NDElementImplementation(Implementation):
         params: dict[str, str],
         element: Element,
         example: str,
-    ) -> tuple[
-        list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]
-    ]:
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
         from ndelement.ciarlet import Continuity, Family, create_family
         from ndelement.reference_cell import ReferenceCellType, entity_counts
@@ -99,9 +100,7 @@ class NDElementImplementation(Implementation):
                 entity_dofs[2][0],
             ]
 
-        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose(
-            (2, 0, 1)
-        )
+        return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose((2, 0, 1))
 
     id = "ndelement"
     name = "NDElement"

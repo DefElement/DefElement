@@ -145,9 +145,7 @@ def test_sequence(file, cellname):
             signal.alarm(25)
             if "variant=" in symfem_name:
                 elementname, variant = symfem_name.split(" variant=")
-                term = symfem.create_element(
-                    cellname, elementname, k, variant=variant
-                ).space_dim
+                term = symfem.create_element(cellname, elementname, k, variant=variant).space_dim
             else:
                 term = symfem.create_element(cellname, symfem_name, k).space_dim
             seq[k] = term
@@ -217,9 +215,7 @@ def test_entity_sequences(file, cellname):
                 range(e.reference.tdim), ["vertices", "edges", "faces", "volumes"]
             ):
                 seq[e_name][k] = len(e.entity_dofs(d, 0))
-            for co_d, e_name in zip(
-                range(e.reference.tdim), ["cell", "facets", "ridges", "peaks"]
-            ):
+            for co_d, e_name in zip(range(e.reference.tdim), ["cell", "facets", "ridges", "peaks"]):
                 seq[e_name][k] = len(e.entity_dofs(e.reference.tdim - co_d, 0))
         except NotImplementedError:
             pass

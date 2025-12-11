@@ -2,7 +2,8 @@
 
 import typing
 
-from defelement.implementations.core import Element, Implementation, pypi_name
+from defelement.implementations.core import Implementation, pypi_name
+from defelement.element import Element
 
 
 @pypi_name("bempp-cl", ["numba", "scipy", "meshio"])
