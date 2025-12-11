@@ -5,6 +5,7 @@ from numpy import float64
 from numpy.typing import NDArray
 
 from defelement.implementations.core import Implementation, Element
+
 # <pypi_name>
 from defelement.implementations.core import pypi_name
 
@@ -12,6 +13,7 @@ from defelement.implementations.core import pypi_name
 @pypi_name("ndelement")
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
+
     # </pypi_name>
 
     @classmethod
