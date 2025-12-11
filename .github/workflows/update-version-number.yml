@@ -24,4 +24,4 @@ jobs:
         run: python3 -m pip install PyGitHub
 
       - name: Set version number
-        run: python3 .github/scripts/update_version_number.py ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/update_version_number.py ${{ secrets.PA_TOKEN }}
