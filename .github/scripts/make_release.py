@@ -5,8 +5,6 @@ import github
 
 _, tar_gz, version, access_key = sys.argv
 
-assert version != "2025.09"  # Prevent release when initally merging
-
 git = github.Github(access_key)
 
 defelement = git.get_repo("DefElement/DefElement")
