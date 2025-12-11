@@ -80,6 +80,10 @@ jobs:
 
       - name: Remove build cache
         run: rm -r .defelement-build-cache
+      - name: Remove __pycache__
+        run: |
+          rm -r defelement/__pycache__
+          rm -r defelement/implementations/__pycache__
 
       - name: Make lock file
         run: pip freeze > requirements.lock
