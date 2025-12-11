@@ -1208,9 +1208,10 @@ if settings.processes == 1:
     for e in all_examples:
         build_example(e)
 else:
-    from multiprocessing import Pool
+    import multiprocessing
+    multiprocessing.set_start_method("fork")
 
-    with Pool(settings.processes) as p:
+    with multiprocessing.Pool(settings.processes) as p:
         p.map(build_example, all_examples)
 
 # Index page

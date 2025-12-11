@@ -194,9 +194,10 @@ def verify_example(
 if settings.processes == 1:
     results = [verify_example(e) for e in elements_to_verify]
 else:
-    from multiprocessing import Pool
+    import multiprocessing
+    multiprocessing.set_start_method("fork")
 
-    with Pool(settings.processes) as p:
+    with multiprocessing.Pool(settings.processes) as p:
         results = p.map(verify_example, elements_to_verify)
 
 data: dict[str, dict[str, dict[str, list[str]]]] = {}
