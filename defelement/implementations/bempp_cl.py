@@ -2,7 +2,7 @@
 
 import typing
 
-from defelement.implementations.core import Implementation, pypy_name
+from defelement.implementations.core import Implementation, pypi_name
 from defelement.element import Element
 
 

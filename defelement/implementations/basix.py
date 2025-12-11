@@ -5,7 +5,7 @@ from numpy.typing import NDArray
 import typing
 
 from defelement.element import Element
-from defelement.implementations.core import Implementation, pypy_name
+from defelement.implementations.core import Implementation, pypi_name
 
 
 @pypi_name("fenics-basix")
