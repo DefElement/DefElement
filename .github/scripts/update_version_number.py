@@ -22,6 +22,7 @@ pre_project, post_project = pyproject.split("[project]\n")
 pre_version, post_version = pyproject.split("version = ")
 post_version = post_version.split("\n", 1)[1]
 
+defelement.create_git_ref(ref=f"refs/heads/{version_branch}", sha=branch.commit.sha)
 new_branch = defelement.get_branch(version_branch)
 defelement.update_file(
     "pyproject.toml",
