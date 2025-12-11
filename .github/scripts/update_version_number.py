@@ -34,6 +34,6 @@ defelement.update_file(
 pr = defelement.create_pull(
     title="Update version number", body="", base="main", head=version_branch
 )
-pr.enable_automerge()
+pr.enable_automerge("SQUASH")
 
 print(f"branch={version_branch}")
