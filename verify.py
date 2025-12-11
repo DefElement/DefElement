@@ -11,95 +11,6 @@ from defelement.element import Categoriser, Element
 from defelement.implementations import parse_example, verifications, versions
 from defelement.verification import verify
 
-start_all = datetime.now()
-
-parser = argparse.ArgumentParser(description="Verify elements")
-parser.add_argument(
-    "destination",
-    metavar="destination",
-    nargs="?",
-    default=None,
-    help="Name of output json file.",
-)
-parser.add_argument("--test", metavar="test", default=None, help="Verify fewer elements.")
-parser.add_argument(
-    "--processes",
-    metavar="processes",
-    default=None,
-    help="The number of processes to run the verification on.",
-)
-parser.add_argument(
-    "--fail-on-missing-libraries",
-    action="store_true",
-    help="Fail if library is not installed.",
-)
-parser.add_argument(
-    "--print-reasons", action="store_true", help="Show reasons for failed verification"
-)
-parser.add_argument(
-    "--assert-passing",
-    action="store_true",
-    help="Assert that verification passes for all elements",
-)
-parser.add_argument(
-    "--impl", metavar="impl", default=None, help="libraries to run verification for"
-)
-
-args = parser.parse_args()
-if args.destination is not None:
-    settings.set_verification_json(args.destination)
-if args.processes is not None:
-    settings.set_processes(int(args.processes))
-if args.test is None:
-    test_elements = None
-elif args.test == "auto":
-    test_elements = [
-        "buffa-christiansen",
-        "direct-serendipity",
-        "dual",
-        "hellan-herrmann-johnson",
-        "hsieh-clough-tocher",
-        "lagrange",
-        "nedelec1",
-        "raviart-thomas",
-        "regge",
-        "serendipity",
-        "taylor-hood",
-        "vector-bubble-enriched-Lagrange",
-        "enriched-galerkin",
-        "bernardi-raugel",
-    ]
-else:
-    test_elements = args.test.split(",")
-if args.impl is None:
-    test_implementations = None
-else:
-    test_implementations = args.impl.split(",")
-skip_missing = not args.fail_on_missing_libraries
-print_reasons = args.print_reasons
-assert_passing = args.assert_passing
-
-categoriser = Categoriser()
-categoriser.load_references(os.path.join(settings.data_path, "references"))
-categoriser.load_families(os.path.join(settings.data_path, "families"))
-
-# Load elements from .def files
-categoriser.load_folder(settings.element_path)
-
-elements_to_verify = []
-for e in categoriser.elements:
-    if test_elements is None or e.filename in test_elements:
-        for eg in e.examples:
-            implementations = [
-                i
-                for i in verifications
-                if i != "symfem"
-                and e.implemented(i)
-                and (test_implementations is None or i in test_implementations)
-            ]
-            if len(implementations) > 0:
-                elements_to_verify.append((e, eg, implementations))
-
 
 def verify_example(
     element: tuple[Element, str, list[str]],
@@ -191,65 +102,154 @@ def verify_example(
     return results
 
 
-if settings.processes == 1:
-    results = [verify_example(e) for e in elements_to_verify]
-else:
-    import multiprocessing
+if __name__ == "__main__":
+    start_all = datetime.now()
 
-    multiprocessing.set_start_method("fork")
-
-    with multiprocessing.Pool(settings.processes) as p:
-        results = p.map(verify_example, elements_to_verify)
-
-data: dict[str, dict[str, dict[str, list[str]]]] = {}
-for r in results:
-    for i0, j0 in r.items():
-        if i0 not in data:
-            data[i0] = {}
-        for i1, j1 in j0.items():
-            if i1 not in data[i0]:
-                data[i0][i1] = {}
-            for i2, j2 in j1.items():
-                if i2 not in data[i0][i1]:
-                    data[i0][i1][i2] = []
-                data[i0][i1][i2] += j2
-
-now = datetime.now().strftime("%Y-%m-%d")
-metadata: dict[str, typing.Any] = {"date": now}
-
-try:
-    with open(settings.verification_history_json) as f:
-        history = json.load(f)
-except FileNotFoundError:
-    history = {}
-
-for impl in set(j for i in data.values() for j in i):
-    metadata[impl] = {"version": versions[impl]()}
-    if impl not in history:
-        history[impl] = []
-    history[impl].append(
-        {
-            "date": now,
-            "pass": sum(len(i[impl]["pass"]) for i in data.values() if impl in i),
-            "version": versions[impl](),
-            "total": sum(
-                len(i[impl]["pass"]) + len(i[impl]["fail"]) for i in data.values() if impl in i
-            ),
-        }
+    parser = argparse.ArgumentParser(description="Verify elements")
+    parser.add_argument(
+        "destination",
+        metavar="destination",
+        nargs="?",
+        default=None,
+        help="Name of output json file.",
+    )
+    parser.add_argument("--test", metavar="test", default=None, help="Verify fewer elements.")
+    parser.add_argument(
+        "--processes",
+        metavar="processes",
+        default=None,
+        help="The number of processes to run the verification on.",
+    )
+    parser.add_argument(
+        "--fail-on-missing-libraries",
+        action="store_true",
+        help="Fail if library is not installed.",
+    )
+    parser.add_argument(
+        "--print-reasons", action="store_true", help="Show reasons for failed verification"
+    )
+    parser.add_argument(
+        "--assert-passing",
+        action="store_true",
+        help="Assert that verification passes for all elements",
+    )
+    parser.add_argument(
+        "--impl", metavar="impl", default=None, help="libraries to run verification for"
     )
 
+    args = parser.parse_args()
+    if args.destination is not None:
+        settings.set_verification_json(args.destination)
+    if args.processes is not None:
+        settings.set_processes(int(args.processes))
+    if args.test is None:
+        test_elements = None
+    elif args.test == "auto":
+        test_elements = [
+            "buffa-christiansen",
+            "direct-serendipity",
+            "dual",
+            "hellan-herrmann-johnson",
+            "hsieh-clough-tocher",
+            "lagrange",
+            "nedelec1",
+            "raviart-thomas",
+            "regge",
+            "serendipity",
+            "taylor-hood",
+            "vector-bubble-enriched-Lagrange",
+            "enriched-galerkin",
+            "bernardi-raugel",
+        ]
+    else:
+        test_elements = args.test.split(",")
+    if args.impl is None:
+        test_implementations = None
+    else:
+        test_implementations = args.impl.split(",")
+    skip_missing = not args.fail_on_missing_libraries
+    print_reasons = args.print_reasons
+    assert_passing = args.assert_passing
 
-with open(settings.verification_json, "w") as f:
-    json.dump(
-        {
-            "metadata": metadata,
-            "verification": data,
-        },
-        f,
-    )
-with open(settings.verification_history_json, "w") as f:
-    json.dump(history, f)
+    categoriser = Categoriser()
+    categoriser.load_references(os.path.join(settings.data_path, "references"))
+    categoriser.load_families(os.path.join(settings.data_path, "families"))
 
-if assert_passing:
-    for d in data.values():
-        assert len(d[impl]["fail"]) == 0
+    # Load elements from .def files
+    categoriser.load_folder(settings.element_path)
+
+    elements_to_verify = []
+    for e in categoriser.elements:
+        if test_elements is None or e.filename in test_elements:
+            for eg in e.examples:
+                implementations = [
+                    i
+                    for i in verifications
+                    if i != "symfem"
+                    and e.implemented(i)
+                    and (test_implementations is None or i in test_implementations)
+                ]
+                if len(implementations) > 0:
+                    elements_to_verify.append((e, eg, implementations))
+
+    if settings.processes == 1:
+        results = [verify_example(e) for e in elements_to_verify]
+    else:
+        import multiprocessing
+
+        multiprocessing.set_start_method("fork")
+
+        with multiprocessing.Pool(settings.processes) as p:
+            results = p.map(verify_example, elements_to_verify)
+
+    data: dict[str, dict[str, dict[str, list[str]]]] = {}
+    for r in results:
+        for i0, j0 in r.items():
+            if i0 not in data:
+                data[i0] = {}
+            for i1, j1 in j0.items():
+                if i1 not in data[i0]:
+                    data[i0][i1] = {}
+                for i2, j2 in j1.items():
+                    if i2 not in data[i0][i1]:
+                        data[i0][i1][i2] = []
+                    data[i0][i1][i2] += j2
+
+    now = datetime.now().strftime("%Y-%m-%d")
+    metadata: dict[str, typing.Any] = {"date": now}
+
+    try:
+        with open(settings.verification_history_json) as f:
+            history = json.load(f)
+    except FileNotFoundError:
+        history = {}
+
+    for impl in set(j for i in data.values() for j in i):
+        metadata[impl] = {"version": versions[impl]()}
+        if impl not in history:
+            history[impl] = []
+        history[impl].append(
+            {
+                "date": now,
+                "pass": sum(len(i[impl]["pass"]) for i in data.values() if impl in i),
+                "version": versions[impl](),
+                "total": sum(
+                    len(i[impl]["pass"]) + len(i[impl]["fail"]) for i in data.values() if impl in i
+                ),
+            }
+        )
+
+    with open(settings.verification_json, "w") as f:
+        json.dump(
+            {
+                "metadata": metadata,
+                "verification": data,
+            },
+            f,
+        )
+    with open(settings.verification_history_json, "w") as f:
+        json.dump(history, f)
+
+    if assert_passing:
+        for d in data.values():
+            assert len(d[impl]["fail"]) == 0
