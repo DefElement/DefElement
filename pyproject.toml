@@ -3,11 +3,6 @@ build-backend = "flit_core.buildapi"
 requires = ["flit_core >=3.8.0,<4"]
 
 [project]
-[build-system]
-build-backend = "flit_core.buildapi"
-requires = ["flit_core >=3.8.0,<4"]
-
-[project]
 name = "defelement"
 description = "an encyclopedia of finite element definitions"
 version="2025.12"

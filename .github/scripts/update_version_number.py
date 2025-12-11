@@ -19,7 +19,7 @@ pyproject_file = defelement.get_contents("pyproject.toml", branch.commit.sha)
 pyproject = pyproject_file.decoded_content.decode("utf8")
 
 pre_project, post_project = pyproject.split("[project]\n")
-pre_version, post_version = pyproject.split("version = ")
+pre_version, post_version = post_project.split("version = ")
 post_version = post_version.split("\n", 1)[1]
 
 defelement.create_git_ref(ref=f"refs/heads/{version_branch}", sha=branch.commit.sha)
