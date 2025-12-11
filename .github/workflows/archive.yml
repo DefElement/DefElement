@@ -1,0 +1,80 @@
+name: Archive DefElement
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check-version-number:
+    name: Check version number
+    runs-on: ubuntu-22.04
+    outputs:
+      release: ${{ steps.version.outputs.release }}
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/checkout@v4
+
+      - name: Install PyGitHub
+        run: python3 -m pip install PyGitHub
+
+      - name: Set version number
+        run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }}
+        id: version
+
+  build-archive:
+    name: Build archive
+    runs-on: ubuntu-22.04
+    needs:
+      - check-version-number
+    if: needs.check-version-number.outputs.release != 'no'
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.update-version-number.outputs.branch }}
+      - name: Clone verification
+        uses: actions/checkout@v4
+        with:
+          path: ./verification
+          repository: DefElement/DefElement
+          ref: verification
+        continue-on-error: true
+
+      - run: mkdir -p ~/.local/share/fonts
+        name: Make font folder
+      - name: Clone Varela Round
+        uses: actions/checkout@v4
+        with:
+          path: ./varela-r
+          repository: avrahamcornfeld/Varela-Round-Hebrew
+          ref: master
+      - run: cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
+        name: Install Varela Round
+      - name: Download and install Computer Modern
+        run: |
+          wget https://downloads.sourceforge.net/project/cm-unicode/cm-unicode/0.7.0/cm-unicode-0.7.0-otf.tar.xz
+          tar -xf cm-unicode-0.7.0-otf.tar.xz
+          cp cm-unicode-0.7.0/cmunti.otf ~/.local/share/fonts/
+
+      - run: python3 -m pip install .
+        name: Install defelement
+      - run: python3 build.py _html --verification-json verification/verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
+        name: Build website HTML
+
+      - name: Make lock file
+        run: pip freeze > requirements.lock
+
+      - name: Make tar.gz
+        run: tar -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
+
+      - name: Install PyGitHub
+        run: python3 -m pip install PyGitHub
+      - name: Make release
+        run: python3 .github/scripts/make_release.py ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ needs.check-version-number.outputs.release }} ${{ secrets.GITHUB_TOKEN }}

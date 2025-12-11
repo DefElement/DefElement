@@ -1,0 +1,26 @@
+name: Archive DefElement
+
+on:
+  schedule:
+    - cron: "0 7 2 * */3"
+  workflow_dispatch:
+
+jobs:
+  update-version-number:
+    name: Update version number
+    runs-on: ubuntu-22.04
+    outputs:
+      branch: ${{ steps.version.outputs.branch }}
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/checkout@v4
+
+      - name: Install PyGitHub
+        run: python3 -m pip install PyGitHub
+
+      - name: Set version number
+        run: python3 .github/scripts/update_version_number.py ${{ secrets.GITHUB_TOKEN }}
+        id: version
