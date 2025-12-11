@@ -172,8 +172,6 @@ def verify_example(
                 print(f"{e.filename} {i} {eg} {red}\u2715{default}")
                 if print_reasons:
                     print(f"  {info}")
-        except (KeyboardInterrupt, RuntimeError) as err:
-            raise err
         except ImportError as err:
             if skip_missing:
                 print(f"{output_code} not installed")
@@ -182,6 +180,8 @@ def verify_example(
         except NotImplementedError:
             results[e.filename][output_code]["not implemented"].append(eg)
             print(f"{e.filename} {i} {eg} {blue}\u2013{default}")
+        except (KeyboardInterrupt, RuntimeError) as err:
+            raise err
         except BaseException as err:
             results[e.filename][output_code]["fail"].append(eg)
             print(f"{e.filename} {i} {eg} {red}\u2715{default}")
