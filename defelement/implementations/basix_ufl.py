@@ -119,9 +119,11 @@ class BasixUFLImplementation(Implementation):
                 entity_dofs[2][0],
             ]
 
-        return entity_dofs, lambda points: e.tabulate(0, points)[0].reshape(
-            points.shape[0], e.reference_value_size, -1
-        )
+        def tabulate(points):
+            table = e.tabulate(0, points)[0]
+            return table.reshape(points.shape[0], e.reference_value_size, -1)
+
+        return entity_dofs, tabulate
 
     id = "basix.ufl"
     name = "Basix.UFL"
@@ -181,6 +183,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         """Get verification data."""
         import symfem
         import symfem.basix_interface
+        import basix.ufl
 
         kwargs = {}
         if "variant" in params:
@@ -188,6 +191,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         symfem_e = symfem.create_element(reference, name, degree, **kwargs)  # type: ignore
 
         e = symfem.basix_interface.create_basix_element(symfem_e, ufl=True)
+        assert isinstance(e, basix.ufl._ElementBase)
 
         entity_dofs = e.entity_dofs
         if reference == "triangle":
@@ -208,9 +212,11 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
                 entity_dofs[2][0],
             ]
 
-        return entity_dofs, lambda points: e.tabulate(0, points)[0].reshape(
-            points.shape[0], e.reference_value_size, -1
-        )
+        def tabulate(points):
+            table = e.tabulate(0, points)[0]
+            return table.reshape(points.shape[0], e.reference_value_size, -1)
+
+        return entity_dofs, tabulate
 
     @classmethod
     def implemented(cls, element: Element) -> bool:
