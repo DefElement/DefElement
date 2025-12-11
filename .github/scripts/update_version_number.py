@@ -4,7 +4,7 @@ from datetime import datetime
 import github
 
 version = datetime.now().strftime("%Y.%m")
-branch = f"v{version}"
+version_branch = f"v{version}"
 
 _, access_key = sys.argv
 
@@ -22,15 +22,15 @@ pre_project, post_project = pyproject.split("[project]\n")
 pre_version, post_version = pyproject.split("version = ")
 post_version = post_version.split("\n", 1)[1]
 
-new_branch = defelement.get_branch(branch)
+new_branch = defelement.get_branch(version_branch)
 defelement.update_file(
     "pyproject.toml",
     "Update version number",
     f'{pre_project}[project]\n{pre_version}version="{version}"\n{post_version}',
     sha=pyproject_file.sha,
-    branch=branch,
+    branch=version_branch,
 )
-pr = defelement.create_pull(title="Update version number", body="", base="main", head=branch)
+pr = defelement.create_pull(title="Update version number", body="", base="main", head=version_branch)
 pr.enable_automerge()
 
-print(f"branch={branch}")
+print(f"branch={version_branch}")
