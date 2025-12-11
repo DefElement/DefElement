@@ -21,7 +21,7 @@ jobs:
       - name: Install PyGitHub
         run: python3 -m pip install PyGitHub
 
-      - name: Set version number
+      - name: Check version number
         run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }}
         id: version
 
