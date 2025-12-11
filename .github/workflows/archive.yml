@@ -22,7 +22,7 @@ jobs:
         run: python3 -m pip install PyGitHub
 
       - name: Check version number
-        run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }} >> $GITHUB_OUTPUT
         id: version
 
   build-archive:
