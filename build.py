@@ -1003,6 +1003,8 @@ if __name__ == "__main__":
     vs = []
     for i in verifications:
         if i != "symfem":
+            if i.startswith("*(") and i.endswith(")"):
+                continue
             vs.append(i)
             if not include_simplefem and i == "simplefem":
                 continue
