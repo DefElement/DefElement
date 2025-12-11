@@ -1209,6 +1209,7 @@ if settings.processes == 1:
         build_example(e)
 else:
     import multiprocessing
+
     multiprocessing.set_start_method("fork")
 
     with multiprocessing.Pool(settings.processes) as p:

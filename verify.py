@@ -172,8 +172,8 @@ def verify_example(
                 print(f"{e.filename} {i} {eg} {red}\u2715{default}")
                 if print_reasons:
                     print(f"  {info}")
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
+        except (KeyboardInterrupt, RuntimeError) as err:
+            raise err
         except ImportError as err:
             if skip_missing:
                 print(f"{output_code} not installed")
