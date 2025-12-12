@@ -1,5 +1,12 @@
 # DefElement
 
+|     | Badges |
+| --- | ------ |
+| Deployment | [![Build and deploy](https://github.com/DefElement/DefElement/actions/workflows/build.yml/badge.svg)](https://github.com/DefElement/DefElement/actions/workflows/build.yml) |
+| CI | [![Test and build](https://github.com/DefElement/DefElement/actions/workflows/test-and-build.yml/badge.svg)](https://github.com/DefElement/DefElement/actions/workflows/test-and-build.yml) [![Check dependency versions](https://github.com/DefElement/DefElement/actions/workflows/check_dependency_versions.yml/badge.svg)](https://github.com/DefElement/DefElement/actions/workflows/check_dependency_versions.yml) |
+| Verification | [![Verification](https://github.com/DefElement/DefElement/actions/workflows/verification.yml/badge.svg)](https://github.com/DefElement/DefElement/actions/workflows/verification.yml) |
+| Archived snapshot | [![Zenodo archive](https://zenodo.org/badge/DOI/10.5281/zenodo.17904469.svg)](https://doi.org/10.5281/zenodo.17904469) |
+
 This repo contains code to generate the website
 [DefElement: an encylopedia of finite element definitions](https://defelement.org).
 
