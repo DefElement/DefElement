@@ -35,7 +35,8 @@ with open(
 
 need_updating = {}
 for lib, version in requirements.items():
-    latest = requests.get(f"https://pypi.org/pypi/{lib}/json").json()["info"]["version"]
+    libname = lib.split("@")[0].split("[")[0]
+    latest = requests.get(f"https://pypi.org/pypi/{libname}/json").json()["info"]["version"]
     if version == latest:
         print(f"{green}{lib}{default} is at latest version ({version})")
     else:
