@@ -1205,16 +1205,19 @@ if __name__ == "__main__":
         f.write(make_html_forwarding_page("/verification/"))
 
     for i in verifications:
-        if i != "symfem":
-            write_html_page(
-                os.path.join(settings.html_path, f"verification/{i}.html"),
-                f"{implementations[i].name} verification",
-                impl_content[i],
-                extra_head=(
-                    "<script src='https://cdn.plot.ly/plotly-2.27.0.min.js' charset='utf-8' "
-                    "type='text/javascript'></script>"
-                ),
-            )
+        if i == "symfem":
+            continue
+        if i.startswith("*(") and i.endswith(")"):
+            continue
+        write_html_page(
+            os.path.join(settings.html_path, f"verification/{i}.html"),
+            f"{implementations[i].name} verification",
+            impl_content[i],
+            extra_head=(
+                "<script src='https://cdn.plot.ly/plotly-2.27.0.min.js' charset='utf-8' "
+                "type='text/javascript'></script>"
+            ),
+        )
 
     # Make example pages
     print("Making examples")
