@@ -15,7 +15,7 @@ release = defelement.create_git_tag_and_release(
     f"v{version}",
     f"v{version}",
     f"v{version}",
-    f"Snapshot of DefElement, {datetime.now().strftime('%d %B %Y')}.\n\nThis release is archived at [https://doi.org/10.5281/zenodo.17904469](doi.org/10.5281/zenodo.17904469)",
+    f"Snapshot of DefElement, {datetime.now().strftime('%d %B %Y')}.\n\nThis release is archived at [doi.org/10.5281/zenodo.17904469](https://doi.org/10.5281/zenodo.17904469)",
     branch.commit.sha,
     "commit",
 )
