@@ -40,4 +40,4 @@ is released under a [Creative Commons Attribution 4.0 International (CC BY 4.0) 
 Font Awesome (`files/fontawesome`) is released under a [Font Awesome Free License](files/fontawesome/LICENSE.txt).
 
 ## Archive
-Archived snapshots of code for building DefElement and website builds can be found at https://doi.org/10.5281/zenodo.17904469
+Archived snapshots of code for building DefElement and website builds can be found at https://doi.org/10.5281/zenodo.17904468
