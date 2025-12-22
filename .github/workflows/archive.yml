@@ -100,3 +100,6 @@ jobs:
         run: python3 -m pip install PyGitHub
       - name: Make release
         run: python3 .github/scripts/make_release.py ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ needs.check-version-number.outputs.release }} ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Zenodo
+        run: python3 .github/scripts/upload_to_zenodo ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ secrets.ZENODO_VERSION }}

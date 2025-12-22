@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "upload_type": "software",
+    "license": "mit",
+    "access_right": "open",
+    "creators": [
+      {
+        "name": "Scroggs, Matthew W.",
+        "affiliation": "University College London",
+        "orcid": "0000-0002-4658-2443"
+      },
+      {
+        "name": "Brubeck, Pablo D.",
+        "affiliation": "Oxford University",
+        "orcid": "0000-0002-3824-0080"
+      },
+      {
+        "name": "Dean, Joseph P.",
+        "affiliation": "University of Cambridge",
+        "orcid": "0000-0001-7499-3373"
+      },
+      {
+        "name": "Dokken, J\u00f8rgen S.",
+        "affiliation": "Simula Research Laboratory",
+        "orcid": "0000-0001-6489-8858"
+      },
+      {
+        "name": "Marsden, India",
+        "affiliation": "Oxford University",
+        "orcid": "0009-0006-0152-4780"
+      }
+    ],
+    "title": "DefElement: an encyclopedia of finite element definitions",
+    "version": "2025.12",
+    "publication_date": "2025-12-01",
+    "keywords": ["finite element method"]
+  }
+}
