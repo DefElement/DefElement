@@ -78,6 +78,11 @@ jobs:
       - run: python3 build.py _html --verification-json verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
         name: Build website HTML
 
+      - name: Install implementations
+        run: |
+          python3 -m pip install setuptools
+          python3 install_implementations.py
+
       - name: Remove build cache
         run: rm -r .defelement-build-cache
       - name: Remove __pycache__
@@ -86,7 +91,7 @@ jobs:
           rm -r defelement/implementations/__pycache__
 
       - name: Make lock file
-        run: pip freeze > requirements.lock
+        run: python3 -m pip freeze > requirements.lock
 
       - name: Make tar.gz
         run: tar --exclude '.git' -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
@@ -95,3 +100,6 @@ jobs:
         run: python3 -m pip install PyGitHub
       - name: Make release
         run: python3 .github/scripts/make_release.py ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ needs.check-version-number.outputs.release }} ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Zenodo
+        run: python3 .github/scripts/upload_to_zenodo ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ secrets.ZENODO_TOKEN }}
