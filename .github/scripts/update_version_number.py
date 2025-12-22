@@ -8,7 +8,7 @@ version_branch = f"v{version}"
 
 _, access_key = sys.argv
 
-git = github.Github(access_key)
+git = github.Github(auth=github.Auth.Token(access_key))
 
 defelement = git.get_repo("DefElement/DefElement")
 branch = defelement.get_branch("main")
