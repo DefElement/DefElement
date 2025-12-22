@@ -86,7 +86,7 @@ jobs:
           rm -r defelement/implementations/__pycache__
 
       - name: Make lock file
-        run: pip freeze > requirements.lock
+        run: python3 -m pip freeze > requirements.lock
 
       - name: Make tar.gz
         run: tar --exclude '.git' -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
