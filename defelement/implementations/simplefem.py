@@ -105,7 +105,7 @@ class SimplefemImplementation(Implementation):
 
             for i, p in enumerate(mapped_points):
                 for j in range(degree):
-                    table[i, 0, j] = e.evaluate(j, p)
+                    table[i, 0, j] = e.evaluate(j, p)[0]
             return table
 
         # </verify5>
