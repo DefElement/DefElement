@@ -78,6 +78,11 @@ jobs:
       - run: python3 build.py _html --verification-json verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
         name: Build website HTML
 
+      - name: Install implementations
+        run: |
+          python3 -m pip install setuptools
+          python3 install_implementations.py
+
       - name: Remove build cache
         run: rm -r .defelement-build-cache
       - name: Remove __pycache__
