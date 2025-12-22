@@ -19,7 +19,7 @@ defelement.create_git_ref(ref=f"refs/heads/{branch_name}", sha=main_branch.commi
 new_branch = defelement.get_branch(branch_name)
 
 # Update pyproject.toml
-pyproject_file = defelement.get_contents("pyproject.toml", branch.commit.sha)
+pyproject_file = defelement.get_contents("pyproject.toml", main_branch.commit.sha)
 pyproject = pyproject_file.decoded_content.decode("utf8")
 pre_project, post_project = pyproject.split("[project]\n")
 pre_version, post_version = post_project.split("version = ")
@@ -34,7 +34,7 @@ defelement.update_file(
 )
 
 # Update .zenodo.json
-zenodo_file = defelement.get_contents(".zenodo.json", branch.commit.sha)
+zenodo_file = defelement.get_contents(".zenodo.json", main_branch.commit.sha)
 zenodo = zenodo_file.decoded_content.decode("utf8")
 pre_version, post_version = post_project.split('"version": "')
 post_version = post_version.split('"', 1)[1]
