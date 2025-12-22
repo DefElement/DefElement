@@ -137,7 +137,7 @@ jobs:
       - name: Check that two verifications runs give the same results
         run: python3 .github/scripts/compare_json.py verification-serial.json verification-4.json
 
-      - run: python3 verify.py --fail-on-missing-libraries --impl simplefem --assert-passing
+      - run: python3 verify.py --fail-on-missing-libraries --impl simplefem --assert-passing --print-reasons
         name: Check that simplefem verification passes
 
   run-tests:
