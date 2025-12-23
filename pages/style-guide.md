@@ -13,7 +13,7 @@ This website is called DefElement, with a capital D and capital E, with no space
 More detail on referring the site itself can be found on the [branding page](branding.md).
 
 ### Notation
-The notation used on DefElement can be found [in this list](ciarlet.md#Notation).
+The notation used on DefElement can be found [in this list](finite-elements.md#Notation).
 
 ### Reference cell
 The cell \({{symbols.reference}}\) on which an element is defined should always be referred to as the reference
@@ -31,3 +31,5 @@ References to papers, books, etc should follow the following style guidance:
 ### Sobolev spaces
 When written in text, the spaces H(div) and H(curl) should be written as text, and not in math-mode.
 
+### Sub-entities
+Hypenated, not <em>subentities</em>.

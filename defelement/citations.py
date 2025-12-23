@@ -32,3 +32,12 @@ kirby_mapping = {
     "year": "2018",
     "doi": "10.5802/smai-jcm.33",
 }
+
+defelement_paper = {
+    "type": "unpublished",
+    "author": "Scroggs, Matthew W. and Brubeck, Pablo D. and Dean, Joseph P. and Dokken, J&oslash;rgen S. and Marsden, India",
+    "title": "DefElement: an encyclopedia of finite element definitions",
+    "year": "2025",
+    "howpublished": "submitted to Computational Science and Engineering",
+    "doi": "10.48550/arXiv.2506.20188",
+}

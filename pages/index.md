@@ -50,7 +50,7 @@ page describes how these are defined for that element, and gives examples of the
 functions they lead to for a selection of low degree spaces.
 
 You can read a detailed description of how the finite element definitions can be understood
-on the [how to understand a finite element page](ciarlet.md).
+on the [how to understand a finite element page](finite-elements.md).
 
 ## Implementations of finite elements
 There are a large number of libraries that implement finite elements. On each element's page,

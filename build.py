@@ -187,6 +187,12 @@ if __name__ == "__main__":
     with open(os.path.join(settings.html_path, "CNAME"), "w") as f:
         f.write("defelement.org")
 
+    # Load categories and reference cells
+    categoriser = Categoriser()
+    categoriser.load_categories(os.path.join(settings.data_path, "categories"))
+    categoriser.load_references(os.path.join(settings.data_path, "references"))
+    categoriser.load_families(os.path.join(settings.data_path, "families"))
+
     # Make pages
     for file in os.listdir(settings.pages_path):
         if file.endswith(".md"):
@@ -196,10 +202,29 @@ if __name__ == "__main__":
             with open(os.path.join(settings.pages_path, file)) as f:
                 metadata, content = parse_metadata(f.read())
 
+            if "redirect" in metadata:
+                with open(os.path.join(settings.html_path, f"{fname}.html"), "w") as f:
+                    f.write(make_html_forwarding_page("/" + metadata["redirect"].replace(".md", ".html")))
+                continue
+
             if "authors" in metadata:
                 content = insert_author_info(content, metadata["authors"], f"{fname}.html")
 
             content = markup(content)
+
+            if "{{REFERENCE_CELL_NUMBERING}}" in content:
+                reference_cell_numbering = ""
+                for cell in categoriser.references.keys():
+                    if cell == "dual polygon":
+                        for nsides in [4, 5, 6]:
+                            reference_cell_numbering += heading_with_self_ref("h2", f"Dual polygon ({nsides})")
+                            reference_cell_numbering += plotting.plot_reference(
+                                symfem.create_reference(f"dual polygon({nsides})")
+                            )
+                    else:
+                        reference_cell_numbering += heading_with_self_ref("h2", cap_first(cell))
+                        reference_cell_numbering += plotting.plot_reference(symfem.create_reference(cell))
+                content = content.replace("{{REFERENCE_CELL_NUMBERING}}", reference_cell_numbering)
 
             write_html_page(
                 os.path.join(settings.html_path, f"{fname}.html"),
@@ -208,12 +233,6 @@ if __name__ == "__main__":
             )
             end = datetime.now()
             print(f" (completed in {(end - start).total_seconds():.2f}s)")
-
-    # Load categories and reference cells
-    categoriser = Categoriser()
-    categoriser.load_categories(os.path.join(settings.data_path, "categories"))
-    categoriser.load_references(os.path.join(settings.data_path, "references"))
-    categoriser.load_families(os.path.join(settings.data_path, "families"))
 
     # Load elements from .def files
     categoriser.load_folder(settings.element_path)
@@ -377,10 +396,10 @@ if __name__ == "__main__":
         if len(ndofs) > 0:
             element_data.append(("Number of DOFs", ndofs))
 
-        # Number of DOFs on subentities
+        # Number of DOFs on sub-entities
         ndofs = e.entity_dof_counts()
         if len(ndofs) > 0:
-            element_data.append(("Number of DOFs<breakable>on subentities", ndofs))
+            element_data.append(("Number of DOFs<breakable>on sub-entities", ndofs))
 
         # Mapping
         mapping = e.mapping()
@@ -1108,14 +1127,14 @@ if __name__ == "__main__":
 
     c = (
         "</table>"
-        "<br /><br />"
-        "For each element in the table above, the verification test passes for an example if:"
+        "<p>For each element in the table above, the verification test passes for an example if:</p>"
         "<ul>"
         "<li>The element's basis functions span the same space as Symfem.</li>"
         "<li>The number of DOFs associated with each sub-entity of the cell is the same as Symfem.</li>"
         "<li>The element has the same continuity between cells as Symfem.</li>"
         "</ul>"
-        "The symbols in the table have the following meaning:"
+        "<p>The algorithm used to perform verification is described in detail in the DefElement paper {{citation::defelement_paper}}.</p>"
+        "<p>The symbols in the table have the following meaning:</p>"
     )
     content += c
     content += (
@@ -1125,8 +1144,8 @@ if __name__ == "__main__":
         f"<tr><td>{orange_check}</td><td>Verification passes for some examples, but not all</td></tr>"
         f"<tr><td>{red_check}</td><td>Verification fails for all examples</td></tr>"
         "</table>"
-        "<br /><br />You can view more details of which examples pass and fail on the "
-        "<a href='/verification/detailed.html'>verification with full detail page</a>."
+        "<p>You can view more details of which examples pass and fail on the "
+        "<a href='/verification/detailed.html'>verification with full detail page</a>.</p>"
     )
     long_content += c
     long_content += (
@@ -1135,8 +1154,8 @@ if __name__ == "__main__":
         f"<tr><td>{red_check}</td><td>Verification fails</td></tr>"
         f"<tr><td>{blue_minus}</td><td>Example not implemented</td></tr>"
         "</table>"
-        "<br /><br />You can view a summarised version of this information on the "
-        "<a href='/verification/index.html'>verification page</a>."
+        "<p>You can view a summarised version of this information on the "
+        "<a href='/verification/index.html'>verification page</a>.</p>"
     )
     for i in impl_content:
         impl_content[i] += c
@@ -1145,14 +1164,14 @@ if __name__ == "__main__":
             f"<tr><td>{green_check}</td><td>Verification passes</td></tr>"
             f"<tr><td>{red_check}</td><td>Verification fails</td></tr>"
             "</table>"
-            "<br /><br />You can information about verification of other libraries on the "
-            "<a href='/verification/index.html'>verification page</a>."
+            "<p>You can information about verification of other libraries on the "
+            "<a href='/verification/index.html'>verification page</a>.</p>"
         )
     if os.path.isfile(settings.verification_json):
         os.system(f"cp {settings.verification_json} {settings.html_path}/verification.json")
         c = (
-            "<br /><br />The verification data is also available "
-            "<a href='/verification.json' target='new'>in JSON format</a>."
+            "<p>The verification data is also available "
+            "<a href='/verification.json' target='new'>in JSON format</a>.</p>"
         )
         content += c
         long_content += c
@@ -1194,12 +1213,12 @@ if __name__ == "__main__":
     content += c
     long_content += c
     write_html_page(
-        os.path.join(settings.html_path, "verification/index.html"), "Verification", content
+        os.path.join(settings.html_path, "verification/index.html"), "Verification", markup(content)
     )
     write_html_page(
         os.path.join(settings.html_path, "verification/detailed.html"),
         "Verification: full detail",
-        long_content,
+        markup(long_content),
     )
     with open(os.path.join(settings.html_path, "verification.html"), "w") as f:
         f.write(make_html_forwarding_page("/verification/"))
@@ -1571,26 +1590,6 @@ if __name__ == "__main__":
     write_html_page(
         os.path.join(settings.htmlindices_path, "references/index.html"),
         "Reference cells",
-        content,
-    )
-
-    # Page showing numbering of references
-    content = heading_with_self_ref("h1", "Reference cell numbering")
-    content += "<p>This page illustrates the entity numbering used for each reference cell.</p>"
-    for cell in categoriser.references.keys():
-        if cell == "dual polygon":
-            for nsides in [4, 5, 6]:
-                content += heading_with_self_ref("h2", f"Dual polygon ({nsides})")
-                content += plotting.plot_reference(
-                    symfem.create_reference(f"dual polygon({nsides})")
-                )
-        else:
-            content += heading_with_self_ref("h2", cap_first(cell))
-            content += plotting.plot_reference(symfem.create_reference(cell))
-
-    write_html_page(
-        os.path.join(settings.html_path, "reference_numbering.html"),
-        "Reference cell numbering",
         content,
     )
 

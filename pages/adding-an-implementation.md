@@ -88,7 +88,7 @@ For simplefem, these class methods are defined as follows:
 
 The funtion `example_import` gives code to import simplefem. The inputs to class method `single_example`
 will be `name="lagrange_element"`, `reference="triangle"`, and `params={}`. The degree used in
-DefElement (in this case, the [polynomial subdegree](/ciarlet.html#The+degree+of+a+finite+element) 1, 2, or 3) will be substituted into the `DEGREEMAP`
+DefElement (in this case, the [polynomial subdegree](finite-elements.md#The+degree+of+a+finite+element) 1, 2, or 3) will be substituted into the `DEGREEMAP`
 special parameter as `k` before this method is called (so the values 3, 6, and 10 will be passed in).
 In this way, DefElement's notion of degree can be automatically converted to the number of points
 input that simplefem uses.
@@ -193,7 +193,7 @@ The method then uses `getattr` to get the relevant element creation function and
 
 We next make lists of which degrees of freedom (DOFs) are associated with each sub-entity: the
 variable `entity_dofs` that is created is a list of lists of lists where
-`entity_dofs[i][j]` is a list of DOFs associated with the `j`th subentity of dimension `i`.
+`entity_dofs[i][j]` is a list of DOFs associated with the `j`th sub-entity of dimension `i`.
 This variable will be one of the two value returned by this function.
 The numbering of DOFs in simplefem is not the same as in DefElement's examples, so
 we do this by looping over the points used to define each basis function and checking
