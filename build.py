@@ -204,7 +204,11 @@ if __name__ == "__main__":
 
             if "redirect" in metadata:
                 with open(os.path.join(settings.html_path, f"{fname}.html"), "w") as f:
-                    f.write(make_html_forwarding_page("/" + metadata["redirect"].replace(".md", ".html")))
+                    f.write(
+                        make_html_forwarding_page(
+                            "/" + metadata["redirect"].replace(".md", ".html")
+                        )
+                    )
                 continue
 
             if "authors" in metadata:
@@ -217,13 +221,17 @@ if __name__ == "__main__":
                 for cell in categoriser.references.keys():
                     if cell == "dual polygon":
                         for nsides in [4, 5, 6]:
-                            reference_cell_numbering += heading_with_self_ref("h2", f"Dual polygon ({nsides})")
+                            reference_cell_numbering += heading_with_self_ref(
+                                "h2", f"Dual polygon ({nsides})"
+                            )
                             reference_cell_numbering += plotting.plot_reference(
                                 symfem.create_reference(f"dual polygon({nsides})")
                             )
                     else:
                         reference_cell_numbering += heading_with_self_ref("h2", cap_first(cell))
-                        reference_cell_numbering += plotting.plot_reference(symfem.create_reference(cell))
+                        reference_cell_numbering += plotting.plot_reference(
+                            symfem.create_reference(cell)
+                        )
                 content = content.replace("{{REFERENCE_CELL_NUMBERING}}", reference_cell_numbering)
 
             write_html_page(
