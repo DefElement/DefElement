@@ -825,7 +825,7 @@ if __name__ == "__main__":
     # Make verification pages
     mkdir(os.path.join(settings.html_path, "verification"))
 
-    impl_content = {i: "" for i in verifications if i != "symfem"}
+    impl_content = {i: "" for i in verifications if i != "symfem" and not i.startswith("*(")}
     for i in impl_content:
         title = f"{implementations[i].name} verification"
         if i in vhistory:
@@ -1165,17 +1165,6 @@ if __name__ == "__main__":
             url = "https://defelement.org/verification/"
         else:
             url = f"https://defelement.org/verification/{i}.html"
-        if not include_simplefem and i == "simplefem":
-            continue
-        c += (
-            "<tr>"
-            f"<td>{implementations[i].name}</td>"
-            f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
-            "<td style='font-size:80%;font-family:monospace'>"
-            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-            f"({url})</td>"
-            "</tr>"
-        )
         if i in impl_content:
             impl_content[i] += heading_with_self_ref("h2", "Verification Github badge")
             impl_content[i] += (
@@ -1189,6 +1178,17 @@ if __name__ == "__main__":
                 "</tr>"
                 "</table>"
             )
+        if not include_simplefem and i == "simplefem":
+            continue
+        c += (
+            "<tr>"
+            f"<td>{implementations[i].name}</td>"
+            f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
+            "<td style='font-size:80%;font-family:monospace'>"
+            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+            f"({url})</td>"
+            "</tr>"
+        )
 
     c += "</table>"
     content += c
