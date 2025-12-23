@@ -130,6 +130,9 @@ jobs:
           python3 -m pip install setuptools
           python3 install_implementations.py --install-type verification
 
+      - run: python3 verify.py --fail-on-missing-libraries --impl simplefem --assert-passing --print-reasons
+        name: Check that simplefem verification passes
+
       - run: python3 verify.py verification-serial.json --test auto --fail-on-missing-libraries
         name: Run verification test in serial
       - run: python3 verify.py verification-4.json --test auto --processes 4 --fail-on-missing-libraries
