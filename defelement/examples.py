@@ -136,7 +136,7 @@ def markup_example(
     eg += "In this example:\n<ul>\n"
     # Reference
     eg += f"<li>\\({symbols.reference}\\) is the reference {element.reference.name}."
-    eg += " The following numbering of the subentities of the reference cell is used:</li>\n"
+    eg += " The following numbering of the sub-entities of the reference cell is used:</li>\n"
     eg += "<center>" + plotting.plot_reference(element.reference) + "</center>\n"
     if isinstance(element, CiarletElement) and element.reference.name != "dual polygon":
         # Polynomial set

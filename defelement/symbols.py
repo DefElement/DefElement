@@ -1,6 +1,7 @@
 """Symbols used on DefElement."""
 
 reference = "R"
+cell = "C"
 polyset = "\\mathcal{V}"
 dual_basis = "\\mathcal{L}"
 functional = "l"
