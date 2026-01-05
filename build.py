@@ -1202,8 +1202,8 @@ if __name__ == "__main__":
                 "<tr>"
                 f"<td><img src='/badges/{i}.svg'></td>"
                 "<td style='font-size:80%;font-family:monospace'>"
-                f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-                f"(https://defelement.org/verification/{i}.html)</td>"
+                f"<nomd>[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+                f"(https://defelement.org/verification/{i}.html)</nomd></td>"
                 "</tr>"
                 "</table>"
             )
@@ -1214,8 +1214,8 @@ if __name__ == "__main__":
             f"<td>{implementations[i].name}</td>"
             f"<td><a href='{url}'><img src='/badges/{i}.svg'></a></td>"
             "<td style='font-size:80%;font-family:monospace'>"
-            f"[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
-            f"({url})</td>"
+            f"<nomd>[![DefElement verification](https://defelement.org/badges/{i}.svg)]"
+            f"({url})</nomd></td>"
             "</tr>"
         )
 
@@ -1243,7 +1243,7 @@ if __name__ == "__main__":
         write_html_page(
             os.path.join(settings.html_path, f"verification/{i}.html"),
             f"{implementations[i].name} verification",
-            impl_content[i],
+            markup(impl_content[i]),
             extra_head=(
                 "<script src='https://cdn.plot.ly/plotly-2.27.0.min.js' charset='utf-8' "
                 "type='text/javascript'></script>"
