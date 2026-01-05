@@ -21,7 +21,7 @@ dependencies = [
     "PyGithub==2.8.1",
     "pytz==2025.2",
     "pyyaml==6.0.3",
-    "website-build-tools==0.1.11"
+    "website-build-tools==0.1.12"
 ]
 packages = ["defelement", "defelement.implementations"]
 
