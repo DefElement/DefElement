@@ -898,7 +898,9 @@ if __name__ == "__main__":
     for i in impl_content:
         if i in vhistory:
             hist = vhistory[i]
-            impl_content[i] += "<div id='verification-plot'></div><script type='text/javascript'>\n"
+            impl_content[i] += (
+                "<div id='verification-plot'></div><nomd><script type='text/javascript'>\n"
+            )
 
             impl_content[i] += "var vpassing = {\n  x: ["
             impl_content[i] += ",".join(f'"{p["date"]}"' for p in hist)
@@ -1007,7 +1009,7 @@ if __name__ == "__main__":
                 f"Plotly.newPlot('verification-plot', [{plotme}], layout);"
             )
 
-            impl_content[i] += "</script>"
+            impl_content[i] += "</script></nomd>"
             impl_content[i] += (
                 "The plot above shows the number of elements passing verificiation (green line) "
                 "out of the number of elements being verified (dashed black line) over time."
