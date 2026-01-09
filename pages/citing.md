@@ -24,7 +24,7 @@ website, you can use the following BibTeX:
 @misc{defelement,
        AUTHOR = {{{list contributors|bibtex}}},
         TITLE = {{DefElement}: an encyclopedia of finite element definitions},
-         YEAR = {{{{date:Y}}}},
+         YEAR = {{2020--{{date:Y}}}},
  HOWPUBLISHED = {\url{https://defelement.org}},
          NOTE = {[Online; accessed {{date:D-M-Y}}]}
 }
@@ -33,7 +33,7 @@ website, you can use the following BibTeX:
 This will create a reference along the lines of:
 
 <ul class='citations'>
-<li>{{list contributors|citation}}. <i>DefElement: an encyclopedia of finite element definitions</i>, {{date:Y}}, <a href='https://defelement.org'>https://defelement.org</a> [Online; accessed: {{date:D-M-Y}}].</li>
+<li>{{list contributors|citation}}. <i>DefElement: an encyclopedia of finite element definitions</i>, 2020&ndash;{{date:Y}}, <a href='https://defelement.org'>https://defelement.org</a> [Online; accessed: {{date:D-M-Y}}].</li>
 </ul>
 
 ### DefElement paper

@@ -128,6 +128,7 @@ As simplefem is an example library, it is by default hidden from the
 [Lagrange element page](element::lagrange). If it were included, its section on the page would look
 like this:
 
+<nomd>
 <table class="element-info"><tbody>
 <tr><td></td><td></td></tr>
 <tr><td><a&nbsp;href=' lists="" implementations="" simplefem.html'="">simplefem</a&nbsp;href='></td><td><code>lagrange_element</code><br><a class="show_eg_link" id="show_simplefem_link" href="javascript:show_simplefem_eg()" style="display:block">↓ Show simplefem examples ↓</a><a class="hide_eg_link" id="hide_simplefem_link" href="javascript:hide_simplefem_eg()" style="display:none">↑ Hide simplefem examples ↑</a><div id="simplefem_eg" style="display:none">Before running this example, you must install <a href="https://github.com/DefElement/simplefem">simplefem</a>:<p class="pcode">pip3 install git+https://github.com/DefElement/simplefem</p>This element can then be created with the following lines of Python:<p class="pcode"><span style="color:#FF8800">#&nbsp;Create&nbsp;Lagrange&nbsp;(equispaced&nbsp;variant)&nbsp;degree&nbsp;10&nbsp;on&nbsp;a&nbsp;triangle</span><br>element&nbsp;=&nbsp;simplefem.lagrange_element(10)</p></div><i class="fa-solid fa-square-check" style="color:#55FF00;font-size:150%;vertical-align:middle"></i> <span style="font-size:80%;vertical-align:middle">This implementation is correct for all the examples below that it supports.</span><div style="display:block;margin-left:30px;font-size:80%;vertical-align:middle" id="simplefem-showverification"><a href="javascript:show_simplefem_verification()">↓ Show more ↓</a></div><div style="display:none;" id="simplefem-hiddenverification"><div style="margin-left:30px;font-size:80%;vertical-align:middle"><a href="javascript:hide_simplefem_verification()">↑ Hide ↑</a></div><div style="margin-left:70px;text-indent:-40px;font-size:80%;vertical-align:middle"><i class="fa-solid fa-square-check" style="color:#55FF00;font-size:150%;vertical-align:middle"></i> <b>Correct</b>: triangle,1,equispaced; triangle,2,equispaced; triangle,3,equispaced</div><div style="margin-left:70px;text-indent:-40px;font-size:80%;vertical-align:middle"><i class="fa-solid fa-square-minus" style="color:#44AAFF;font-size:150%;vertical-align:middle"></i> <b>Not implemented</b>: interval,1,equispaced; interval,2,equispaced; interval,3,equispaced; quadrilateral,1,equispaced; quadrilateral,2,equispaced; quadrilateral,3,equispaced; tetrahedron,1,equispaced; tetrahedron,2,equispaced; hexahedron,1,equispaced; hexahedron,2,equispaced; prism,1,equispaced; prism,2,equispaced; pyramid,1,equispaced; pyramid,2,equispaced; interval,1,gll; interval,2,gll; interval,3,gll; interval,4,gll; quadrilateral,1,gll; quadrilateral,2,gll; interval,1,lobatto; interval,2,lobatto; interval,3,lobatto; quadrilateral,1,lobatto; quadrilateral,2,lobatto; quadrilateral,3,lobatto; hexahedron,1,lobatto; hexahedron,2,lobatto</div></div><script type="text/javascript">
@@ -153,6 +154,7 @@ function hide_simplefem_eg(){
 </script></td></tr>
 <tr></tr>
 </tbody></table>
+</nomd>
 
 ## Verification
 As well as giving information about implementations and code snippets for creating elements,
