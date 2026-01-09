@@ -898,7 +898,9 @@ if __name__ == "__main__":
     for i in impl_content:
         if i in vhistory:
             hist = vhistory[i]
-            impl_content[i] += "<div id='verification-plot'></div><nomd><script type='text/javascript'>\n"
+            impl_content[i] += (
+                "<div id='verification-plot'></div><nomd><script type='text/javascript'>\n"
+            )
 
             impl_content[i] += "var vpassing = {\n  x: ["
             impl_content[i] += ",".join(f'"{p["date"]}"' for p in hist)
