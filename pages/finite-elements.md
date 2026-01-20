@@ -179,7 +179,7 @@ If the dimensions of the reference and physical cells are not equal (eg for a su
 then \({{symbols.jacobian}}\) will be a rectangular matrix. In this case then in the definitions below,
 the determinant \(\det({{symbols.jacobian}})\) should be replaced by \(\sqrt{\det({{symbols.jacobian}}^T{{symbols.jacobian}})}\)
 and the inverse matrix \({{symbols.jacobian}}^{-1}\) should be replaced by the Moore&ndash;Penrose pseudoinverse matrix
-\({{symbols.jacobian}}^\dagger=\left({{symbols.jacobian}}^T{{symbols.jacobian}})^{-1}{{symbols.jacobian}}^T\) that satisfies \({{symbols.jacobian}}^\dagger{{symbols.jacobian}} = \mathbf{I}\).
+\({{symbols.jacobian}}^\dagger=\left({{symbols.jacobian}}^T{{symbols.jacobian}}\right)^{-1}{{symbols.jacobian}}^T\) that satisfies \({{symbols.jacobian}}^\dagger{{symbols.jacobian}} = \mathbf{I}\).
 
 ### Scalar-valued basis functions
 The identity mapping&mdash;used to map scalar basis functions, \({{symbols.basis_function}}\)&mdash;is defined by
