@@ -104,5 +104,5 @@ class NDElementImplementation(Implementation):
 
     id = "ndelement"
     name = "NDElement"
-    url = "https://github.com/bempp/nd"
+    url = "https://codeberg.org/nd-project/nd"
     verification = True
