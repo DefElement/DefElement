@@ -19,7 +19,7 @@ dependencies = [
     "numpy==2.4.2",
     "sympy==1.14.0",
     "PyGithub==2.8.1",
-    "pytz==2025.2",
+    "pytz==2026.1",
     "pyyaml==6.0.3",
     "website-build-tools==0.1.12"
 ]
