@@ -5,7 +5,7 @@ import requests
 
 _, file, token = sys.argv
 
-doi = "10.5081/zenodo.17904468"
+doi = "10.5281/zenodo.17904468"
 api_url = "zenodo.org"
 # api_url = "sandbox.zenodo.org"
 
