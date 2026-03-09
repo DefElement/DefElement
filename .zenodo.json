@@ -31,10 +31,8 @@
       }
     ],
     "title": "DefElement: an encyclopedia of finite element definitions",
-    "version": "2026.03"
-,
-    "publication_date": "2026-03-09"
-,
+    "version": "2026.03",
+    "publication_date": "2026-03-09",
     "keywords": ["finite element method"]
   }
 }
