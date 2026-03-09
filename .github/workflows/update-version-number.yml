@@ -2,7 +2,7 @@ name: Update version number
 
 on:
   schedule:
-    - cron: "0 7 2 * */3"
+    - cron: "0 7 2 */3 *"
   workflow_dispatch:
 
 jobs:
