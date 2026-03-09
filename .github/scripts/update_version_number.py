@@ -38,10 +38,10 @@ zenodo_file = defelement.get_contents(".zenodo.json", main_branch.commit.sha)
 zenodo = zenodo_file.decoded_content.decode("utf8")
 pre_version, post_version = zenodo.split('"version": "')
 post_version = post_version.split('"', 1)[1]
-zenodo = f'{pre_version}"version": "{version}"\n{post_version}'
+zenodo = f'{pre_version}"version": "{version}"{post_version}'
 pre_pubdate, post_pubdate = zenodo.split('"publication_date": "')
 post_pubdate = post_pubdate.split('"', 1)[1]
-zenodo = f'{pre_pubdate}"publication_date": "{datetime.now().strftime("%Y-%m-%d")}"\n{post_pubdate}'
+zenodo = f'{pre_pubdate}"publication_date": "{datetime.now().strftime("%Y-%m-%d")}"{post_pubdate}'
 defelement.update_file(
     ".zenodo.json",
     "[AUTOMATED] Update version number",
