@@ -6,7 +6,7 @@ This page illustrates the entity numbering used for each reference cell. In gene
 ### Convention 1: vertex numbering
 
 If \(a=(a_0,...,a_{d-1})\) and \(b=(a_0,...,b_{d-1})\) are two vertices of a reference cell then the index of vertex
-\(a\) is less than the index of vertex \(b\) if and only if \((a_{d-1},...,a_0)<(b_{d-1},...,b_0)\) (where the meaning of \(<\) is as in Pyhton for tuples).
+\(a\) is less than the index of vertex \(b\) if and only if \((a_{d-1},...,a_0)<(b_{d-1},...,b_0)\) (where the meaning of \(<\) is as in Python for tuples).
 
 Note that dual cells are treated as a special case, with the vertices numbered in an anticlockwise order.
 
