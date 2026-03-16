@@ -14,6 +14,21 @@ blue = "\033[34m"
 default = "\033[0m"
 
 
+class Version:
+    def __init__(self, v: str):
+        self.v = v.split(".")
+
+    def __eq__(self, other):
+        if not isinstance(other, Version):
+            return NotImplemented
+
+        n = min(len(self.v), len(other.v))
+        return self.v[:n] == other.v[:n]
+
+    def __str__(self):
+        return ".".join(self.v)
+
+
 class DependenciesNeedUpdating(BaseException):
     pass
 
@@ -31,12 +46,14 @@ with open(
 ) as f:
     for dep in tomllib.load(f)["project"]["dependencies"]:
         lib, version = dep.split("==")
-        requirements[lib] = version
+        requirements[lib] = Version(version)
 
 need_updating = {}
 for lib, version in requirements.items():
     libname = lib.split("@")[0].split("[")[0]
-    latest = requests.get(f"https://pypi.org/pypi/{libname}/json").json()["info"]["version"]
+    latest = Version(
+        requests.get(f"https://pypi.org/pypi/{libname}/json").json()["info"]["version"]
+    )
     if version == latest:
         print(f"{green}{lib}{default} is at latest version ({version})")
     else:
