@@ -281,6 +281,9 @@ class Implementation:
     verification = False
     # Language(s) that this implementation can create snippets for
     languages: typing.List[str] = []
+    # Language to pass into install command to get command(s) to install
+    # Note that this only needs to be set if len(languages) > 1
+    install_language: str | None = None
 
 
 class VariantNotImplemented(NotImplementedError):

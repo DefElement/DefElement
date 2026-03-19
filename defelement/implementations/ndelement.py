@@ -160,3 +160,4 @@ class NDElementImplementation(Implementation):
     url = "https://codeberg.org/nd-project/nd"
     verification = True
     languages = ["python", "rust"]
+    install_language = "python"
