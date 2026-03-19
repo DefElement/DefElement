@@ -25,9 +25,16 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
             @classmethod
             def version(cls) -> str:
                 """Get the version number of this implementation."""
-                from importlib.metadata import version
+                from importlib.metadata import version, PackageNotFoundError
 
-                return version(package_name)
+                try:
+                    return version(package_name)
+                except PackageNotFoundError:
+                    import requests
+
+                    return requests.get(f"https://pypi.org/pypi/{package_name}/json").json()[
+                        "info"
+                    ]["version"]
 
             @classmethod
             def install(cls, language: str) -> str | None:
