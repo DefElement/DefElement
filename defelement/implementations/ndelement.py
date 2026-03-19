@@ -14,9 +14,14 @@ class NDElementImplementation(Implementation):
     @classmethod
     def version(cls) -> str:
         """Get the version number of this implementation."""
-        from importlib.metadata import version
+        from importlib.metadata import version, PackageNotFoundError
 
-        return version("ndelement")
+        try:
+            return version("ndelement")
+        except PackageNotFoundError:
+            import requests
+
+            return requests.get("https://pypi.org/pypi/ndelement/json").json()["info"]["version"]
 
     @classmethod
     def install(cls, language: str) -> str | None:
