@@ -20,6 +20,7 @@ class NDElementImplementation(Implementation):
 
     @classmethod
     def install(cls, language: str) -> str | None:
+        """Get the command(s) to install this implementation."""
         if language == "python":
             return "pip install ndelement"
         if language == "rust":

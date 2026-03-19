@@ -31,6 +31,7 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
 
             @classmethod
             def install(cls, language: str) -> str | None:
+                """Get the command(s) to install this implementation."""
                 if language == "python":
                     return (
                         ""
