@@ -104,10 +104,10 @@ number of the implementation library. For simplefem, this is implemented as foll
 
 When an implementation can be installed from PyPI, the decorator `pypi_name` can be used.
 This decorator will automatically implement the method `version` and set the variable `install`
-(as described in the next section). For the ndelement library, for example, `pypi_name` is used as
+(as described in the next section). For the Basix library, for example, `pypi_name` is used as
 follows:
 
-{{snippet::defelement/implementations/ndelement.py::pypi_name}}
+{{snippet::defelement/implementations/basix.py::pypi_name}}
 
 ### Variables
 Finally, four variables need to be defined:

@@ -7,15 +7,23 @@ from numpy.typing import NDArray
 from defelement.element import Element
 from defelement.implementations.core import Implementation
 
-# <pypi_name>
-from defelement.implementations.core import pypi_name
 
-
-@pypi_name("ndelement")
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
-    # </pypi_name>
+    @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        from importlib.metadata import version
+
+        return version("ndelement")
+
+    @classmethod
+    def install(cls, language: str) -> str | None:
+        if language == "python":
+            return "pip install ndelement"
+        if language == "rust":
+            return f'ndelement = "{cls.version()}"'
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
