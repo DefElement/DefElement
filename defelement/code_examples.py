@@ -8,7 +8,7 @@ from defelement.tools import jsify
 from defelement.languages import languages
 
 
-def generate_examples(e: Element, impl: Implementation, language: str) -> str | None:
+def generate_examples(e: Element, impl: type[Implementation], language: str) -> str | None:
     """Generate code snippets.
 
     Args:

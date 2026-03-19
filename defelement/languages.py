@@ -22,7 +22,7 @@ class Language:
         raise NotImplementedError()
 
     @classmethod
-    def install(cls, impl: Implementation) -> str:
+    def install(cls, impl: type[Implementation]) -> str:
         """Generate installation information for a language.
 
         Args:
@@ -68,7 +68,7 @@ class Rust(Language):
         return rust_highlight(code)
 
     @classmethod
-    def install(cls, impl: Implementation) -> str:
+    def install(cls, impl: type[Implementation]) -> str:
         """Generate installation information for a language."""
         info = (
             f"To running this snippet, you must add <a href='{impl.url}'>{impl.name}</a>"

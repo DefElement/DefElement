@@ -437,15 +437,15 @@ if __name__ == "__main__":
             if not include_simplefem and codename == "simplefem":
                 continue
             jscodename = jsify(libname)
-            examples = {}
+            code_examples = {}
             for language in implementations[codename].languages:
                 eg_html = generate_examples(e, implementations[codename], language)
                 if eg_html is not None:
-                    examples[language] = eg_html
-            if len(examples) > 0:
+                    code_examples[language] = eg_html
+            if len(code_examples) > 0:
                 info = e.list_of_implementation_strings(codename)
 
-                info += "\n".join(examples.values())
+                info += "\n".join(code_examples.values())
 
                 short_info = libname
 
