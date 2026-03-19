@@ -44,6 +44,16 @@ class SimplefemImplementation(Implementation):
 
     # </example>
 
+    # <install>
+    @classmethod
+    def install(cls, language: str) -> str | None:
+        """Get the command(s) to install this implementation."""
+        if language == "python":
+            return "pip3 install git+https://github.com/DefElement/simplefem"
+        return None
+
+    # </install>
+
     # <version>
     @classmethod
     def version(cls) -> str:
@@ -120,7 +130,6 @@ class SimplefemImplementation(Implementation):
     id = "simplefem"
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
-    install = "pip3 install git+https://github.com/DefElement/simplefem"
     languages = ["python"]
     # </variables>
     # <verificationvariable>

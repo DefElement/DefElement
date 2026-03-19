@@ -3,60 +3,9 @@
 import symfem
 from defelement.caching import load_cache, save_cache
 from defelement.element import Element
-from defelement.tools import jsify
 from defelement.implementations import Implementation
-from webtools.code_markup import python_highlight, rust_highlight, cpp_highlight
-
-
-def install_info(impl: Implementation, language: str) -> str:
-    """Generate installation information for a language.
-
-    Args:
-        impl: The implementation
-        language: Programming language
-
-    Returns:
-        Installation info
-    """
-    info = f"Before running this example, you must install <a href='{impl.url}'>{impl.name}</a>"
-
-    cmd = impl.install(language)
-
-    if cmd is None:
-        info += ". "
-    else:
-        info += ":<p class='pcode'>" + cmd.replace("\n", "<br />") + "</p>"
-    return info
-
-
-def add_to_cargo_toml(impl: Implementation) -> str:
-    """Generate information about adding to Cargo.toml file.
-
-    Args:
-        impl: The implementation
-
-    Returns:
-        Installation info
-    """
-    info = (
-        f"To running this snippet, you must add <a href='{impl.url}'>{impl.name}</a>"
-        " to your Cargo.toml file"
-    )
-
-    cmd = impl.install("rust")
-
-    if cmd is None:
-        info += ". "
-    else:
-        info += ":<p class='pcode'>" + cmd.replace("\n", "<br />") + "</p>"
-    return info
-
-
-languages = {
-    "python": {"name": "Python", "highlight": python_highlight},
-    "rust": {"name": "Rust", "highlight": rust_highlight, "install": add_to_cargo_toml},
-    "cpp": {"name": "C++", "higlight": cpp_highlight},
-}
+from defelement.tools import jsify
+from defelement.languages import languages
 
 
 def generate_examples(e: Element, impl: Implementation, language: str) -> str | None:
@@ -70,7 +19,8 @@ def generate_examples(e: Element, impl: Implementation, language: str) -> str | 
     Returns:
         Code snippets or None if none were generated
     """
-    langname = languages[language]["name"]
+    langname = languages[language].name
+    assert impl.id is not None
     jscodename = jsify(impl.id)
     if not e.implemented(impl.id):
         return None
@@ -115,15 +65,12 @@ def generate_examples(e: Element, impl: Implementation, language: str) -> str | 
         f"<div id='{jscodename}_{language}_eg' style='display:none'>"
     )
 
-    if "install" in languages[language]:
-        info += languages[language]["install"](impl)
-    else:
-        info += install_info(impl, language)
+    info += languages[language].install(impl)
 
     info += (
         "This element can then be created with the following lines of "
-        f"{languages[language]['name']}:"
-        f"<p class='pcode'>{languages[language]['highlight'](example_code)}</p>"
+        f"{languages[language].name}:"
+        f"<p class='pcode'>{languages[language].highlight(example_code)}</p>"
         "</div>"
     )
 

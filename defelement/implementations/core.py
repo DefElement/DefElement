@@ -38,6 +38,7 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
                         if dependencies is None
                         else "pip install " + " ".join(dependencies) + "\n"
                     ) + f"pip install {package_name}"
+                return None
 
         return Wrapped
 
@@ -135,6 +136,7 @@ class Implementation:
         Returns:
             Version number
         """
+        return None
 
     @classmethod
     def verify(
@@ -272,15 +274,15 @@ class Implementation:
         return code
 
     # Unique identifier used in implementation section of .def files
-    id: str | None = None
+    id: str
     # The name of the implementation
-    name: str | None = None
+    name: str
     # URL of source of implementation (eg Github link)
-    url: str | None = None
+    url: str
     # Set to true if this implementation should be verified
     verification = False
     # Language(s) that this implementation can create snippets for
-    languages: typing.List[str] = []
+    languages: typing.List[str]
     # Language to pass into install command to get command(s) to install
     # Note that this only needs to be set if len(languages) > 1
     install_language: str | None = None

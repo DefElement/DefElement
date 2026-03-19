@@ -25,6 +25,7 @@ class NDElementImplementation(Implementation):
             return "pip install ndelement"
         if language == "rust":
             return f'ndelement = "{cls.version()}"'
+        return None
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
