@@ -29,9 +29,14 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
 
                 return version(package_name)
 
-            install = (
-                "" if dependencies is None else "pip install " + " ".join(dependencies) + "\n"
-            ) + f"pip install {package_name}"
+            @classmethod
+            def install(cls, language: str) -> str | None:
+                if language == "python":
+                    return (
+                        ""
+                        if dependencies is None
+                        else "pip install " + " ".join(dependencies) + "\n"
+                    ) + f"pip install {package_name}"
 
         return Wrapped
 
@@ -60,10 +65,13 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get code for imports to include at start of examples snippet.
 
         This function must be implemented.
+
+        Args:
+            language: Programming language
 
         Returns:
             Python code for imports
@@ -77,6 +85,7 @@ class Implementation:
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -95,6 +104,7 @@ class Implementation:
             reference: The name of the reference cell
             degree: The degree of this example
             params: Additional parameters set in the .def file
+            language: Programming language
             element: The DefElement element object
             example: Raw example data
 
@@ -107,12 +117,23 @@ class Implementation:
     def version(cls) -> str:
         """Get the version number of this implementation.
 
-        This fucntion must be implemented.
+        This function must be implemented.
 
         Returns:
             Version number
         """
         raise NotImplementedError()
+
+    @classmethod
+    def install(cls, language: str) -> str | None:
+        """Get the command(s) to install this implementation.
+
+        Args:
+            language: Programming language
+
+        Returns:
+            Version number
+        """
 
     @classmethod
     def verify(
@@ -195,18 +216,21 @@ class Implementation:
         return []
 
     @classmethod
-    def examples(cls, element: Element) -> str:
+    def examples(cls, element: Element, language: str) -> str:
         """Generate code for all examples.
 
         This function should not be overridden in subclasses.
 
         Args:
             element: The element
+            language: Programming language
 
         Returns:
             Example code
         """
-        code = cls.example_import()
+        if language not in cls.languages:
+            raise ValueError(f"Implementation cannot create snippets for language: {language}")
+        code = cls.example_import(language)
         assert cls.id is not None
         for eg in element.examples:
             reference, defelement_degree, variant, kwargs = parse_example(eg)
@@ -231,25 +255,31 @@ class Implementation:
 
             assert degree is not None
             code += "\n\n"
-            code += "# Create "
+            if language == "python":
+                code += "# "
+            elif language in ["rust", "c++", "c"]:
+                code += "// "
+            else:
+                raise ValueError(f"Unsupported language: {language}")
+            code += "Create "
             if variant is None:
                 code += element.name
             else:
                 code += element.name_with_variant(variant)
             code += f" degree {degree} on a {reference}\n"
-            code += cls.single_example(name, reference, degree, params, element, eg)
+            code += cls.single_example(name, reference, degree, params, language, element, eg)
         return code
 
     # Unique identifier used in implementation section of .def files
     id: str | None = None
     # The name of the implementation
     name: str | None = None
-    # Snippet to install the implementation
-    install: str | None = None
     # URL of source of implementation (eg Github link)
     url: str | None = None
     # Set to true if this implementation should be verified
     verification = False
+    # Language(s) that this implementation can create snippets for
+    languages: typing.List[str] = []
 
 
 class VariantNotImplemented(NotImplementedError):

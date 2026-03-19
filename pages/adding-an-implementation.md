@@ -73,12 +73,15 @@ the element).
 ### `example_import` and `single_example`
 To generate example code that will be displayed on an element's page, DefElement will use the
 class methods `example_import` and `single_example`. The class method `example_import` returns the
-import statements to include at the start of the example code. The class method `single_example`
+import statements to include at the start of the example code: this method takes
+the programming language as its only input.
+The class method `single_example`
 returns Python code that will create the element: the inputs to this method are
 the string included in the .def file (`name`);
 the name of the reference cell for this example (`reference`);
-the degree for this example (`degree`); and
-the parameters included in the .def file (`params`).
+the degree for this example (`degree`);
+the parameters included in the .def file (`params`);
+and the programming language that a snippet should be generated in (`language`).
 The additional inputs `element` and `example` are the DefElement `Element` object and the raw example
 information: these may be needed in some more complex cases.
 
@@ -115,6 +118,8 @@ Finally, four variables need to be defined:
 * `url` gives the URL of the git repository of the inplementation.
 * `install` gives the pip command to install the implementation. Note that this can be omitted
   if the `pypi_name` decorator is used.
+* `languages` gives a list of programming languages that this implementation can generate snippets
+  for.
 
 For simplefem, these variables are set to the following values. In general, it is preferable for
 the install to be done from PyPI rather than via git, but as simplefem is merely an example library

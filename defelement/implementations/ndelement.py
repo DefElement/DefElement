@@ -30,14 +30,19 @@ class NDElementImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
-        return (
-            "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
-        )
+        if language == "python":
+            return (
+                "from ndelement import ciarlet\n"
+                "from ndelement.reference_cell import ReferenceCellType"
+            )
+        if language == "rust":
+            return "use ndelement::{ciarlet, types::{Continuity, ReferenceCellType}};"
+        raise ValueError(f"Unsupported language: {language}")
 
     @classmethod
-    def single_example(
+    def single_example_python(
         cls,
         name: str,
         reference: str,
@@ -46,7 +51,7 @@ class NDElementImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example."""
+        """Generate Python code for a single example."""
         out = "family = ciarlet.create_family("
         out += f"ciarlet.Family.{name}, {degree}"
         if "continuity" in params:
@@ -55,6 +60,45 @@ class NDElementImplementation(Implementation):
         out += ")\n"
         out += f"element = family.element(ReferenceCellType.{reference[0].upper() + reference[1:]})"
         return out
+
+    @classmethod
+    def single_example_rust(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate Rust code for a single example."""
+        out = f"let family = ciarlet::{name}ElementFamily({degree}, Continuity::"
+        if "continuity" in params:
+            assert params["continuity"] in ["Standard", "Discontinuous"]
+            out += params["continuity"]
+        else:
+            out += "Standard"
+        out += ");\n"
+        out += f"let element = family.element(ReferenceCellType::{reference[0].upper() + reference[1:]});"
+        return out
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        language: str,
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example."""
+        if language == "python":
+            return cls.single_example_python(name, reference, degree, params, element, example)
+        if language == "rust":
+            return cls.single_example_rust(name, reference, degree, params, element, example)
+        raise ValueError(f"Unsupported language: {language}")
 
     @classmethod
     def verify(
@@ -106,3 +150,4 @@ class NDElementImplementation(Implementation):
     name = "NDElement"
     url = "https://codeberg.org/nd-project/nd"
     verification = True
+    languages = ["python", "rust"]

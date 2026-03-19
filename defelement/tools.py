@@ -15,3 +15,8 @@ def to_array(
     if isinstance(data, (list, tuple)):
         return np.array([to_array(i) for i in data])
     return float(data)
+
+
+def jsify(text):
+    """Convert to a safe variable name for Javascript."""
+    return text.replace(".", "_").replace("-", "_").replace("+", "p")

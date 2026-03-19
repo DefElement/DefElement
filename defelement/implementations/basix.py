@@ -29,7 +29,7 @@ class BasixImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import basix"
 
@@ -40,6 +40,7 @@ class BasixImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -113,3 +114,4 @@ class BasixImplementation(Implementation):
     name = "Basix"
     url = "https://github.com/FEniCS/basix"
     verification = True
+    languages = ["python"]

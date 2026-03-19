@@ -50,7 +50,7 @@ class FIATImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import FIAT"
 
@@ -61,6 +61,7 @@ class FIATImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -235,3 +236,4 @@ class FIATImplementation(Implementation):
     name = "FIAT"
     url = "https://github.com/firedrakeproject/fiat"
     verification = True
+    languages = ["python"]

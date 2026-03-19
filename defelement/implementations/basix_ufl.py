@@ -26,7 +26,7 @@ class BasixUFLImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import basix\nimport basix.ufl"
 
@@ -37,6 +37,7 @@ class BasixUFLImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -129,6 +130,7 @@ class BasixUFLImplementation(Implementation):
     name = "Basix.UFL"
     url = "https://github.com/FEniCS/basix"
     verification = True
+    languages = ["python"]
 
 
 class CustomBasixUFLImplementation(BasixUFLImplementation):
@@ -140,7 +142,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         raise NotImplementedError()
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import basix\nimport basix.ufl\nimport numpy as np"
 
@@ -151,6 +153,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
