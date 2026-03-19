@@ -105,5 +105,5 @@ languages = {}
 
 for item in dir():
     lang = getattr(this, item)
-    if isclass(lang) and issubclass(lang, Language):
+    if isclass(lang) and issubclass(lang, Language) and lang != Language:
         languages[lang.id] = lang
