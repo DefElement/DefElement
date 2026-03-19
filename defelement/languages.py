@@ -33,7 +33,7 @@ class Language:
         """
         info = f"Before running this example, you must install <a href='{impl.url}'>{impl.name}</a>"
 
-        cmd = impl.install(cls.name)
+        cmd = impl.install(cls.id)
 
         if cmd is None:
             info += ". "
