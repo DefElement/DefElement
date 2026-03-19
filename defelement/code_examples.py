@@ -32,26 +32,21 @@ def generate_examples(e: Element, impl: type[Implementation], language: str) -> 
         input_code, output_code = impl.id[2:-1].split(" -> ")
         jscodename = jsify(output_code)
         if c is None:
-            if not e.implemented(output_code):
-                try:
-                    example_code = e.make_implementation_examples(impl.id, language)
-                    save_cache(cache_id, symfem.__version__, example_code)
-                except (NotImplementedError, KeyError):
-                    save_cache(cache_id, symfem.__version__, "_NONE")
-                    return None
-        else:
-            if c == "_NONE":
+            if e.implemented(output_code):
                 return None
-            else:
-                example_code = c
-        # if e.filename in verification and output_code in verification[e.filename]:
-        #    v = verification[e.filename][output_code]
+            try:
+                example_code = e.make_implementation_examples(impl.id, language)
+                save_cache(cache_id, symfem.__version__, example_code)
+            except (NotImplementedError, KeyError):
+                save_cache(cache_id, symfem.__version__, "_NONE")
+                return None
+        elif c == "_NONE":
+            return None
+        else:
+            example_code = c
 
     # Standard implementations
     elif e.has_implementation_examples(impl.id):
-        # if e.filename in verification and impl.id in verification[e.filename]:
-        #    v = verification[e.filename][impl.id]
-
         example_code = e.make_implementation_examples(impl.id, language)
 
     # Make the HTML for the examples
