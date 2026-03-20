@@ -3,7 +3,7 @@ import os
 import pytest
 
 from defelement.element import Categoriser
-from defelement.implementations import examples
+from defelement.implementations import examples, implementations
 
 dir = os.path.dirname(os.path.realpath(__file__))
 c = Categoriser()
@@ -21,17 +21,19 @@ def test_snippets(element, library):
 
     if not e.implemented(library):
         pytest.skip()
+    if "python" not in implementations[library].languages:
+        pytest.skip()
 
     if library.startswith("*(") and library.endswith(")"):
         input_code, output_code = library[2:-1].split(" -> ")
         if e.implemented(output_code):
             pytest.skip()
         try:
-            code = e.make_implementation_examples(library)
+            code = e.make_implementation_examples(library, "python")
         except (NotImplementedError, KeyError):
             pytest.skip()
     else:
-        code = e.make_implementation_examples(library)
+        code = e.make_implementation_examples(library, "python")
     lines = code.split("\n")
     for i, j in enumerate(lines):
         print(j)
