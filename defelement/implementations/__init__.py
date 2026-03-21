@@ -33,7 +33,6 @@ for file in os.listdir(this_dir):
             if not name.startswith("_"):
                 c = getattr(mod, name)
                 if isclass(c) and c != Implementation and issubclass(c, Implementation):
-                    assert c.id is not None
                     implementations[c.id] = c
 
 formats = {id: i.format for id, i in implementations.items()}

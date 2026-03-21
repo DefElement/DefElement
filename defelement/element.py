@@ -887,7 +887,7 @@ class Element:
         else:
             return joiner.join(imp_list)
 
-    def make_implementation_examples(self, lib: str) -> str:
+    def make_implementation_examples(self, lib: str, language: str) -> str:
         """Make implementation examples for a library.
 
         Args:
@@ -898,7 +898,7 @@ class Element:
         """
         from defelement.implementations import implementations
 
-        return implementations[lib].examples(self)
+        return implementations[lib].examples(self, language)
 
     def has_implementation_examples(self, lib: str) -> bool:
         """Check if element has implementation examples for a library.

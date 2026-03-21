@@ -7,15 +7,30 @@ from numpy.typing import NDArray
 from defelement.element import Element
 from defelement.implementations.core import Implementation
 
-# <pypi_name>
-from defelement.implementations.core import pypi_name
 
-
-@pypi_name("ndelement")
 class NDElementImplementation(Implementation):
     """NDElement implementation."""
 
-    # </pypi_name>
+    @classmethod
+    def version(cls) -> str:
+        """Get the version number of this implementation."""
+        from importlib.metadata import version, PackageNotFoundError
+
+        try:
+            return version("ndelement")
+        except PackageNotFoundError:
+            import requests
+
+            return requests.get("https://pypi.org/pypi/ndelement/json").json()["info"]["version"]
+
+    @classmethod
+    def install(cls, language: str) -> str | None:
+        """Get the command(s) to install this implementation."""
+        if language == "python":
+            return "pip install ndelement"
+        if language == "rust":
+            return f'ndelement = "{cls.version()}"'
+        return None
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
@@ -30,14 +45,19 @@ class NDElementImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
-        return (
-            "from ndelement import ciarlet\nfrom ndelement.reference_cell import ReferenceCellType"
-        )
+        if language == "python":
+            return (
+                "from ndelement import ciarlet\n"
+                "from ndelement.reference_cell import ReferenceCellType"
+            )
+        if language == "rust":
+            return "use ndelement::{ciarlet, types::{Continuity, ReferenceCellType}};"
+        raise ValueError(f"Unsupported language: {language}")
 
     @classmethod
-    def single_example(
+    def single_example_python(
         cls,
         name: str,
         reference: str,
@@ -46,7 +66,7 @@ class NDElementImplementation(Implementation):
         element: Element,
         example: str,
     ) -> str:
-        """Generate code for a single example."""
+        """Generate Python code for a single example."""
         out = "family = ciarlet.create_family("
         out += f"ciarlet.Family.{name}, {degree}"
         if "continuity" in params:
@@ -55,6 +75,45 @@ class NDElementImplementation(Implementation):
         out += ")\n"
         out += f"element = family.element(ReferenceCellType.{reference[0].upper() + reference[1:]})"
         return out
+
+    @classmethod
+    def single_example_rust(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate Rust code for a single example."""
+        out = f"let family = ciarlet::{name}ElementFamily({degree}, Continuity::"
+        if "continuity" in params:
+            assert params["continuity"] in ["Standard", "Discontinuous"]
+            out += params["continuity"]
+        else:
+            out += "Standard"
+        out += ");\n"
+        out += f"let element = family.element(ReferenceCellType::{reference[0].upper() + reference[1:]});"
+        return out
+
+    @classmethod
+    def single_example(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        language: str,
+        element: Element,
+        example: str,
+    ) -> str:
+        """Generate code for a single example."""
+        if language == "python":
+            return cls.single_example_python(name, reference, degree, params, element, example)
+        if language == "rust":
+            return cls.single_example_rust(name, reference, degree, params, element, example)
+        raise ValueError(f"Unsupported language: {language}")
 
     @classmethod
     def verify(
@@ -106,3 +165,5 @@ class NDElementImplementation(Implementation):
     name = "NDElement"
     url = "https://codeberg.org/nd-project/nd"
     verification = True
+    languages = ["python", "rust"]
+    install_language = "python"

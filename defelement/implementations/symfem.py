@@ -88,7 +88,7 @@ class SymfemImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import symfem"
 
@@ -99,6 +99,7 @@ class SymfemImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -144,3 +145,4 @@ class SymfemImplementation(Implementation):
     name = "Symfem"
     url = "https://github.com/mscroggs/symfem"
     verification = True
+    languages = ["python"]

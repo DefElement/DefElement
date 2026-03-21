@@ -24,7 +24,7 @@ class SimplefemImplementation(Implementation):
 
     # <example>
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import simplefem"
 
@@ -35,6 +35,7 @@ class SimplefemImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -42,6 +43,16 @@ class SimplefemImplementation(Implementation):
         return f"element = simplefem.{name}({degree})"
 
     # </example>
+
+    # <install>
+    @classmethod
+    def install(cls, language: str) -> str | None:
+        """Get the command(s) to install this implementation."""
+        if language == "python":
+            return "pip3 install git+https://github.com/DefElement/simplefem"
+        return None
+
+    # </install>
 
     # <version>
     @classmethod
@@ -119,7 +130,7 @@ class SimplefemImplementation(Implementation):
     id = "simplefem"
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
-    install = "pip3 install git+https://github.com/DefElement/simplefem"
+    languages = ["python"]
     # </variables>
     # <verificationvariable>
     verification = True

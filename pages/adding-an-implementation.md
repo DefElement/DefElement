@@ -73,12 +73,15 @@ the element).
 ### `example_import` and `single_example`
 To generate example code that will be displayed on an element's page, DefElement will use the
 class methods `example_import` and `single_example`. The class method `example_import` returns the
-import statements to include at the start of the example code. The class method `single_example`
+import statements to include at the start of the example code: this method takes
+the programming language as its only input.
+The class method `single_example`
 returns Python code that will create the element: the inputs to this method are
 the string included in the .def file (`name`);
 the name of the reference cell for this example (`reference`);
-the degree for this example (`degree`); and
-the parameters included in the .def file (`params`).
+the degree for this example (`degree`);
+the parameters included in the .def file (`params`);
+and the programming language that a snippet should be generated in (`language`).
 The additional inputs `element` and `example` are the DefElement `Element` object and the raw example
 information: these may be needed in some more complex cases.
 
@@ -93,6 +96,13 @@ special parameter as `k` before this method is called (so the values 3, 6, and 1
 In this way, DefElement's notion of degree can be automatically converted to the number of points
 input that simplefem uses.
 
+### `install`
+The class method `install` can be implemented. It takes the programming language as an input
+and returns the bash commands that can be used to install the implementation.
+For simplefem, this is implemented as follows:
+
+{{snippet::defelement/implementations/simplefem.py::install}}
+
 ### `version`
 The final class method that must be implemented is `version`, which should return the version
 number of the implementation library. For simplefem, this is implemented as follows:
@@ -100,14 +110,14 @@ number of the implementation library. For simplefem, this is implemented as foll
 {{snippet::defelement/implementations/simplefem.py::version}}
 
 When an implementation can be installed from PyPI, the decorator `pypi_name` can be used.
-This decorator will automatically implement the method `version` and set the variable `install`
-(as described in the next section). For the ndelement library, for example, `pypi_name` is used as
+This decorator will automatically implement the methods `version` and `install`.
+For the Basix library, for example, `pypi_name` is used as
 follows:
 
-{{snippet::defelement/implementations/ndelement.py::pypi_name}}
+{{snippet::defelement/implementations/basix.py::pypi_name}}
 
 ### Variables
-Finally, four variables need to be defined:
+Finally, five variables need to be defined:
 
 * `id` gives the id used to identify this implementation (eg in URLs). This should be all lowercase
   and not contain any special characters.
@@ -115,6 +125,14 @@ Finally, four variables need to be defined:
 * `url` gives the URL of the git repository of the inplementation.
 * `install` gives the pip command to install the implementation. Note that this can be omitted
   if the `pypi_name` decorator is used.
+* `languages` gives a list of programming languages that this implementation can generate snippets
+  for.
+
+Additionallly, the following variables may be needed for some implementations:
+
+* When an implementation supports more than one languages (ie when `len(languages) > 1`),
+  the variable `install_language` can be used to set which language should be passed into
+  the method `install` to get commands to install the implementation on CI runners.
 
 For simplefem, these variables are set to the following values. In general, it is preferable for
 the install to be done from PyPI rather than via git, but as simplefem is merely an example library

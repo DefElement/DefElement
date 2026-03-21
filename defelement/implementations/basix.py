@@ -5,12 +5,17 @@ from numpy.typing import NDArray
 import typing
 
 from defelement.element import Element
-from defelement.implementations.core import Implementation, pypi_name
+from defelement.implementations.core import Implementation
+
+# <pypi_name>
+from defelement.implementations.core import pypi_name
 
 
 @pypi_name("fenics-basix")
 class BasixImplementation(Implementation):
     """Basix implementation."""
+
+    # </pypi_name>
 
     @classmethod
     def format(cls, string: str, params: dict[str, typing.Any]) -> str:
@@ -29,7 +34,7 @@ class BasixImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls) -> str:
+    def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
         return "import basix"
 
@@ -40,6 +45,7 @@ class BasixImplementation(Implementation):
         reference: str,
         degree: int,
         params: dict[str, str],
+        language: str,
         element: Element,
         example: str,
     ) -> str:
@@ -113,3 +119,4 @@ class BasixImplementation(Implementation):
     name = "Basix"
     url = "https://github.com/FEniCS/basix"
     verification = True
+    languages = ["python"]
