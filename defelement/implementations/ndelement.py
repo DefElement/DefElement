@@ -1,4 +1,4 @@
-"""NDElement implementation."""
+"""Implementation in ndelement."""
 
 import typing
 from numpy import float64
@@ -8,8 +8,8 @@ from defelement.element import Element
 from defelement.implementations.core import Implementation
 
 
-class NDElementImplementation(Implementation):
-    """NDElement implementation."""
+class NdelementImplementation(Implementation):
+    """Implementation in ndelement."""
 
     @classmethod
     def version(cls) -> str:
@@ -162,7 +162,7 @@ class NDElementImplementation(Implementation):
         return entity_dofs, lambda points: e.tabulate(points, 0)[:, :, :, 0].transpose((2, 0, 1))
 
     id = "ndelement"
-    name = "NDElement"
+    name = "ndelement"
     url = "https://codeberg.org/nd-project/nd"
     verification = True
     languages = ["python", "rust"]
