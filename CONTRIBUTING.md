@@ -172,3 +172,7 @@ add a square-shaped image to the [pictures/](https://github.com/DefElement/DefEl
 ## Code of conduct
 We expect all our contributors to follow our [code of conduct](CODE_OF_CONDUCT.md). Any unacceptable
 behaviour can be reported to Matthew (defelement@mscroggs.co.uk).
+
+## AI-assisted development
+If a large language model (LLM) or other AI tool is used, this must be declared in the text of the pull request. Any AI-generated content must be thoroughly
+checked by the person opening the pull request before the it is opened.
