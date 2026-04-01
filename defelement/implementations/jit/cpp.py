@@ -66,7 +66,7 @@ def compile(
                  for libname, namespace in packages
             )
 
-            with open(os.path.join(os.path.join(folder, "cpp"), "cmake_template"), "w") as f:
+            with open(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "cpp"), "cmake_template")) as f:
                 cmake_template = f.read()
             with open(os.path.join(folder, "CMakeLists.txt"), "w") as f:
                 f.write(cmake_template
@@ -87,7 +87,7 @@ def compile(
 
             if not os.path.isdir(os.path.join(folder, "build")):
                 os.mkdir(os.path.join(folder, "build"))
-            assert os.system(f"cd {folder}/build && cmake -DCMAKE_INSTALL_PREFIX:PATH=. .. && make && make install") == 0
+            assert os.system(f"cmake -DCMAKE_INSTALL_PREFIX:PATH=. -B{folder}/build -S{folder} && make {folder}/build && make install {folder}/build") == 0
 
         except BaseException as e:
             tools.save_error(folder, e)
