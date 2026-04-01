@@ -166,6 +166,9 @@ implementations:
   simplefem:
     equispaced:
       triangle: lagrange_element DEGREEMAP=(k+1)*(k+2)//2
+  simplefempp:
+    equispaced:
+      triangle: LagrangeElementTriangle DEGREES=1,2,3
 examples:
   - interval,1,equispaced
   - interval,2,equispaced

@@ -434,7 +434,7 @@ if __name__ == "__main__":
         libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
         libraries.sort(key=lambda i: i[0])
         for codename, libname, url, pip in libraries:
-            if not include_simplefem and codename == "simplefem":
+            if not include_simplefem and codename in ["simplefem", "simplefempp"]:
                 continue
             jscodename = jsify(libname)
             code_examples = {}
