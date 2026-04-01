@@ -20,7 +20,7 @@ class SimplefemppImplementation(Implementation):
     @classmethod
     def example_import(cls, language: str) -> str:
         """Get imports to include at start of example."""
-        return "#include <simplefem/lagrange.h>"
+        return "#include <simplefem/lagrange.h>\n\nusing namespace simplefem;"
 
     @classmethod
     def single_example(
@@ -94,13 +94,19 @@ class SimplefemppImplementation(Implementation):
             inputs=[jit.ndarray("pts", 2)],
             function="\n".join([
                 f"auto element = {name}({degree});",
-                "mdspan_t<double, 3> values({pts.extent(0), 1, element.dim()});",
+                "INIT values;",
+                "std::vector<double> point(2);",
                 "for (std::size_t i = 0; i < pts.extent(0); ++i)",
-                "  for (std::size_t j = 0; j < element.dim(); ++j)",
-                "    values(i, 0, j) = element.tabulate(j, pts[i, :]);",
+                "  for (std::size_t j = 0; j < element.dim(); ++j) {",
+                "    point[0] = pts(i, 0);"
+                "    point[1] = pts(i, 1);"
+                "    values(i, 0, j) = element.evaluate(j, point);",
+                "  }",
             ]),
-            outputs=[jit.ndarray("values", 3)],
-            imports=cls.example_import("cpp")
+            outputs=[jit.ndarray("values", 3, shape=("pts.extent(0)", 1, "element.dim()"))],
+            imports=cls.example_import("cpp") + "\n#include <vector>",
+            id=f"{cls.name  }-{name}-{reference}",
+            packages=[("SimpleFem", "simplefem")],
         )
 
         return entity_dofs, tabulate
