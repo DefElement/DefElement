@@ -1,6 +1,7 @@
 """C++ just-in-time compilation."""
 
 import os
+import re
 from collections.abc import Callable
 from defelement.implementations.jit import tools
 from defelement.implementations.jit.argument_types import ArgType
@@ -107,7 +108,11 @@ def compile(
             for vars, out in [(inputs + in_out, False), (true_outputs, True)]:
                 for i in vars:
                     # TODO: indent
-                    code = code.replace(f"INIT {i.variable};", i.initialise("cpp", output=out));
+                    code = re.sub(
+                        r"( *)INIT " + i.variable,
+                        lambda matches: add_indent(i.initialise("cpp", output=out), len(matches[1])),
+                        code
+                    )
             with open(join(folder, "function.cpp"), "w") as f:
                 f.write(code)
 

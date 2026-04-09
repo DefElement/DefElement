@@ -191,14 +191,13 @@ class NDArray(ArgType):
         match language:
             case "cpp":
                 lines = []
+                line = f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{"
                 if self.shape is None:
-                    lines.append(
-                        f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{" + ", ".join(f"{self.raw_variable_name}.shape{i}" for i in range(self.dimension)) + "};",
-                    )
+                    line += ", ".join(f"{self.raw_variable_name}.shape{i}" for i in range(self.dimension))
                 else:
-                    lines.append(
-                        f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{" + ", ".join(f"(int){i}" for i in self.shape) + "};",
-                    )
+                    line += ", ".join(f"(int){i}" for i in self.shape)
+                line += "};"
+                lines.append(line)
                 if output:
                     assert self.shape is not None
                     lines += [
