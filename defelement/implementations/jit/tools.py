@@ -54,4 +54,10 @@ def check_for_error(folder: str):
 
 
 def hash(text: str) -> str:
+    """Generate a hash."""
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def add_indent(text: str, indentation: int) -> str:
+    """Add indentation to some lines of code."""
+    return "\n".join(" " * indentation + i for i in text.split("\n"))

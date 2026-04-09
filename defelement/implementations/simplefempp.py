@@ -91,7 +91,7 @@ class SimplefemppImplementation(Implementation):
             raise ValueError(f"Unsupported degree: {degree}")
 
         tabulate = jit.cpp(
-            inputs=[jit.ndarray("pts", 2), jit.int("degree")],
+            inputs=[jit.ndarray("pts", 2), jit.integer("degree")],
             function="\n".join(
                 [
                     f"auto element = {name}(degree);",
@@ -107,10 +107,10 @@ class SimplefemppImplementation(Implementation):
             ),
             outputs=[jit.ndarray("values", 3, shape=("pts.extent(0)", 1, "element.dim()"))],
             imports=cls.example_import("cpp") + "\n#include <vector>",
-            id=f"{cls.name}-{name}-{reference}",
+            id=f"{cls.name}-{cls.version}-{name}-{reference}",
             packages=[("SimpleFem", "simplefem")],
         )
-        return entity_dofs, lambda pts: tabulate(pts, degree)
+        return entity_dofs, lambda pts: tabulate(pts, degree)  # type: ignore
 
     id = "simplefempp"
     name = "simplefem++"

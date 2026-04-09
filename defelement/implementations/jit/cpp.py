@@ -12,10 +12,6 @@ from cffi import FFI
 here = os.path.dirname(os.path.realpath(__file__))
 
 
-def add_indent(text: str, indentation: int) -> str:
-    return "\n".join(" " * indentation + i for i in text.split("\n"))
-
-
 def compile(
     *,
     function: str,
@@ -26,11 +22,10 @@ def compile(
     packages: list[tuple[str, str]] = [],
 ) -> Callable:
     """Just-in-time compile a C++ function."""
-    id_hash = tools.hash(id)
     folder = tools.source_dir("cpp", id)
 
-    library_name = f"defelement_function_{id_hash}"
-    project_name = f"DefElementFunction{id_hash}"
+    library_name = "defelement_function"
+    project_name = "DefElementFunction"
 
     true_outputs = [o for o in outputs if not o.in_out]
     in_out = [o for o in outputs if o.in_out]
@@ -59,11 +54,11 @@ def compile(
         try:
             # function.h
             code = 'extern "C" {\n'
-            code += add_indent("\n".join(custom_types), 2)
+            code += tools.add_indent("\n".join(custom_types), 2)
             code += "\n"
-            code += add_indent("\n".join(f"{i};" for i in metadata_functions), 2)
+            code += tools.add_indent("\n".join(f"{i};" for i in metadata_functions), 2)
             code += "\n"
-            code += add_indent(function_def, 2) + ";"
+            code += tools.add_indent(function_def, 2) + ";"
             code += "\n"
             code += "}"
             with open(join(folder, "function.h"), "w") as f:
@@ -92,15 +87,15 @@ def compile(
                 mf = o.metadata_function_signature("cpp", function_inputs_no_in_out)
                 if mf is not None:
                     code += f"{mf}{{\n"
-                    code += add_indent(o.metadata_function_impl("cpp", function), 2)
+                    code += tools.add_indent(o.metadata_function_impl("cpp", function), 2)
                     code += "\n"
                     code += "}\n\n"
             code += f"{function_def} {{\n"
-            code += add_indent(function, 2)
+            code += tools.add_indent(function, 2)
             code += "\n"
             if len(true_outputs) > 0:
                 if len(true_outputs) == 1:
-                    code += add_indent(true_outputs[0].function_output("cpp"), 2)
+                    code += tools.add_indent(true_outputs[0].function_output("cpp"), 2)
                     code += "\n"
                 else:
                     raise NotImplementedError(
@@ -112,7 +107,7 @@ def compile(
                     # TODO: indent
                     code = re.sub(
                         r"( *)INIT " + i.variable,
-                        lambda matches: add_indent(
+                        lambda matches: tools.add_indent(
                             i.initialise("cpp", output=out), len(matches[1])
                         ),
                         code,
@@ -132,7 +127,7 @@ def compile(
             for source, target in [
                 ("cmake_template", "CMakeLists.txt"),
                 ("mdspan.hpp", "mdspan.hpp"),
-                ("Config.cmake.in", f"DefElementFunction{id_hash}Config.cmake.in"),
+                ("Config.cmake.in", "DefElementFunctionConfig.cmake.in"),
             ]:
                 with open(join(here, "cpp", source)) as f:
                     template = f.read()
@@ -169,7 +164,7 @@ def compile(
     )
     lib = ffi.dlopen(join(folder, "build", f"lib{library_name}.so"))
 
-    def function(*args):
+    def wrapped_function(*args):
         if len(args) != len(inputs):
             raise TypeError(
                 f"Incorrect number of arguments passed to function: expecting {len(inputs)}, received {len(args)}"
@@ -196,4 +191,4 @@ def compile(
                 return out[0]
             return out
 
-    return function
+    return wrapped_function
