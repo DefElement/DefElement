@@ -6,6 +6,7 @@ from datetime import datetime
 import hashlib
 import os
 from appdirs import user_cache_dir
+
 try:
     os.mkdir(user_cache_dir())
 except FileExistsError:
@@ -53,5 +54,4 @@ def check_for_error(folder: str):
 
 
 def hash(text: str) -> str:
-    return hashlib.sha256(text.encode('utf-8')).hexdigest()
-
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()

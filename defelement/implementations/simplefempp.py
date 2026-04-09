@@ -40,14 +40,16 @@ class SimplefemppImplementation(Implementation):
     def install(cls, language: str) -> str | None:
         """Get the command(s) to install this implementation."""
         if language == "cpp":
-            return "\n".join([
-                "git clone https://github.com/DefElement/simplefempp",
-                "cd simplefempp",
-                "mkdir build",
-                "cd build",
-                "cmake ..",
-                "sudo make install",
-            ])
+            return "\n".join(
+                [
+                    "git clone https://github.com/DefElement/simplefempp",
+                    "cd simplefempp",
+                    "mkdir build",
+                    "cd build",
+                    "cmake ..",
+                    "sudo make install",
+                ]
+            )
         return None
 
     @classmethod
@@ -66,8 +68,6 @@ class SimplefemppImplementation(Implementation):
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
-        import simplefem
-        import numpy as np
 
         if degree == 1:
             entity_dofs = [
@@ -92,24 +92,25 @@ class SimplefemppImplementation(Implementation):
 
         tabulate = jit.cpp(
             inputs=[jit.ndarray("pts", 2), jit.int("degree")],
-            function="\n".join([
-                f"auto element = {name}(degree);",
-                "INIT values;",
-                "std::vector<double> point(2);",
-                "for (std::size_t i = 0; i < pts.extent(0); ++i)",
-                "  for (std::size_t j = 0; j < element.dim(); ++j) {",
-                "    point[0] = pts(i, 0);",
-                "    point[1] = pts(i, 1);",
-                "    values(i, 0, j) = element.evaluate(j, point);",
-                "  }",
-            ]),
+            function="\n".join(
+                [
+                    f"auto element = {name}(degree);",
+                    "INIT values;",
+                    "std::vector<double> point(2);",
+                    "for (std::size_t i = 0; i < pts.extent(0); ++i)",
+                    "  for (std::size_t j = 0; j < element.dim(); ++j) {",
+                    "    point[0] = pts(i, 0);",
+                    "    point[1] = pts(i, 1);",
+                    "    values(i, 0, j) = element.evaluate(j, point);",
+                    "  }",
+                ]
+            ),
             outputs=[jit.ndarray("values", 3, shape=("pts.extent(0)", 1, "element.dim()"))],
             imports=cls.example_import("cpp") + "\n#include <vector>",
             id=f"{cls.name}-{name}-{reference}",
             packages=[("SimpleFem", "simplefem")],
         )
         return entity_dofs, lambda pts: tabulate(pts, degree)
-
 
     id = "simplefempp"
     name = "simplefem++"

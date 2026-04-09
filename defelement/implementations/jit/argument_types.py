@@ -1,8 +1,8 @@
 """Argument types."""
+
 from abc import ABC, abstractmethod
 from itertools import product
 import numpy as np
-import ctypes
 
 
 class ArgType(ABC):
@@ -55,13 +55,15 @@ class ArgType(ABC):
 
     def empty(self, lib, ffi, inputs):
         """Create an empty instance of this object to use as an in/out argument."""
-        raise NotImplmentedError("empty not implemented for this argument type.")
+        raise NotImplementedError("empty not implemented for this argument type.")
 
 
 class NDArray(ArgType):
     """N-dimensional array."""
 
-    def __init__(self, variable: str, dimension: int, shape: tuple[int | str, ...] | None, dtype: str):
+    def __init__(
+        self, variable: str, dimension: int, shape: tuple[int | str, ...] | None, dtype: str
+    ):
         """Initialise."""
         self.variable = variable
         self.dimension = dimension
@@ -114,7 +116,9 @@ class NDArray(ArgType):
 
         out += f"{self.shape_type_name} {self.shape_variable_name} = {{ "
         if self.shape is None:
-            out += ", ".join(f".shape{i} = {self.raw_variable_name}.shape{i}" for i in range(self.dimension))
+            out += ", ".join(
+                f".shape{i} = {self.raw_variable_name}.shape{i}" for i in range(self.dimension)
+            )
         else:
             out += ", ".join(f".shape{i} = (int){j}" for i, j in enumerate(self.shape))
         out += " };\n"
@@ -142,13 +146,20 @@ class NDArray(ArgType):
         """Output(s) from a function."""
         match language:
             case "cpp":
-                return "\n".join([
-                    f"{self.raw_type_name} {self.variable}_out = {{ " + ", ".join([
-                        f".data = {self.raw_variable_name}.data()"] + [
-                        f".shape{i} = {self.shape_variable_name}[{i}]" for i in range(self.dimension)
-                    ]) + " };",
-                    f"return {self.variable}_out;",
-                ])
+                return "\n".join(
+                    [
+                        f"{self.raw_type_name} {self.variable}_out = {{ "
+                        + ", ".join(
+                            [f".data = {self.raw_variable_name}.data()"]
+                            + [
+                                f".shape{i} = {self.shape_variable_name}[{i}]"
+                                for i in range(self.dimension)
+                            ]
+                        )
+                        + " };",
+                        f"return {self.variable}_out;",
+                    ]
+                )
             case _:
                 raise ValueError(f"Unsupported language: {language}")
 
@@ -156,20 +167,24 @@ class NDArray(ArgType):
         """Definition of type to include if necessary."""
         match language:
             case "cpp":
-                return "\n".join([
-                    f"typedef struct {self.raw_type_name} {{",
-                    f"  {self.dtype}* data;",
-                ] + [
-                    f"  int shape{i};" for i in range(self.dimension)
-                ] + [
-                    f"}} {self.raw_type_name};",
-                    f"typedef struct {self.shape_type_name} {{",
-                ] + [
-                    f"  int shape{i};" for i in range(self.dimension)
-                ] + [
-                    f"}} {self.shape_type_name};",
-                    f"{self.raw_type_name} new_{self.raw_type_name}({self.dtype}* data, " + ", ".join(f"int shape{i}" for i in range(self.dimension)) + ");",
-                ])
+                return "\n".join(
+                    [
+                        f"typedef struct {self.raw_type_name} {{",
+                        f"  {self.dtype}* data;",
+                    ]
+                    + [f"  int shape{i};" for i in range(self.dimension)]
+                    + [
+                        f"}} {self.raw_type_name};",
+                        f"typedef struct {self.shape_type_name} {{",
+                    ]
+                    + [f"  int shape{i};" for i in range(self.dimension)]
+                    + [
+                        f"}} {self.shape_type_name};",
+                        f"{self.raw_type_name} new_{self.raw_type_name}({self.dtype}* data, "
+                        + ", ".join(f"int shape{i}" for i in range(self.dimension))
+                        + ");",
+                    ]
+                )
             case _:
                 return None
 
@@ -177,12 +192,18 @@ class NDArray(ArgType):
         """Initialise of custom type(s) to include if necessary."""
         match language:
             case "cpp":
-                return "\n".join([
-                    f"{self.raw_type_name} new_{self.raw_type_name}({self.dtype}* data, " + ", ".join(f"int shape{i}" for i in range(self.dimension)) + "){",
-                    f"  {self.raw_type_name} out = {{ .data = data, " + ", ".join(f".shape{i} = shape{i}" for i in range(self.dimension)) + " };",
-                    "  return out;",
-                    "}",
-                ])
+                return "\n".join(
+                    [
+                        f"{self.raw_type_name} new_{self.raw_type_name}({self.dtype}* data, "
+                        + ", ".join(f"int shape{i}" for i in range(self.dimension))
+                        + "){",
+                        f"  {self.raw_type_name} out = {{ .data = data, "
+                        + ", ".join(f".shape{i} = shape{i}" for i in range(self.dimension))
+                        + " };",
+                        "  return out;",
+                        "}",
+                    ]
+                )
             case _:
                 return None
 
@@ -193,7 +214,9 @@ class NDArray(ArgType):
                 lines = []
                 line = f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{"
                 if self.shape is None:
-                    line += ", ".join(f"{self.raw_variable_name}.shape{i}" for i in range(self.dimension))
+                    line += ", ".join(
+                        f"{self.raw_variable_name}.shape{i}" for i in range(self.dimension)
+                    )
                 else:
                     line += ", ".join(f"(int){i}" for i in self.shape)
                 line += "};"
@@ -201,7 +224,9 @@ class NDArray(ArgType):
                 if output:
                     assert self.shape is not None
                     lines += [
-                        f"std::vector<{self.dtype}> {self.raw_variable_name}(" + " * ".join(f"{i}" for i in self.shape) + ");",
+                        f"std::vector<{self.dtype}> {self.raw_variable_name}("
+                        + " * ".join(f"{i}" for i in self.shape)
+                        + ");",
                         f"mdspan<{self.dtype}, {self.dimension}> {self.variable}({self.raw_variable_name}.data(), {self.shape_variable_name});",
                     ]
                 else:
@@ -214,7 +239,9 @@ class NDArray(ArgType):
 
     def to_raw(self, lib, ffi, obj):
         """Convert python object to a raw C type."""
-        return getattr(lib, f"new_{self.raw_type_name}")(ffi.cast("double*", obj.ctypes.data), *obj.shape)
+        return getattr(lib, f"new_{self.raw_type_name}")(
+            ffi.cast("double*", obj.ctypes.data), *obj.shape
+        )
 
     def from_raw(self, lib, ffi, obj):
         """Convert raw C object to a Python type."""
@@ -276,7 +303,7 @@ def array(
     dtype: str = "double",
 ) -> ArgType:
     """Create a one-dimensional array."""
-    return NDArray(variable, 1, None if length is None else (length, ), dtype)
+    return NDArray(variable, 1, None if length is None else (length,), dtype)
 
 
 def int(
