@@ -37,6 +37,8 @@ target_include_directories(<!library_name> PUBLIC
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_SOURCE_DIR}>")
 
+<!target_link_libraries>
+
 if (UNIX)
     list(APPEND DEFELEMENT_DEVELOPER_FLAGS -O2;-g;-pipe)
     list(APPEND DEFELEMENT_COMPILER_FLAGS -Wall;-Werror;-Wextra;-Wno-comment;-pedantic;)

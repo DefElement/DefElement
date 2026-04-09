@@ -28,22 +28,28 @@ def compile(
     library_name = f"defelement_function_{id_hash}"
     project_name = f"DefElementFunction{id_hash}"
 
-    if len(outputs) == 0:
-        out_type = "void"
-    if len(outputs) == 1:
-        out_type = outputs[0].type("cpp")
+    true_outputs = [o for o in outputs if not o.in_out]
+    in_out = [o for o in outputs if o.in_out]
+    function_inputs = ", ".join(f"{i.function_input('cpp')}" for i in inputs + in_out)
+    if len(true_outputs) == 0:
+        output_type = "void"
+    elif len(true_outputs) == 1:
+        output_type = true_outputs[0].type("cpp")
     else:
-        out_type = "std::tuple<" + ", ".join(o.type("cpp") for o in outputs) + ">"
+        raise NotImplementedError("Functions with more than one output not currently supported")
+    function_def = f"{output_type} function({function_inputs})"
 
-    function_def = out_type + " function(" + ", ".join(f"{i.function_input('cpp')}" for i in inputs) + ")"
+    custom_types = "\n".join([i.define_custom_type("cpp") for i in inputs + outputs if i.define_custom_type("cpp") is not None])
 
     if not os.path.isfile(join(folder, "build", f"lib{library_name}.so")):
         try:
 
             with open(join(folder, "function.h"), "w") as f:
-                f.write("#include <tuple>\n")
+                f.write('extern "C" {\n')
+                f.write("\n".join(f"  {i}" for i in custom_types.split("\n")))
                 f.write("\n")
-                f.write(f"{function_def};\n")
+                f.write(f"  {function_def};\n")
+                f.write("}")
 
             with open(join(folder, "function.cpp"), "w") as f:
                 f.write('#include "function.h"\n')
@@ -53,16 +59,25 @@ def compile(
                 f.write("\n")
                 f.write("template <typename T, std::size_t d> using mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE::mdspan<T, MDSPAN_IMPL_STANDARD_NAMESPACE::dextents<std::size_t, d>>;\n")
                 f.write("\n")
+                for i in inputs + outputs:
+                    init_i = i.init_custom_type("cpp")
+                    if init_i is not None:
+                        f.write(init_i + "\n")
                 f.write(f"{function_def} {{\n")
-                for i in inputs:
-                    f.write(i.initialise("cpp") + "\n")
-                for o in outputs:
-                    function = function.replace(f"INIT {o.variable};", o.initialise("cpp"))
+                for vars, out in [(inputs + in_out, False), (true_outputs, True)]:
+                    for i in vars:
+                        if i.initialise("cpp", output=out) != "":
+                            if f"INIT {i.variable};" in function:
+                                function = function.replace(f"INIT {i.variable};", i.initialise("cpp", output=out));
+                            else:
+                                f.write(i.initialise("cpp", 2, output=out) + "\n")
                 f.write("\n".join(f"  {line}" for line in function.split("\n")) + "\n")
-                if len(outputs) == 1:
-                    f.write(f"  return {outputs[0].function_output('cpp')};\n");
-                elif len(outputs) > 0:
-                    f.write("  return {" + ", ".join(o.function_output("cpp") for o in outputs) + "};\n");
+                if len(true_outputs) > 0:
+                    if len(true_outputs) == 1:
+                        f.write("\n".join(f"  {i}" for i in true_outputs[0].function_output('cpp').split("\n")))
+                        f.write("\n")
+                    else:
+                        raise NotImplementedError("Functions with more than one output not currently supported")
                 f.write("}\n")
 
             find_packages = "\n".join(
@@ -70,7 +85,7 @@ def compile(
                 for libname, _ in packages
             )
             target_link_libraries = "\n".join(
-                f"target_link_libraries(${{PROJECT_NAME}} {libname}::{namespace})"
+                f"target_link_libraries({library_name} {libname}::{namespace})"
                  for libname, namespace in packages
             )
 
@@ -101,16 +116,31 @@ def compile(
 
     tools.check_for_error(folder)
 
-    ffibuilder = FFI()
-    print(function_def)
-    ffibuilder.cdef(function_def + ";")
-    ffibuilder.set_source(f"_{library_name}",
-      r'#include "function.h"',
-      include_dirs = [join(folder, "build")],
-      libraries = [library_name],
-      library_dirs = [join(folder, "build")],
-    )
+    ffi = FFI()
+    ffi.cdef(f"{custom_types}\n{function_def};")
+    lib = ffi.dlopen(join(folder, "build", f"lib{library_name}.so"))
 
-    from IPython import embed; embed()()
+    def function(*args):
+        if len(args) != len(inputs):
+            raise TypeError(f"Incorrect number of arguments passed to function: expecting {len(inputs)}, received {len(args)}")
+        in_out_args = tuple(i.empty(lib, ffi) for i in in_out)
+        result = lib.function(*[i.to_raw(lib, ffi, a) for i, a in zip(inputs + in_out, args + in_out_args)])
+        out = []
+        i = 0
+        for o in outputs:
+            if o.in_out:
+                out.append(in_out_args[i])
+                i += 1
+            else:
+                if len(true_outputs) == 1:
+                    out.append(true_outputs[0].from_raw(lib, ffi, result))
+                else:
+                    raise NotImplementedError("Functions with more than one output not currently supported")
+        if len(out) > 0:
+            if len(out) == 1:
+                return out[0]
+            return out
 
-    return lambda x: np.zeros([x.shape[0], 1, 10])
+    from IPython import embed; embed()
+
+    return function
