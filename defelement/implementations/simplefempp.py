@@ -92,18 +92,16 @@ class SimplefemppImplementation(Implementation):
 
         tabulate = jit.cpp(
             inputs=[jit.ndarray("pts", 2), jit.integer("degree")],
-            function="\n".join(
-                [
-                    f"auto element = {name}(degree);",
-                    "INIT values;",
-                    "std::vector<double> point(2);",
-                    "for (std::size_t i = 0; i < pts.extent(0); ++i)",
-                    "  for (std::size_t j = 0; j < element.dim(); ++j) {",
-                    "    point[0] = pts(i, 0);",
-                    "    point[1] = pts(i, 1);",
-                    "    values(i, 0, j) = element.evaluate(j, point);",
-                    "  }",
-                ]
+            function=(
+                f"auto element = {name}(degree);\n"
+                "INIT values;\n"
+                "std::vector<double> point(2);\n"
+                "for (std::size_t i = 0; i < pts.extent(0); ++i)\n"
+                "  for (std::size_t j = 0; j < element.dim(); ++j) {\n"
+                "    point[0] = pts(i, 0);\n"
+                "    point[1] = pts(i, 1);\n"
+                "    values(i, 0, j) = element.evaluate(j, point);\n"
+                "  }"
             ),
             outputs=[jit.ndarray("values", 3, shape=("pts.extent(0)", 1, "element.dim()"))],
             imports=cls.example_import("cpp") + "\n#include <vector>",
