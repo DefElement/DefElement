@@ -90,10 +90,10 @@ class SimplefemppImplementation(Implementation):
         else:
             raise ValueError(f"Unsupported degree: {degree}")
 
-        return entity_dofs, jit.cpp(
-            inputs=[jit.ndarray("pts", 2)],
+        tabulate = jit.cpp(
+            inputs=[jit.ndarray("pts", 2), jit.int("degree")],
             function="\n".join([
-                f"auto element = {name}({degree});",
+                f"auto element = {name}(degree);",
                 "INIT values;",
                 "std::vector<double> point(2);",
                 "for (std::size_t i = 0; i < pts.extent(0); ++i)",
@@ -102,17 +102,13 @@ class SimplefemppImplementation(Implementation):
                 "    point[1] = pts(i, 1);",
                 "    values(i, 0, j) = element.evaluate(j, point);",
                 "  }",
-                f'std::cout << {degree} << "\\n";',
-                "for (std::size_t i = 0; i < pts.extent(0); ++i)",
-                "  for (std::size_t j = 0; j < element.dim(); ++j) {",
-                '    std::cout << "values("<<i<<", 0, "<<j<<") = " << values(i, 0, j) << "\\n";',
-                "  }",
             ]),
             outputs=[jit.ndarray("values", 3, shape=("pts.extent(0)", 1, "element.dim()"))],
-            imports=cls.example_import("cpp") + "\n#include <vector>\n#include <iostream>",
-            id=f"{cls.name  }-{name}-{reference}",
+            imports=cls.example_import("cpp") + "\n#include <vector>",
+            id=f"{cls.name}-{name}-{reference}",
             packages=[("SimpleFem", "simplefem")],
         )
+        return entity_dofs, lambda pts: tabulate(pts, degree)
 
 
     id = "simplefempp"

@@ -16,6 +16,14 @@ class ArgType(ABC):
         """Initialise of custom type(s) to include if necessary."""
         return None
 
+    def metadata_function_signature(self, language: str, inputs: str) -> str | None:
+        """Get the signature of the function to generate metadata for this type."""
+        return None
+
+    def metadata_function_impl(self, language: str, function: str) -> str | None:
+        """Get the signature of the function to generate metadata for this type."""
+        return None
+
     @abstractmethod
     def type(self, language: str) -> str:
         """Type to use for function output."""
@@ -28,24 +36,24 @@ class ArgType(ABC):
     def function_output(self, language: str) -> str:
         """Output(s) from a function."""
 
-    @abstractmethod
-    def initialise(self, language: str, indentation: int = 0) -> str:
+    def initialise(self, language: str, output: bool = False) -> str:
         """Initialise in the given language."""
+        return ""
 
-    @abstractmethod
     def to_raw(self, lib, ffi, obj):
         """Convert python object to a raw C type."""
+        return obj
 
-    @abstractmethod
     def from_raw(self, lib, ffi, obj):
         """Convert raw C object to a Python type."""
+        return obj
 
     @property
     def in_out(self) -> bool:
         """Is this an in/out argument when used as an output?"""
         return False
 
-    def empty(self, lib, ffi):
+    def empty(self, lib, ffi, inputs):
         """Create an empty instance of this object to use as an in/out argument."""
         raise NotImplmentedError("empty not implemented for this argument type.")
 
@@ -61,21 +69,58 @@ class NDArray(ArgType):
         self.shape = shape
 
     @property
-    def in_out(self) -> bool:
-        """Is this an in/out argument when used as an output?"""
-        return True
+    def shape_type_name(self):
+        return f"defelement_type_raw_{self.variable}_shape"
 
-    def empty(self, lib, ffi):
-        """Create an empty instance of this object to use as an in/out argument."""
-        return np.empty([1, 1, 3])
+    @property
+    def shape_function_name(self):
+        return f"defelement_function_raw_{self.variable}_shape"
+
+    @property
+    def shape_variable_name(self):
+        return f"defelement_raw_{self.variable}_shape"
 
     @property
     def raw_type_name(self):
         return f"defelement_type_raw_{self.variable}"
 
     @property
-    def raw_type_variable_name(self):
+    def raw_variable_name(self):
         return f"defelement_raw_{self.variable}"
+
+    @property
+    def in_out(self) -> bool:
+        """Is this an in/out argument when used as an output?"""
+        return True
+
+    def empty(self, lib, ffi, inputs):
+        """Create an empty instance of this object to use as an in/out argument."""
+        shape = getattr(lib, self.shape_function_name)(*inputs)
+        return np.empty([getattr(shape, f"shape{i}") for i in range(self.dimension)])
+
+    def metadata_function_signature(self, language: str, inputs: str) -> str | None:
+        """Get the signature of the function to generate metadata for this type."""
+        match language:
+            case "cpp":
+                return f"{self.shape_type_name} {self.shape_function_name}({inputs})"
+            case _:
+                return None
+
+    def metadata_function_impl(self, language: str, function: str) -> str | None:
+        """Get the signature of the function to generate metadata for this type."""
+        out = ""
+        if f"INIT {self.variable}" in function:
+            out += function.split(f"INIT {self.variable}")[0]
+
+        out += f"{self.shape_type_name} {self.shape_variable_name} = {{ "
+        if self.shape is None:
+            out += ", ".join(f".shape{i} = {self.raw_variable_name}.shape{i}" for i in range(self.dimension))
+        else:
+            out += ", ".join(f".shape{i} = (int){j}" for i, j in enumerate(self.shape))
+        out += " };\n"
+        out += f"return {self.shape_variable_name};"
+
+        return out
 
     def type(self, language: str):
         """Input(s) to a function."""
@@ -89,7 +134,7 @@ class NDArray(ArgType):
         """Input(s) to a function."""
         match language:
             case "cpp":
-                return f"{self.raw_type_name} {self.raw_type_variable_name}"
+                return f"{self.raw_type_name} {self.raw_variable_name}"
             case _:
                 raise ValueError(f"Unsupported language: {language}")
 
@@ -99,8 +144,8 @@ class NDArray(ArgType):
             case "cpp":
                 return "\n".join([
                     f"{self.raw_type_name} {self.variable}_out = {{ " + ", ".join([
-                        f".data = {self.raw_type_variable_name}.data()"] + [
-                        f".shape{i} = {self.variable}_shape[{i}]" for i in range(self.dimension)
+                        f".data = {self.raw_variable_name}.data()"] + [
+                        f".shape{i} = {self.shape_variable_name}[{i}]" for i in range(self.dimension)
                     ]) + " };",
                     f"return {self.variable}_out;",
                 ])
@@ -113,14 +158,16 @@ class NDArray(ArgType):
             case "cpp":
                 return "\n".join([
                     f"typedef struct {self.raw_type_name} {{",
-                    f"  {self.dtype}* data;"] + [
+                    f"  {self.dtype}* data;",
+                ] + [
                     f"  int shape{i};" for i in range(self.dimension)
                 ] + [
                     f"}} {self.raw_type_name};",
-                    f"typedef struct {self.raw_type_name}_metadata {{",
+                    f"typedef struct {self.shape_type_name} {{",
+                ] + [
                     f"  int shape{i};" for i in range(self.dimension)
                 ] + [
-                    f"}} {self.raw_type_name}_metadata;",
+                    f"}} {self.shape_type_name};",
                     f"{self.raw_type_name} new_{self.raw_type_name}({self.dtype}* data, " + ", ".join(f"int shape{i}" for i in range(self.dimension)) + ");",
                 ])
             case _:
@@ -139,29 +186,28 @@ class NDArray(ArgType):
             case _:
                 return None
 
-    def initialise(self, language: str, indentation: int = 0, output: bool = False) -> str:
+    def initialise(self, language: str, output: bool = False) -> str:
         """Initialise in the given language."""
-        tab = " " * indentation
         match language:
             case "cpp":
                 lines = []
                 if self.shape is None:
                     lines.append(
-                        f"{tab}std::array<int, {self.dimension}> {self.variable}_shape = {{" + ", ".join(f"{self.raw_type_variable_name}.shape{i}" for i in range(self.dimension)) + "};",
+                        f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{" + ", ".join(f"{self.raw_variable_name}.shape{i}" for i in range(self.dimension)) + "};",
                     )
                 else:
                     lines.append(
-                        f"{tab}std::array<int, {self.dimension}> {self.variable}_shape = {{" + ", ".join(f"(int){i}" for i in self.shape) + "};",
+                        f"std::array<int, {self.dimension}> {self.shape_variable_name} = {{" + ", ".join(f"(int){i}" for i in self.shape) + "};",
                     )
                 if output:
                     assert self.shape is not None
                     lines += [
-                        f"std::vector<{self.dtype}> {self.raw_type_variable_name}(" + " * ".join(f"{i}" for i in self.shape) + ");",
-                        f"{tab}mdspan<{self.dtype}, {self.dimension}> {self.variable}({self.raw_type_variable_name}.data(), {self.variable}_shape);",
+                        f"std::vector<{self.dtype}> {self.raw_variable_name}(" + " * ".join(f"{i}" for i in self.shape) + ");",
+                        f"mdspan<{self.dtype}, {self.dimension}> {self.variable}({self.raw_variable_name}.data(), {self.shape_variable_name});",
                     ]
                 else:
                     lines.append(
-                        f"{tab}mdspan<{self.dtype}, {self.dimension}> {self.variable}(static_cast<{self.dtype}*>({self.raw_type_variable_name}.data), {self.variable}_shape);",
+                        f"mdspan<{self.dtype}, {self.dimension}> {self.variable}({self.raw_variable_name}.data, {self.shape_variable_name});",
                     )
                 return "\n".join(lines)
             case _:
@@ -180,7 +226,39 @@ class NDArray(ArgType):
             out.__setitem__(index, obj.data[i])
             i += 1
         return out
-        # return np.ctypeslib.as_array(obj.data, shape=[getattr(obj, f"shape{i}") for i in range(self.dimension)])
+
+
+class Scalar(ArgType):
+    """Scalar."""
+
+    def __init__(self, variable: str, dtype: str):
+        """Initialise."""
+        self.variable = variable
+        self.dtype = dtype
+
+    def type(self, language: str):
+        """Input(s) to a function."""
+        match language:
+            case "cpp":
+                return self.dtype
+            case _:
+                raise ValueError(f"Unsupported language: {language}")
+
+    def function_input(self, language: str):
+        """Input(s) to a function."""
+        match language:
+            case "cpp":
+                return f"{self.dtype} {self.variable}"
+            case _:
+                raise ValueError(f"Unsupported language: {language}")
+
+    def function_output(self, language: str):
+        """Output(s) from a function."""
+        match language:
+            case "cpp":
+                return f"return {self.variable};"
+            case _:
+                raise ValueError(f"Unsupported language: {language}")
 
 
 def ndarray(
@@ -201,3 +279,16 @@ def array(
     """Create a one-dimensional array."""
     return NDArray(variable, 1, None if length is None else (length, ), dtype)
 
+
+def int(
+    variable: str,
+) -> ArgType:
+    """Create a one-dimensional array."""
+    return Scalar(variable, "int")
+
+
+def double(
+    variable: str,
+) -> ArgType:
+    """Create a one-dimensional array."""
+    return Scalar(variable, "double")
