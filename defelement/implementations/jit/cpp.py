@@ -17,7 +17,7 @@ def compile(
     function: str,
     inputs: list[ArgType] = [],
     outputs: list[ArgType] = [],
-    imports: str,
+    imports: str | None = None,
     id: str | None = None,
     packages: list[tuple[str, str]] = [],
 ) -> Callable:
@@ -72,7 +72,8 @@ def compile(
                 "using mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE::mdspan"
                 "<T, MDSPAN_IMPL_STANDARD_NAMESPACE::dextents<std::size_t, d>>;\n"
             )
-            code += imports.strip("\n")
+            if imports is not None:
+                code += imports.strip("\n")
             code += "\n\n"
             for i in inputs + outputs:
                 init_i = i.init_custom_type("cpp")
