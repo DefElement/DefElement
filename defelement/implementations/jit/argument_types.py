@@ -35,11 +35,11 @@ class ArgType(ABC):
 
     @abstractmethod
     def function_input(self, language: str) -> str:
-        """Input(s) to a function."""
+        """Get input(s) to a function."""
 
     @abstractmethod
     def function_output(self, language: str) -> str:
-        """Output(s) from a function."""
+        """Get output(s) from a function."""
 
     def initialise(self, language: str, output: bool = False) -> str:
         """Initialise in the given language."""
@@ -55,7 +55,7 @@ class ArgType(ABC):
 
     @property
     def in_out(self) -> bool:
-        """Is this an in/out argument when used as an output?"""
+        """Check if this is an in/out argument when used as an output."""
         return False
 
     def empty(self, lib, ffi, inputs):
@@ -82,27 +82,32 @@ class NDArray(ArgType):
 
     @property
     def shape_type_name(self):
+        """Name for shape type."""
         return f"defelement_type_raw_{self.variable}_shape"
 
     @property
     def shape_function_name(self):
+        """Name for shape function."""
         return f"defelement_function_raw_{self.variable}_shape"
 
     @property
     def shape_variable_name(self):
+        """Name for shape variable."""
         return f"defelement_raw_{self.variable}_shape"
 
     @property
     def raw_type_name(self):
+        """Name for raw type."""
         return f"defelement_type_raw_{self.variable}"
 
     @property
     def raw_variable_name(self):
+        """Name for raw variable."""
         return f"defelement_raw_{self.variable}"
 
     @property
     def in_out(self) -> bool:
-        """Is this an in/out argument when used as an output?"""
+        """Check if this is an in/out argument when used as an output."""
         return True
 
     def empty(self, lib, ffi, inputs):
@@ -142,7 +147,7 @@ class NDArray(ArgType):
                 raise NotImplementedError()
 
     def type(self, language: str):
-        """Input(s) to a function."""
+        """Type to use for function output."""
         match language:
             case "cpp":
                 return f"{self.raw_type_name}"
@@ -150,7 +155,7 @@ class NDArray(ArgType):
                 raise ValueError(f"Unsupported language: {language}")
 
     def function_input(self, language: str):
-        """Input(s) to a function."""
+        """Get input(s) to a function."""
         match language:
             case "cpp":
                 return f"{self.raw_type_name} {self.raw_variable_name}"
@@ -158,7 +163,7 @@ class NDArray(ArgType):
                 raise ValueError(f"Unsupported language: {language}")
 
     def function_output(self, language: str):
-        """Output(s) from a function."""
+        """Get output(s) from a function."""
         match language:
             case "cpp":
                 return (
@@ -269,7 +274,7 @@ class Scalar(ArgType):
         return self._variable
 
     def type(self, language: str):
-        """Input(s) to a function."""
+        """Type to use for function output."""
         match language:
             case "cpp":
                 return self.dtype
@@ -277,7 +282,7 @@ class Scalar(ArgType):
                 raise ValueError(f"Unsupported language: {language}")
 
     def function_input(self, language: str):
-        """Input(s) to a function."""
+        """Get input(s) to a function."""
         match language:
             case "cpp":
                 return f"{self.dtype} {self.variable}"
@@ -285,7 +290,7 @@ class Scalar(ArgType):
                 raise ValueError(f"Unsupported language: {language}")
 
     def function_output(self, language: str):
-        """Output(s) from a function."""
+        """Get output(s) from a function."""
         match language:
             case "cpp":
                 return f"return {self.variable};"

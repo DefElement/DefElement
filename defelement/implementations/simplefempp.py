@@ -68,7 +68,6 @@ class SimplefemppImplementation(Implementation):
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
-
         if degree == 1:
             entity_dofs = [
                 [[0], [1], [2]],
