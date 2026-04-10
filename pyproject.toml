@@ -5,7 +5,7 @@ requires = ["flit_core >=3.8.0,<4"]
 [project]
 name = "defelement"
 description = "an encyclopedia of finite element definitions"
-version = "2026.03"
+version = "2026.04"
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
 license = "MIT"
@@ -21,7 +21,7 @@ dependencies = [
     "PyGithub==2.9",
     "pytz==2026.1",
     "pyyaml==6.0.3",
-    "website-build-tools==0.1.12"
+    "website-build-tools==0.1.13"
 ]
 packages = ["defelement", "defelement.implementations"]
 
