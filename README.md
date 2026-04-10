@@ -37,7 +37,9 @@ is released under an [MIT license](LICENSE.txt).
 The content of the DefElement website itself (including `data/`, `elements/`, `files/`, `pages/`, `people/`)
 is released under a [Creative Commons Attribution 4.0 International (CC BY 4.0) license](LICENSE-CC.txt).
 
-Font Awesome (`files/fontawesome`) is released under a [Font Awesome Free License](files/fontawesome/LICENSE.txt).
+Font Awesome (`files/fontawesome`) is released under a [Font Awesome Free license](files/fontawesome/LICENSE.txt).
+
+The Kokkos implementation of mdspan (`defelement/implementations/jit/cpp/mdspan.hpp`) is released under an [Apache 2.0 license with LLVM exceptions](https://kokkos.org/LICENSE/).
 
 ## Archive
 Archived snapshots of code for building DefElement and website builds can be found at https://doi.org/10.5281/zenodo.17904468
