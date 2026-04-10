@@ -171,15 +171,13 @@ class SimplefemppImplementation(Implementation):
     def install(cls, language: str) -> str | None:
         """Get the command(s) to install this implementation."""
         if language == "cpp":
-            return "\n".join(
-                [
-                    "git clone https://github.com/DefElement/simplefempp",
-                    "cd simplefempp",
-                    "mkdir build",
-                    "cd build",
-                    "cmake ..",
-                    "sudo make install",
-                ]
+            return (
+                "git clone https://github.com/DefElement/simplefempp\n"
+                "cd simplefempp\n"
+                "mkdir build\n"
+                "cd build\n"
+                "cmake ..\n"
+                "sudo make install"
             )
         return None
 
