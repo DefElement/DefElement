@@ -6,7 +6,11 @@ from numpy import float64
 from numpy.typing import NDArray
 
 from defelement.element import Element
+# </intro>
+# <jit-intro>
 from defelement.implementations import jit
+# </jit-intro>
+# <intro>
 from defelement.implementations.core import Implementation
 
 
@@ -186,17 +190,8 @@ class SimplefemppImplementation(Implementation):
         """Get the version number of this implementation."""
         return "0.9.0"
 
-    @classmethod
-    def verify(
-        cls,
-        name: str,
-        reference: str,
-        degree: int,
-        params: dict[str, str],
-        element: Element,
-        example: str,
-    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
-        """Get verification data."""
+    def entity_dofs(cls, degree: int) -> list[list[int]]:
+        """Get DOFs associated with each cell entity."""
         if degree == 1:
             entity_dofs = [
                 [[0], [1], [2]],
@@ -218,6 +213,20 @@ class SimplefemppImplementation(Implementation):
         else:
             raise ValueError(f"Unsupported degree: {degree}")
 
+# <verificationpp>
+
+    @classmethod
+    def verify(
+        cls,
+        name: str,
+        reference: str,
+        degree: int,
+        params: dict[str, str],
+        element: Element,
+        example: str,
+    ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
+        """Get verification data."""
+        entity_dofs = cls.entity_dofs(degree)
         tabulate = jit.cpp(
             inputs=[jit.ndarray("pts", 2), jit.integer("degree")],
             function=(
@@ -237,6 +246,8 @@ class SimplefemppImplementation(Implementation):
             packages=[("SimpleFem", "simplefem")],
         )
         return entity_dofs, lambda pts: tabulate(pts, degree)  # type: ignore
+
+# </verificationpp>
 
     id = "simplefempp"
     name = "simplefem++"

@@ -247,5 +247,10 @@ Finally, we return `entity_dofs` and the function `tabulate` and set the class v
 ### The verification page
 
 As it is an example library, simplefem is hidden from the main verification index pages,
-but can be viewed at  [defelement.org/verification/simplefem.html](/verification/simplefem.html).
+but can be viewed at [defelement.org/verification/simplefem.html](/verification/simplefem.html).
 
+### Verification of non-Python libraries
+
+For finite element implementations without a Python interface, DefElement include some
+helper functions to make interfacing these implementations for verification easier.
+For more details, see the [verification and JIT guide](verification-and-jit.md)

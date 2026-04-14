@@ -119,7 +119,10 @@ def insert_snippet(matches: typing.Match[str]) -> str:
     file = matches[1]
     tag = matches[2]
     with open(file) as f:
-        content = f.read().split(f"# <{tag}>\n")[1].split(f"# </{tag}>\n")[0]
+        content = "\n\n".join(
+            part.split(f"# </{tag}>\n")[0]
+            for part in f.read().split(f"# <{tag}>\n")[1:]
+        )
     out = ""
     for part in re.split(r"\n\n+", content.rstrip(" \n").lstrip("\n")):
         out += "<p class='pcode'>"

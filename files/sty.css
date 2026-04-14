@@ -80,6 +80,8 @@ table.bordered thead {font-weight:bold;font-size:80%}
 table.bordered.align-left td {padding:2px 6px;text-align:left}
 table.bordered.align-right td {padding:2px 6px;text-align:right}
 
+table.centred {margin:auto}
+
 table.element-info {width:100%}
 table.element-info, table.element-info tr, table.element-info td, table.element-info tr td
     {border-collapse:collapsed}
