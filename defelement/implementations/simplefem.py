@@ -193,7 +193,7 @@ class SimplefemppImplementation(Implementation):
         return "0.9.0"
 
     @classmethod
-    def entity_dofs(cls, degree: int) -> list[list[int]]:
+    def entity_dofs(cls, degree: int) -> list[list[list[int]]]:
         """Get DOFs associated with each cell entity."""
         if degree == 1:
             return [
