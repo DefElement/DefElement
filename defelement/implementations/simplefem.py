@@ -6,9 +6,11 @@ from numpy import float64
 from numpy.typing import NDArray
 
 from defelement.element import Element
+
 # </intro>
 # <jit-intro>
 from defelement.implementations import jit
+
 # </jit-intro>
 # <intro>
 from defelement.implementations.core import Implementation
@@ -190,22 +192,23 @@ class SimplefemppImplementation(Implementation):
         """Get the version number of this implementation."""
         return "0.9.0"
 
+    @classmethod
     def entity_dofs(cls, degree: int) -> list[list[int]]:
         """Get DOFs associated with each cell entity."""
         if degree == 1:
-            entity_dofs = [
+            return [
                 [[0], [1], [2]],
                 [[], [], []],
                 [[]],
             ]
         elif degree == 2:
-            entity_dofs = [
+            return [
                 [[0], [2], [5]],
                 [[1], [3], [4]],
                 [[]],
             ]
         elif degree == 3:
-            entity_dofs = [
+            return [
                 [[0], [3], [9]],
                 [[1, 2], [4, 7], [6, 8]],
                 [[5]],
@@ -213,7 +216,7 @@ class SimplefemppImplementation(Implementation):
         else:
             raise ValueError(f"Unsupported degree: {degree}")
 
-# <verificationpp>
+    # <verificationpp>
 
     @classmethod
     def verify(
@@ -247,7 +250,7 @@ class SimplefemppImplementation(Implementation):
         )
         return entity_dofs, lambda pts: tabulate(pts, degree)  # type: ignore
 
-# </verificationpp>
+    # </verificationpp>
 
     id = "simplefempp"
     name = "simplefem++"

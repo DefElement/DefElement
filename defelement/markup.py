@@ -120,8 +120,7 @@ def insert_snippet(matches: typing.Match[str]) -> str:
     tag = matches[2]
     with open(file) as f:
         content = "\n\n".join(
-            part.split(f"# </{tag}>\n")[0]
-            for part in f.read().split(f"# <{tag}>\n")[1:]
+            part.split(f"# </{tag}>\n")[0] for part in f.read().split(f"# <{tag}>\n")[1:]
         )
     out = ""
     for part in re.split(r"\n\n+", content.rstrip(" \n").lstrip("\n")):
