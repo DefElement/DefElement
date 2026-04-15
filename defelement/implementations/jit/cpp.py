@@ -126,7 +126,7 @@ def compile(
             )
 
             for source, target in [
-                ("cmake_template", "CMakeLists.txt"),
+                ("CMakeLists.template.txt", "CMakeLists.txt"),
                 ("mdspan.hpp", "mdspan.hpp"),
                 ("Config.cmake.in", "DefElementFunctionConfig.cmake.in"),
             ]:
