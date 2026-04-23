@@ -36,7 +36,7 @@ sobolev: H(div)
 implementations:
   symfem: MTW
   fiat:
-    triangle: MardalTaiWinther DEGREEMAP=k+2
+    triangle: MardalTaiWinther
 examples:
   - triangle,1
   - tetrahedron,1
