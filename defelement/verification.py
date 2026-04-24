@@ -142,7 +142,7 @@ def same_span(table0: NDArray[float64], table1: NDArray[float64], complete: bool
         return False
 
     stack = np.hstack([table0, table1])
-    srank = np.linalg.matrix_rank(stack)
+    srank = np.linalg.matrix_rank(stack, tol=1e-11)
     return rank0 == srank
 
 
