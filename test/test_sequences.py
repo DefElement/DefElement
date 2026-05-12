@@ -10,7 +10,7 @@ import symfem
 import sympy
 import yaml
 
-oeis_cache = {}
+oeis_cache: dict[str, str] = {}
 
 
 class TimeOutTheTest(BaseException):

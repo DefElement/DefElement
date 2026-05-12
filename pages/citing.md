@@ -42,23 +42,26 @@ You may also wish to cite the [DefElement paper](https://arxiv.org/abs/2506.2018
 To cite this, you can use the following BibTeX:
 
 ```
-@unpublished{2025-defelement,
+@article{2026-defelement,
        AUTHOR = {Scroggs, Matthew W.
                  and Brubeck, Pablo D.
                  and Dean, Joseph P.
                  and Dokken, J{\o}rgen S.
                  and Marsden, India},
         TITLE = {{DefElement:} an encyclopedia of finite element definitions},
-         YEAR = {2025},
-         NOTE = {submitted to Computational Science and Engineering},
-          DOI = {10.48550/arXiv.2506.20188}
+         YEAR = {2026},
+      JOURNAL = {Computational Science and Engineering},
+       VOLUME = {3},
+       NUMBER = {2},
+        PAGES = {{1--31}},
+          DOI = {10.1007/s44207-026-00011-0}
 }
 ```
 
 This will create a reference along the lines of:
 
 <ul class='citations'>
-<li>M. W. Scroggs, P. D. Brubeck, J. P. Dean, J. S. Dokken, I. Marsden. <i>DefElement: an encyclopedia of finite element definitions</i>, 2025, submitted to Computational Science and Engineering, <a href='https://doi.org/10.48550/arXiv.2506.20188'>https://doi.org/10.48550/arXiv.2506.20188</a>.</li>
+<li>M. W. Scroggs, P. D. Brubeck, J. P. Dean, J. S. Dokken, I. Marsden. <i>DefElement: an encyclopedia of finite element definitions</i>, 2026, Computational Science and Engineering 3(2), 1&ndash;31, <a href='https://doi.org/10.1007/s44207-026-00011-0'>https://doi.org/10.1007/s44207-026-00011-0</a>.</li>
 </ul>
 
 ## DefElement poster
