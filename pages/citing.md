@@ -38,7 +38,7 @@ This will create a reference along the lines of:
 
 ### DefElement paper
 
-You may also wish to cite the [DefElement paper](https://arxiv.org/abs/2506.20188), which is currently available as a preprint on ar&Chi;iv.
+You may also wish to cite the [DefElement paper](https://dx.doi.org/10.1007/s44207-026-00011-0), which is currently available as a preprint on ar&Chi;iv.
 To cite this, you can use the following BibTeX:
 
 ```
