@@ -11,6 +11,7 @@ from defelement.implementations.core import (
     VariantNotImplemented,
     parse_example,
 )
+from defelement.implementations import jit
 
 __all__ = [
     "DegreeNotImplemented",
