@@ -56,7 +56,7 @@ tex_comment = (
     "% -------------------------------------------------------\n"
 )
 
-all_plots = []
+all_plots: list[str] = []
 
 
 def do_the_plot(
