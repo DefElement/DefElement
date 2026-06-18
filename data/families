@@ -2,20 +2,26 @@ de-rham:
   P:
     arnold-logg: P
     cockburn-fu: 1
+    txt_name: P
   P-:
     arnold-logg: P-
     cockburn-fu: 2
+    txt_name: P-
   Q-:
     arnold-logg: Q-
     cockburn-fu: 4
+    txt_name: Q-
   S:
     arnold-logg: S
     cockburn-fu: 1
+    txt_name: S
   S-:
     arnold-logg: S-
     cockburn-fu: 2
+    txt_name: Q-
   TNT:
     cockburn-fu: 3
+    txt_name: TNT
   CH:
     name:
       general: \mathrm{C}\mathrm{P}^{3-r}\mathrm{\Lambda}^r(\mathcal{R})
@@ -33,3 +39,4 @@ de-rham:
         pagestart: 327
         pageend: 371
         doi: 10.1007/s00211-018-0970-6
+    txt_name: C

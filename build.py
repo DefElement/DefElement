@@ -63,6 +63,43 @@ def build_example(eg: dict[str, typing.Any]):
     )
 
 
+def compile_example_info(eg):
+    cell, degree, variant, kwargs = parse_example(eg)
+    symfem_name, symfem_degree, params = e.get_implementation_string(
+        "symfem", cell, degree, variant
+    )
+
+    fname = f"{cell}-{e.filename}"
+    if variant is not None:
+        fname += f"-{variant}"
+    fname += f"-{degree}.html"
+    for s in " ()":
+        fname = fname.replace(s, "-")
+
+    name = f"{cell}<br />degree {degree}"
+    if variant is not None:
+        name += f"<br />{e.variant_name(variant)} variant"
+    for key, value in kwargs.items():
+        name += f"<br />{key}={str(value).replace(' ', '&nbsp;')}"
+
+    eginfo = {
+        "name": name,
+        "args": [cell, symfem_name, symfem_degree],
+        "kwargs": kwargs,
+        "html_name": e.html_name,
+        "element_filename": e.html_filename,
+        "filename": fname,
+        "url": f"/elements/examples/{fname}",
+    }
+    if "variant" in params:
+        eginfo["kwargs"]["variant"] = params["variant"]
+    if "legacy-names" in e.data:
+        eginfo["legacy-filenames"] = [
+            fname.replace(e.filename, i) for i in e.data["legacy-names"]
+        ]
+    return eginfo
+
+
 if __name__ == "__main__":
     start_all = datetime.now()
 
@@ -631,39 +668,7 @@ if __name__ == "__main__":
                 assert e.implemented("symfem")
 
                 for eg in e.examples:
-                    cell, degree, variant, kwargs = parse_example(eg)
-                    symfem_name, symfem_degree, params = e.get_implementation_string(
-                        "symfem", cell, degree, variant
-                    )
-
-                    fname = f"{cell}-{e.filename}"
-                    if variant is not None:
-                        fname += f"-{variant}"
-                    fname += f"-{degree}.html"
-                    for s in " ()":
-                        fname = fname.replace(s, "-")
-
-                    name = f"{cell}<br />degree {degree}"
-                    if variant is not None:
-                        name += f"<br />{e.variant_name(variant)} variant"
-                    for key, value in kwargs.items():
-                        name += f"<br />{key}={str(value).replace(' ', '&nbsp;')}"
-
-                    eginfo = {
-                        "name": name,
-                        "args": [cell, symfem_name, symfem_degree],
-                        "kwargs": kwargs,
-                        "html_name": e.html_name,
-                        "element_filename": e.html_filename,
-                        "filename": fname,
-                        "url": f"/elements/examples/{fname}",
-                    }
-                    if "variant" in params:
-                        eginfo["kwargs"]["variant"] = params["variant"]
-                    if "legacy-names" in e.data:
-                        eginfo["legacy-filenames"] = [
-                            fname.replace(e.filename, i) for i in e.data["legacy-names"]
-                        ]
+                    eg_info = compile_example_info(eg)
                     all_examples.append(eginfo)
                     element_examples.append(eginfo)
 
@@ -1632,9 +1637,31 @@ if __name__ == "__main__":
                 de_rham_2d_hcurl.append(de_rham_row(family, fname, cell, ["0", "1", "d"]))
             sub_content += "</ul>"
 
+        sub_content += "<table>"
+        for cell in ["simplex", "tp"]:
+            if cell in family:
+                sub_content += "<tr>"
+                for o, join in [
+                    ("0", "<td>\\(\\xrightarrow{\\nabla}\\)</td>"),
+                    ("1", "<td>\\(\\xrightarrow{\\nabla\\times}\\)</td>"),
+                    ("d-1", "<td>\\(\\xrightarrow{\\nabla\\cdot}\\)</td>"),
+                    ("d", "")
+                ]:
+                    sub_content += "<td style='align:center'>"
+                    if o in family[cell]:
+                        print(family[cell][o])
+                        print(data)()
+                        sub_content += (
+                            f"<a href='/elements/{family[cell][o][1]}'"
+                            f" style='text-decoration:none'><small>{family[cell][o][0]}<small></a>"
+                        )
+                    sub_content += "</td>" + join
+                sub_content += "</tr>"
+        sub_content += "</table>"
+
         write_html_page(
             os.path.join(settings.htmlfamilies_path, f"{fname}.html"),
-            "The " + " or ".join(cnames) + " family",
+            f"The {data['txt_name']} family",
             sub_content,
         )
 
