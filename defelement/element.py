@@ -363,6 +363,24 @@ class Element:
             return None
         return self.data["sobolev"]
 
+    def complex_degrees(self) -> dict[str, dict[str, int]]:
+        """Get degrees to use for examples in complexes.
+
+        Returns:
+            Map from complex id to degree
+        """
+        if "complexes" not in self.data:
+            return {}
+        out = {}
+        for key, families in self.data["complexes"].items():
+            out[key] = {}
+            if not isinstance(families, (list, tuple)):
+                families = [families]
+            for e in families:
+                id = e.split(",")[0]
+                out[key][id] = self._c.families[key][id].get("example-degree", 1)
+        return out
+
     def complexes(self, link: bool = True, names: bool = True) -> dict[str, list[str]]:
         """Get complexes.
 
