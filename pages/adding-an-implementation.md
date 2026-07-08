@@ -89,7 +89,7 @@ For simplefem, these class methods are defined as follows:
 
 {{snippet::defelement/implementations/simplefem.py::example}}
 
-The funtion `example_import` gives code to import simplefem. The inputs to class method `single_example`
+The function `example_import` gives code to import simplefem. The inputs to class method `single_example`
 will be `name="lagrange_element"`, `reference="triangle"`, and `params={}`. The degree used in
 DefElement (in this case, the [polynomial subdegree](finite-elements.md#The+degree+of+a+finite+element) 1, 2, or 3) will be substituted into the `DEGREEMAP`
 special parameter as `k` before this method is called (so the values 3, 6, and 10 will be passed in).
@@ -247,5 +247,10 @@ Finally, we return `entity_dofs` and the function `tabulate` and set the class v
 ### The verification page
 
 As it is an example library, simplefem is hidden from the main verification index pages,
-but can be viewed at  [defelement.org/verification/simplefem.html](/verification/simplefem.html).
+but can be viewed at [defelement.org/verification/simplefem.html](/verification/simplefem.html).
 
+### Verification of non-Python libraries
+
+For finite element implementations without a Python interface, DefElement include some
+helper functions to make interfacing these implementations for verification easier.
+For more details, see the [verification and JIT guide](verification-and-jit.md)

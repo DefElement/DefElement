@@ -267,7 +267,7 @@ class Implementation:
             code += "\n\n"
             if language == "python":
                 code += "# "
-            elif language in ["rust", "c++", "c"]:
+            elif language in ["rust", "cpp", "c"]:
                 code += "// "
             else:
                 raise ValueError(f"Unsupported language: {language}")
