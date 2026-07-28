@@ -69,17 +69,10 @@ jobs:
         name: Make verification dir containing history
       - run: python3 verify.py ../verification/verification.json --processes 4
         name: Run verification
-      - run: |
-          cd ../verification
-          git init
-          git checkout -b verification
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git commit -m "verification.json"
-          git remote add origin https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com/DefElement/DefElement.git
-          git push -u origin verification --force
+      - run: python3 .github/scripts/push_verification.py ../verification
         name: Push to GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-deply-website:
     name: Build and deploy website
