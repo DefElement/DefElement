@@ -1,9 +1,7 @@
 import json
 import os
-import sys
 
 import requests
-
 
 token = os.environ.get("ZENODO_TOKEN", None)
 version = os.environ.get("VERSION", None)
