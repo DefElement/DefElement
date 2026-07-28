@@ -1,17 +1,20 @@
 import json
 import os
-import sys
 
 import requests
 
-_, file, token = sys.argv
+token = os.environ.get("ZENODO_TOKEN", None)
+version = os.environ.get("VERSION", None)
+tar_gz = f"defelement-v{version}.tar.gz"
+if "PATH" in os.environ:
+    tar_gz = os.path.join(os.environ["PATH"], tar_gz)
 
 doi = "10.5281/zenodo.17904468"
 api_url = "zenodo.org"
 # api_url = "sandbox.zenodo.org"
 
 headers = {"Authorization": f"Bearer {token}"}
-filename = file.split("/")[-1]
+filename = tar_gz.split("/")[-1]
 root_dir = os.path.join(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), ".."),
     "..",
@@ -72,7 +75,7 @@ r = put(
     "application/json",
 )
 
-with open(file, "rb") as f:
+with open(tar_gz, "rb") as f:
     r = put(f"{bucket_link}/{filename}", f)
 
 r = post(f"https://{api_url}/api/deposit/depositions/{new_id}/actions/publish")

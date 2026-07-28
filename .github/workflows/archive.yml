@@ -5,6 +5,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-version-number:
     name: Check version number
@@ -13,17 +19,23 @@ jobs:
       release: ${{ steps.version.outputs.release }}
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install PyGitHub
         run: python3 -m pip install PyGitHub
 
       - name: Check version number
-        run: python3 .github/scripts/check_version_number.py ${{ secrets.GITHUB_TOKEN }} >> $GITHUB_OUTPUT
+        run: python3 .github/scripts/check_version_number.py >> $GITHUB_OUTPUT
         id: version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: read
 
   build-archive:
     name: Build archive
@@ -31,21 +43,24 @@ jobs:
     needs:
       - check-version-number
     permissions:
-      id-token: write
-      contents: write
+      id-token: write # Needed by push
+      contents: write # Allow pushing of zip
     if: needs.check-version-number.outputs.release != 'no'
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Clone verification
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./verification
           repository: DefElement/DefElement
           ref: verification
+          persist-credentials: false
         continue-on-error: true
 
       - name: Move verification jsons
@@ -56,11 +71,12 @@ jobs:
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
       - name: Clone Varela Round
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
           ref: master
+          persist-credentials: false
       - run: |
           cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
           rm -r varela-r
@@ -75,8 +91,10 @@ jobs:
 
       - run: python3 -m pip install .
         name: Install defelement
-      - run: python3 build.py _html --verification-json verification.json --github-token ${{ secrets.GITHUB_TOKEN }} --processes 4
+      - run: python3 build.py _html --verification-json verification.json --processes 4
         name: Build website HTML
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install implementations
         run: |
@@ -94,12 +112,22 @@ jobs:
         run: python3 -m pip freeze > requirements.lock
 
       - name: Make tar.gz
-        run: tar --exclude '.git' -czvf ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz .
+        run: tar --exclude '.git' -czvf ../defelement-v${NEEDS_CHECK_VERSION_NUMBER_OUTPUTS_RELEASE}.tar.gz .
+        env:
+          NEEDS_CHECK_VERSION_NUMBER_OUTPUTS_RELEASE: ${{ needs.check-version-number.outputs.release }}
 
       - name: Install PyGitHub
         run: python3 -m pip install PyGitHub
       - name: Make release
-        run: python3 .github/scripts/make_release.py ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ needs.check-version-number.outputs.release }} ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/scripts/make_release.py
+        env:
+          PATH: ".."
+          VERSION: ${{ needs.check-version-number.outputs.release }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to Zenodo
-        run: python3 .github/scripts/upload_to_zenodo.py ../defelement-v${{ needs.check-version-number.outputs.release }}.tar.gz ${{ secrets.ZENODO_TOKEN }}
+        run: python3 .github/scripts/upload_to_zenodo.py
+        env:
+          PATH: ".."
+          VERSION: ${{ needs.check-version-number.outputs.release }}
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
