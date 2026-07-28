@@ -1,9 +1,14 @@
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 
 import github
 
-_, tar_gz, version, access_key = sys.argv
+access_key = os.environ.get("GITHUB_TOKEN", None)
+version = os.environ.get("VERSION", None)
+tar_gz = f"defelement-v{version}.tar.gz"
+if "PATH" in os.environ:
+    tar_gz = os.path.join(os.environ["PATH"], tar_gz)
 
 git = github.Github(auth=github.Auth.Token(access_key))
 

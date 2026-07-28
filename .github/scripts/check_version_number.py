@@ -20,7 +20,7 @@ with open(
 ) as f:
     version = tomllib.load(f)["project"]["version"]
 
-_, access_key = sys.argv
+access_key = os.environ.get("GITHUB_TOKEN", None)
 
 git = github.Github(auth=github.Auth.Token(access_key))
 

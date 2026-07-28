@@ -8,16 +8,24 @@ on:
   schedule:
     - cron: "0 7 * * 1"
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   style-checks:
     name: Run style checks
     runs-on: ubuntu-22.04
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - run: |
           python3 -m pip install .[style]
@@ -39,38 +47,43 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Clone Symfem
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./symfem
           repository: mscroggs/symfem
           ref: main
+          persist-credentials: false
       - name: Install Symfem
         run: |
             cd symfem
             python3 -m pip install .[optional]
 
       - name: Clone verification
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./verification
           repository: DefElement/DefElement
           ref: verification
+          persist-credentials: false
         continue-on-error: true
 
       - run: mkdir -p ~/.local/share/fonts
         name: Make font folder
       - name: Clone Varela Round
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./varela-r
           repository: avrahamcornfeld/Varela-Round-Hebrew
           ref: master
+          persist-credentials: false
       - run: cp varela-r/fonts/VarelaRound-Regular.otf ~/.local/share/fonts/
         name: Install Varela Round
       - name: Download and install Computer Modern
@@ -83,6 +96,8 @@ jobs:
         name: Install defelement
       - run: python3 build.py _test_html --no-cache --verification-json verification/verification.json --test auto --processes 4 --include-simplefem
         name: Build website HTML
+    permissions:
+      contents: read
 
   build-website:
     name: Build and deploy website
@@ -91,32 +106,35 @@ jobs:
       - run-tests
     uses: ./.github/workflows/build.yml
     permissions:
-      pages: write
-      id-token: write
+      pages: write # Allow updating of website
+      id-token: write # Needed by pages
 
   verification:
     name: Test verification
     runs-on: ubuntu-22.04
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Load Symfem cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./symfem
           repository: mscroggs/symfem
           ref: main
+          persist-credentials: false
       - name: Install Symfem
         run: |
             cd symfem
@@ -139,33 +157,38 @@ jobs:
         name: Run verification test on 4 processes
       - name: Check that two verifications runs give the same results
         run: python3 .github/scripts/compare_json.py verification-serial.json verification-4.json
+    permissions:
+      contents: read
 
   run-tests:
     name: Run tests
     runs-on: ubuntu-22.04
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - run: python3 -m pip install pytest-xdist
         name: Install dependencies
 
       - name: Load Symfem cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /home/runner/.cache/symfem
           key: symfem-cache
 
       - name: Clone Symfem
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./symfem
           repository: mscroggs/symfem
           ref: main
+          persist-credentials: false
       - name: Install Symfem
         run: |
             cd symfem
@@ -183,3 +206,5 @@ jobs:
 
       - run: python3 -m pytest -n4 test
         name: Run tests with pytest
+    permissions:
+      contents: read

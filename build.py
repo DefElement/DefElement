@@ -81,12 +81,6 @@ if __name__ == "__main__":
         help="Builds a version of the website with fewer elements.",
     )
     parser.add_argument(
-        "--github-token",
-        metavar="github_token",
-        default=None,
-        help="Provide a Github token to get update timestamps.",
-    )
-    parser.add_argument(
         "--processes",
         metavar="processes",
         default=None,
@@ -135,8 +129,8 @@ if __name__ == "__main__":
     if args.processes is not None:
         settings.set_processes(int(args.processes))
 
-    if args.github_token is not None:
-        settings.set_github_token(args.github_token)
+    if "GITHUB_TOKEN" in os.environ:
+        settings.set_github_token(os.environ["GITHUB_TOKEN"])
 
     if args.verification_json is not None:
         settings.set_verification_json(args.verification_json)
