@@ -76,7 +76,7 @@ jobs:
         name: Install defelement
       - run: python3 build.py _html --verification-json verification/verification.json --processes 4
         name: Build website HTML
-        end:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ !github.event.pull_request.head.repo.fork }}
       - run: python3 build.py _html --verification-json verification/verification.json --processes 4
