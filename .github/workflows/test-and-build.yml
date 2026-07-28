@@ -8,7 +8,8 @@ on:
   schedule:
     - cron: "0 7 * * 1"
 
-permissions: {}
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
