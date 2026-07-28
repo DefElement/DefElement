@@ -43,7 +43,6 @@ jobs:
     needs:
       - check-version-number
     permissions:
-      contents: read
       id-token: write # Needed by push
       contents: write # Allow pushing of zip
     if: needs.check-version-number.outputs.release != 'no'
