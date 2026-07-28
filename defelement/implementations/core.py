@@ -289,7 +289,7 @@ class Implementation:
     # Set to true if this implementation should be verified
     verification = False
     # Language(s) that this implementation can create snippets for
-    languages: tuple[str]
+    languages: tuple[str, ...]
     # Language to pass into install command to get command(s) to install
     # Note that this only needs to be set if len(languages) > 1
     install_language: str | None = None
