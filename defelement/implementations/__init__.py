@@ -4,6 +4,7 @@ import importlib
 import os
 from inspect import isclass
 
+from defelement.implementations import jit
 from defelement.implementations.core import (
     DegreeNotImplemented,
     Implementation,
@@ -11,7 +12,6 @@ from defelement.implementations.core import (
     VariantNotImplemented,
     parse_example,
 )
-from defelement.implementations import jit
 
 __all__ = [
     "DegreeNotImplemented",

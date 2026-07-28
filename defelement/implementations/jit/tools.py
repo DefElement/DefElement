@@ -1,10 +1,11 @@
 """Utility functions."""
 
-import shutil
-import traceback
-from datetime import datetime
 import hashlib
 import os
+import shutil
+import traceback
+from datetime import datetime, timedelta, timezone
+
 from appdirs import user_cache_dir
 
 try:
@@ -12,7 +13,7 @@ try:
 except FileExistsError:
     pass
 
-TODAY = datetime.now().strftime("%Y-%m-%d")
+TODAY = datetime.now(tz=timezone(timedelta())).strftime("%Y-%m-%d")
 DIR = user_cache_dir("defelement")
 try:
     os.mkdir(DIR)

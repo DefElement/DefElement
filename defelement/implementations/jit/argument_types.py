@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from itertools import product
+
 import numpy as np
 
 
@@ -253,10 +254,8 @@ class NDArray(ArgType):
         """Convert raw C object to a Python type."""
         shape = [getattr(obj, f"shape{i}") for i in range(self.dimension)]
         out = np.empty(shape)
-        i = 0
-        for index in product(*[range(j) for j in shape]):
-            out.__setitem__(index, obj.data[i])
-            i += 1
+        for data, index in zip(obj.data, product(*[range(j) for j in shape])):
+            out.__setitem__(index, data)
         return out
 
 

@@ -256,5 +256,5 @@ class SimplefemppImplementation(Implementation):
     id = "simplefempp"
     name = "simplefem++"
     url = "https://github.com/DefElement/simplefempp"
-    languages = ["cpp"]
+    languages = ("cpp",)
     verification = True

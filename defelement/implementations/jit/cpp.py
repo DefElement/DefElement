@@ -3,11 +3,12 @@
 import os
 import re
 from collections.abc import Callable
-from defelement.implementations.jit import tools
-from defelement.implementations.jit.argument_types import ArgType
-from webtools.tools import join
 
 from cffi import FFI
+from webtools.tools import join
+
+from defelement.implementations.jit import tools
+from defelement.implementations.jit.argument_types import ArgType
 
 here = os.path.dirname(os.path.realpath(__file__))
 
@@ -15,17 +16,24 @@ here = os.path.dirname(os.path.realpath(__file__))
 def compile(
     *,
     function: str,
-    inputs: list[ArgType] = [],
-    outputs: list[ArgType] = [],
+    inputs: list[ArgType] | None = None,
+    outputs: list[ArgType] | None = None,
     imports: str | None = None,
     id: str | None = None,
-    packages: list[tuple[str, str]] = [],
+    packages: list[tuple[str, str]] | None = None,
 ) -> Callable:
     """Just-in-time compile a C++ function."""
     folder = tools.source_dir("cpp", id)
 
     library_name = "defelement_function"
     project_name = "DefElementFunction"
+
+    if packages is None:
+        packages = []
+    if inputs is None:
+        inputs = []
+    if outputs is None:
+        outputs = []
 
     true_outputs = [o for o in outputs if not o.in_out]
     in_out = [o for o in outputs if o.in_out]
@@ -81,9 +89,9 @@ def compile(
                     code += init_i + "\n\n"
             for vars, out in [(inputs + in_out, False), (true_outputs, True)]:
                 for i in vars:
-                    if i.initialise("cpp", output=out) != "":
-                        if f"INIT {i.variable};" not in function:
-                            function = i.initialise("cpp", output=out) + "\n" + function
+                    init_code = i.initialise("cpp", output=out)
+                    if init_code != "" and f"INIT {i.variable};" not in function:
+                        function = init_code + "\n" + function
             if o in in_out:
                 mf = o.metadata_function_signature("cpp", function_inputs_no_in_out)
                 if mf is not None:
@@ -108,7 +116,7 @@ def compile(
                     # TODO: indent
                     code = re.sub(
                         r"( *)INIT " + i.variable,
-                        lambda matches: tools.add_indent(
+                        lambda matches, out=out, i=i: tools.add_indent(
                             i.initialise("cpp", output=out), len(matches[1])
                         ),
                         code,
@@ -149,7 +157,7 @@ def compile(
             assert os.system(f"make -C {folder}/build") == 0
             assert os.system(f"make -C {folder}/build install") == 0
 
-        except BaseException as e:
+        except BaseException as e:  # noqa: BLE001
             tools.save_error(folder, e)
 
     tools.check_for_error(folder)
