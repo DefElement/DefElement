@@ -113,14 +113,11 @@ def compile(
             code += "}\n"
             for vars, out in [(inputs + in_out, False), (true_outputs, True)]:
                 for i in vars:
-                    # TODO: indent
-                    code = re.sub(
-                        r"( *)INIT " + i.variable,
-                        lambda matches, out=out, i=i: tools.add_indent(
-                            i.initialise("cpp", output=out), len(matches[1])
-                        ),
-                        code,
-                    )
+
+                    def replacer(matches, out=out, i=i) -> str:
+                        return tools.add_indent(i.initialise("cpp", output=out), len(matches[1]))
+
+                    code = re.sub(r"( *)INIT " + i.variable, replacer, code)
             with open(join(folder, "function.cpp"), "w") as f:
                 f.write(code)
 
