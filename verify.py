@@ -4,7 +4,7 @@ import argparse
 import json
 import os
 import typing
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from defelement import settings
 from defelement.element import Categoriser, Element
@@ -83,17 +83,17 @@ def verify_example(
                 print(f"{e.filename} {i} {eg} {red}\u2715{default}")
                 if print_reasons:
                     print(f"  {info}")
-        except ImportError as err:
+        except ImportError:
             if skip_missing:
                 print(f"{output_code} not installed")
             else:
-                raise err
+                raise
         except NotImplementedError:
             results[e.filename][output_code]["not implemented"].append(eg)
             print(f"{e.filename} {i} {eg} {blue}\u2013{default}")
-        except (KeyboardInterrupt, RuntimeError) as err:
-            raise err
-        except BaseException as err:
+        except (KeyboardInterrupt, RuntimeError):
+            raise
+        except BaseException as err:  # noqa: BLE001
             results[e.filename][output_code]["fail"].append(eg)
             print(f"{e.filename} {i} {eg} {red}\u2715{default}")
             if print_reasons:
@@ -103,7 +103,7 @@ def verify_example(
 
 
 if __name__ == "__main__":
-    start_all = datetime.now()
+    start_all = datetime.now(tz=timezone(timedelta()))
 
     parser = argparse.ArgumentParser(description="Verify elements")
     parser.add_argument(
@@ -215,7 +215,7 @@ if __name__ == "__main__":
                         data[i0][i1][i2] = []
                     data[i0][i1][i2] += j2
 
-    now = datetime.now().strftime("%Y-%m-%d")
+    now = datetime.now(tz=timezone(timedelta())).strftime("%Y-%m-%d")
     metadata: dict[str, typing.Any] = {"date": now}
 
     try:
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     except FileNotFoundError:
         history = {}
 
-    for impl in set(j for i in data.values() for j in i):
+    for impl in {j for i in data.values() for j in i}:
         metadata[impl] = {"version": versions[impl]()}
         if impl not in history:
             history[impl] = []

@@ -15,8 +15,8 @@ def test_self():
         data = yaml.load(f, Loader=yaml.FullLoader)
     e = Element(data, "lagrange")
 
-    eg = [i for i in e.examples if "triangle" in i][0]
-    reference, defelement_degree, variant, kwargs = parse_example(eg)
+    eg = next(i for i in e.examples if "triangle" in i)
+    reference, defelement_degree, variant, _kwargs = parse_example(eg)
     symfem_name, symfem_degree, symfem_params = e.get_implementation_string(
         "symfem",
         reference,
@@ -35,7 +35,7 @@ def test_variant():
 
     eg0, eg1 = [i for i in e.examples if "quadrilateral,1" in i][:2]
 
-    reference0, defelement_degree0, variant0, kwargs0 = parse_example(eg0)
+    reference0, defelement_degree0, variant0, _kwargs0 = parse_example(eg0)
     symfem_name0, symfem_degree0, symfem_params0 = e.get_implementation_string(
         "symfem",
         reference0,
@@ -43,7 +43,7 @@ def test_variant():
         variant0,
     )
 
-    reference1, defelement_degree1, variant1, kwargs1 = parse_example(eg1)
+    reference1, defelement_degree1, variant1, _kwargs1 = parse_example(eg1)
     symfem_name1, symfem_degree1, symfem_params1 = e.get_implementation_string(
         "symfem",
         reference1,
@@ -65,8 +65,8 @@ def test_hermite_vs_lagrange():
     with open(os.path.join(element_path, "lagrange.def")) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     e = Element(data, "lagrange")
-    eg = [i for i in e.examples if "triangle,3" in i][0]
-    reference, defelement_degree, variant, kwargs = parse_example(eg)
+    eg = next(i for i in e.examples if "triangle,3" in i)
+    reference, defelement_degree, variant, _kwargs = parse_example(eg)
     symfem_name, symfem_degree, symfem_params = e.get_implementation_string(
         "symfem",
         reference,
@@ -78,8 +78,8 @@ def test_hermite_vs_lagrange():
     with open(os.path.join(element_path, "hermite.def")) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     e = Element(data, "hermite")
-    eg = [i for i in e.examples if "triangle,3" in i][0]
-    reference, defelement_degree, variant, kwargs = parse_example(eg)
+    eg = next(i for i in e.examples if "triangle,3" in i)
+    reference, defelement_degree, variant, _kwargs = parse_example(eg)
     symfem_name, symfem_degree, symfem_params = e.get_implementation_string(
         "symfem",
         reference,
@@ -99,9 +99,9 @@ def test_verify_bdm_vs_n2():
         data = yaml.load(f, Loader=yaml.FullLoader)
     e1 = Element(data, "nedelec2")
 
-    eg = [i for i in e0.examples if i in e1.examples and "triangle" in i][0]
+    eg = next(i for i in e0.examples if i in e1.examples and "triangle" in i)
 
-    reference, defelement_degree, variant, kwargs = parse_example(eg)
+    reference, defelement_degree, variant, _kwargs = parse_example(eg)
     symfem_name0, symfem_degree0, symfem_params0 = e0.get_implementation_string(
         "symfem",
         reference,

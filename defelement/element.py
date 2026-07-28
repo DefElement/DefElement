@@ -1,5 +1,6 @@
 """DefElement elements."""
 
+import itertools
 import os
 import re
 import typing
@@ -12,11 +13,11 @@ import yaml
 from github import Github
 
 from defelement import citations, settings
+from defelement.citations import arnold_logg as arnold_logg_citation
+from defelement.citations import cockburn_fu as cockburn_fu_citation
 from defelement.families import keys_and_names
 from defelement.markup import insert_links
 from defelement.polyset import make_extra_info, make_poly_set
-from defelement.citations import arnold_logg as arnold_logg_citation
-from defelement.citations import cockburn_fu as cockburn_fu_citation
 
 
 def make_dof_data(
@@ -82,7 +83,7 @@ def extract_degreemap(info):
     assert isinstance(info, dict)
     maps = {i: extract_degreemap(j) for i, j in info.items() if i != "display"}
 
-    value = list(maps.values())[0]
+    value = next(iter(maps.values()))
     for i in maps.values():
         if i != value:
             return maps
@@ -448,8 +449,8 @@ class Element:
             return f"\\({min_o}\\leqslant k\\leqslant {max_o}\\)"
 
         return make_degree_data(
-            self.data["min-degree"] if "min-degree" in self.data else 0,
-            self.data["max-degree"] if "max-degree" in self.data else None,
+            self.data.get("min-degree", 0),
+            self.data.get("max-degree", None),
         )
 
     def sub_elements(self, link: bool = True) -> list[str]:
@@ -585,9 +586,9 @@ class Element:
         if (
             "reference-cells" in self.data
             and len(psets) == 1
-            and len(list(psets.values())[0]) == len(self.data["reference-cells"])
+            and len(next(iter(psets.values()))) == len(self.data["reference-cells"])
         ):
-            out = f"\\({make_poly_set(list(psets.keys())[0])}\\)<br />"
+            out = f"\\({make_poly_set(next(iter(psets.keys())))}\\)<br />"
         else:
             out = ""
             for i, j in psets.items():
@@ -783,7 +784,7 @@ class Element:
             sp = out.split("=")
             out = " ".join(sp[0].split(" ")[:-1])
             sp[-1] += " "
-            for i, j in zip(sp[:-1], sp[1:]):
+            for i, j in itertools.pairwise(sp):
                 i = i.split(" ")[-1]
                 j = " ".join(j.split(" ")[:-1])
                 params[i] = j
@@ -867,7 +868,7 @@ class Element:
                     else:
                         i_dict[s].append(vinfo["variant-name"])
                 else:
-                    for i, j in data.items():
+                    for i in data:
                         istring, _, params = self.get_implementation_string(lib, i, None, v)
                         s = implementations[lib].format(istring, params)
                         if s not in i_dict:
@@ -877,7 +878,7 @@ class Element:
                         else:
                             i_dict[s].append(f"{i}, {vinfo['variant-name']}")
             if len(i_dict) == 1:
-                return f"<code>{list(i_dict.keys())[0]}</code>"
+                return f"<code>{next(iter(i_dict.keys()))}</code>"
             imp_list = [
                 f"<code>{i}</code> <span style='font-size:60%'>({'; '.join(j)})</span>"
                 for i, j in i_dict.items()
@@ -1001,7 +1002,7 @@ class Element:
 
         assert self._c is not None
 
-        references = self.data["references"] if "references" in self.data else []
+        references = self.data.get("references", [])
 
         if "complexes" in self.data:
             for key, families in self.data["complexes"].items():
@@ -1010,10 +1011,9 @@ class Element:
                 for e in families:
                     e_s = e.split(",")
                     if len(e_s) == 3:
-                        fam, ext, cell = e_s
-                        k = "k"
+                        fam, _ext, _cell = e_s
                     else:
-                        fam, ext, cell, k = e_s
+                        fam, _ext, _cell, _k = e_s
                     data = self._c.families[key][fam]
                     if "arnold-logg" in data and arnold_logg_citation not in references:
                         references.append(arnold_logg_citation)
@@ -1157,8 +1157,8 @@ class Categoriser:
                     e.created = commits.get_page(-1)[-1].commit.committer.date
                     e.modified = commits.get_page(0)[0].commit.committer.date
                 except IndexError:
-                    e.created = datetime.utcnow().replace(tzinfo=pytz.utc)
-                    e.modified = datetime.utcnow().replace(tzinfo=pytz.utc)
+                    e.created = datetime.now(tz=pytz.utc)
+                    e.modified = datetime.now(tz=pytz.utc)
 
         self.elements.sort(key=lambda x: x.name.lower())
 

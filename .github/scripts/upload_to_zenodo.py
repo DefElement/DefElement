@@ -1,6 +1,7 @@
-import sys
-import os
 import json
+import os
+import sys
+
 import requests
 
 _, file, token = sys.argv

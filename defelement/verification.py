@@ -3,11 +3,10 @@
 import typing
 
 import symfem
-
-from defelement.tools import to_array
-
 from numpy import float64
 from numpy.typing import NDArray
+
+from defelement.tools import to_array
 
 
 def points(ref: str) -> NDArray[float64]:

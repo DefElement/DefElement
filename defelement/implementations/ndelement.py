@@ -1,6 +1,7 @@
 """Implementation in ndelement."""
 
 import typing
+
 from numpy import float64
 from numpy.typing import NDArray
 
@@ -14,7 +15,7 @@ class NdelementImplementation(Implementation):
     @classmethod
     def version(cls) -> str:
         """Get the version number of this implementation."""
-        from importlib.metadata import version, PackageNotFoundError
+        from importlib.metadata import PackageNotFoundError, version
 
         try:
             return version("ndelement")
@@ -165,5 +166,5 @@ class NdelementImplementation(Implementation):
     name = "ndelement"
     url = "https://codeberg.org/nd-project/nd"
     verification = True
-    languages = ["python", "rust"]
+    languages = ("python", "rust")
     install_language = "python"

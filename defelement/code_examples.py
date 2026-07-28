@@ -1,11 +1,12 @@
 """Generating code snippets."""
 
 import symfem
+
 from defelement.caching import load_cache, save_cache
 from defelement.element import Element
 from defelement.implementations import Implementation
-from defelement.tools import jsify
 from defelement.languages import languages
+from defelement.tools import jsify
 
 
 def generate_examples(e: Element, impl: type[Implementation], language: str) -> str | None:
@@ -29,7 +30,7 @@ def generate_examples(e: Element, impl: type[Implementation], language: str) -> 
     if impl.id.startswith("*(") and impl.id.endswith(")"):
         cache_id = f"{e.name}-{impl.id}-implementation-code"
         c = load_cache(cache_id, symfem.__version__)
-        input_code, output_code = impl.id[2:-1].split(" -> ")
+        _input_code, output_code = impl.id[2:-1].split(" -> ")
         jscodename = jsify(output_code)
         if c is None:
             if e.implemented(output_code):

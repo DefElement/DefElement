@@ -1,6 +1,7 @@
 """Check that dependencies are up to date."""
 
 import os
+
 import requests
 
 try:

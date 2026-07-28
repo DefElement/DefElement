@@ -17,10 +17,10 @@ __all__ = [
     "Implementation",
     "NotImplementedOnReference",
     "VariantNotImplemented",
-    "parse_example",
-    "implementations",
-    "formats",
     "examples",
+    "formats",
+    "implementations",
+    "parse_example",
     "verifications",
 ]
 

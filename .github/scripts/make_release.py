@@ -1,5 +1,5 @@
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import github
 
@@ -15,7 +15,7 @@ release = defelement.create_git_tag_and_release(
     f"v{version}",
     f"v{version}",
     f"v{version}",
-    f"Snapshot of DefElement, {datetime.now().strftime('%d %B %Y')}.\n\nThis release is archived at [doi.org/10.5281/zenodo.17904468](https://doi.org/10.5281/zenodo.17904468)",
+    f"Snapshot of DefElement, {datetime.now(tz=timezone(timedelta())).strftime('%d %B %Y')}.\n\nThis release is archived at [doi.org/10.5281/zenodo.17904468](https://doi.org/10.5281/zenodo.17904468)",
     main_branch.commit.sha,
     "commit",
 )
