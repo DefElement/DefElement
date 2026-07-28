@@ -35,7 +35,7 @@ def check_formula(formula, seq):
     if isinstance(formula, list):
         parts = []
         for i, fpart in enumerate(formula):
-            k, j = list(fpart.items())[0]
+            k, j = next(iter(fpart.items()))
             if "=" in k:
                 ns = [int(a) for a in k.split("=")[1].split(",")]
             elif ">=" in k:

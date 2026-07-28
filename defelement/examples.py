@@ -112,7 +112,7 @@ def markup_example(
     html_name: str,
     element_page: str,
     fname: str,
-    legacy_filenames: list[str] = [],
+    legacy_filenames: list[str] | None = None,
 ) -> str:
     """Markup examples.
 
@@ -126,6 +126,8 @@ def markup_example(
     Returns:
         Example as HTML
     """
+    if legacy_filenames is None:
+        legacy_filenames = []
     eg = heading_with_self_ref(
         "h1", f"Degree {element.order} {html_name} on a {element.reference.name}"
     )

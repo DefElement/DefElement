@@ -5,10 +5,10 @@ import typing
 
 import symfem
 from webtools import settings
-from webtools.markup import insert_links as _insert_links
 from webtools.code_markup import code_highlight as _code_highlight
+from webtools.markup import insert_links as _insert_links
 
-from defelement import info, plotting, symbols, citations
+from defelement import citations, info, plotting, symbols
 
 page_references: list[str] = []
 

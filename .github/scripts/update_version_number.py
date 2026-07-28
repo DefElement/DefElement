@@ -1,9 +1,9 @@
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import github
 
-version = datetime.now().strftime("%Y.%m")
+version = datetime.now(tz=timezone(timedelta())).strftime("%Y.%m")
 branch_name = f"v{version}"
 
 _, access_key = sys.argv
@@ -41,7 +41,7 @@ post_version = post_version.split('"', 1)[1]
 zenodo = f'{pre_version}"version": "v{version}"{post_version}'
 pre_pubdate, post_pubdate = zenodo.split('"publication_date": "')
 post_pubdate = post_pubdate.split('"', 1)[1]
-zenodo = f'{pre_pubdate}"publication_date": "{datetime.now().strftime("%Y-%m-%d")}"{post_pubdate}'
+zenodo = f'{pre_pubdate}"publication_date": "{datetime.now(tz=timezone(timedelta())).strftime("%Y-%m-%d")}"{post_pubdate}'
 defelement.update_file(
     ".zenodo.json",
     "[AUTOMATED] Update version number",

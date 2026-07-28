@@ -41,7 +41,7 @@ def test_element_page(e):
 
     docs = parse_contributing_page()
 
-    for key in data.keys():
+    for key in data:
         assert key in docs["all"]
 
     for key in docs["req"]:

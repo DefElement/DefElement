@@ -2,9 +2,9 @@
 
 import typing
 
-from symfem.finite_element import FiniteElement
 from numpy import float64
 from numpy.typing import NDArray
+from symfem.finite_element import FiniteElement
 
 from defelement.element import Element
 from defelement.implementations.core import (
@@ -27,7 +27,7 @@ def symfem_create_element(element: Element, example: str) -> FiniteElement:
     """
     import symfem
 
-    ref, defelement_deg, variant, kwargs = parse_example(example)
+    ref, defelement_deg, variant, _kwargs = parse_example(example)
     symfem_name, deg, params = element.get_implementation_string(
         "symfem", ref, defelement_deg, variant
     )
@@ -145,4 +145,4 @@ class SymfemImplementation(Implementation):
     name = "Symfem"
     url = "https://github.com/mscroggs/symfem"
     verification = True
-    languages = ["python"]
+    languages = ("python",)

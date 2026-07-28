@@ -3,7 +3,7 @@
 import base64
 import os
 import typing
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import symfem
 import sympy
@@ -13,7 +13,7 @@ from symfem.plotting import Picture
 from defelement import settings
 from defelement.caching import load_cache, save_cache
 
-now = datetime.now()
+now = datetime.now(tz=timezone(timedelta()))
 svg_desc = (
     "This plot is from DefElement (https://defelement.org) "
     "and is available under a Creative Commons Attribution "
@@ -63,7 +63,7 @@ def do_the_plot(
     filename: str,
     desc: str,
     plot: typing.Callable,
-    args: list[typing.Any] = [],
+    args: list[typing.Any] | None = None,
     png_width: int = 180,
     scale: int = 250,
     link: bool = True,
@@ -86,6 +86,8 @@ def do_the_plot(
     from webtools.html import make_html_page
     from webtools.markup import cap_first, heading_with_self_ref
 
+    if args is None:
+        args = []
     filename = filename.replace(" ", "-")
 
     kwargs = {
@@ -286,9 +288,11 @@ def plot_img(img_filename: str, link: bool = True) -> str:
 
     def actual_plot(
         filename: str,
-        plot_options: dict[str, typing.Any] = {},
+        plot_options: dict[str, typing.Any] | None = None,
         **kwargs: typing.Any,
     ):
+        if plot_options is None:
+            plot_options = {}
         img = Picture(**kwargs)
         colors = img.colors
         with open(os.path.join(settings.img_path, f"{img_filename}.img")) as f:

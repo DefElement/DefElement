@@ -24,7 +24,7 @@ def test_latex(file, cellname):
     if "polynomial set" not in data:
         return
 
-    for i, j in data["polynomial set"].items():
+    for j in data["polynomial set"].values():
         for k in j.split("&&"):
             k = k.strip()
             if k.startswith("<k>"):

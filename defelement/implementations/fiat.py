@@ -209,8 +209,10 @@ class FIATImplementation(Implementation):
         """Return a list of notes to include for the implementation of this element."""
         if element.name in true_space_dimension:
             return [
-                "This implementation includes additional DOFs that are used then filtered "
-                "out when mapping the element, as described in Kirby (2018)."
+                (
+                    "This implementation includes additional DOFs that are used then filtered "
+                    "out when mapping the element, as described in Kirby (2018)."
+                )
             ]
         return []
 
@@ -236,4 +238,4 @@ class FIATImplementation(Implementation):
     name = "FIAT"
     url = "https://github.com/firedrakeproject/fiat"
     verification = True
-    languages = ["python"]
+    languages = ("python",)

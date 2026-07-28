@@ -1,9 +1,11 @@
 """Programming languages."""
 
-from webtools.code_markup import python_highlight, rust_highlight, cpp_highlight
-from defelement.implementations import Implementation
-from inspect import isclass
 import sys
+from inspect import isclass
+
+from webtools.code_markup import cpp_highlight, python_highlight, rust_highlight
+
+from defelement.implementations import Implementation
 
 
 class Language:
