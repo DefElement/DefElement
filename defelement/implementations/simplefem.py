@@ -2,6 +2,7 @@
 
 # <intro>
 import typing
+
 from numpy import float64
 from numpy.typing import NDArray
 
@@ -78,8 +79,8 @@ class SimplefemImplementation(Implementation):
         """Get verification data."""
         # </verify1>
         # <verify2>
-        import simplefem
         import numpy as np
+        import simplefem
         # </verify2>
 
         # <verify3>
@@ -130,7 +131,7 @@ class SimplefemImplementation(Implementation):
     id = "simplefem"
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
-    languages = ["python"]
+    languages = ("python",)
     # </variables>
     # <verificationvariable>
     verification = True

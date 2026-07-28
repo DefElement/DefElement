@@ -25,7 +25,7 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
             @classmethod
             def version(cls) -> str:
                 """Get the version number of this implementation."""
-                from importlib.metadata import version, PackageNotFoundError
+                from importlib.metadata import PackageNotFoundError, version
 
                 try:
                     return version(package_name)
@@ -289,7 +289,7 @@ class Implementation:
     # Set to true if this implementation should be verified
     verification = False
     # Language(s) that this implementation can create snippets for
-    languages: typing.List[str]
+    languages: tuple[str]
     # Language to pass into install command to get command(s) to install
     # Note that this only needs to be set if len(languages) > 1
     install_language: str | None = None
@@ -307,7 +307,7 @@ class NotImplementedOnReference(NotImplementedError):
     """Error for element not implemented on a reference cell."""
 
 
-ValueType = typing.Union[int, str, list["ValueType"]]
+ValueType = int | str | list["ValueType"]
 
 
 def _parse_value(v: str) -> ValueType:

@@ -1,11 +1,12 @@
 """Basix.UFL implementation."""
 
 import typing
+
 from numpy import float64
 from numpy.typing import NDArray
 
-from defelement.implementations.basix import BasixImplementation
 from defelement.element import Element
+from defelement.implementations.basix import BasixImplementation
 from defelement.implementations.core import (
     Implementation,
     parse_example,
@@ -130,7 +131,7 @@ class BasixUFLImplementation(Implementation):
     name = "Basix.UFL"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    languages = ["python"]
+    languages = ("python",)
 
 
 class CustomBasixUFLImplementation(BasixUFLImplementation):
@@ -184,9 +185,9 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         example: str,
     ) -> tuple[list[list[list[int]]], typing.Callable[[NDArray[float64]], NDArray[float64]]]:
         """Get verification data."""
+        import basix.ufl
         import symfem
         import symfem.basix_interface
-        import basix.ufl
 
         kwargs = {}
         if "variant" in params:
@@ -284,14 +285,11 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
             return False
 
         # non-Ciarlet elements
-        if element.filename in [
+        return element.filename not in [
             "direct-serendipity",
             "enriched-galerkin",
             "lfeg",
             "rotated-buffa-christiansen",
-        ]:
-            return False
-
-        return True
+        ]
 
     id = "*(symfem -> basix.ufl)"

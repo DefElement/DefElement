@@ -1,14 +1,14 @@
 """Basix implementation."""
 
-from numpy import float64
-from numpy.typing import NDArray
 import typing
 
+from numpy import float64
+from numpy.typing import NDArray
+
 from defelement.element import Element
-from defelement.implementations.core import Implementation
 
 # <pypi_name>
-from defelement.implementations.core import pypi_name
+from defelement.implementations.core import Implementation, pypi_name
 
 
 @pypi_name("fenics-basix")
@@ -119,4 +119,4 @@ class BasixImplementation(Implementation):
     name = "Basix"
     url = "https://github.com/FEniCS/basix"
     verification = True
-    languages = ["python"]
+    languages = ("python",)

@@ -25,7 +25,7 @@ def test_snippets(element, library):
         pytest.skip()
 
     if library.startswith("*(") and library.endswith(")"):
-        input_code, output_code = library[2:-1].split(" -> ")
+        _input_code, output_code = library[2:-1].split(" -> ")
         if e.implemented(output_code):
             pytest.skip()
         try:
@@ -38,4 +38,4 @@ def test_snippets(element, library):
     for i, j in enumerate(lines):
         print(j)
 
-    exec(code)
+    exec(code)  # noqa: S102
