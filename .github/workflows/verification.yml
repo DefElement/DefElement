@@ -87,5 +87,6 @@ jobs:
       - verification
     uses: ./.github/workflows/build.yml
     permissions:
+      contents: read
       pages: write # Allow updating of Github Pages website
       id-token: write # Needed by pages

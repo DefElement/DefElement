@@ -16,6 +16,7 @@ jobs:
     name: Update version number
     runs-on: ubuntu-22.04
     permissions:
+      contents: read
       id-token: write # Needed for puching
       contents: write # Allow writing of new tag
       pull-requests: write # Allow opening PR to update version numbers
