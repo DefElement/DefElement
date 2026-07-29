@@ -5,23 +5,33 @@ on:
     - cron: "0 7 2 */3 *"
   workflow_dispatch:
 
+permissions: {}
+
+concurrency:
+  group: update-version-number-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update-version-number:
     name: Update version number
     runs-on: ubuntu-22.04
     permissions:
-      id-token: write
-      contents: write
-      pull-requests: write
+      id-token: write # Needed for puching
+      contents: write # Allow writing of new tag
+      pull-requests: write # Allow opening PR to update version numbers
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install PyGitHub
         run: python3 -m pip install PyGitHub
 
       - name: Set version number
-        run: python3 .github/scripts/update_version_number.py ${{ secrets.PA_TOKEN }}
+        run: python3 .github/scripts/update_version_number.py
+        env:
+          PA_TOKEN: ${{ secrets.PA_TOKEN }}

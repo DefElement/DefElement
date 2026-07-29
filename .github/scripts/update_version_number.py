@@ -1,4 +1,4 @@
-import sys
+import os
 from datetime import datetime, timedelta, timezone
 
 import github
@@ -6,7 +6,7 @@ import github
 version = datetime.now(tz=timezone(timedelta())).strftime("%Y.%m")
 branch_name = f"v{version}"
 
-_, access_key = sys.argv
+access_key = os.environ.get("PA_TOKEN", None)
 
 git = github.Github(auth=github.Auth.Token(access_key))
 
