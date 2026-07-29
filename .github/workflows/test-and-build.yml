@@ -11,7 +11,7 @@ on:
 permissions: {}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: test-and-build-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
