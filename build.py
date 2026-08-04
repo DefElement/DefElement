@@ -428,7 +428,7 @@ if __name__ == "__main__":
         libraries = [(i, j.name, j.url, j.install) for i, j in implementations.items()]
         libraries.sort(key=lambda i: i[0])
         for codename, libname, url, pip in libraries:
-            if not include_simplefem and codename == "simplefem":
+            if not include_simplefem and codename in ["simplefem", "simplefempp"]:
                 continue
             jscodename = jsify(libname)
             code_examples = {}
@@ -967,7 +967,7 @@ if __name__ == "__main__":
             if i.startswith("*(") and i.endswith(")"):
                 continue
             vs.append(i)
-            if not include_simplefem and i == "simplefem":
+            if not include_simplefem and i in ["simplefem", "simplefempp"]:
                 continue
             content += f"<td><a href='/verification/{i}.html'>{implementations[i].name}</a></td>"
             long_content += (
@@ -981,7 +981,7 @@ if __name__ == "__main__":
         row = "<tr>"
         row += f"<td><a href='/elements/{e.filename}.html'>{e.html_name}</a></td>"
         for i in vs:
-            if not include_simplefem and i == "simplefem":
+            if not include_simplefem and i in ["simplefem", "simplefempp"]:
                 continue
             row += "<td>"
             if e.filename in verification and i in verification[e.filename]:
@@ -1141,7 +1141,7 @@ if __name__ == "__main__":
                 "</tr>"
                 "</table>"
             )
-        if not include_simplefem and i == "simplefem":
+        if not include_simplefem and i in ["simplefem", "simplefempp"]:
             continue
         c += (
             "<tr>"

@@ -4,6 +4,7 @@ import importlib
 import os
 from inspect import isclass
 
+from defelement.implementations import jit
 from defelement.implementations.core import (
     DegreeNotImplemented,
     Implementation,
