@@ -8,6 +8,28 @@ from webtools.code_markup import cpp_highlight, python_highlight, rust_highlight
 from defelement.implementations import Implementation
 
 
+def julia_highlight(code: str) -> str:
+    """Highlight comments in a Julia snippet and convert it to HTML.
+
+    webtools does not provide a Julia highlighter. The snippets are short enough that
+    keyword highlighting adds little, so only comments are highlighted, using the same
+    color that webtools uses.
+
+    Args:
+        code: Julia snippet
+
+    Returns:
+        Snippet with comments highlighted
+    """
+    out = []
+    for line in code.replace(" ", "&nbsp;").split("\n"):
+        if "#" in line:
+            line, comment = line.split("#", 1)
+            line += f"<span style='color:#FF8800'>#{comment}</span>"
+        out.append(line)
+    return "<br />".join(out)
+
+
 class Language:
     """A programming language."""
 
@@ -99,6 +121,18 @@ class Cpp(Language):
 
     id = "cpp"
     name = "C++"
+
+
+class Julia(Language):
+    """Julia."""
+
+    @classmethod
+    def highlight(cls, code: str) -> str:
+        """Add code highlighting."""
+        return julia_highlight(code)
+
+    id = "julia"
+    name = "Julia"
 
 
 this = sys.modules[__name__]

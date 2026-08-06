@@ -101,6 +101,12 @@ implementations:
     legendre:
       triangle: RaviartThomas variant=integral DEGREEMAP=k+1
       tetrahedron: RaviartThomas variant=integral DEGREEMAP=k+1
+  ferrite:
+    lagrange:
+      triangle: RaviartThomas DEGREEMAP=k+1 DEGREES=0,1
+      tetrahedron: RaviartThomas DEGREEMAP=k+1 DEGREES=0
+      quadrilateral: RaviartThomas DEGREEMAP=k+1 DEGREES=0
+      hexahedron: RaviartThomas DEGREEMAP=k+1 DEGREES=0
 examples:
   - triangle,0,lagrange
   - triangle,1,lagrange

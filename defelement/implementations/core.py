@@ -265,7 +265,7 @@ class Implementation:
 
             assert degree is not None
             code += "\n\n"
-            if language == "python":
+            if language in ["python", "julia"]:
                 code += "# "
             elif language in ["rust", "c++", "c"]:
                 code += "// "

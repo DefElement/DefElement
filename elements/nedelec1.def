@@ -124,6 +124,12 @@ implementations:
       tetrahedron: NedelecFirstKind DEGREEMAP=k+1
       quadrilateral: NedelecFirstKind DEGREEMAP=k+1
       hexahedron: NedelecFirstKind DEGREEMAP=k+1
+  ferrite:
+    lagrange:
+      triangle: Nedelec DEGREEMAP=k+1 DEGREES=0,1
+      tetrahedron: Nedelec DEGREEMAP=k+1 DEGREES=0
+      quadrilateral: Nedelec DEGREEMAP=k+1 DEGREES=0
+      hexahedron: Nedelec DEGREEMAP=k+1 DEGREES=0
 examples:
   - triangle,0,lagrange
   - triangle,1,lagrange

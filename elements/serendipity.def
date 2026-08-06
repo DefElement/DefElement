@@ -48,6 +48,9 @@ implementations:
   basix: serendipity lagrange_variant=equispaced dpc_variant=simplex_equispaced
   basix.ufl: serendipity lagrange_variant=equispaced dpc_variant=simplex_equispaced
   fiat: Serendipity
+  ferrite:
+    quadrilateral: Serendipity DEGREES=2
+    hexahedron: Serendipity DEGREES=2
 examples:
   - interval,1
   - interval,2

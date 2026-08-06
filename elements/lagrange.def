@@ -166,6 +166,15 @@ implementations:
   simplefem:
     equispaced:
       triangle: lagrange_element DEGREEMAP=(k+1)*(k+2)//2
+  ferrite:
+    equispaced:
+      interval: Lagrange DEGREES=1,2
+      triangle: Lagrange DEGREES=1:6
+      tetrahedron: Lagrange DEGREES=1:5
+      quadrilateral: Lagrange DEGREES=1:4
+      hexahedron: Lagrange DEGREES=1:4
+      prism: Lagrange DEGREES=1,2
+      pyramid: Lagrange DEGREES=1,2
 examples:
   - interval,1,equispaced
   - interval,2,equispaced

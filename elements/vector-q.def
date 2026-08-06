@@ -35,6 +35,9 @@ polynomial-set:
 implementations:
   symfem: vector Q
   basix.ufl: P lagrange_variant=equispaced shape=(dim,)
+  ferrite:
+    quadrilateral: Lagrange vdim=2 DEGREES=1:4
+    hexahedron: Lagrange vdim=3 DEGREES=1:4
 examples:
   - quadrilateral,1
   - quadrilateral,2
