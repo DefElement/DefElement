@@ -157,7 +157,7 @@ if __name__ == "__main__":
             "regge",
             "serendipity",
             "taylor-hood",
-            "vector-bubble-enriched-Lagrange",
+            "vector-bubble-enriched-lagrange",
             "enriched-galerkin",
             "bernardi-raugel",
         ]
