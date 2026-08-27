@@ -16,7 +16,7 @@ with open(os.path.join(path, "verification.json")) as f:
 with open(os.path.join(path, "verification-history.json")) as f:
     new_verification_history = f.read()
 
-old_verification = branch.get_contents("verification.json")
+old_verification = defelement.get_contents("verification.json", branch.commit.sha)
 defelement.update_file(
     "verification.json",
     "verification.json",
@@ -26,6 +26,7 @@ defelement.update_file(
 )
 
 old_verification_history = branch.get_contents("verification-history.json")
+old_verification_history = defelement.get_contents("verification-history.json", branch.commit.sha)
 defelement.update_file(
     "verification-history.json",
     "verification-history.json",
