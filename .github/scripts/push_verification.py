@@ -25,7 +25,6 @@ defelement.update_file(
     branch="verification",
 )
 
-old_verification_history = branch.get_contents("verification-history.json")
 old_verification_history = defelement.get_contents("verification-history.json", branch.commit.sha)
 defelement.update_file(
     "verification-history.json",
