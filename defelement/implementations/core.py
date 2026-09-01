@@ -293,6 +293,9 @@ class Implementation:
     # Language to pass into install command to get command(s) to install
     # Note that this only needs to be set if len(languages) > 1
     install_language: str | None = None
+    # Description of the library that will appear on its verification page and
+    # possibly in other placed in future.
+    description: str | None = None
 
 
 class VariantNotImplemented(NotImplementedError):

@@ -120,3 +120,4 @@ class BasixImplementation(Implementation):
     url = "https://github.com/FEniCS/basix"
     verification = True
     languages = ("python",)
+    description = "Basix is the finite element definition and tabulation library used by FEniCSx."

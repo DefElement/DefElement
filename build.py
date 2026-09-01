@@ -784,7 +784,9 @@ if __name__ == "__main__":
     # Make verification pages
     mkdir(os.path.join(settings.html_path, "verification"))
 
-    impl_content = {i: "" for i in sorted_verification_ids if i != "symfem" and not i.startswith("*(")}
+    impl_content = {
+        i: "" for i in sorted_verification_ids if i != "symfem" and not i.startswith("*(")
+    }
     for i in impl_content:
         title = f"{implementations[i].name} verification"
         if i in vhistory:

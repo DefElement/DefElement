@@ -38,3 +38,4 @@ class BemppClImplementation(Implementation):
     name = "Bempp-cl"
     url = "https://github.com/bempp/bempp-cl"
     languages = ("python",)
+    description = "Bempp-cl is an open-source boundary element method (BEM) library developed at University College London (UCL)."

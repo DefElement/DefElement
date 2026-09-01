@@ -132,6 +132,7 @@ class BasixUFLImplementation(Implementation):
     url = "https://github.com/FEniCS/basix"
     verification = True
     languages = ("python",)
+    description = "Basix.UFL is the UFL interface to Basix, the finite element definition and tabulation library used by FEniCSx."
 
 
 class CustomBasixUFLImplementation(BasixUFLImplementation):

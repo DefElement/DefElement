@@ -132,6 +132,7 @@ class SimplefemImplementation(Implementation):
     name = "simplefem"
     url = "https://github.com/DefElement/simplefem"
     languages = ("python",)
+    description = "simplefem is a simple Python finite library that is used as an example in the DefElement documantation."
     # </variables>
     # <verificationvariable>
     verification = True

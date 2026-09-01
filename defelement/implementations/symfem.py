@@ -146,3 +146,4 @@ class SymfemImplementation(Implementation):
     url = "https://github.com/mscroggs/symfem"
     verification = True
     languages = ("python",)
+    description = "Symfem is a symbolic finite element definition library."

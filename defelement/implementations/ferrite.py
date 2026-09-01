@@ -214,3 +214,4 @@ class FerriteImplementation(Implementation):
     url = "https://github.com/Ferrite-FEM/Ferrite.jl"
     verification = True
     languages = ("julia",)
+    description = "Ferrite.jl is a finite element toolbox written in Julia."
