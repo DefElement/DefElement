@@ -830,6 +830,16 @@ if __name__ == "__main__":
             impl_content[i] += updated
 
     for i in impl_content:
+        impl_content[i] += "<p>"
+        if implementations[i].description is None:
+            impl_content[i] += f"{implementations[i].name}'s"
+        else:
+            impl_content[i] += f"{implementations[i].description} Its"
+        url = implementations[i].url
+        impl_content[i] += (
+            f" source code can be found at <a href='{url}'>{url.split('://')[1]}</a>."
+        )
+        impl_content[i] += "</p>"
         if i in vhistory:
             hist = vhistory[i]
             impl_content[i] += (
