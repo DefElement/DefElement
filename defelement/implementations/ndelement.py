@@ -168,3 +168,4 @@ class NdelementImplementation(Implementation):
     verification = True
     languages = ("python", "rust")
     install_language = "python"
+    description = "ndelement is a finite element definition library the forms part of nd, a set of crates for numerical discretisation in Rust."

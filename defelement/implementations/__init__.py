@@ -39,3 +39,8 @@ formats = {id: i.format for id, i in implementations.items()}
 examples = {id: i.examples for id, i in implementations.items()}
 versions = {id: i.version for id, i in implementations.items()}
 verifications = {id: i.verify for id, i in implementations.items() if i.verification}
+
+sorted_ids = list(formats.keys())
+sorted_verification_ids = list(verifications.keys())
+sorted_ids.sort(key=lambda id: implementations[id].name.lower())
+sorted_verification_ids.sort(key=lambda id: implementations[id].name.lower())

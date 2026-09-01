@@ -239,3 +239,4 @@ class FIATImplementation(Implementation):
     url = "https://github.com/firedrakeproject/fiat"
     verification = True
     languages = ("python",)
+    description = "FIAT is a finite element tabulation library used in the Firedrake ecosystem."
