@@ -104,7 +104,7 @@ jobs:
     needs:
       - test-build-website
       - run-tests
-    uses: ./.github/workflows/build.yml
+    uses: $/.github/workflows/build.yml
     permissions:
       contents: read
       pages: write # Allow updating of website
