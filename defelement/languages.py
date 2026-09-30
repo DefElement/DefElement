@@ -46,18 +46,19 @@ class Language:
         raise NotImplementedError()
 
     @classmethod
-    def install(cls, impl: type[Implementation]) -> str:
+    def install(cls, impl: type[Implementation], dependencies: list[str] | None = None) -> str:
         """Generate installation information for a language.
 
         Args:
             impl: The implementation
+            dependencies: Additional packages that the element needs
 
         Returns:
             Installation info
         """
         info = f"Before running this example, you must install <a href='{impl.url}'>{impl.name}</a>"
 
-        cmd = impl.install(cls.id)
+        cmd = impl.install(cls.id, dependencies)
 
         if cmd is None:
             info += ". "
@@ -92,14 +93,14 @@ class Rust(Language):
         return rust_highlight(code)
 
     @classmethod
-    def install(cls, impl: type[Implementation]) -> str:
+    def install(cls, impl: type[Implementation], dependencies: list[str] | None = None) -> str:
         """Generate installation information for a language."""
         info = (
             f"To running this snippet, you must add <a href='{impl.url}'>{impl.name}</a>"
             " to your Cargo.toml file"
         )
 
-        cmd = impl.install("rust")
+        cmd = impl.install("rust", dependencies)
 
         if cmd is None:
             info += ". "

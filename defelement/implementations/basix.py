@@ -34,7 +34,7 @@ class BasixImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         return "import basix"
 

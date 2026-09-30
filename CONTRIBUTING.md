@@ -89,6 +89,7 @@ There are a few special parameters (written in ALL CAPS) that can be used here:
 </thead>
 <tr><td>`DEGREES`</td><td>A list of degrees for which this element is defined in this implementation, eg `1,2,4:8` denotes that degrees 1 and 2 and 4 to 8 (including 4 but not including 8) are supported. Note that if `DEGREEMAP` is set, the degrees used here should correspond to the DefElement convention, not the degree after the degree map is applied.</td></tr>
 <tr><td>`DEGREEMAP`</td><td>A map to apply to the degree used on DefElement to obtain the degree used by this library. The value here will be parsed using Sympy, with the variable `k` equal to the degree (using DefElement's convention).</td></tr>
+<tr><td>`DEPENDENCIES`</td><td>A comma-separated list of additional packages that are needed to use this element in this implementation, eg `FerriteInterpolations`. These are collected over all the implementation strings of the element and passed to the implementation's `install` and `example_import` methods, so that the example snippets and install instructions on the element's page include them.</td></tr>
 </table>
 
 ### Testing your contribution
