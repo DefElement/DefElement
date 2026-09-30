@@ -44,6 +44,10 @@ implementations:
     quadrilateral: DPC dpc_variant=simplex_equispaced discontinuous=True
     hexahedron: DPC dpc_variant=simplex_equispaced discontinuous=True
   fiat: DPC
+  ferrite:
+    interval: DiscontinuousLagrange DEGREES=0:3
+    quadrilateral: DPC DEGREES=1:4 DEPENDENCIES=FerriteInterpolations
+    hexahedron: DPC DEGREES=1:3 DEPENDENCIES=FerriteInterpolations
 examples:
   - interval,1
   - interval,2

@@ -25,6 +25,8 @@ dofs:
   faces: point evaluations
 implementations:
   symfem: conforming Crouzeix-Raviart
+  ferrite:
+    triangle: ConformingCrouzeixRaviart DEGREES=2:5 DEPENDENCIES=FerriteInterpolations
 examples:
   - triangle,1
   - triangle,2

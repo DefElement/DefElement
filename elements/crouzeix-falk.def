@@ -25,6 +25,8 @@ dofs:
   cell: point evaluation at midpoint
 implementations:
   symfem: Crouzeix-Falk
+  ferrite:
+    triangle: CrouzeixFalk DEGREES=3 DEPENDENCIES=FerriteInterpolations
 examples:
   - triangle,3
 references:

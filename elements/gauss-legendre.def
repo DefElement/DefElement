@@ -34,6 +34,7 @@ polynomial-set:
   hexahedron: qoly[k]
 implementations:
   symfem: Lagrange variant=legendre
+  ferrite: GaussLegendre DEPENDENCIES=FerriteInterpolations
 examples:
   - interval,1
   - interval,2
