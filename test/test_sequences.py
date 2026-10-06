@@ -10,7 +10,7 @@ import symfem
 import sympy
 import yaml
 
-oeis_cache: dict[str, str] = {}
+oeis_cache_location = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../.oeis-cache")
 
 
 class TimeOutTheTest(BaseException):
@@ -72,28 +72,37 @@ def check_oeis(oeis, seq):
         oeis, condition = oeis.split(" [")
         condition = condition.split("]")[0]
         seq = {i: j for i, j in seq.items() if is_satisfied(condition, i)}
+    if not os.path.isdir(oeis_cache_location):
+        os.mkdir(oeis_cache_location)
     seq = {i: j for i, j in seq.items() if j > 0}
-    if oeis not in oeis_cache:
+    if oeis not in os.listdir(oeis_cache_location):
         try:
-            with urllib.request.urlopen(
-                urllib.request.Request(
-                    f"http://oeis.org/{oeis}/list",
-                    headers={"User-Agent": "DefElement test runner"},
-                )
-            ) as f:
-                oeis_cache[oeis] = "".join(
-                    [
-                        i.strip()
-                        for i in f.read()
-                        .decode("utf-8")
-                        .split("<pre>[")[1]
-                        .split("]</pre>")[0]
-                        .split("\n")
-                    ]
+            with (
+                urllib.request.urlopen(
+                    urllib.request.Request(
+                        f"http://oeis.org/{oeis}/list",
+                        headers={"User-Agent": "DefElement test runner"},
+                    )
+                ) as o,
+                open(os.path.join(oeis_cache_location, oeis), "w") as f,
+            ):
+                f.write(
+                    "".join(
+                        [
+                            i.strip()
+                            for i in o.read()
+                            .decode("utf-8")
+                            .split("<pre>[")[1]
+                            .split("]</pre>")[0]
+                            .split("\n")
+                        ]
+                    )
                 )
         except urllib.error.HTTPError:
             pytest.xfail("Error reading from OEIS")
-    assert ",".join([str(i) for i in seq.values()]) in oeis_cache[oeis]
+
+    with open(os.path.join(oeis_cache_location, oeis)) as f:
+        assert ",".join([str(i) for i in seq.values()]) in f.read()
 
 
 def parse_degree(degree, cellname):
@@ -128,9 +137,20 @@ def test_sequence(file, cellname):
         pytest.skip()
 
     if isinstance(data["implementations"]["symfem"], dict):
-        if cellname not in data["implementations"]["symfem"]:
-            pytest.skip()
-        symfem_name = data["implementations"]["symfem"][cellname]
+        if cellname in data["implementations"]["symfem"]:
+            symfem_name = data["implementations"]["symfem"][cellname]
+        else:
+            for d in data["implementations"]["symfem"].values():
+                if isinstance(d, str):
+                    symfem_name = d
+                    break
+            else:
+                for d in data["implementations"]["symfem"].values():
+                    if isinstance(d, dict) and cellname in d:
+                        symfem_name = d[cellname]
+                        break
+                else:
+                    pytest.skip()
     else:
         symfem_name = data["implementations"]["symfem"]
 
