@@ -10,7 +10,7 @@ import symfem
 import sympy
 import yaml
 
-oeis_cache_location = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../.cache/oeis")
+oeis_cache_location = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../.oeis-cache")
 
 
 class TimeOutTheTest(BaseException):
@@ -125,25 +125,30 @@ for i in os.listdir(element_path):
 @pytest.mark.parametrize("file, cellname", inputs)
 def test_sequence(file, cellname):
     if cellname == "dual polygon":
-        assert "A" == "!"
         pytest.skip()
     with open(os.path.join(element_path, file)) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
 
     if "implementations" not in data or "symfem" not in data["implementations"]:
-        assert "B" == "!"
         pytest.skip()
     if "ndofs" not in data:
-        assert "C" == "!"
         pytest.skip()
 
     if isinstance(data["implementations"]["symfem"], dict):
-        if cellname not in data["implementations"]["symfem"]:
-            print(cellname)
-            print(data["implementations"]["symfem"])
-            assert "D" == "!"
-            pytest.skip()
-        symfem_name = data["implementations"]["symfem"][cellname]
+        if cellname in data["implementations"]["symfem"]:
+            symfem_name = data["implementations"]["symfem"][cellname]
+        else:
+            for d in data["implementations"]["symfem"].values():
+                if isinstance(d, str):
+                    symfem_name = d
+                    break
+            else:
+                for d in data["implementations"]["symfem"].values():
+                    if isinstance(d, dict) and cellname in d:
+                        symfem_name = d[cellname]
+                        break
+                else:
+                    pytest.skip()
     else:
         symfem_name = data["implementations"]["symfem"]
 
