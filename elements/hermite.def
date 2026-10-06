@@ -36,7 +36,7 @@ dofs:
 implementations:
   symfem: Hermite
   basix: Hermite
-  fiat: CubicHermite
+  fiat: Hermite
 examples:
   - interval,3
   - triangle,3
