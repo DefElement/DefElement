@@ -77,25 +77,27 @@ def check_oeis(oeis, seq):
     seq = {i: j for i, j in seq.items() if j > 0}
     if oeis not in os.listdir(oeis_cache_location):
         try:
-            with urllib.request.urlopen(
-                urllib.request.Request(
-                    f"http://oeis.org/{oeis}/list",
-                    headers={"User-Agent": "DefElement test runner"},
-                )
-            ) as o:
-                with open(os.path.join(oeis_cache_location, oeis), "w") as f:
-                    f.write(
-                        "".join(
-                            [
-                                i.strip()
-                                for i in o.read()
-                                .decode("utf-8")
-                                .split("<pre>[")[1]
-                                .split("]</pre>")[0]
-                                .split("\n")
-                            ]
-                        )
+            with (
+                urllib.request.urlopen(
+                    urllib.request.Request(
+                        f"http://oeis.org/{oeis}/list",
+                        headers={"User-Agent": "DefElement test runner"},
                     )
+                ) as o,
+                open(os.path.join(oeis_cache_location, oeis), "w") as f,
+            ):
+                f.write(
+                    "".join(
+                        [
+                            i.strip()
+                            for i in o.read()
+                            .decode("utf-8")
+                            .split("<pre>[")[1]
+                            .split("]</pre>")[0]
+                            .split("\n")
+                        ]
+                    )
+                )
         except urllib.error.HTTPError:
             pytest.xfail("Error reading from OEIS")
 
