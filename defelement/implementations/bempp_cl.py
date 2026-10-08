@@ -16,7 +16,7 @@ class BemppClImplementation(Implementation):
         return f'"{string}"'
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         return "import bempp_cl.api\ngrid = bempp_cl.api.shapes.regular_sphere(1)"
 

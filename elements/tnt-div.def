@@ -36,6 +36,8 @@ implementations:
   symfem:
     quadrilateral: TNTdiv
     hexahedron: TNTdiv
+  ferrite:
+    quadrilateral: TNTDiv DEGREES=1 DEPENDENCIES=FerriteInterpolations
 examples:
   - quadrilateral,1
   - quadrilateral,2

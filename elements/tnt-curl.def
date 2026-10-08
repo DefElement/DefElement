@@ -39,6 +39,8 @@ implementations:
   symfem:
     quadrilateral: TNTcurl
     hexahedron: TNTcurl
+  ferrite:
+    quadrilateral: TNTCurl DEGREES=1 DEPENDENCIES=FerriteInterpolations
 examples:
   - quadrilateral,1
   - quadrilateral,2

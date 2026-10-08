@@ -41,11 +41,11 @@ class FerriteImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         if language != "julia":
             raise ValueError(f"Unsupported language: {language}")
-        return "using Ferrite"
+        return "using " + ", ".join(["Ferrite", *(dependencies or [])])
 
     @classmethod
     def single_example(
@@ -72,10 +72,13 @@ class FerriteImplementation(Implementation):
         return out
 
     @classmethod
-    def install(cls, language: str) -> str | None:
+    def install(cls, language: str, dependencies: list[str] | None = None) -> str | None:
         """Get the command(s) to install this implementation."""
         if language == "julia":
-            return "julia -e 'using Pkg; Pkg.add(\"Ferrite\")'"
+            if not dependencies:
+                return "julia -e 'using Pkg; Pkg.add(\"Ferrite\")'"
+            packages = ", ".join(f'"{p}"' for p in ["Ferrite", *dependencies])
+            return f"julia -e 'using Pkg; Pkg.add([{packages}])'"
         return None
 
     @classmethod
@@ -106,6 +109,8 @@ class FerriteImplementation(Implementation):
         from juliacall import Main as jl
 
         jl.seval("using Ferrite")
+        for dependency in element.implementation_dependencies(cls.id):
+            jl.seval(f"using {dependency}")
 
         shape = reference_shapes[reference]
         vdim = None

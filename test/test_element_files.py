@@ -60,3 +60,41 @@ def test_symfem_no_degreemap(e):
 
     if "implementations" in data and "symfem" in data["implementations"]:
         assert no_degreemap(data["implementations"]["symfem"])
+
+
+def test_dependencies():
+    from defelement.element import Element
+
+    e = Element(
+        {
+            "implementations": {
+                "ferrite": {
+                    "equispaced": {
+                        "triangle": "Bernstein DEGREES=1:4 DEPENDENCIES=FerriteInterpolations",
+                        "quadrilateral": "Bernstein vdim=2 DEPENDENCIES=B,A",
+                    },
+                    "gll": {"interval": "Lagrange"},
+                },
+                "basix": "P",
+            },
+            "variants": {
+                "equispaced": {"variant-name": "equispaced"},
+                "gll": {"variant-name": "GLL"},
+            },
+        },
+        "test",
+    )
+    assert e.implementation_dependencies("ferrite") == ["A", "B", "FerriteInterpolations"]
+    assert e.implementation_dependencies("basix") == []
+    assert e.implementation_dependencies("fiat") == []
+
+    assert e.get_implementation_string("ferrite", "triangle", 2, "equispaced") == (
+        "Bernstein",
+        2,
+        {},
+    )
+    assert e.get_implementation_string("ferrite", "quadrilateral", 2, "equispaced") == (
+        "Bernstein",
+        2,
+        {"vdim": "2"},
+    )

@@ -25,6 +25,8 @@ polynomial-set:
 implementations:
   symfem: TScurl
   fiat: TrimmedSerendipityCurl DEGREEMAP=k+1
+  ferrite:
+    quadrilateral: TrimmedSerendipityCurl DEGREES=1 DEPENDENCIES=FerriteInterpolations
 sobolev: H(curl)
 mapping: covariant Piola
 examples:

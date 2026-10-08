@@ -25,6 +25,8 @@ polynomial-set:
 implementations:
   symfem: TSdiv
   fiat: TrimmedSerendipityDiv DEGREEMAP=k+1
+  ferrite:
+    quadrilateral: TrimmedSerendipityDiv DEGREES=1 DEPENDENCIES=FerriteInterpolations
 sobolev: H(div)
 mapping: contravariant Piola
 examples:

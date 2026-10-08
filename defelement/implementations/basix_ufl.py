@@ -27,7 +27,7 @@ class BasixUFLImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         return "import basix\nimport basix.ufl"
 
@@ -144,7 +144,7 @@ class CustomBasixUFLImplementation(BasixUFLImplementation):
         raise NotImplementedError()
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         return "import basix\nimport basix.ufl\nimport numpy as np"
 

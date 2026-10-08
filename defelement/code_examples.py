@@ -61,7 +61,7 @@ def generate_examples(e: Element, impl: type[Implementation], language: str) -> 
         f"<div id='{jscodename}_{language}_eg' style='display:none'>"
     )
 
-    info += languages[language].install(impl)
+    info += languages[language].install(impl, e.implementation_dependencies(impl.id))
 
     info += (
         "This element can then be created with the following lines of "

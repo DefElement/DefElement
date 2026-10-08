@@ -25,7 +25,7 @@ class NdelementImplementation(Implementation):
             return requests.get("https://pypi.org/pypi/ndelement/json").json()["info"]["version"]
 
     @classmethod
-    def install(cls, language: str) -> str | None:
+    def install(cls, language: str, dependencies: list[str] | None = None) -> str | None:
         """Get the command(s) to install this implementation."""
         if language == "python":
             return "pip install ndelement"
@@ -46,7 +46,7 @@ class NdelementImplementation(Implementation):
         return out
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get imports to include at start of example."""
         if language == "python":
             return (

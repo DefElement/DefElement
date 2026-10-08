@@ -802,6 +802,9 @@ class Element:
                     raise DegreeNotImplemented()
             del params["DEGREES"]
 
+        # Dependencies are collected per element by implementation_dependencies
+        params.pop("DEPENDENCIES", None)
+
         input_deg = degree
         if "DEGREEMAP" in params:
             if degree is not None:
@@ -809,6 +812,35 @@ class Element:
             del params["DEGREEMAP"]
 
         return out, input_deg, params
+
+    def implementation_dependencies(self, lib: str) -> list[str]:
+        """Get the additional packages needed to use this element in a library.
+
+        These are set using the DEPENDENCIES parameter of the implementation strings, and are
+        collected over all reference cells and variants.
+
+        Args:
+            lib: The library
+
+        Returns:
+            Sorted list of additional packages
+        """
+        if "implementations" not in self.data or lib not in self.data["implementations"]:
+            return []
+
+        deps: set[str] = set()
+
+        def collect(data: str | dict[str, typing.Any]):
+            if isinstance(data, str):
+                for d in re.findall(r"DEPENDENCIES=(\S+)", data):
+                    deps.update(d.split(","))
+            else:
+                for key, value in data.items():
+                    if key != "display":
+                        collect(value)
+
+        collect(self.data["implementations"][lib])
+        return sorted(deps)
 
     def list_of_implementation_strings(
         self,
@@ -951,6 +983,13 @@ class Element:
                             "This implementation uses an alternative value of "
                             "degree for this element"
                         )
+            dependencies = self.implementation_dependencies(lib)
+            if len(dependencies) > 0:
+                notes.append(
+                    "This implementation requires the additional "
+                    + ("package " if len(dependencies) == 1 else "packages ")
+                    + ", ".join(dependencies)
+                )
         return notes
 
     def implementation_references(self, lib: str) -> list[dict[str, str]]:

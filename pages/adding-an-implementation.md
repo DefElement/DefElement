@@ -74,7 +74,9 @@ the element).
 To generate example code that will be displayed on an element's page, DefElement will use the
 class methods `example_import` and `single_example`. The class method `example_import` returns the
 import statements to include at the start of the example code: this method takes
-the programming language as its only input.
+the programming language as an input, as well as an optional list of additional packages
+(`dependencies`) that the element needs. These are set using the `DEPENDENCIES` special parameter
+in the .def file; implementations that do not use this parameter can ignore this input.
 The class method `single_example`
 returns Python code that will create the element: the inputs to this method are
 the string included in the .def file (`name`);
@@ -98,7 +100,8 @@ input that simplefem uses.
 
 ### `install`
 The class method `install` can be implemented. It takes the programming language as an input
-and returns the bash commands that can be used to install the implementation.
+and returns the bash commands that can be used to install the implementation. Like `example_import`,
+it also takes an optional list of additional packages (`dependencies`) that should be installed too.
 For simplefem, this is implemented as follows:
 
 {{snippet::defelement/implementations/simplefem.py::install}}

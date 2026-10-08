@@ -19,6 +19,7 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
     Returns:
         A wrapped class
     """
+    prerequisites = dependencies
 
     def pypi_name(Cls):
         class Wrapped(Cls):
@@ -37,14 +38,14 @@ def pypi_name(package_name: str, dependencies: list[str] | None = None):
                     ]["version"]
 
             @classmethod
-            def install(cls, language: str) -> str | None:
+            def install(cls, language: str, dependencies: list[str] | None = None) -> str | None:
                 """Get the command(s) to install this implementation."""
                 if language == "python":
                     return (
                         ""
-                        if dependencies is None
-                        else "pip install " + " ".join(dependencies) + "\n"
-                    ) + f"pip install {package_name}"
+                        if prerequisites is None
+                        else "pip install " + " ".join(prerequisites) + "\n"
+                    ) + " ".join(["pip install", package_name, *(dependencies or [])])
                 return None
 
         return Wrapped
@@ -74,13 +75,15 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
-    def example_import(cls, language: str) -> str:
+    def example_import(cls, language: str, dependencies: list[str] | None = None) -> str:
         """Get code for imports to include at start of examples snippet.
 
         This function must be implemented.
 
         Args:
             language: Programming language
+            dependencies: Additional packages that the element needs, as set using the
+                `DEPENDENCIES` parameter in the .def file
 
         Returns:
             Python code for imports
@@ -134,11 +137,13 @@ class Implementation:
         raise NotImplementedError()
 
     @classmethod
-    def install(cls, language: str) -> str | None:
+    def install(cls, language: str, dependencies: list[str] | None = None) -> str | None:
         """Get the command(s) to install this implementation.
 
         Args:
             language: Programming language
+            dependencies: Additional packages to install, as set using the `DEPENDENCIES`
+                parameter in the .def file
 
         Returns:
             Version number
@@ -240,7 +245,7 @@ class Implementation:
         """
         if language not in cls.languages:
             raise ValueError(f"Implementation cannot create snippets for language: {language}")
-        code = cls.example_import(language)
+        code = cls.example_import(language, element.implementation_dependencies(cls.id))
         assert cls.id is not None
         for eg in element.examples:
             reference, defelement_degree, variant, kwargs = parse_example(eg)

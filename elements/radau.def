@@ -35,6 +35,8 @@ polynomial-set:
   hexahedron: qoly[k]
 implementations:
   symfem: Lagrange variant=radau
+  ferrite:
+    interval: Radau DEGREES=2 DEPENDENCIES=FerriteInterpolations
 examples:
   - interval,1
   - interval,2

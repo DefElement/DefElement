@@ -37,6 +37,10 @@ sobolev: H1
 implementations:
   symfem: Bernstein
   fiat: Bernstein
+  ferrite:
+    interval: Bernstein DEGREES=1:4 DEPENDENCIES=FerriteInterpolations
+    triangle: Bernstein DEGREES=1:4 DEPENDENCIES=FerriteInterpolations
+    tetrahedron: Bernstein DEGREES=1:3 DEPENDENCIES=FerriteInterpolations
 examples:
   - interval,1
   - interval,2

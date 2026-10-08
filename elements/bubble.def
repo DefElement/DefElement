@@ -43,6 +43,10 @@ implementations:
   basix: bubble
   basix.ufl: bubble
   fiat: Bubble
+  ferrite:
+    interval: Bubble DEGREES=2:4 DEPENDENCIES=FerriteInterpolations
+    triangle: Bubble DEGREES=3:5 DEPENDENCIES=FerriteInterpolations
+    tetrahedron: Bubble DEGREES=4 DEPENDENCIES=FerriteInterpolations
 examples:
   - interval,2
   - interval,3
