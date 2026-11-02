@@ -37,8 +37,12 @@ dofs:
   edges: normal-normal and normal-tangent component moments with (lagrange,k-2), or point evaluations at interior degree-k lattice points
   faces: moments of independent tensor components with (lagrange,k-2), or point evaluations at interior degree-(k+1) lattice points
 variants:
-  point: Point evaluations.
-  integral: Integral moments.
+  point:
+    variant-name: point
+    description: Point evaluations.
+  integral:
+    variant-name: integral
+    description: Integral moments.
 implementations:
   symfem:
     point: Hu-Zhang variant=point
