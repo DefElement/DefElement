@@ -1,0 +1,53 @@
+name: Hu-Zhang
+html-name: Hu&ndash;Zhang
+polynomial-subdegree: k
+degree: polynomial-subdegree
+mapping: see {{citation::kirby_mapping}}
+reference-cells:
+- triangle
+references:
+- title: A family of conforming mixed finite elements for linear elasticity on triangular grids
+  author:
+  - Hu, Jun
+  - Zhang, Shangyou
+  journal: arXiv preprint arXiv:1406.7457
+  year: 2014
+  doi: 10.48550/arXiv.1406.7457
+min-degree: 3
+polynomial-superdegree: k
+lagrange-subdegree: k
+lagrange-superdegree: k
+categories:
+- matrix
+- Hdiv
+sobolev: H(div)
+polynomial-set: <k>[\left\{\boldsymbol{p}\in{{poly[k]^dd}}\middle|\boldsymbol{p}=\boldsymbol{p}^{\mathrm{T}}\right\}]
+ndofs:
+  triangle:
+    formula: 3(k+1)(k+2)/2
+entity-ndofs:
+  vertices:
+    formula: 3
+  edges:
+    formula: 2(k-1)
+  faces:
+    formula: 3k(k-1)/2
+dofs:
+  vertices: point evaluations of independent tensor components
+  edges: normal-normal and normal-tangent component moments with (lagrange,k-2), or point evaluations at interior degree-k lattice points
+  faces: moments of independent tensor components with (lagrange,k-2), or point evaluations at interior degree-(k+1) lattice points
+variants:
+  point: Point evaluations.
+  integral: Integral moments.
+implementations:
+  symfem:
+    point: Hu-Zhang variant=point
+    integral: Hu-Zhang variant=integral
+  fiat:
+    point: HuZhang variant=point
+    integral: HuZhang variant=integral
+notes:
+- This triangular symmetric-stress element is distinct from the quadrilateral vector [Huang&ndash;Zhang](element::huang-zhang) element.
+examples:
+- triangle,3,point
+- triangle,3,integral
