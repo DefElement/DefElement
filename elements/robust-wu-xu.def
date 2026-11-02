@@ -1,0 +1,51 @@
+name: robust Wu-Xu
+html-name: robust Wu&ndash;Xu
+polynomial-subdegree: k
+degree: polynomial-subdegree
+mapping: see {{citation::kirby_mapping}}
+reference-cells:
+- triangle
+references:
+- title: Nonconforming finite element spaces for 2mth order partial differential equations on Rn simplicial grids when m=n+1
+  author:
+  - Wu, Shuonan
+  - Xu, Jinchao
+  journal: Mathematics of Computation
+  volume: 88
+  year: 2019
+  pagestart: 531
+  pageend: 551
+  doi: 10.1090/mcom/3361
+min-degree: 3
+max-degree: 3
+polynomial-superdegree: 2k+1
+lagrange-subdegree: k
+lagrange-superdegree: 2k+1
+categories:
+- scalar
+sobolev: H1
+polynomial-set: <k>[{{poly[k]}}+b_K{{poly[1]}}+b_K^2{{poly[1]}}@defmath@b_K@\lambda_0\lambda_1\lambda_2@]
+ndofs:
+  triangle:
+    formula: 15
+entity-ndofs:
+  vertices:
+    formula: 3
+  edges:
+    formula: 2
+  faces:
+    formula: 0
+dofs:
+  vertices:
+  - point evaluations
+  - point evaluations of first derivatives
+  edges:
+  - averages of first normal derivatives
+  - averages of second normal derivatives
+notes:
+- This element is H3 nonconforming. It is distinct from the [Wu&ndash;Xu](element::wu-xu) element.
+implementations:
+  symfem: robust Wu-Xu
+  fiat: WuXuRobustH3NC DEGREEMAP=2*k+1
+examples:
+- triangle,3
