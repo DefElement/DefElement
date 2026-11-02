@@ -17,6 +17,7 @@ categories:
 reference-cells:
   - triangle
   - tetrahedron
+polynomial-set: <k>[\left\{\boldsymbol{p}\in C^0(K)^d\middle|\boldsymbol{p}|_T\in{{poly[k]^d}}(T),\ T\in\mathcal{T}^{\mathrm{A}}\right\}+ \operatorname{span}\left\{\boldsymbol{\beta}_f\middle|f\subset\partial K\right\}@def@\boldsymbol{\beta}_f@the modified Bernardi&ndash;Raugel facet bubble with constant divergence defined in the cited Guzm&aacute;n&ndash;Neilan paper@@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 dofs:
   vertices: point evaluations in coordinate directions
   edges: (if \(k>1\)) point evaluations in coordinate directions at midpoints

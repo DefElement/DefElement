@@ -10,6 +10,7 @@ categories:
 reference-cells:
   - triangle
   - tetrahedron
+polynomial-set: <k>[\left\{\boldsymbol{p}\in H(\mathrm{div};K;\mathbb{S})\middle|\boldsymbol{p}|_T\in{{poly[k]^dd}}(T),\ T\in\mathcal{T}^{\mathrm{A}}\right\}@def@\mathbb{S}@the space of symmetric matrices@@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 ndofs:
   triangle:
     formula: 15

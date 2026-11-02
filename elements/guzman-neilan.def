@@ -24,6 +24,7 @@ categories:
 reference-cells:
   - triangle
   - tetrahedron
+polynomial-set: <k>[{{poly[k]^d}}(K)+ \operatorname{span}\left\{\boldsymbol{\beta}_f\middle|f\subset\partial K\right\}@def@\boldsymbol{\beta}_f@the modified Bernardi&ndash;Raugel facet bubble with constant divergence defined in the cited Guzm&aacute;n&ndash;Neilan paper@]
 dofs:
   vertices:
     - point evaluations in coordinate direcions
@@ -33,7 +34,7 @@ dofs:
 mapping: contravariant Piola
 sobolev: H1
 notes:
-  - This element is a modification of the [Bernardi&ndash;Raugel](element::bernardi-raugel) element with the facet bubbles modified to be divergence free.
+  - This element is a modification of the [Bernardi&ndash;Raugel](element::bernardi-raugel) element with the facet bubbles modified to have constant divergence.
 implementations:
   symfem: Guzman-Neilan first kind
   fiat: GuzmanNeilanFirstKindH1

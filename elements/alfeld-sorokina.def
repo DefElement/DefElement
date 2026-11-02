@@ -2,6 +2,7 @@ name: Alfeld-Sorokina
 html-name: Alfeld&ndash;Sorokina
 complexes:
   de-rham: CH,d-1,simplex
+polynomial-set: <k>[\left\{\boldsymbol{p}\in C^0(K)^d\middle|\boldsymbol{p}|_T\in{{poly[k]^d}}(T),\ T\in\mathcal{T}^{\mathrm{A}},\ \nabla\cdot\boldsymbol{p}\in C^0(K)\right\}@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 ndofs:
   triangle:
     formula: 15

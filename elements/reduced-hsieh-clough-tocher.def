@@ -5,6 +5,7 @@ short-names:
   - HCT-red
 min-degree: 3
 max-degree: 3
+polynomial-set: <k>[\left\{p\in C^1(K)\middle|p|_T\in{{poly[k]}}(T),\ T\in\mathcal{T}^{\mathrm{A}},\ \partial_n p|_e\in{{poly[1]}}(e),\ e\subset\partial K\right\}@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 dofs:
   vertices:
     - point evaluations

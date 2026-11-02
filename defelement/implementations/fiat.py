@@ -16,6 +16,7 @@ from defelement.implementations.core import (
 # TODO make this a FIAT attribute
 true_space_dimension = {
     "Bell": 18,
+    "Walkington": 45,
     "Mardal-Tai-Winther": 9,
     "reduced Hsieh-Clough-Tocher": 9,
     "Arnold-Winther": 24,
