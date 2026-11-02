@@ -1,0 +1,49 @@
+name: Alfeld C2
+html-name: Alfeld C2
+polynomial-subdegree: k
+degree: polynomial-subdegree
+mapping: see {{citation::kirby_mapping}}
+reference-cells:
+- triangle
+references:
+- title: A bivariate C2 Clough-Tocher scheme
+  author: Alfeld, Peter
+  journal: Computer Aided Geometric Design
+  volume: 1
+  issue: 3
+  year: 1984
+  pagestart: 257
+  pageend: 267
+  doi: 10.1016/0167-8396(84)90012-8
+min-degree: 5
+polynomial-superdegree: k
+lagrange-subdegree: k
+categories:
+- scalar
+- macro
+sobolev: H3
+ndofs:
+  triangle:
+    formula: 18+9(k-4)+(k-5)(k-4)/2
+entity-ndofs:
+  vertices:
+    formula: 6
+  edges:
+    formula: 3(k-4)
+  faces:
+    formula: (k-5)(k-4)/2
+dofs:
+  vertices:
+  - point evaluations
+  - point evaluations of derivatives up to order 2
+  edges:
+  - integral moments with (lagrange,k-6)
+  - normal derivative integral moments with (lagrange,k-5)
+  - second normal derivative integral moments with (lagrange,k-4)
+  faces: integral moments with (lagrange,k-6)
+implementations:
+  symfem: Alfeld C2
+  fiat: AlfeldC2
+examples:
+- triangle,5
+polynomial-set: <k>[\left\{p\in C^2(K)\cap C^{k-2}(b)\middle|p|_T\in{{poly[k]}}(T),\ T\in\mathcal{T}^{\mathrm{AA}},\ p\in C^{k-1}(c_i),\ [\partial_n^jp]_e=0,\ e\in\mathcal{E}^{\mathrm{A}},\ 0\leq j\leq k-2\right\}@def@\mathcal{T}^{\mathrm{AA}}@the double Alfeld split@@def@b@the centroid of the reference triangle@@def@c_i@the centroid of the ith triangle of the first Alfeld split@@def@\mathcal{E}^{\mathrm{A}}@the interior edges of the first Alfeld split@]
