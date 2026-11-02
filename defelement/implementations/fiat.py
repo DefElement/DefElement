@@ -14,8 +14,9 @@ from defelement.implementations.core import (
 )
 
 # TODO make this a FIAT attribute
-true_space_dimension = {
+true_space_dimension: dict[str, int | dict[int, int]] = {
     "Bell": 18,
+    "Hu-Zhang-Zhang": {1: 18, 2: 42},
     "Mardal-Tai-Winther": 9,
     "reduced Hsieh-Clough-Tocher": 9,
     "Arnold-Winther": 24,
@@ -193,6 +194,8 @@ class FIATImplementation(Implementation):
             reduced_dim = e.space_dimension() - (sd + 1) * (sd - 1)
         else:
             reduced_dim = true_space_dimension.get(element.name)
+            if isinstance(reduced_dim, dict):
+                reduced_dim = reduced_dim[degree]
 
         if reduced_dim is not None:
             for dim in range(len(edofs)):

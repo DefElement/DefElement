@@ -1,0 +1,55 @@
+name: Hu-Zhang-Zhang
+html-name: Hu&ndash;Zhang&ndash;Zhang
+polynomial-subdegree: k
+degree: polynomial-subdegree
+mapping: see {{citation::kirby_mapping}}
+reference-cells:
+- tetrahedron
+references:
+- title: A family of finite element Stokes complexes in three dimensions
+  author:
+  - Hu, Kaibo
+  - Zhang, Qian
+  - Zhang, Zhimin
+  journal: SIAM Journal on Numerical Analysis
+  volume: 60
+  issue: 1
+  year: 2022
+  pagestart: 222
+  pageend: 243
+  doi: 10.1137/20M1358700
+min-degree: 0
+max-degree: 1
+polynomial-superdegree: 4
+lagrange-subdegree: k
+categories:
+- vector
+- macro
+- Hcurl
+sobolev: H(curl)
+polynomial-set: <k>[\nabla{{poly[k+1]}}\oplus\widetilde\kappa\left(\Sigma^{k+1,+}\cap\ker\nabla\cdot\right)@def@\Sigma^{k+1,+}@the modified velocity space defined in the cited Hu&ndash;Zhang&ndash;Zhang paper@@def@\widetilde\kappa@the corrected Poincar&eacute; curl operator defined in the cited paper@]
+ndofs:
+  tetrahedron:
+    formula: 18+24k
+entity-ndofs:
+  vertices:
+    formula: 3
+  edges:
+    formula: 4k+1
+  faces:
+    formula: 0
+  volumes:
+    formula: 0
+dofs:
+  vertices: point evaluations of curl components
+  edges:
+  - tangential integral moments with (lagrange,k)
+  - (if \(k=1\)) point evaluations of curl components at edge midpoints
+notes:
+- The curl belongs to \(H^1\).
+implementations:
+  symfem: Hu-Zhang-Zhang
+  fiat: HuZhangZhang DEGREEMAP=k+1
+examples:
+- tetrahedron,0
+- tetrahedron,1
