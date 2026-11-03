@@ -8,6 +8,7 @@ short-names:
 complexes:
   de-rham: CH,0,simplex
 min-degree: 3
+polynomial-set: <k>[\left\{p\in C^1(K)\cap C^{k-1}(b)\middle|p|_T\in{{poly[k]}}(T),\ T\in\mathcal{T}^{\mathrm{A}}\right\}@def@b@the centroid of the reference cell@@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 dofs:
   vertices:
     - point evaluations

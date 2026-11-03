@@ -2,6 +2,7 @@ name: P1 macro
 html-name: P1 macro
 complexes:
   de-rham: CH,d,simplex
+polynomial-set: <k>[\left\{p\in C^0(K)\middle|p|_T\in{{poly[k]}}(T),\ T\in\mathcal{T}^{\mathrm{A}}\right\}@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
 ndofs:
   triangle:
     formula: 4

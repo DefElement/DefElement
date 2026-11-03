@@ -1,0 +1,43 @@
+name: Walkington
+html-name: Walkington
+min-degree: 4
+max-degree: 4
+polynomial-subdegree: 4
+polynomial-superdegree: 5
+lagrange-subdegree: 4
+degree: polynomial-subdegree
+categories:
+  - scalar
+  - macro
+reference-cells:
+  - tetrahedron
+polynomial-set: <k>[\left\{p\in C^1(K)\cap C^4(b)\middle|p|_T\in{{poly[k+1]}}(T),\ T\in\mathcal{T}^{\mathrm{A}},\ \partial_n p|_F\in{{poly[3]}}(F),\ F\subset\partial K\right\}@def@b@the centroid of the reference cell@@def@\mathcal{T}^{\mathrm{A}}@the Alfeld split of the reference cell@]
+dofs:
+  vertices:
+    - point evaluations
+    - point evaluations of first derivatives
+    - point evaluations of second derivatives
+  faces:
+    - normal derivative evaluations at face centroids
+  volumes:
+    - point evaluation at the centroid
+ndofs:
+  tetrahedron:
+    formula: 45
+mapping: see {{citation::kirby_mapping}}
+sobolev: H2
+implementations:
+  symfem: Walkington
+  fiat: Walkington DEGREEMAP=k+1
+examples:
+  - tetrahedron,4
+references:
+  - title: A C1 tetrahedral finite element without edge degrees of freedom
+    author: Walkington, Noel J.
+    journal: SIAM Journal on Numerical Analysis
+    volume: 52
+    issue: 1
+    year: 2014
+    pagestart: 330
+    pageend: 342
+    doi: 10.1137/130912013
