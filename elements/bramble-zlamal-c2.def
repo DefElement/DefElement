@@ -1,0 +1,51 @@
+name: Bramble-Zlamal C2
+html-name: Bramble&ndash;Zl&aacute;mal C2
+polynomial-subdegree: k
+degree: polynomial-subdegree
+mapping: see {{citation::kirby_mapping}}
+reference-cells:
+- triangle
+references:
+- title: Triangular elements in the finite element method
+  author:
+  - Bramble, James H.
+  - "Zl\xE1mal, Milo\u0161"
+  journal: Mathematics of Computation
+  volume: 24
+  issue: 112
+  year: 1970
+  pagestart: 809
+  pageend: 820
+  doi: 10.1090/S0025-5718-1970-0282540-0
+min-degree: 9
+polynomial-superdegree: k
+lagrange-subdegree: k
+categories:
+- scalar
+sobolev: H3
+ndofs:
+  triangle:
+    formula: (k+1)(k+2)/2
+entity-ndofs:
+  vertices:
+    formula: 15
+  edges:
+    formula: 3(k-8)
+  faces:
+    formula: (k-8)(k-7)/2
+dofs:
+  vertices:
+  - point evaluations
+  - point evaluations of derivatives up to order 4
+  edges:
+  - integral moments with (lagrange,k-10)
+  - normal derivative integral moments with (lagrange,k-9)
+  - second normal derivative integral moments with (lagrange,k-8)
+  faces: integral moments with (lagrange,k-9)
+implementations:
+  symfem: Bramble-Zlamal C2
+  fiat: BrambleZlamalC2
+examples:
+- triangle,9
+lagrange-superdegree: k
+polynomial-set: poly[k]
