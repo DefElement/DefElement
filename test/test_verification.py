@@ -1,5 +1,6 @@
 import os
 
+import pytest
 import yaml
 
 from defelement.element import Element
@@ -118,3 +119,16 @@ def test_verify_bdm_vs_n2():
     info0 = verifications["symfem"](symfem_name0, reference, symfem_degree0, symfem_params0, e0, eg)
     info1 = verifications["symfem"](symfem_name1, reference, symfem_degree1, symfem_params1, e1, eg)
     assert not verify("triangle", info0, info1)[0]
+
+
+@pytest.mark.parametrize("noise, expected", [(1e-14, True), (1e-5, False)])
+def test_trace_span_roundoff(noise, expected):
+    import numpy as np
+
+    from defelement.verification import same_span
+
+    first = np.array([[[1.0, 0.0]], [[0.0, 0.0]], [[0.0, 0.0]]])
+    second = first.copy()
+    second[1, 0, 1] = noise
+    assert same_span(first, second, complete=False) == expected
+    assert not same_span(first, second, complete=True)
