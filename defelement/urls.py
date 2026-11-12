@@ -1,6 +1,6 @@
 """DefElement page URLs indexed by implementation identifier."""
 
-from importlib.resources import files
+from importlib.metadata import distribution
 from pathlib import Path
 
 import yaml
@@ -18,13 +18,22 @@ def get_urls(library: str) -> dict[str, tuple[str, ...]]:
     Raises:
         KeyError: If the library has no recorded implementations.
     """
-    element_files = files("defelement").joinpath("elements")
-    if not element_files.is_dir():
-        element_files = Path(__file__).resolve().parent.parent / "elements"
+    element_files = Path(__file__).resolve().parent.parent / "elements"
+    if element_files.is_dir():
+        paths = element_files.glob("*.def")
+    elif any(element_files.parent.glob("*.def")):
+        paths = element_files.parent.glob("*.def")
+    else:
+        package = distribution("defelement")
+        paths = (
+            Path(str(package.locate_file(path)))
+            for path in package.files or []
+            if path.suffix == ".def"
+        )
 
     urls: dict[str, set[str]] = {}
-    for path in sorted(element_files.iterdir(), key=lambda p: p.name):
-        if not path.name.endswith(".def") or path.name.startswith("."):
+    for path in sorted(paths, key=lambda p: p.name):
+        if path.name.startswith("."):
             continue
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
         implementations = data.get("implementations", {})

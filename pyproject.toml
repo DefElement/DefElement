@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = ["setuptools>=77"]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.8.0,<4"]
 
 [project]
 name = "defelement"
@@ -23,18 +23,13 @@ dependencies = [
     "pyyaml==6.0.3",
     "website-build-tools==0.1.14"
 ]
+packages = ["defelement", "defelement.implementations"]
 
 [project.optional-dependencies]
 style = ["ruff", "mypy", "pydocstyle"]
 
-[tool.setuptools]
-packages = ["defelement", "defelement.implementations", "defelement.elements"]
-
-[tool.setuptools.package-dir]
-"defelement.elements" = "elements"
-
-[tool.setuptools.package-data]
-"defelement.elements" = ["*.def"]
+[tool.flit.external-data]
+directory = "elements"
 
 [tool.ruff]
 line-length = 100
