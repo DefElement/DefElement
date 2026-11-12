@@ -30,13 +30,17 @@ def test_unknown_names():
         get_urls("not-a-library")
 
 
-def test_other_libraries():
-    """Handle display labels, parameters and identifiers containing spaces."""
+def test_basix_urls():
+    """Resolve continuous and discontinuous elements sharing an enum name."""
     basix = get_urls("basix")
     assert basix["P"] == (
         "https://defelement.org/elements/discontinuous-lagrange.html",
         "https://defelement.org/elements/lagrange.html",
     )
+
+
+def test_symfem_urls():
+    """Resolve identifiers containing spaces."""
     assert get_urls("symfem")["discontinuous Lagrange"] == (
         "https://defelement.org/elements/discontinuous-lagrange.html",
     )
