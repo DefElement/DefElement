@@ -1,0 +1,51 @@
+"""DefElement page URLs indexed by implementation identifier."""
+
+from importlib.resources import files
+from pathlib import Path
+
+import yaml
+
+
+def get_urls(library: str) -> dict[str, tuple[str, ...]]:
+    """Get DefElement URLs for a library's implementation names.
+
+    Args:
+        library: Implementation ID, such as "fiat" or "basix".
+
+    Returns:
+        Implementation names mapped to sorted, unique URL tuples.
+
+    Raises:
+        KeyError: If the library has no recorded implementations.
+    """
+    element_files = files("defelement").joinpath("elements")
+    if not element_files.is_dir():
+        element_files = Path(__file__).resolve().parent.parent / "elements"
+
+    urls: dict[str, set[str]] = {}
+    for path in sorted(element_files.iterdir(), key=lambda p: p.name):
+        if not path.name.endswith(".def") or path.name.startswith("."):
+            continue
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        implementations = data.get("implementations", {})
+        if library not in implementations:
+            continue
+        url = f"https://defelement.org/elements/{path.name[:-4]}.html"
+        for variant in data.get("variants", {None: {}}):
+            implementation = implementations[library]
+            if variant is not None:
+                if variant not in implementation:
+                    continue
+                implementation = implementation[variant]
+            if isinstance(implementation, str):
+                implementation = {None: implementation}
+            for reference, name in implementation.items():
+                if reference == "display":
+                    continue
+                if "=" in name:
+                    name = " ".join(name.split("=", 1)[0].split(" ")[:-1])
+                urls.setdefault(name, set()).add(url)
+
+    if not urls:
+        raise KeyError(f"No implementations recorded for library: {library}")
+    return {identifier: tuple(sorted(matches)) for identifier, matches in urls.items()}
