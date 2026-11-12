@@ -8,8 +8,7 @@ description = "an encyclopedia of finite element definitions"
 version = "2026.10"
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
-license = "MIT AND CC-BY-4.0"
-license-files = ["LICENSE", "LICENSE-CC"]
+license = "MIT"
 authors = [
     { name = "Matthew Scroggs", email = "defelement@mscroggs.co.uk" },
     { name = "other contributors to DefElement" }
