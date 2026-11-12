@@ -28,6 +28,9 @@ packages = ["defelement", "defelement.implementations"]
 [project.optional-dependencies]
 style = ["ruff", "mypy", "pydocstyle"]
 
+[tool.flit.external-data]
+directory = "elements"
+
 [tool.ruff]
 line-length = 100
 indent-width = 4

@@ -5,6 +5,32 @@ This repo contains code to generate the website
 
 The examples included in DefElement are generated using [Symfem](https://github.com/mscroggs/symfem).
 
+## Element URLs for other libraries
+
+Install directly from GitHub, pinning a commit for reproducible docs builds:
+
+```toml
+[project.optional-dependencies]
+docs = ["defelement @ git+https://github.com/DefElement/defelement.com.git@<commit>"]
+```
+
+```python
+from defelement import get_urls
+
+get_urls("fiat")["RaviartThomas"]
+# ("https://defelement.org/elements/raviart-thomas.html",)
+```
+
+`get_urls(library)` maps implementation identifiers to sorted, unique URL tuples.
+Identifiers are the names recorded by DefElement, such as FIAT class names;
+Firedrake/UFL aliases must first be resolved by their owning library. Multiple
+URLs are retained when an identifier implements different elements, such as
+`FIAT.Lagrange` for Lagrange and P1-iso-P2. No URL is a default match. Unrecorded
+identifiers are absent; libraries with no recorded implementations raise `KeyError`.
+
+The same function supports every library recorded in `elements/*.def` and reads
+those definitions from the installed package without network requests.
+
 ## Building the website
 
 Before building the website, you must install the required Python dependencies:
