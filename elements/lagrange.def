@@ -178,6 +178,7 @@ implementations:
   fuse:
     display: table:0, dim, 0
     equispaced:
+      interval: table:0, 1, 0
       triangle: table:0, 2, 0
       tetrahedron: table:0, 3, 0
 examples:
