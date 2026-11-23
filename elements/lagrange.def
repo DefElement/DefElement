@@ -175,6 +175,11 @@ implementations:
       hexahedron: Lagrange DEGREES=1:4
       prism: Lagrange DEGREES=1,2
       pyramid: Lagrange DEGREES=1,2
+  fuse:
+    display: table:0, dim, 0
+    equispaced:
+      triangle: table:0, 2, 0
+      tetrahedron: table:0, 3, 0
 examples:
   - interval,1,equispaced
   - interval,2,equispaced
