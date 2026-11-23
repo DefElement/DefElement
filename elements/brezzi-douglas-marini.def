@@ -57,6 +57,11 @@ implementations:
   ferrite:
     lagrange:
       triangle: BrezziDouglasMarini DEGREES=1
+  fuse:
+    display: table:1, dim, 2
+    lagrange:
+      triangle: table:1, 2, 2
+      tetrahedron: table:1, 3, 2
 examples:
   - triangle,1,lagrange
   - triangle,2,lagrange
