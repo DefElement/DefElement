@@ -65,20 +65,19 @@ class FUSEImplementation(Implementation):
         if not name.startswith("table:"):
             raise NotImplementedError("Cannot verify non periodic table FUSE elements")
 
-        e = fuse.periodic_table(*[int(n) for n in name[6:].split(",")], degree).to_fiat()
-        if e.value_shape() != ():
-            raise NotImplementedError("FUSE verification of vector-valued elements")
+        triple = fuse.periodic_table(*[int(n) for n in name[6:].split(",")], degree)
+        e = triple.to_fiat()
+        pullback = triple.pullback()
+        if pullback not in ["identity", "covariant Piola", "contravariant Piola"]:
+            raise NotImplementedError(f"FUSE verification with {pullback} pullback is not implemented")
 
-        # FUSE cells are not DefElement's reference cells (e.g. the FUSE triangle is
-        # equilateral and centred on the origin), so map DefElement's reference cell
-        # affinely onto the FUSE cell, sending DefElement vertex i to FUSE vertex i.
+        # FUSE default cells differ from DefElement's reference cells so map DefElement's
+        # reference cell affinely onto the FUSE cell, sending DefElement vertex i to FUSE vertex i.
         cell = e.get_reference_element()
         r = symfem.create_reference(reference)
         fuse_verts = np.array(cell.get_vertices(), dtype=float64)
         def_verts = np.array([[float(c) for c in v] for v in r.vertices])
-        jacobian = (fuse_verts[1:] - fuse_verts[0]).T @ np.linalg.inv(
-            (def_verts[1:] - def_verts[0]).T
-        )
+        jacobian = (fuse_verts[1:] - fuse_verts[0]).T @ np.linalg.inv((def_verts[1:] - def_verts[0]).T)
 
         # Reorder the entity DOFs into DefElement's sub-entity numbering by matching
         # each sub-entity's set of vertices.
@@ -91,11 +90,25 @@ class FUSEImplementation(Implementation):
                 [list(fuse_edofs[dim][lookup[frozenset(se)]]) for se in r.sub_entities(dim)]
             )
 
+        # Pull the values on the FUSE cell back to DefElement's reference cell.
+        if pullback == "covariant Piola":
+            value_map = jacobian.T
+        elif pullback == "contravariant Piola":
+            value_map = np.linalg.det(jacobian) * np.linalg.inv(jacobian)
+        else:
+            value_map = None
+
+        value_size = 1
+        for i in e.value_shape():
+            value_size *= i
         z = (0,) * r.tdim
 
         def tabulate(points: NDArray[float64]) -> NDArray[float64]:
             mapped = fuse_verts[0] + (points - def_verts[0]) @ jacobian.T
-            return e.tabulate(0, mapped)[z].T.reshape(points.shape[0], 1, -1)
+            table = e.tabulate(0, mapped)[z].T.reshape(points.shape[0], value_size, -1)
+            if value_map is not None:
+                table = np.einsum("ij,pjd->pid", value_map, table)
+            return table
 
         return edofs, tabulate
 

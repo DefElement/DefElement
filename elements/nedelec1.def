@@ -130,6 +130,11 @@ implementations:
       tetrahedron: Nedelec DEGREEMAP=k+1 DEGREES=0
       quadrilateral: Nedelec DEGREEMAP=k+1 DEGREES=0
       hexahedron: Nedelec DEGREEMAP=k+1 DEGREES=0
+  fuse:
+    display: table:0, dim, 1
+    lagrange:
+      triangle: table:0, 2, 1 DEGREEMAP=k+1
+      tetrahedron: table:0, 3, 1 DEGREEMAP=k+1
 examples:
   - triangle,0,lagrange
   - triangle,1,lagrange
